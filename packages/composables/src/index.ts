@@ -1,30 +1,32 @@
 /* istanbul ignore file */
 
-import useCategory from './composables/useCategory';
-import useProduct from './composables/useProduct';
-import { setCart, useCart } from './composables/useCart';
-import useCheckout from './composables/useCheckout';
-import { useReview, reviewGetters } from './composables/useReview';
-import { setUser, useUser } from './composables/useUser';
-import useUserOrders from './composables/useUserOrders';
-import useContent from './composables/useContent';
-import useFacet from './composables/useFacet';
-import { useWishlist, setWishlist } from './composables/useWishlist';
-import useUserShipping from './composables/useUserShipping';
-import useUserBilling from './composables/useUserBilling';
+import useCategory from './useCategory';
+import useProduct from './useProduct';
+import { setCart, useCart } from './useCart';
+import useCheckout from './useCheckout';
+import { setUser, useUser } from './useUser';
+import useUserOrders from './useUserOrders';
+import { setWishlist, useWishlist } from './useWishlist';
+import { useReview, reviewGetters } from './useReview';
+import useFacet from './useFacet';
+import { track } from '@vue-storefront/core';
+import useUserShipping from './useUserShipping';
+import useUserBilling from './useUserBilling';
 
 import {
   cartGetters,
   categoryGetters,
   checkoutGetters,
-  facetGetters,
   productGetters,
   userGetters,
   userShippingGetters,
   userBillingGetters,
   orderGetters,
-  wishlistGetters
-} from './composables/getters';
+  wishlistGetters,
+  facetGetters
+} from './getters';
+
+track('VSFCommercetools');
 
 export {
   useCategory,
@@ -32,25 +34,25 @@ export {
   useCart,
   setCart,
   useCheckout,
-  useReview,
   useUser,
   setUser,
   useUserOrders,
-  useContent,
-  useFacet,
+  useUserBilling,
   useWishlist,
   useUserShipping,
-  useUserBilling,
   setWishlist,
+  useReview,
+  useFacet,
   cartGetters,
   categoryGetters,
   checkoutGetters,
   productGetters,
-  facetGetters,
   reviewGetters,
   userGetters,
+  userShippingGetters,
+  userBillingGetters,
   orderGetters,
   wishlistGetters,
-  userShippingGetters,
-  userBillingGetters
+  facetGetters
 };
+

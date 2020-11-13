@@ -1,39 +1,31 @@
-import { UseCategory, UseProduct } from '@vue-storefront/core';
+import { Filter, ProductVariant, Category } from '@vue-storefront/shopify-api';
+import { FacetSearchResult } from '@vue-storefront/core';
 
-type Product = {}
-type Category = {}
-type User = {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-}
-type UserAddress = {}
-type Cart = {}
-type CartItem = {}
-type Coupon = {}
-type Order = {}
-type OrderItem = {}
-type OrderSearchParams = {}
-type Review = {};
-type ShippingMethod = {}
-type WishlistProduct = {}
-type Wishlist = {}
-
-export {
-  Cart,
-  CartItem,
-  Category,
-  Coupon,
-  Order,
-  OrderItem,
-  OrderSearchParams,
-  Product,
-  Review,
-  ShippingMethod,
-  User,
-  UserAddress,
-  Wishlist,
-  WishlistProduct,
-  UseCategory,
-  UseProduct
+export type OrderSearchParams = {
+  id?: string;
+  page?: number;
+  perPage?: number;
 };
+
+export interface ProductsSearchParams {
+  perPage?: number;
+  page?: number;
+  sort?: any;
+  term?: any;
+  filters?: Record<string, Filter>;
+  catId?: string | string[];
+  skus?: string[];
+  slug?: string;
+  id?: string;
+}
+
+export interface FacetResultsData {
+  products: ProductVariant[];
+  categories: Category[];
+  facets: Record<string, Filter>;
+  total: number;
+  perPageOptions: number[];
+  itemsPerPage: number;
+}
+
+export type SearchData = FacetSearchResult<FacetResultsData>

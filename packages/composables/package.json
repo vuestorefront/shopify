@@ -1,10 +1,10 @@
 {
-  "name": "@vue-storefront/boilerplate",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@vue-storefront/shopify",
+  "version": "0.2.6",
   "sideEffects": false,
   "main": "lib/index.cjs.js",
   "module": "lib/index.es.js",
+  "tsModule": "src/index.ts",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "rimraf lib && rollup -c",
@@ -13,12 +13,15 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@vue-storefront/boilerplate-api": "^0.0.1",
-    "@vue-storefront/core": "2.0.12"
+    "@vue-storefront/shopify-api": "0.2.7",
+    "@vue-storefront/core": "2.0.10",
+    "js-cookie": "^2.2.1",
+    "vue": "^2.6.x"
   },
-  "files": [
-    "lib/**/*"
-  ],
+  "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.30",
+    "vue-template-compiler": "^2.6.x"
+  },
   "publishConfig": {
     "access": "public"
   }

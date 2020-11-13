@@ -1,23 +1,36 @@
 {
-  "name": "@vue-storefront/boilerplate-api",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@vue-storefront/shopify-api",
+  "version": "0.2.7",
   "sideEffects": false,
   "main": "lib/index.cjs.js",
   "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rimraf lib && rollup -c",
     "dev": "rollup -c -w",
-    "test": "jest",
+    "test": "cross-env APP_ENV=test jest --rootDir .",
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@vue-storefront/core": "2.0.12"
+    "@vue-storefront/core": "2.0.11",
+    "@commercetools/sdk-auth": "^3.0.1",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "^2.6.10",
+    "apollo-link": "^1.2.14",
+    "apollo-link-context": "^1.0.20",
+    "apollo-link-error": "^1.1.13",
+    "apollo-link-http": "^1.5.17",
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.10.1",
+    "isomorphic-fetch": "^2.2.1",
+    "shopify-buy": "^2.9.3"
   },
-  "files": [
-    "lib/**/*"
-  ],
+  "devDependencies": {
+    "apollo-link-schema": "^1.2.5",
+    "graphql-tools": "^4.0.6",
+    "jest-transform-graphql": "^2.1.0",
+    "rollup-plugin-graphql": "^0.1.0"
+  },
   "publishConfig": {
     "access": "public"
   }
