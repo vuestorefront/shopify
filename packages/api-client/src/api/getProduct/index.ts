@@ -10,7 +10,6 @@ export interface ProductData {
 }
 
 const getProduct = async (params, customQueryFn?: CustomQueryFn) => {
-  console.log(params);
   const { locale, acceptLanguage, currency, country, client } = getSettings();
   const defaultVariables = {
     where: buildProductWhere(params),

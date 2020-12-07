@@ -11,8 +11,8 @@ const factoryParams = {
   search: async (params: FacetSearchResult<FacetResultsData>): Promise<FacetResultsData> => {
     const itemsPerPage = params.input.itemsPerPage;
 
-    const categoryResponse = await getCategory({ slug: params.input.categorySlug });
-    const categories = categoryResponse.data.categories.results;
+    const categories = await getCategory({ slug: params.input.categorySlug });
+    // const categories = categoryResponse.data.categories.results;
     const inputFilters = params.input.filters;
     const filters = Object.keys(inputFilters).reduce((prev, curr) => ([
       ...prev,

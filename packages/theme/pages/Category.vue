@@ -9,7 +9,8 @@
         <SfHeading :level="3" :title="$t('Categories')" class="navbar__title" />
       </div>
       <div class="navbar__main">
-        <SfButton data-cy="category-btn_filters"
+        <SfButton
+          data-cy="category-btn_filters"
           class="sf-button--text navbar__filters-button"
           aria-label="Filters"
           @click="toggleFilterSidebar"
@@ -25,7 +26,13 @@
         </SfButton>
         <div class="navbar__sort desktop-only">
           <span class="navbar__label">{{ $t('Sort by') }}:</span>
-          <SfSelect class="navbar__select" :selected="sortBy.selected" placeholder="select sorting" @change="th.changeSorting" data-cy="category-select_sortBy">
+          <SfSelect
+            class="navbar__select"
+            :selected="sortBy.selected"
+            placeholder="select sorting"
+            @change="th.changeSorting"
+            data-cy="category-select_sortBy"
+          >
             <SfSelectOption
               v-for="option in sortBy.options"
               :key="option.id"
@@ -36,9 +43,13 @@
           </SfSelect>
         </div>
         <div class="navbar__counter">
-          <span class="navbar__label desktop-only">{{ $t('Products found') }}: </span>
+          <span class="navbar__label desktop-only"
+            >{{ $t('Products found') }}:
+          </span>
           <span class="desktop-only">{{ pagination.totalItems }}</span>
-          <span class="navbar__label smartphone-only">{{ pagination.totalItems }} Items</span>
+          <span class="navbar__label smartphone-only"
+            >{{ pagination.totalItems }} Items</span
+          >
         </div>
         <div class="navbar__view">
           <span class="navbar__view-label desktop-only">{{ $t('View') }}</span>
@@ -80,16 +91,36 @@
             >
               <SfList class="list">
                 <SfListItem class="list__item">
-                  <SfMenuItem :count="cat.count || ''" :data-cy="`category-link_subcategory_${cat.slug}`" :label="cat.label">
+                  <SfMenuItem
+                    :count="cat.count || ''"
+                    :data-cy="`category-link_subcategory_${cat.slug}`"
+                    :label="cat.label"
+                  >
                     <template #label>
-                      <nuxt-link :to="localePath(th.getCatLink(cat))" :class="cat.isCurrent ? 'sidebar--cat-selected' : ''">All</nuxt-link>
+                      <nuxt-link
+                        :to="localePath(th.getCatLink(cat))"
+                        :class="cat.isCurrent ? 'sidebar--cat-selected' : ''"
+                        >All</nuxt-link
+                      >
                     </template>
                   </SfMenuItem>
                 </SfListItem>
-                <SfListItem class="list__item" v-for="(subCat, j) in cat.items" :key="j">
-                  <SfMenuItem :count="subCat.count || ''" :data-cy="`category-link_subcategory_${subCat.slug}`" :label="subCat.label">
+                <SfListItem
+                  class="list__item"
+                  v-for="(subCat, j) in cat.items"
+                  :key="j"
+                >
+                  <SfMenuItem
+                    :count="subCat.count || ''"
+                    :data-cy="`category-link_subcategory_${subCat.slug}`"
+                    :label="subCat.label"
+                  >
                     <template #label="{ label }">
-                      <nuxt-link :to="localePath(th.getCatLink(subCat))" :class="subCat.isCurrent ? 'sidebar--cat-selected' : ''">{{ label }}</nuxt-link>
+                      <nuxt-link
+                        :to="localePath(th.getCatLink(subCat))"
+                        :class="subCat.isCurrent ? 'sidebar--cat-selected' : ''"
+                        >{{ label }}</nuxt-link
+                      >
                     </template>
                   </SfMenuItem>
                 </SfListItem>
@@ -114,8 +145,16 @@
               :style="{ '--index': i }"
               :title="productGetters.getName(product)"
               :image="productGetters.getCoverImage(product)"
-              :regular-price="productGetters.getFormattedPrice(productGetters.getPrice(product).regular)"
-              :special-price="productGetters.getFormattedPrice(productGetters.getPrice(product).special)"
+              :regular-price="
+                productGetters.getFormattedPrice(
+                  productGetters.getPrice(product).regular
+                )
+              "
+              :special-price="
+                productGetters.getFormattedPrice(
+                  productGetters.getPrice(product).special
+                )
+              "
               :max-rating="5"
               :score-rating="productGetters.getAverageRating(product)"
               :show-add-to-cart-button="true"
@@ -123,7 +162,13 @@
               :isAddedToCart="isOnCart(product)"
               @click:wishlist="addToWishlist(product)"
               @click:add-to-cart="addToCart(product, 1)"
-              :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
+              :link="
+                localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )
+              "
               class="products__product-card"
             />
           </transition-group>
@@ -142,14 +187,28 @@
               :title="productGetters.getName(product)"
               :description="productGetters.getDescription(product)"
               :image="productGetters.getCoverImage(product)"
-              :regular-price="productGetters.getFormattedPrice(productGetters.getPrice(product).regular)"
-              :special-price="productGetters.getFormattedPrice(productGetters.getPrice(product).special)"
+              :regular-price="
+                productGetters.getFormattedPrice(
+                  productGetters.getPrice(product).regular
+                )
+              "
+              :special-price="
+                productGetters.getFormattedPrice(
+                  productGetters.getPrice(product).special
+                )
+              "
               :max-rating="5"
               :score-rating="3"
               :is-on-wishlist="false"
               class="products__product-card-horizontal"
               @click:wishlist="addToWishlist(product)"
-              :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
+              :link="
+                localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )
+              "
             />
           </transition-group>
           <SfPagination
@@ -167,7 +226,11 @@
             class="products__pagination__options desktop-only"
           >
             <span class="products__pagination__label">Show on page:</span>
-            <SfSelect class="products__items-per-page" :selected="pagination.itemsPerPage" @change="th.changeItemsPerPage">
+            <SfSelect
+              class="products__items-per-page"
+              :selected="pagination.itemsPerPage"
+              @change="th.changeItemsPerPage"
+            >
               <SfSelectOption
                 v-for="option in pagination.pageOptions"
                 :key="option"
@@ -189,10 +252,7 @@
     >
       <Filters :facets="facets">
         <template #categories-mobile>
-          <SfAccordionItem
-            header="Category"
-            class="filters__accordion-item"
-          >
+          <SfAccordionItem header="Category" class="filters__accordion-item">
             <SfAccordion class="categories">
               <SfAccordionItem
                 v-for="cat in categoryTree && categoryTree.items"
@@ -208,11 +268,19 @@
                       icon=""
                     >
                       <template #label>
-                        <nuxt-link :to="localePath(th.getCatLink(cat))" :class="cat.isCurrent ? 'sidebar--cat-selected' : ''">All</nuxt-link>
+                        <nuxt-link
+                          :to="localePath(th.getCatLink(cat))"
+                          :class="cat.isCurrent ? 'sidebar--cat-selected' : ''"
+                          >All</nuxt-link
+                        >
                       </template>
                     </SfMenuItem>
                   </SfListItem>
-                  <SfListItem class="list__item" v-for="subCat in cat.items" :key="`subcat-${subCat.slug}`">
+                  <SfListItem
+                    class="list__item"
+                    v-for="subCat in cat.items"
+                    :key="`subcat-${subCat.slug}`"
+                  >
                     <SfMenuItem
                       :count="subCat.count || ''"
                       :data-cy="`category-link_subcategory_${subCat.slug}`"
@@ -220,7 +288,13 @@
                       icon=""
                     >
                       <template #label="{ label }">
-                        <nuxt-link :to="localePath(th.getCatLink(subCat))" :class="subCat.isCurrent ? 'sidebar--cat-selected' : ''">{{ label }}</nuxt-link>
+                        <nuxt-link
+                          :to="localePath(th.getCatLink(subCat))"
+                          :class="
+                            subCat.isCurrent ? 'sidebar--cat-selected' : ''
+                          "
+                          >{{ label }}</nuxt-link
+                        >
                       </template>
                     </SfMenuItem>
                   </SfListItem>
@@ -253,13 +327,20 @@ import {
   SfColor
 } from '@storefront-ui/vue';
 import { computed, onMounted } from '@vue/composition-api';
-import { useCart, useFacet, useWishlist, facetGetters, productGetters } from '@vue-storefront/shopify';
+import {
+  useCart,
+  useFacet,
+  useWishlist,
+  facetGetters,
+  productGetters
+} from '@vue-storefront/shopify';
 import { useUiHelpers, useUiState } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
 import Filters from '../components/Filters';
 
 export default {
   transition: 'fade',
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
     onMounted(() => context.root.$scrollTo(context.root.$el, 2000));
     const th = useUiHelpers();
@@ -269,14 +350,19 @@ export default {
     const { result, search, loading } = useFacet();
 
     const products = computed(() => facetGetters.getProducts(result.value));
-    const categoryTree = computed(() => facetGetters.getCategoryTree(result.value));
-    const breadcrumbs = computed(() => facetGetters.getBreadcrumbs(result.value));
+    const categoryTree = computed(() =>
+      facetGetters.getCategoryTree(result.value)
+    );
+    const breadcrumbs = computed(() =>
+      facetGetters.getBreadcrumbs(result.value)
+    );
     const sortBy = computed(() => facetGetters.getSortOptions(result.value));
-    const facets = computed(() => facetGetters.getGrouped(result.value, ['color', 'size']));
+    const facets = computed(() =>
+      facetGetters.getGrouped(result.value, ['color', 'size'])
+    );
     const pagination = computed(() => facetGetters.getPagination(result.value));
 
     onSSR(async () => {
-      console.log('Key : ', th.getFacetsFromURL());
       await search(th.getFacetsFromURL());
     });
 
@@ -318,7 +404,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@storefront-ui/vue/styles";
+@import '~@storefront-ui/vue/styles';
 #category {
   box-sizing: border-box;
   @include for-desktop {
@@ -439,7 +525,8 @@ export default {
     }
     &-label {
       margin: 0 var(--spacer-sm) 0 0;
-      font: var(--font-weight--normal) var(--font-size--base) / 1.6 var(--font-family--secondary);
+      font: var(--font-weight--normal) var(--font-size--base) / 1.6
+        var(--font-family--secondary);
       color: var(--c-link);
     }
   }
@@ -503,7 +590,7 @@ export default {
   }
   &__product-card {
     --product-card-add-button-transform: translate3d(0, 30%, 0);
-     flex: 1 1 50%;
+    flex: 1 1 50%;
     @include for-desktop {
       --product-card-padding: var(--spacer-sm);
       flex: 1 1 25%;
@@ -521,9 +608,9 @@ export default {
     transition-delay: calc(0.1s * var(--index));
   }
   &__pagination {
-      display: flex;
-      justify-content: center;
-      margin: var(--spacer-xl) 0 0 0;
+    display: flex;
+    justify-content: center;
+    margin: var(--spacer-xl) 0 0 0;
   }
   @include for-desktop {
     margin: var(--spacer-sm) 0 0 var(--spacer-sm);

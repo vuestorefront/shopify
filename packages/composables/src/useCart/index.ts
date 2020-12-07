@@ -28,14 +28,9 @@ const getCurrentCart = async (currentCart) => {
 const params: UseCartFactoryParams<Cart, LineItem, ProductVariant, AgnosticCoupon> = {
   loadCart: async (CustomQueryFn?: any) => {
     const settings = getSettings();
-    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-
     if (!isTokenUserSession(settings.currentToken)) {
       return null;
     }
-    console.log('==============================');
-    console.log('==============================');
     return await loadCurrentCart(CustomQueryFn);
   },
   addToCart: async ({ currentCart, product, quantity }, customQuery?: CustomQueryFn) => {
