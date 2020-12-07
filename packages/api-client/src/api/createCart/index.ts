@@ -5,7 +5,8 @@ interface CartData extends Omit<CartDraft, 'currency'> {
   currency?: string;
 }
 
-const createCart = async (cartDraft: CartData = {}, customQueryFn?: CustomQueryFn) => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const createCart = async (cartDraft: CartData = {}) => {
   const { spclient } = getSettings();
 
   const defaultVariables = {
@@ -13,11 +14,10 @@ const createCart = async (cartDraft: CartData = {}, customQueryFn?: CustomQueryF
   };
 
   const request = await spclient.checkout
-  .create(defaultVariables)
-  .then((checkout) => {
-    return checkout;
-  });
-  
+    .create(defaultVariables)
+    .then((checkout) => {
+      return checkout;
+    });
   return request;
 };
 
