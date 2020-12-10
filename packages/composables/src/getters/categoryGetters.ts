@@ -7,8 +7,8 @@ export const getCategoryTree = (category: Category): AgnosticCategoryTree | null
     label: rootCategory.title,
     slug: rootCategory.slug,
     id: rootCategory.id,
-    isCurrent: rootCategory.id === category.id
-    // items: rootCategory.children.map(buildTree)
+    isCurrent: rootCategory.id === category.id,
+    items: []
   });
 
   if (!category) {
