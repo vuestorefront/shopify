@@ -141,18 +141,18 @@
             <SfProductCard
               data-cy="category-product-card"
               v-for="(product, i) in products"
-              :key="productGetters.getSlug(product)"
+              :key="productGetters.getId(product)"
               :style="{ '--index': i }"
               :title="productGetters.getName(product)"
               :image="productGetters.getCoverImage(product)"
               :regular-price="
                 productGetters.getFormattedPrice(
-                  productGetters.getPrice(product).regular
+                  productGetters.getPrice(product.variants).regular
                 )
               "
               :special-price="
                 productGetters.getFormattedPrice(
-                  productGetters.getPrice(product).special
+                  productGetters.getPrice(product.variants).special
                 )
               "
               :max-rating="5"
@@ -162,13 +162,7 @@
               :isAddedToCart="isOnCart(product)"
               @click:wishlist="addToWishlist(product)"
               @click:add-to-cart="addToCart(product, 1)"
-              :link="
-                localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )
-              "
+              :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
               class="products__product-card"
             />
           </transition-group>
@@ -348,14 +342,16 @@ export default {
     const { addToCart, isOnCart } = useCart();
     const { addToWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
+    const products = computed(() => {
+      return facetGetters.getProducts(result.value);
+    });
 
-    const products = computed(() => facetGetters.getProducts(result.value));
     const categoryTree = computed(() =>
       facetGetters.getCategoryTree(result.value)
     );
-    const breadcrumbs = computed(() =>
-      facetGetters.getBreadcrumbs(result.value)
-    );
+    const breadcrumbs = computed(() => {
+      facetGetters.getBreadcrumbs(result.value);
+    });
     const sortBy = computed(() => facetGetters.getSortOptions(result.value));
     const facets = computed(() =>
       facetGetters.getGrouped(result.value, ['color', 'size'])

@@ -7,29 +7,29 @@ interface ProductVariantFilters {
   attributes?: Record<string, string>;
 }
 
-export const getProductName = (product: ProductVariant | Readonly<ProductVariant>): string => (product as any)?._name || '';
+export const getProductName = (product: ProductVariant | Readonly<ProductVariant>): string => (product as any)?.title || '';
 
-export const getProductSlug = (product: ProductVariant | Readonly<ProductVariant>): string => (product as any)?._slug || '';
+export const getProductSlug = (product: ProductVariant | Readonly<ProductVariant>): string => (product as any)?.handle || '';
 
 export const getProductPrice = (product: ProductVariant | Readonly<ProductVariant>): AgnosticPrice => createPrice(product);
 
 export const getProductGallery = (product: ProductVariant): AgnosticMediaGalleryItem[] => {
   const images = product?.images || [];
-
   return images.map((image: Image) => ({
-    small: image.url,
-    big: image.url,
-    normal: image.url
+    small: image.src,
+    big: image.src,
+    normal: image.src
   }));
 };
 
-export const getProductCoverImage = (product: ProductVariant): string => product?.images?.[0]?.url || '';
+export const getProductCoverImage = (product: ProductVariant): string => {
+  return product?.images?.[0]?.src || 'URL not found';
+};
 
 export const getProductFiltered = (products: ProductVariant[], filters: ProductVariantFilters | any = {}): ProductVariant[] => {
   if (!products) {
     return [];
   }
-
   if (filters.attributes && Object.keys(filters.attributes).length > 0) {
     return [getVariantByAttributes(products, filters.attributes)];
   }
@@ -37,7 +37,6 @@ export const getProductFiltered = (products: ProductVariant[], filters: ProductV
   if (filters.master) {
     return products.filter((product) => (product as any)._master);
   }
-
   return products;
 };
 
@@ -84,8 +83,9 @@ export const getProductDescription = (product: ProductVariant): any => (product 
 
 export const getProductCategoryIds = (product: ProductVariant): string[] => (product as any)?._categoriesRef || '';
 
-export const getProductId = (product: ProductVariant): string => (product as any)?._id || '';
+export const getProductId = (product: ProductVariant): string => (product as any)?.id || '';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const getFormattedPrice = (price: number) => createFormatPrice(price);
 
 export const getTotalReviews = (product: ProductVariant): number => (product as any)?._rating?.count || 0;

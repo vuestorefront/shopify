@@ -28,14 +28,14 @@ const factoryParams = {
       // sort: params.sort
     });
     const enhancedProductResponse = enhanceProduct(productResponse);
-    const products = (enhancedProductResponse.data as any)._variants as ProductVariant[];
+    const products = (enhancedProductResponse as any)._variants as ProductVariant[];
     const facets = getFiltersFromProductsAttributes(products);
 
     return {
       products,
       categories,
       facets,
-      total: productResponse.data.products.total,
+      total: productResponse.length,
       perPageOptions: ITEMS_PER_PAGE,
       itemsPerPage
     };

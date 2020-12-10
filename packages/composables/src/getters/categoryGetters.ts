@@ -4,11 +4,11 @@ import { Category } from './../types/GraphQL';
 export const getCategoryTree = (category: Category): AgnosticCategoryTree | null => {
   const getRoot = (category: Category): Category => (category.parent ? getRoot(category.parent) : category);
   const buildTree = (rootCategory: Category) => ({
-    label: rootCategory.name,
+    label: rootCategory.title,
     slug: rootCategory.slug,
     id: rootCategory.id,
-    isCurrent: rootCategory.id === category.id,
-    items: rootCategory.children.map(buildTree)
+    isCurrent: rootCategory.id === category.id
+    // items: rootCategory.children.map(buildTree)
   });
 
   if (!category) {

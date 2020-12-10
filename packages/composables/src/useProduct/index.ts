@@ -16,14 +16,13 @@ const productsSearch = async (params: ProductsSearchParams, customQuery?: Custom
     ...params,
     ...mapPaginationParams(params)
   };
-
   const productResponse = await getProduct(apiSearchParams, customQuery);
   const enhancedProductResponse = enhanceProduct(productResponse);
-  const products = (enhancedProductResponse.data as any)._variants;
+  const products = (enhancedProductResponse as any)._variants;
   const availableFilters: Record<string, Filter> = getFiltersFromProductsAttributes(products);
   return {
     data: products,
-    total: productResponse.data.products.total,
+    total: productResponse.length,
     // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4856
     availableFilters,
     availableSortingOptions
