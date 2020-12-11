@@ -5,7 +5,7 @@ export const getCategoryTree = (category: Category): AgnosticCategoryTree | null
   const getRoot = (category: Category): Category => (category.parent ? getRoot(category.parent) : category);
   const buildTree = (rootCategory: Category) => ({
     label: rootCategory.title,
-    slug: rootCategory.slug,
+    slug: rootCategory.handle,
     id: rootCategory.id,
     isCurrent: rootCategory.id === category.id,
     items: []
@@ -14,7 +14,6 @@ export const getCategoryTree = (category: Category): AgnosticCategoryTree | null
   if (!category) {
     return null;
   }
-
   return buildTree(getRoot(category));
 };
 

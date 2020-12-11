@@ -1,5 +1,5 @@
 import { getProduct } from '@vue-storefront/shopify-api';
-import { enhanceProduct, mapPaginationParams, getFiltersFromProductsAttributes } from './../helpers/internals';
+import { enhanceProduct, mapPaginationParams } from './../helpers/internals';
 import { ProductVariant } from './../types/GraphQL';
 import { useProductFactory, ProductsSearchResult, UseProduct, AgnosticSortByOption, CustomQuery } from '@vue-storefront/core';
 import { ProductsSearchParams } from '../types';
@@ -19,12 +19,12 @@ const productsSearch = async (params: ProductsSearchParams, customQuery?: Custom
   const productResponse = await getProduct(apiSearchParams, customQuery);
   const enhancedProductResponse = enhanceProduct(productResponse);
   const products = (enhancedProductResponse as any)._variants;
-  const availableFilters: Record<string, Filter> = getFiltersFromProductsAttributes(products);
+  // const availableFilters: Record<string, Filter> = getFiltersFromProductsAttributes(products);
   return {
     data: products,
     total: productResponse.length,
     // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4856
-    availableFilters,
+    // availableFilters,
     availableSortingOptions
   };
 };

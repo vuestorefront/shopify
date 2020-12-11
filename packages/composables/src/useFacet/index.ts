@@ -21,6 +21,7 @@ const factoryParams = {
 
     const productResponse = await getProduct({
       catId: categories[0].id,
+      data: params.data,
       limit: itemsPerPage,
       offset: (params.input.page - 1) * itemsPerPage,
       filters

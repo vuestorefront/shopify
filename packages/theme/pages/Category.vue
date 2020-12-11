@@ -85,8 +85,8 @@
         <SfLoader :class="{ loading }" :loading="loading">
           <SfAccordion :firstOpen="true" :showChevron="false">
             <SfAccordionItem
-              v-for="(cat, i) in categoryTree && categoryTree.items"
-              :key="i"
+              v-for="(cat) in categoryTree"
+              :key="cat.slug"
               :header="cat.label"
             >
               <SfList class="list">
@@ -99,28 +99,9 @@
                     <template #label>
                       <nuxt-link
                         :to="localePath(th.getCatLink(cat))"
-                        :class="cat.isCurrent ? 'sidebar--cat-selected' : ''"
-                        >All</nuxt-link
-                      >
-                    </template>
-                  </SfMenuItem>
-                </SfListItem>
-                <SfListItem
-                  class="list__item"
-                  v-for="(subCat, j) in cat.items"
-                  :key="j"
-                >
-                  <SfMenuItem
-                    :count="subCat.count || ''"
-                    :data-cy="`category-link_subcategory_${subCat.slug}`"
-                    :label="subCat.label"
-                  >
-                    <template #label="{ label }">
-                      <nuxt-link
-                        :to="localePath(th.getCatLink(subCat))"
-                        :class="subCat.isCurrent ? 'sidebar--cat-selected' : ''"
-                        >{{ label }}</nuxt-link
-                      >
+                        :class="cat.isCurrent ? 'sidebar--cat-selected' : ''">
+                        All
+                        </nuxt-link>
                     </template>
                   </SfMenuItem>
                 </SfListItem>
@@ -147,12 +128,12 @@
               :image="productGetters.getCoverImage(product)"
               :regular-price="
                 productGetters.getFormattedPrice(
-                  productGetters.getPrice(product.variants).regular
+                  productGetters.getPrice(product).regular
                 )
               "
               :special-price="
                 productGetters.getFormattedPrice(
-                  productGetters.getPrice(product.variants).special
+                  productGetters.getPrice(product).special
                 )
               "
               :max-rating="5"
@@ -249,14 +230,13 @@
           <SfAccordionItem header="Category" class="filters__accordion-item">
             <SfAccordion class="categories">
               <SfAccordionItem
-                v-for="cat in categoryTree && categoryTree.items"
+                v-for="cat in categoryTree"
                 :key="`category-${cat.slug}`"
                 :header="cat.label"
               >
                 <SfList class="list">
                   <SfListItem class="list__item">
                     <SfMenuItem
-                      :count="cat.coun || ''"
                       :data-cy="`category-link_subcategory_${cat.slug}`"
                       :label="cat.label"
                       icon=""
@@ -272,20 +252,20 @@
                   </SfListItem>
                   <SfListItem
                     class="list__item"
-                    v-for="subCat in cat.items"
-                    :key="`subcat-${subCat.slug}`"
+                    v-for="cat in categoryTree"
+                    :key="`subcat-${cat.slug}`"
                   >
                     <SfMenuItem
-                      :count="subCat.count || ''"
-                      :data-cy="`category-link_subcategory_${subCat.slug}`"
-                      :label="subCat.label"
+                      :count="cat.count || ''"
+                      :data-cy="`category-link_subcategory_${cat.slug}`"
+                      :label="cat.label"
                       icon=""
                     >
                       <template #label="{ label }">
                         <nuxt-link
-                          :to="localePath(th.getCatLink(subCat))"
+                          :to="localePath(th.getCatLink(cat))"
                           :class="
-                            subCat.isCurrent ? 'sidebar--cat-selected' : ''
+                            cat.isCurrent ? 'sidebar--cat-selected' : ''
                           "
                           >{{ label }}</nuxt-link
                         >
@@ -342,15 +322,13 @@ export default {
     const { addToCart, isOnCart } = useCart();
     const { addToWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
-    const products = computed(() => {
-      return facetGetters.getProducts(result.value);
-    });
-
+    const products = computed(() => facetGetters.getProducts(result.value));
     const categoryTree = computed(() =>
       facetGetters.getCategoryTree(result.value)
     );
+
     const breadcrumbs = computed(() => {
-      facetGetters.getBreadcrumbs(result.value);
+      return facetGetters.getBreadcrumbs(result.value);
     });
     const sortBy = computed(() => facetGetters.getSortOptions(result.value));
     const facets = computed(() =>

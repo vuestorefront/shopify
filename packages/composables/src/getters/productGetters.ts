@@ -1,6 +1,6 @@
 import { ProductGetters, AgnosticMediaGalleryItem, AgnosticAttribute, AgnosticPrice } from '@vue-storefront/core';
 import { ProductVariant, Image } from './../types/GraphQL';
-import { formatAttributeList, getVariantByAttributes, createPrice, createFormatPrice } from './_utils';
+import { getVariantByAttributes, createPrice, createFormatPrice } from './_utils';
 
 interface ProductVariantFilters {
   master?: boolean;
@@ -40,7 +40,7 @@ export const getProductFiltered = (products: ProductVariant[], filters: ProductV
   return products;
 };
 
-export const getProductAttributes = (products: ProductVariant[] | ProductVariant, filterByAttributeName?: string[]): Record<string, AgnosticAttribute | string> => {
+export const getProductAttributes = (products: ProductVariant[] | ProductVariant): Record<string, AgnosticAttribute | string> => {
   const isSingleProduct = !Array.isArray(products);
   const productList = (isSingleProduct ? [products] : products) as ProductVariant[];
 
@@ -48,9 +48,8 @@ export const getProductAttributes = (products: ProductVariant[] | ProductVariant
     return {} as any;
   }
 
-  const formatAttributes = (product: ProductVariant): AgnosticAttribute[] =>
+  /* const formatAttributes = (product: ProductVariant): AgnosticAttribute[] =>
     formatAttributeList(product.attributeList).filter((attribute) => filterByAttributeName ? filterByAttributeName.includes(attribute.name) : attribute);
-
   const reduceToUniques = (prev, curr) => {
     const isAttributeExist = prev.some((el) => el.name === curr.name && el.value === curr.value);
 
@@ -76,7 +75,7 @@ export const getProductAttributes = (products: ProductVariant[] | ProductVariant
     .map((product) => formatAttributes(product))
     .reduce((prev, curr) => [...prev, ...curr], [])
     .reduce(reduceToUniques, [])
-    .reduce(reduceByAttributeName, {});
+    .reduce(reduceByAttributeName, {});*/
 };
 
 export const getProductDescription = (product: ProductVariant): any => (product as any)?._description || '';

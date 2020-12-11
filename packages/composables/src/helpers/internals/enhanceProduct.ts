@@ -5,12 +5,12 @@ interface ProductData {
   products: ProductQueryResult;
 }
 // eslint-disable-next-line prefer-const
+// let productsList = [];
 const enhanceProduct = (productResponse: ApolloQueryResult<ProductData>): ApolloQueryResult<ProductData> => {
-  // (productResponse.data as any)._variants = productResponse.data.products.results
   (productResponse as any)._variants = productResponse;
+  // productsList.push(productResponse);
 
   /* productsList.map((product) => {
-    const current = product.masterData.current;
     const current = product;
 
     return current.variants.map((variant) => ({

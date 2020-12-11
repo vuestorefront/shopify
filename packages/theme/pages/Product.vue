@@ -4,12 +4,10 @@
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
     />
+
     <div class="product">
       <!-- TODO: replace example images with the getter, wait for SfGallery fix by SFUI team: https://github.com/DivanteLtd/storefront-ui/issues/1074 -->
-      <SfGallery
-        class="product__gallery"
-        :images="productGallery"
-      />
+      <SfGallery class="product__gallery" :images="productGallery" />
       <div class="product__info">
         <div class="product__header">
           <SfHeading
@@ -26,35 +24,42 @@
         </div>
         <div class="product__price-and-rating">
           <SfPrice
-            :regular="productGetters.getFormattedPrice(productGetters.getPrice(product).regular)"
-            :special="productGetters.getFormattedPrice(productGetters.getPrice(product).special)"
+            :regular="
+              productGetters.getFormattedPrice(
+                productGetters.getPrice(product).regular
+              )
+            "
+            :special="
+              productGetters.getFormattedPrice(
+                productGetters.getPrice(product).special
+              )
+            "
           />
           <div>
             <div class="product__rating">
-              <SfRating
-                :score="averageRating"
-                :max="5" />
-              <a
-                v-if="!!totalReviews"
-                href="#"
-                class="product__count">
+              <SfRating :score="averageRating" :max="5" />
+              <a v-if="!!totalReviews" href="#" class="product__count">
                 ({{ totalReviews }})
               </a>
             </div>
-            <SfButton data-cy="product-btn_read-all" class="sf-button--text desktop-only">
+            <SfButton
+              data-cy="product-btn_read-all"
+              class="sf-button--text desktop-only"
+            >
               Read all reviews
             </SfButton>
           </div>
         </div>
         <div>
-          <p class="product__description desktop-only">
-            {{ description }}}
-          </p>
-          <SfButton data-cy="product-btn_size-guide" class="sf-button--text desktop-only product__guide">
+          <p class="product__description desktop-only">{{ description }}}</p>
+          <SfButton
+            data-cy="product-btn_size-guide"
+            class="sf-button--text desktop-only product__guide"
+          >
             Size guide
           </SfButton>
           <!-- TODO: add size selector after design is added -->
-          <SfSelect
+          <!--SfSelect
             data-cy="product-select_size"
             v-if="options.size"
             :selected="configuration.size"
@@ -70,13 +75,13 @@
             >
               <SfProductOption :label="size.label" />
             </SfSelectOption>
-          </SfSelect>
+          </!--SfSelect-->
           <!-- TODO: add color picker after PR done by SFUI team -->
-          <div class="product__colors desktop-only">
+          <!--div class="product__colors desktop-only">
             <p class="product__color-label">Color:</p>
             <div v-if="options.color">
-              <!-- TODO: handle selected logic differently as the selected prop for SfColor is a boolean -->
-              <SfColor
+              < TODO: handle selected logic differently as the selected prop for SfColor is a boolean -->
+          <!--SfColor
                 data-cy="product-color_update"
                 v-for="(color, i) in options.color"
                 :key="i"
@@ -85,7 +90,7 @@
                 @click="updateFilter({color})"
               />
             </div>
-          </div>
+          </div-->
           <SfAddToCart
             data-cy="product-cart_add"
             :stock="stock"
@@ -95,23 +100,23 @@
             @click="addToCart(product, parseInt(qty))"
             class="product__add-to-cart"
           />
-          <SfButton data-cy="product-btn_save-later" class="sf-button--text desktop-only product__save">
+          <SfButton
+            data-cy="product-btn_save-later"
+            class="sf-button--text desktop-only product__save"
+          >
             Save for later
           </SfButton>
-          <SfButton data-cy="product-btn_add-to-compare" class="sf-button--text desktop-only product__compare">
+          <SfButton
+            data-cy="product-btn_add-to-compare"
+            class="sf-button--text desktop-only product__compare"
+          >
             Add to compare
           </SfButton>
         </div>
         <SfTabs :openTab="1" class="product__tabs">
           <SfTab data-cy="product-tab_description" title="Description">
             <div>
-              <p>
-                The Karissa V-Neck Tee features a semi-fitted shape that's
-                flattering for every figure. You can hit the gym with
-                confidence while it hugs curves and hides common "problem"
-                areas. Find stunning women's cocktail dresses and party
-                dresses.
-              </p>
+            <p>{{ description }}</p>
             </div>
             <SfProperty
               v-for="(property, i) in properties"
@@ -219,7 +224,13 @@ import {
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
 import { ref, computed } from '@vue/composition-api';
-import { useProduct, useCart, productGetters, useReview, reviewGetters } from '@vue-storefront/shopify';
+import {
+  useProduct,
+  useCart,
+  productGetters,
+  useReview,
+  reviewGetters
+} from '@vue-storefront/shopify';
 import { onSSR } from '@vue-storefront/core';
 
 export default {
@@ -230,23 +241,55 @@ export default {
     const qty = ref(1);
     const { id } = context.root.$route.params;
     const { products, search } = useProduct('products');
-    const { products: relatedProducts, search: searchRelatedProducts, loading: relatedLoading } = useProduct('relatedProducts');
+    const {
+      products: relatedProducts,
+      search: searchRelatedProducts,
+      loading: relatedLoading
+    } = useProduct('relatedProducts');
     const { addToCart, loading } = useCart();
-    const { reviews: productReviews, search: searchReviews } = useReview('productReviews');
+    const { reviews: productReviews, search: searchReviews } = useReview(
+      'productReviews'
+    );
 
-    const product = computed(() => productGetters.getFiltered(products.value, { master: true, attributes: context.root.$route.query })[0]);
-    const options = computed(() => productGetters.getAttributes(products.value, ['color', 'size']));
-    const configuration = computed(() => productGetters.getAttributes(product.value, ['color', 'size']));
-    const categories = computed(() => productGetters.getCategoryIds(product.value));
-    const reviews = computed(() => reviewGetters.getItems(productReviews.value));
+    const product = computed(
+      () => {
+        const curProductSlug = context.root.$route.params.slug;
+        let finalProduct = [];
+        for (let p = 0; p < products.value.length; p++) {
+          if (products.value[p].handle === curProductSlug) {
+            finalProduct = products.value[p];
+            break;
+          }
+        }
+        return productGetters.getFiltered(finalProduct, {
+          master: false,
+          attributes: context.root.$route.query
+        });
+      });
+
+    const options = computed(() =>
+      productGetters.getAttributes(products.value, ['color', 'size'])
+    );
+    const configuration = computed(() =>
+      productGetters.getAttributes(product.value, ['color', 'size'])
+    );
+    const categories = computed(() =>
+      productGetters.getCategoryIds(product.value)
+    );
+    const reviews = computed(() =>
+      reviewGetters.getItems(productReviews.value)
+    );
 
     // TODO: Breadcrumbs are temporary disabled because productGetters return undefined. We have a mocks in data
     // const breadcrumbs = computed(() => productGetters.getBreadcrumbs ? productGetters.getBreadcrumbs(product.value) : props.fallbackBreadcrumbs);
-    const productGallery = computed(() => productGetters.getGallery(product.value).map(img => ({
-      mobile: { url: img.small },
-      desktop: { url: img.normal },
-      big: { url: img.big }
-    })));
+
+    const productGallery = computed(() =>
+      productGetters.getGallery(product.value).map((img) => ({
+        mobile: { url: img.small },
+        desktop: { url: img.normal },
+        big: { url: img.big }
+      }))
+    );
 
     onSSR(async () => {
       await search({ id });
@@ -270,9 +313,15 @@ export default {
       product,
       reviews,
       reviewGetters,
-      averageRating: computed(() => reviewGetters.getAverageRating(productReviews.value)),
-      totalReviews: computed(() => reviewGetters.getTotalReviews(productReviews.value)),
-      relatedProducts: computed(() => productGetters.getFiltered(relatedProducts.value, { master: true })),
+      averageRating: computed(() =>
+        reviewGetters.getAverageRating(productReviews.value)
+      ),
+      totalReviews: computed(() =>
+        reviewGetters.getTotalReviews(productReviews.value)
+      ),
+      relatedProducts: computed(() =>
+        productGetters.getFiltered(relatedProducts.value, { master: false })
+      ),
       relatedLoading,
       options,
       qty,
@@ -326,10 +375,11 @@ export default {
           value: 'Germany'
         }
       ],
-      description: 'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
+      description:
+        'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
       detailsIsActive: false,
       brand:
-          'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',
+        'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',
       careInstructions: 'Do not wash!',
       breadcrumbs: [
         {
@@ -356,7 +406,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "~@storefront-ui/vue/styles";
+@import '~@storefront-ui/vue/styles';
 
 #product {
   box-sizing: border-box;

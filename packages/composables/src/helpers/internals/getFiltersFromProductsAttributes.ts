@@ -5,7 +5,6 @@ import { Filter, FilterOption } from '@vue-storefront/shopify-api';
 const extractAttributes = (product: ProductVariant): Attribute[] => product.attributeList;
 
 const flattenAttributes = (prev: Attribute[], curr: Attribute[]): Attribute[] => [...prev, ...(curr || [])];
-
 const getFilterFromAttribute = (attribute: Attribute, prev) => {
   const attrValue = getAttributeValue(attribute);
   const filter = prev[attribute.name] || {
@@ -26,7 +25,6 @@ export default (products: ProductVariant[]): Record<string, Filter> => {
   if (!products) {
     return {};
   }
-
   return products.map(extractAttributes).reduce(flattenAttributes, []).reduce((prev, attribute) => {
     prev[attribute.name] = getFilterFromAttribute(attribute, prev);
     return prev;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { CartGetters, AgnosticCoupon, AgnosticPrice, AgnosticTotals } from '@vue-storefront/core';
 import { Cart, LineItem } from './../types/GraphQL';
 import { getProductAttributes } from './productGetters';
@@ -20,8 +21,8 @@ export const getCartItemPrice = (product: LineItem): AgnosticPrice => createPric
 
 export const getCartItemQty = (product: LineItem): number => product.quantity;
 
-export const getCartItemAttributes = (product: LineItem, filterByAttributeName?: Array<string>) =>
-  getProductAttributes(product.variant, filterByAttributeName);
+export const getCartItemAttributes = (product: LineItem) =>
+  getProductAttributes(product.variant);
 
 export const getCartItemSku = (product: LineItem): string => product.variant.sku;
 

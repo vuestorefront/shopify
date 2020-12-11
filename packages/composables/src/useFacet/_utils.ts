@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { SearchData } from './../types';
 
 const buildBreadcrumbsList = (rootCat, bc) => {
-  const newBc = [...bc, { text: rootCat.name, link: rootCat.slug }];
+  const newBc = [...bc, { text: rootCat.title, link: rootCat.handle }];
   return rootCat.parent ? buildBreadcrumbsList(rootCat.parent, newBc) : newBc;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const buildBreadcrumbs = (rootCat) =>
   buildBreadcrumbsList(rootCat, [])
     .reverse()

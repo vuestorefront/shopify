@@ -12,6 +12,7 @@ import { getProductFiltered } from './productGetters';
 import { getCategoryTree as buildCategoryTree } from './categoryGetters';
 import { buildBreadcrumbs, buildFacets, reduceForGroupedFacets, reduceForFacets } from './../useFacet/_utils';
 import { FacetResultsData, SearchData } from './../types';
+// import { params } from 'src/useUser/factoryParams';
 
 const getAll = (searchData: SearchData, criteria?: string[]): AgnosticFacet[] => buildFacets(searchData, reduceForFacets, criteria);
 
@@ -60,10 +61,24 @@ const getBreadcrumbs = (searchData: SearchData): AgnosticBreadcrumb[] => {
   if (!searchData.data) {
     return [];
   }
+  // fetch curren category slug
+  const curCategoryPage = searchData.input.categorySlug;
+  const allCategories = searchData.data.categories;
+  let curCatIndex = 0;
 
+  // fetch index from category array to generate link and title
+  for (let i = 0; i < allCategories.length; i++) {
+    // eslint-disable-next-line dot-notation
+    if (allCategories[i]['handle'] === curCategoryPage) {
+      curCatIndex = i;
+      break;
+    } else {
+      curCatIndex = 0;
+    }
+  }
   return [
     { text: 'Home', link: '/' },
-    ...buildBreadcrumbs(searchData.data.categories[0]).map(b => ({ ...b, link: `/c${b.link}` }))
+    ...buildBreadcrumbs(searchData.data.categories[curCatIndex]).map(b => ({ ...b, link: `/c${b.link}` }))
   ];
 };
 
