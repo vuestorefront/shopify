@@ -24,13 +24,13 @@ This repository is a monorepo containing three projects:
 yarn install or yarn
 ```
 
-3. (optional) Then you can verify if everything works properly by building all three projects:
+2. (optional) Then you can verify if everything works properly by building all three projects:
 
 ```sh
 yarn build
 ```
 
-4. If everything built properly, you can start creating your new integration with:
+3. If everything built properly, you can start creating your new integration with:
 
 ```sh
 yarn dev
