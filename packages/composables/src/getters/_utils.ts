@@ -3,6 +3,7 @@ import { ProductVariant, ProductPrice, DiscountedProductPriceValue, LineItem } f
 import { getSettings } from '@vue-storefront/shopify-api';
 import { DiscountedLineItemPrice } from '../types/GraphQL';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const getAttributeValue = (attribute) => {
   switch (attribute.__typename) {
     case 'StringAttribute':
@@ -33,23 +34,19 @@ export const getAttributeValue = (attribute) => {
 
 export const formatAttributeList = (attributes: Array<any>): AgnosticAttribute[] =>
   attributes.map((attr) => {
-    const attrValue = getAttributeValue(attr);
     return {
       name: attr.name,
-      value: attrValue,
-      label: attr.label || attr.localizedLabel || ((typeof attrValue === 'string') ? attrValue : null)
+      value: attr.values,
+      label: attr.name
     };
   });
-
-export const getVariantByAttributes = (products: ProductVariant[] | Readonly<ProductVariant[]>, attributes: any): ProductVariant => {
+export const getVariantByAttributes = (products, attributes: any): ProductVariant => {
   if (!products || products.length === 0) {
     return null;
   }
-
   const configurationKeys = Object.keys(attributes);
-
   return products.find((product) => {
-    const currentAttributes = formatAttributeList(product.attributeList);
+    const currentAttributes = formatAttributeList(product.options);
 
     return configurationKeys.every((attrName) =>
       currentAttributes.find(({ name, value }) => attrName === name && attributes[attrName] === value)

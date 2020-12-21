@@ -1,6 +1,6 @@
 import { ProductGetters, AgnosticMediaGalleryItem, AgnosticAttribute, AgnosticPrice } from '@vue-storefront/core';
 import { ProductVariant, Image } from './../types/GraphQL';
-import { getVariantByAttributes, createPrice, createFormatPrice } from './_utils';
+import { formatAttributeList, getVariantByAttributes, createPrice, createFormatPrice } from './_utils';
 
 interface ProductVariantFilters {
   master?: boolean;
@@ -43,13 +43,13 @@ export const getProductFiltered = (products: ProductVariant[], filters: ProductV
 export const getProductAttributes = (products: ProductVariant[] | ProductVariant): Record<string, AgnosticAttribute | string> => {
   const isSingleProduct = !Array.isArray(products);
   const productList = (isSingleProduct ? [products] : products) as ProductVariant[];
-
   if (!products || productList.length === 0) {
     return {} as any;
   }
 
-  /* const formatAttributes = (product: ProductVariant): AgnosticAttribute[] =>
-    formatAttributeList(product.attributeList).filter((attribute) => filterByAttributeName ? filterByAttributeName.includes(attribute.name) : attribute);
+  const formatAttributes = (product): AgnosticAttribute[] =>{
+    return formatAttributeList(product.options);
+  };
   const reduceToUniques = (prev, curr) => {
     const isAttributeExist = prev.some((el) => el.name === curr.name && el.value === curr.value);
 
@@ -70,15 +70,16 @@ export const getProductAttributes = (products: ProductVariant[] | ProductVariant
       }
     ]
   });
-
   return productList
     .map((product) => formatAttributes(product))
     .reduce((prev, curr) => [...prev, ...curr], [])
     .reduce(reduceToUniques, [])
-    .reduce(reduceByAttributeName, {});*/
+    .reduce(reduceByAttributeName, {});
 };
 
-export const getProductDescription = (product: ProductVariant): any => (product as any)?._description || '';
+export const getProductDescription = (product: ProductVariant): any => {
+  return (product as any)?.description || '';
+};
 
 export const getProductCategoryIds = (product: ProductVariant): string[] => (product as any)?._categoriesRef || '';
 

@@ -51,7 +51,7 @@
           </div>
         </div>
         <div>
-          <p class="product__description desktop-only">{{ description }}}</p>
+          <p class="product__description desktop-only">{{ productGetters.getDescription(product) }}</p>
           <SfButton
             data-cy="product-btn_size-guide"
             class="sf-button--text desktop-only product__guide"
@@ -59,38 +59,38 @@
             Size guide
           </SfButton>
           <!-- TODO: add size selector after design is added -->
-          <!--SfSelect
+          <SfSelect
             data-cy="product-select_size"
-            v-if="options.size"
-            :selected="configuration.size"
+            v-if="options.Size"
+            :selected="configuration.Size"
             @change="size => updateFilter({ size })"
             label="Size"
             class="sf-select--underlined product__select-size"
             :required="true"
           >
             <SfSelectOption
-              v-for="size in options.size"
+              v-for="size in options.Size"
               :key="size.value"
               :value="size.value"
             >
-              <SfProductOption :label="size.label" />
+              {{ size.value }}
             </SfSelectOption>
-          </!--SfSelect-->
+          </SfSelect>
           <!-- TODO: add color picker after PR done by SFUI team -->
-          <!--div class="product__colors desktop-only">
+          <div v-if="options.Color">
+            <div class="product__colors desktop-only">
             <p class="product__color-label">Color:</p>
-            <div v-if="options.color">
-              < TODO: handle selected logic differently as the selected prop for SfColor is a boolean -->
-          <!--SfColor
+              <!-- TODO: handle selected logic differently as the selected prop for SfColor is a boolean -->
+          <SfColor
                 data-cy="product-color_update"
-                v-for="(color, i) in options.color"
+                v-for="(color, i) in options.Color"
                 :key="i"
                 :color="color.value"
                 class="product__color"
                 @click="updateFilter({color})"
               />
             </div>
-          </div-->
+          </div>
           <SfAddToCart
             data-cy="product-cart_add"
             :stock="stock"
@@ -268,7 +268,7 @@ export default {
       });
 
     const options = computed(() =>
-      productGetters.getAttributes(products.value, ['color', 'size'])
+      productGetters.getAttributes(product.value)
     );
     const configuration = computed(() =>
       productGetters.getAttributes(product.value, ['color', 'size'])
