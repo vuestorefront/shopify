@@ -85,7 +85,7 @@
         <SfLoader :class="{ loading }" :loading="loading">
           <SfAccordion :firstOpen="true" :showChevron="false">
             <SfAccordionItem
-              v-for="(cat) in categoryTree"
+              v-for="cat in categoryTree"
               :key="cat.slug"
               :header="cat.label"
             >
@@ -99,9 +99,10 @@
                     <template #label>
                       <nuxt-link
                         :to="localePath(th.getCatLink(cat))"
-                        :class="cat.isCurrent ? 'sidebar--cat-selected' : ''">
+                        :class="cat.isCurrent ? 'sidebar--cat-selected' : ''"
+                      >
                         All
-                        </nuxt-link>
+                      </nuxt-link>
                     </template>
                   </SfMenuItem>
                 </SfListItem>
@@ -143,7 +144,13 @@
               :isAddedToCart="isOnCart(product)"
               @click:wishlist="addToWishlist(product)"
               @click:add-to-cart="addToCart(product, 1)"
-              :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
+              :link="
+                localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )
+              "
               class="products__product-card"
             />
           </transition-group>
@@ -264,9 +271,7 @@
                       <template #label="{ label }">
                         <nuxt-link
                           :to="localePath(th.getCatLink(cat))"
-                          :class="
-                            cat.isCurrent ? 'sidebar--cat-selected' : ''
-                          "
+                          :class="cat.isCurrent ? 'sidebar--cat-selected' : ''"
                           >{{ label }}</nuxt-link
                         >
                       </template>
@@ -298,7 +303,7 @@ import {
   SfSelect,
   SfBreadcrumbs,
   SfLoader,
-  SfColor
+  SfColor,
 } from '@storefront-ui/vue';
 import { computed, onMounted } from '@vue/composition-api';
 import {
@@ -306,7 +311,7 @@ import {
   useFacet,
   useWishlist,
   facetGetters,
-  productGetters
+  productGetters,
 } from '@vue-storefront/shopify';
 import { useUiHelpers, useUiState } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
@@ -353,7 +358,7 @@ export default {
       breadcrumbs,
       addToWishlist,
       addToCart,
-      isOnCart
+      isOnCart,
     };
   },
   components: {
@@ -372,8 +377,8 @@ export default {
     SfLoader,
     SfColor,
     SfHeading,
-    Filters
-  }
+    Filters,
+  },
 };
 </script>
 

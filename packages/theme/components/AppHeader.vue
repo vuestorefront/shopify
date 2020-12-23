@@ -49,7 +49,7 @@ import {
   useWishlist,
   useUser,
   cartGetters,
-  useCategory
+  useCategory,
 } from '@vue-storefront/shopify';
 import { computed, ref } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
@@ -60,13 +60,13 @@ export default {
   components: {
     SfHeader,
     SfImage,
-    LocaleSelector
+    LocaleSelector,
   },
   setup(props, { root }) {
     const {
       toggleCartSidebar,
       toggleWishlistSidebar,
-      toggleLoginModal
+      toggleLoginModal,
     } = useUiState();
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
     const { isAuthenticated, load } = useUser();
@@ -89,7 +89,6 @@ export default {
       if (isAuthenticated.value) {
         return root.$router.push('/my-account');
       }
-
       toggleLoginModal();
     };
 
@@ -108,9 +107,9 @@ export default {
       toggleWishlistSidebar,
       changeSearchTerm,
       term,
-      categories
+      categories,
     };
-  }
+  },
 };
 </script>
 

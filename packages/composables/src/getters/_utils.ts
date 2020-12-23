@@ -44,7 +44,10 @@ export const getVariantByAttributes = (products, attributes: any): ProductVarian
   if (!products || products.length === 0) {
     return null;
   }
+  // get available variants keys from product object
   const configurationKeys = Object.keys(attributes);
+
+  // find variations based on selected key and value
   return products.find((product) => {
     const currentAttributes = formatAttributeList(product.options);
 

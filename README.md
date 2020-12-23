@@ -8,7 +8,6 @@
 
 This repository is a starting point for creating new integrations for [Vue Storefront Next with Shopify](https://github.com/DivanteLtd/vue-storefront/tree/next).
 
-- [Demo](http://shopify-pwa-beta.aureatelabs.com/) (WIP)
 - [Documentation](https://docs-next.vuestorefront.io/shopify/) (WIP)
 
 This repository is a monorepo containing three projects:

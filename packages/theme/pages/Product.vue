@@ -51,7 +51,10 @@
           </div>
         </div>
         <div>
-          <p class="product__description desktop-only">{{ productGetters.getDescription(product) }}</p>
+          <p class="product__description desktop-only">
+            {{ productGetters.getDescription(product) }}
+          </p>
+
           <SfButton
             data-cy="product-btn_size-guide"
             class="sf-button--text desktop-only product__guide"
@@ -63,7 +66,7 @@
             data-cy="product-select_size"
             v-if="options.Size"
             :selected="configuration.Size"
-            @change="size => updateFilter({ size })"
+            @change="(size) => updateFilter({ size })"
             label="Size"
             class="sf-select--underlined product__select-size"
             :required="true"
@@ -79,15 +82,15 @@
           <!-- TODO: add color picker after PR done by SFUI team -->
           <div v-if="options.Color">
             <div class="product__colors desktop-only">
-            <p class="product__color-label">Color:</p>
+              <p class="product__color-label">Color:</p>
               <!-- TODO: handle selected logic differently as the selected prop for SfColor is a boolean -->
-          <SfColor
+              <SfColor
                 data-cy="product-color_update"
                 v-for="(color, i) in options.Color"
                 :key="i"
                 :color="color.value"
                 class="product__color"
-                @click="updateFilter({color})"
+                @click="updateFilter({ color })"
               />
             </div>
           </div>
@@ -116,7 +119,7 @@
         <SfTabs :openTab="1" class="product__tabs">
           <SfTab data-cy="product-tab_description" title="Description">
             <div>
-            <p>{{ description }}</p>
+              <p>{{ description }}</p>
             </div>
             <SfProperty
               v-for="(property, i) in properties"
@@ -218,7 +221,7 @@ import {
   SfReview,
   SfBreadcrumbs,
   SfButton,
-  SfColor
+  SfColor,
 } from '@storefront-ui/vue';
 
 import InstagramFeed from '~/components/InstagramFeed.vue';
@@ -229,7 +232,7 @@ import {
   useCart,
   productGetters,
   useReview,
-  reviewGetters
+  reviewGetters,
 } from '@vue-storefront/shopify';
 import { onSSR } from '@vue-storefront/core';
 
@@ -244,34 +247,30 @@ export default {
     const {
       products: relatedProducts,
       search: searchRelatedProducts,
-      loading: relatedLoading
+      loading: relatedLoading,
     } = useProduct('relatedProducts');
     const { addToCart, loading } = useCart();
     const { reviews: productReviews, search: searchReviews } = useReview(
       'productReviews'
     );
 
-    const product = computed(
-      () => {
-        const curProductSlug = context.root.$route.params.slug;
-        let finalProduct = [];
-        for (let p = 0; p < products.value.length; p++) {
-          if (products.value[p].handle === curProductSlug) {
-            finalProduct = products.value[p];
-            break;
-          }
+    const product = computed(() => {
+      const curProductSlug = context.root.$route.params.slug;
+      let finalProduct = [];
+      for (let p = 0; p < products.value.length; p++) {
+        if (products.value[p].handle === curProductSlug) {
+          finalProduct = products.value[p];
+          break;
         }
-        return productGetters.getFiltered(finalProduct, {
-          master: false,
-          attributes: context.root.$route.query
-        });
+      }
+      return productGetters.getFiltered(finalProduct, {
+        master: false,
+        attributes: context.root.$route.query,
       });
-
-    const options = computed(() =>
-      productGetters.getAttributes(product.value)
-    );
+    });
+    const options = computed(() => productGetters.getAttributes(product.value));
     const configuration = computed(() =>
-      productGetters.getAttributes(product.value, ['color', 'size'])
+      productGetters.getAttributes(product.value)
     );
     const categories = computed(() =>
       productGetters.getCategoryIds(product.value)
@@ -287,7 +286,7 @@ export default {
       productGetters.getGallery(product.value).map((img) => ({
         mobile: { url: img.small },
         desktop: { url: img.normal },
-        big: { url: img.big }
+        big: { url: img.big },
       }))
     );
 
@@ -302,8 +301,8 @@ export default {
         path: context.root.$route.path,
         query: {
           ...configuration.value,
-          ...filter
-        }
+          ...filter,
+        },
       });
     };
 
@@ -328,7 +327,7 @@ export default {
       addToCart,
       loading,
       productGetters,
-      productGallery
+      productGallery,
     };
   },
   components: {
@@ -351,7 +350,7 @@ export default {
     SfBreadcrumbs,
     SfButton,
     InstagramFeed,
-    RelatedProducts
+    RelatedProducts,
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
@@ -360,20 +359,20 @@ export default {
       properties: [
         {
           name: 'Product Code',
-          value: '578902-00'
+          value: '578902-00',
         },
         {
           name: 'Category',
-          value: 'Pants'
+          value: 'Pants',
         },
         {
           name: 'Material',
-          value: 'Cotton'
+          value: 'Cotton',
         },
         {
           name: 'Country',
-          value: 'Germany'
-        }
+          value: 'Germany',
+        },
       ],
       description:
         'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
@@ -385,24 +384,24 @@ export default {
         {
           text: 'Home',
           route: {
-            link: '#'
-          }
+            link: '#',
+          },
         },
         {
           text: 'Category',
           route: {
-            link: '#'
-          }
+            link: '#',
+          },
         },
         {
           text: 'Pants',
           route: {
-            link: '#'
-          }
-        }
-      ]
+            link: '#',
+          },
+        },
+      ],
     };
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

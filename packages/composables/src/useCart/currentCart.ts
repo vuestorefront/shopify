@@ -9,7 +9,7 @@ const loadCurrentCart = async (customQueryFn = (user = null, cart = null) => ({ 
     return profileData.me.activeCart;
   }
 
-  const { data } = await createCart({});
+  const {data} = await createCart();
   return data.cart;
 };
 
