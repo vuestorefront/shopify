@@ -1,6 +1,7 @@
 import { ProductGetters, AgnosticMediaGalleryItem, AgnosticAttribute, AgnosticPrice } from '@vue-storefront/core';
 import { ProductVariant, Image } from './../types/GraphQL';
-import { formatAttributeList, getVariantByAttributes, createPrice, createFormatPrice } from './_utils';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { formatAttributeList, getVariantByAttributes, getVariantByAttributesSP, createPrice, createFormatPrice } from './_utils';
 
 interface ProductVariantFilters {
   master?: boolean;
@@ -11,7 +12,9 @@ export const getProductName = (product: ProductVariant | Readonly<ProductVariant
 
 export const getProductSlug = (product: ProductVariant | Readonly<ProductVariant>): string => (product as any)?.handle || '';
 
-export const getProductPrice = (product: ProductVariant | Readonly<ProductVariant>): AgnosticPrice => createPrice(product);
+export const getProductPrice = (product: ProductVariant | Readonly<ProductVariant>): AgnosticPrice => {
+  return createPrice(product);
+};
 
 export const getProductGallery = (product: ProductVariant): AgnosticMediaGalleryItem[] => {
   const images = product?.images || [];
@@ -31,11 +34,11 @@ export const getProductFiltered = (products: ProductVariant[], filters: ProductV
     return [];
   }
   if (filters.attributes && Object.keys(filters.attributes).length > 0) {
-    return [getVariantByAttributes(products, filters.attributes)];
+    return [getVariantByAttributesSP(products, filters.attributes)];
   }
 
   if (filters.master) {
-    return products.filter((product) => (product as any)._master);
+    return products.filter((product) => product.id === filters.master);
   }
   return products;
 };
@@ -46,9 +49,8 @@ export const getProductAttributes = (products: ProductVariant[] | ProductVariant
   if (!products || productList.length === 0) {
     return {} as any;
   }
-
-  const formatAttributes = (product): AgnosticAttribute[] =>{
-    return formatAttributeList(product.options);
+  const formatAttributes = (products): AgnosticAttribute[] =>{
+    return formatAttributeList(products.options);
   };
   const reduceToUniques = (prev, curr) => {
     const isAttributeExist = prev.some((el) => el.name === curr.name && el.value === curr.value);

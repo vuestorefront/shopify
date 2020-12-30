@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 <template>
   <div id="product">
     <SfBreadcrumbs
@@ -7,7 +8,8 @@
 
     <div class="product">
       <!-- TODO: replace example images with the getter, wait for SfGallery fix by SFUI team: https://github.com/DivanteLtd/storefront-ui/issues/1074 -->
-      <SfGallery class="product__gallery" :images="productGallery" />
+
+      <SfGallery class="product__gallery" v-if="productGallery" :images="productGallery"/>
       <div class="product__info">
         <div class="product__header">
           <SfHeading
@@ -62,34 +64,33 @@
             Size guide
           </SfButton>
           <!-- TODO: add size selector after design is added -->
-          <SfSelect
-            data-cy="product-select_size"
-            v-if="options.Size"
-            :selected="configuration.Size"
-            @change="(size) => updateFilter({ size })"
-            label="Size"
-            class="sf-select--underlined product__select-size"
-            :required="true"
-          >
-            <SfSelectOption
-              v-for="size in options.Size"
-              :key="size.value"
-              :value="size.value"
-            >
-              {{ size.value }}
-            </SfSelectOption>
-          </SfSelect>
+           <SfSelect
+              data-cy="product-select_size"
+              label="size"
+              v-if="options.Size"
+              :selected="configuration.Size"
+              placeholder = "Choosesize"
+              @input="size => updateFilter({ size })"
+              class="sf-select--underlined product__select-size"
+              :required="true"
+              >
+            <SfSelectOption v-for="(size, key) in options.Size" :key="key" :tabindex="key" :value="size.value">
+                {{ size.value }}
+              </SfSelectOption>
+            </SfSelect>
           <!-- TODO: add color picker after PR done by SFUI team -->
           <div v-if="options.Color">
             <div class="product__colors desktop-only">
               <p class="product__color-label">Color:</p>
               <!-- TODO: handle selected logic differently as the selected prop for SfColor is a boolean -->
+
               <SfColor
                 data-cy="product-color_update"
                 v-for="(color, i) in options.Color"
                 :key="i"
                 :color="color.value"
                 class="product__color"
+                :has-badge="true"
                 @click="updateFilter({ color })"
               />
             </div>
@@ -150,6 +151,7 @@
               class="product__review"
             />
           </SfTab>
+
           <SfTab
             title="Additional Information"
             data-cy="product-tab_additional"
@@ -221,7 +223,7 @@ import {
   SfReview,
   SfBreadcrumbs,
   SfButton,
-  SfColor,
+  SfColor
 } from '@storefront-ui/vue';
 
 import InstagramFeed from '~/components/InstagramFeed.vue';
@@ -232,7 +234,7 @@ import {
   useCart,
   productGetters,
   useReview,
-  reviewGetters,
+  reviewGetters
 } from '@vue-storefront/shopify';
 import { onSSR } from '@vue-storefront/core';
 
@@ -247,46 +249,26 @@ export default {
     const {
       products: relatedProducts,
       search: searchRelatedProducts,
-      loading: relatedLoading,
+      loading: relatedLoading
     } = useProduct('relatedProducts');
     const { addToCart, loading } = useCart();
     const { reviews: productReviews, search: searchReviews } = useReview(
       'productReviews'
     );
 
-    const product = computed(() => {
-      const curProductSlug = context.root.$route.params.slug;
-      let finalProduct = [];
-      for (let p = 0; p < products.value.length; p++) {
-        if (products.value[p].handle === curProductSlug) {
-          finalProduct = products.value[p];
-          break;
-        }
-      }
-      return productGetters.getFiltered(finalProduct, {
-        master: false,
-        attributes: context.root.$route.query,
-      });
-    });
+    const product = computed(() => productGetters.getFiltered(products.value, { master: id, attributes: context.root.$route.query })[0]);
     const options = computed(() => productGetters.getAttributes(product.value));
-    const configuration = computed(() =>
-      productGetters.getAttributes(product.value)
-    );
-    const categories = computed(() =>
-      productGetters.getCategoryIds(product.value)
-    );
-    const reviews = computed(() =>
-      reviewGetters.getItems(productReviews.value)
-    );
+    const configuration = computed(() => productGetters.getAttributes(product.value, { ...context.root.$route.query }));
+    const categories = computed(() => productGetters.getCategoryIds(product.value));
+    const reviews = computed(() => reviewGetters.getItems(productReviews.value));
 
     // TODO: Breadcrumbs are temporary disabled because productGetters return undefined. We have a mocks in data
     // const breadcrumbs = computed(() => productGetters.getBreadcrumbs ? productGetters.getBreadcrumbs(product.value) : props.fallbackBreadcrumbs);
-
     const productGallery = computed(() =>
       productGetters.getGallery(product.value).map((img) => ({
         mobile: { url: img.small },
         desktop: { url: img.normal },
-        big: { url: img.big },
+        big: { url: img.big }
       }))
     );
 
@@ -297,13 +279,12 @@ export default {
     });
 
     const updateFilter = (filter) => {
-      context.root.$router.push({
+      console.log(filter);
+
+      /* context.root.$router.push({
         path: context.root.$route.path,
-        query: {
-          ...configuration.value,
-          ...filter,
-        },
-      });
+        query: { ...filter }
+      });*/
     };
 
     return {
@@ -327,7 +308,7 @@ export default {
       addToCart,
       loading,
       productGetters,
-      productGallery,
+      productGallery
     };
   },
   components: {
@@ -350,7 +331,7 @@ export default {
     SfBreadcrumbs,
     SfButton,
     InstagramFeed,
-    RelatedProducts,
+    RelatedProducts
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
@@ -359,20 +340,20 @@ export default {
       properties: [
         {
           name: 'Product Code',
-          value: '578902-00',
+          value: '578902-00'
         },
         {
           name: 'Category',
-          value: 'Pants',
+          value: 'Pants'
         },
         {
           name: 'Material',
-          value: 'Cotton',
+          value: 'Cotton'
         },
         {
           name: 'Country',
-          value: 'Germany',
-        },
+          value: 'Germany'
+        }
       ],
       description:
         'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
@@ -384,24 +365,24 @@ export default {
         {
           text: 'Home',
           route: {
-            link: '#',
-          },
+            link: '#'
+          }
         },
         {
           text: 'Category',
           route: {
-            link: '#',
-          },
+            link: '#'
+          }
         },
         {
           text: 'Pants',
           route: {
-            link: '#',
-          },
-        },
-      ],
+            link: '#'
+          }
+        }
+      ]
     };
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>

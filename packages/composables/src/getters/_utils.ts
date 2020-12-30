@@ -1,7 +1,6 @@
 import { AgnosticAttribute, AgnosticPrice } from '@vue-storefront/core';
-import { ProductVariant, ProductPrice, DiscountedProductPriceValue, LineItem } from './../types/GraphQL';
+import { ProductVariant, LineItem } from './../types/GraphQL';
 import { getSettings } from '@vue-storefront/shopify-api';
-import { DiscountedLineItemPrice } from '../types/GraphQL';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const getAttributeValue = (attribute) => {
@@ -40,24 +39,35 @@ export const formatAttributeList = (attributes: Array<any>): AgnosticAttribute[]
       label: attr.name
     };
   });
-export const getVariantByAttributes = (products, attributes: any): ProductVariant => {
+export const getVariantByAttributes = (products: Array<any>, attributes: Array<any>): ProductVariant => {
   if (!products || products.length === 0) {
     return null;
   }
   // get available variants keys from product object
   const configurationKeys = Object.keys(attributes);
-
-  // find variations based on selected key and value
   return products.find((product) => {
     const currentAttributes = formatAttributeList(product.options);
-
     return configurationKeys.every((attrName) =>
       currentAttributes.find(({ name, value }) => attrName === name && attributes[attrName] === value)
     );
   });
 };
 
-const getPrice = (price: ProductPrice | DiscountedProductPriceValue | DiscountedLineItemPrice) => price ? price.value.centAmount / 100 : null;
+export const getVariantByAttributesSP = (products: Array<any>, attributes: Array<any>): ProductVariant => {
+  if (!products || products.length === 0) {
+    return null;
+  }
+  // get available variants keys from product object
+  const configurationKeys = Object.keys(attributes);
+  return products.find((product) => {
+    const currentAttributes = formatAttributeList(product.selectedOptions);
+    return configurationKeys.every((attrName) =>
+      currentAttributes.find(({ name, value }) => attrName === name && attributes[attrName] === value)
+    );
+  });
+};
+
+const getPrice = (price) => price ? price : null;
 
 const getDiscount = (product: ProductVariant | LineItem) => product.price?.discounted;
 
@@ -94,6 +104,7 @@ export const createPrice = (product: ProductVariant | LineItem): AgnosticPrice =
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const createFormatPrice = (price: number) => {
   if (!price) {
     return null;

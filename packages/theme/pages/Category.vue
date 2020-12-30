@@ -303,7 +303,7 @@ import {
   SfSelect,
   SfBreadcrumbs,
   SfLoader,
-  SfColor,
+  SfColor
 } from '@storefront-ui/vue';
 import { computed, onMounted } from '@vue/composition-api';
 import {
@@ -311,7 +311,7 @@ import {
   useFacet,
   useWishlist,
   facetGetters,
-  productGetters,
+  productGetters
 } from '@vue-storefront/shopify';
 import { useUiHelpers, useUiState } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
@@ -358,7 +358,7 @@ export default {
       breadcrumbs,
       addToWishlist,
       addToCart,
-      isOnCart,
+      isOnCart
     };
   },
   components: {
@@ -377,8 +377,8 @@ export default {
     SfLoader,
     SfColor,
     SfHeading,
-    Filters,
-  },
+    Filters
+  }
 };
 </script>
 
