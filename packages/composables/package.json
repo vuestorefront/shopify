@@ -1,0 +1,28 @@
+{
+  "name": "@vue-storefront/shopify",
+  "version": "0.0.1",
+  "private": true,
+  "sideEffects": false,
+  "main": "lib/index.cjs.js",
+  "module": "lib/index.es.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "rimraf lib && rollup -c",
+    "dev": "rollup -c -w",
+    "test": "jest",
+    "prepublish": "yarn build"
+  },
+  "dependencies": {
+    "@vue-storefront/shopify-api": "0.0.1",
+    "@vue-storefront/core": "^2.2.1"
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "1.0.0-beta.21"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
