@@ -4,6 +4,7 @@
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
     />
+    <!-- sorting features panel -->
     <div class="navbar section">
       <div class="navbar__aside desktop-only">
         <SfHeading :level="3" :title="$t('Categories')" class="navbar__title" />
@@ -75,63 +76,8 @@
       </div>
     </div>
     <div class="main section">
-      <div class="sidebar desktop-only">
-        <SfLoader
-        :class="{ loading }"
-        :loading="loading">
-          <SfAccordion
-            :open="activeCategory"
-            :show-chevron="true"
-          >
-            <SfAccordionItem
-              v-for="(cat, i) in categoryTree && categoryTree"
-              :key="i"
-              :header="cat.label"
-            >
-              <template>
-                <SfList class="list">
-                  <SfListItem class="list__item">
-                    <SfMenuItem
-                      :count="cat.count || ''"
-                      :data-cy="`category-link_subcategory_${cat.slug}`"
-                      :label="cat.label"
-                    >
-                      <template #label>
-                        <nuxt-link
-                          :to="localePath(th.getCatLink(cat))"
-                          :class="cat.isCurrent ? 'sidebar--cat-selected' : ''"
-                        >
-                          View all
-                        </nuxt-link>
-                      </template>
-                    </SfMenuItem>
-                  </SfListItem>
-                  <SfListItem
-                    class="list__item"
-                    v-for="(subCat, j) in cat.items"
-                    :key="j"
-                  >
-                    <SfMenuItem
-                      :count="subCat.count || ''"
-                      :data-cy="`category-link_subcategory_${subCat.slug}`"
-                      :label="subCat.label"
-                    >
-                      <template #label="{ label }">
-                        <nuxt-link
-                          :to="localePath(th.getCatLink(subCat))"
-                          :class="subCat.isCurrent ? 'sidebar--cat-selected' : ''"
-                        >
-                          {{ label }}
-                        </nuxt-link>
-                      </template>
-                    </SfMenuItem>
-                  </SfListItem>
-                </SfList>
-              </template>
-            </SfAccordionItem>
-          </SfAccordion>
-        </SfLoader>
-      </div>
+      <!-- Category sidebar here -->
+      <categorySidebar :visible="true" :sidebarData="categoryTree" :loading="loading"/>
       <SfLoader :class="{ loading }" :loading="loading">
         <div class="products" v-if="!loading">
           <transition-group
@@ -341,6 +287,7 @@ import {
   SfColor,
   SfProperty
 } from '@storefront-ui/vue';
+import categorySidebar from '~/components/categorySidebar';
 import { ref, computed, onMounted } from '@vue/composition-api';
 import { useCart, useWishlist, productGetters, useFacet, facetGetters } from '@vue-storefront/shopify';
 import { useUiHelpers, useUiState } from '~/composables';
@@ -458,7 +405,8 @@ export default {
     SfLoader,
     SfColor,
     SfHeading,
-    SfProperty
+    SfProperty,
+    categorySidebar
   }
 };
 </script>
