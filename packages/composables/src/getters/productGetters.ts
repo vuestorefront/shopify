@@ -40,7 +40,7 @@ export const getProductGallery = (product: ProductVariant): AgnosticMediaGallery
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const getProductCoverImage = product => product?._coverImage.src || '';
+export const getProductCoverImage = product => product?._coverImage?.src || '';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductFiltered = (products: ProductVariant[], filters: ProductVariantFilters | any = {}): ProductVariant[] => {
