@@ -9,15 +9,13 @@
         <SfCarouselItem class="carousel__item" v-for="(blog, i) in articles" :key="i">
           <div class="blog-item-wrapper">
             <div class="img-wrapper">
-                <a :href="`/b/${blog.handle}`" target="_blank"><img class="img-responsive" :src="blog.image.originalSrc"/></a>
+                <a href="javscript:void(0);" target="_blank"><img class="img-responsive" :src="blog.image.originalSrc"/></a>
             </div>
             <div class="article-meta">
-                <h4><a :href="`/b/${blog.handle}`" target="_blank">{{blog.title}}</a></h4>
+                <h4><a href="javscript:void(0);" target="_blank">{{blog.title}}</a></h4>
                 {{ blog.excerpt }}
             </div>
             <div class="article-item__meta">
-                <span class="article-item__meta-item">Travel</span>
-                <span class="article-item__meta-item">{{ blog.authorV2.name }}</span>
                 <time class="article-item__meta-item">{{ blog.publishedAt }}</time>
             </div>
           </div>
