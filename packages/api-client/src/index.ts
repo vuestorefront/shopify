@@ -7,6 +7,7 @@ import getMe from './api/getMe';
 import isGuest from './api/isGuest';
 import checkOut from './api/checkOut';
 import Client from 'shopify-buy';
+require('isomorphic-fetch');
 
 const defaultSettings = {};
 
@@ -16,7 +17,7 @@ const onSetup = (settings) => {
       ...defaultSettings,
       ...settings
     },
-    client: Client.buildClient(settings.api, fetch)
+    client: Client.buildClient(settings.api)
   });
 };
 
