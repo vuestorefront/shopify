@@ -104,7 +104,7 @@
               :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
               class="products__product-card"
               @click:wishlist="addToWishlist(product)"
-              @click:add-to-cart="addToCart(product, 1)"
+              @click="addItem({ product, quantity: 1 })"
             />
           </transition-group>
           <transition-group
@@ -299,8 +299,8 @@ export default {
     const th = useUiHelpers();
     const slug = context.root.$route.params.slug_1;
     const uiState = useUiState();
-    const { addToCart, isOnCart } = useCart();
-    const { addToWishlist } = useWishlist();
+    const { addItem: addToCart, isOnCart } = useCart();
+    const { addItem: addToWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
     const products = computed(() => facetGetters.getProducts(result.value));
     const categoryTree = computed(() => facetGetters.getCategoryTree(result.value));

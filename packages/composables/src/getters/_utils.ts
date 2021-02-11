@@ -38,3 +38,12 @@ export const formatAttributeList = (attributes: Array<any>): AgnosticAttribute[]
       label: attr.name
     };
   });
+
+export const formatSelectedAttributeList = (attributes: Array<any>): AgnosticAttribute[] =>
+  attributes.map((attr) => {
+    return {
+      name: attr.name,
+      value: attr.value,
+      label: attr.name
+    };
+  });

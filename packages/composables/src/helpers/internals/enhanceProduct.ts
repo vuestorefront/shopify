@@ -12,6 +12,7 @@ const enhanceProduct = (productResponse: Array<any>) => {
     productType: product.productType,
     options: product.options,
     _id: product.id,
+    variantId: product.variants[0].id,
     _description: product.description,
     _descriptionHtml: product.descriptionHtml,
     _categoriesRef: [],

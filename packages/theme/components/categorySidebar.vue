@@ -75,8 +75,8 @@ export default {
       type: Boolean
     },
     sidebarData: {
-      default: [],
-      type: Array
+      default: [] | {},
+      type: Array | Object
     },
     loading: {
       default: true,

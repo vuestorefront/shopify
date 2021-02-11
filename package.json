@@ -62,6 +62,8 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.3.5",
-    "shopify-api": "^0.2.3"
+    "shopify-api": "^0.2.3",
+    "swiper": "^6.4.11",
+    "vue-awesome-swiper": "^4.1.1"
   }
 }

@@ -38,7 +38,7 @@
                 ({{ totalReviews }})
               </a>
             </div>
-            <SfButton data-cy="product-btn_read-all" class="sf-button--text">Read all reviews</SfButton>
+            <SfButton data-cy="product-btn_read-all" class="sf-button--text">{{ $t('Read all reviews') }}</SfButton>
           </div>
         </div>
         <div>
@@ -46,11 +46,12 @@
             {{ productDescription }}
           </p>
           <SfButton data-cy="product-btn_size-guide" class="sf-button--text desktop-only product__guide">
-            Size guide
+             {{ $t('Size guide') }}
           </SfButton>
           <SfSelect
             data-cy="product-select_size"
             v-if="options.Size"
+            :value="configuration.size"
             @input="size => updateFilter({ size })"
             label="Size"
             class="sf-select--underlined product__select-size"
@@ -64,8 +65,8 @@
               {{size.value}}
             </SfSelectOption>
           </SfSelect>
-          <div v-if="options.Color" class="product__colors desktop-only">
-            <p class="product__color-label">Color:</p>
+          <div v-if="options.Color&& options.Color.length > 1" class="product__colors desktop-only">
+            <p class="product__color-label">{{ $t('Color') }}:</p>
             <SfColor
               data-cy="product-color_update"
               v-for="(color, i) in options.Color"
@@ -82,14 +83,8 @@
             :disabled="loading"
             :canAddToCart="stock > 0"
             class="product__add-to-cart"
-            @click="addToCart(product, parseInt(qty))"
+            @click="addItem({ product, quantity: parseInt(qty) })"
           />
-          <SfButton data-cy="product-btn_save-later" class="sf-button--text desktop-only product__save">
-            Save for later
-          </SfButton>
-          <SfButton data-cy="product-btn_add-to-compare" class="sf-button--text desktop-only product__compare">
-            Add to compare
-          </SfButton>
         </div>
         <SfTabs :open-tab="1" class="product__tabs">
           <SfTab data-cy="product-tab_description" title="Description">
@@ -131,14 +126,14 @@
             class="product__additional-info"
           >
           <div class="product__additional-info">
-            <p class="product__additional-info__title">Brand</p>
+            <p class="product__additional-info__title">{{ $t('Brand') }}</p>
             <p>{{ brand }}</p>
-            <p class="product__additional-info__title">Take care of me</p>
+            <p class="product__additional-info__title">{{ $t('Instruction1') }}</p>
             <p class="product__additional-info__paragraph">
-              Just here for the care instructions?
+              {{ $t('Instruction2') }}
             </p>
             <p class="product__additional-info__paragraph">
-              Yeah, we thought so
+              {{ $t('Instruction3') }}
             </p>
             <p>{{ careInstructions }}</p>
           </div>
@@ -146,43 +141,19 @@
         </SfTabs>
       </div>
     </div>
-
+    <LazyHydrate when-visible>
     <RelatedProducts
       :products="relatedProducts"
       :loading="relatedLoading"
       title="Match it with"
     />
+    </LazyHydrate>
+    <LazyHydrate when-visible>
     <InstagramFeed />
-    <SfBanner
-      image="/homepage/bannerD.png"
-      subtitle="Fashion to Take Away"
-      title="Download our application to your mobile"
-      class="sf-banner--left desktop-only banner-app"
-    >
-
-    <template #call-to-action>
-        <div class="banner-app__call-to-action">
-          <SfButton
-            class="banner-app__button"
-            aria-label="Go to Apple Product"
-            @click="() => {}"
-          >
-            <SfImage
-              src="/homepage/apple.png"
-            />
-          </SfButton>
-          <SfButton
-            class="banner-app__button"
-            aria-label="Go to Google Product"
-            @click="() => {}"
-          >
-            <SfImage
-              src="/homepage/google.png"
-            />
-          </SfButton>
-        </div>
-      </template>
-    </SfBanner>
+    </LazyHydrate>
+     <LazyHydrate when-visible>
+      <MobileStoreBanner />
+    </LazyHydrate>
   </div>
 
 </template>
@@ -212,6 +183,8 @@ import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
 import { ref, computed } from '@vue/composition-api';
 import { useProduct, useCart, productGetters, useReview, reviewGetters } from '@vue-storefront/shopify';
+import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
+import LazyHydrate from 'vue-lazy-hydration';
 import { onSSR } from '@vue-storefront/core';
 
 export default {
@@ -223,13 +196,13 @@ export default {
     const { id } = context.root.$route.params;
     const { products, search } = useProduct('products');
     const { products: relatedProducts, search: searchRelatedProducts, loading: relatedLoading } = useProduct('relatedProducts');
-    const { addToCart, loading } = useCart();
+    const { addItem, loading } = useCart();
     const { reviews: productReviews, search: searchReviews } = useReview('productReviews');
     const product = computed(() => productGetters.getFiltered(products.value, { master: true, attributes: context.root.$route.query })[0]);
     const productDescription = computed(() => productGetters.getDescription(product.value));
     const productDescriptionHtml = computed(() => productGetters.getDescription(product.value, true));
     const options = computed(() => productGetters.getAttributes(product.value));
-    const configuration = computed(() => productGetters.getAttributes(product.value, ['color', 'size']));
+    const configuration = computed(() => productGetters.getAttributes(product.value, ['Color', 'Size']));
     const reviews = computed(() => reviewGetters.getItems(productReviews.value));
 
     // TODO: Breadcrumbs are temporary disabled because productGetters return undefined. We have a mocks in data
@@ -247,15 +220,13 @@ export default {
     });
 
     const updateFilter = (filter) => {
-      console.log(filter);
-
-      /* context.root.$router.push({
+      context.root.$router.push({
         path: context.root.$route.path,
         query: {
           ...configuration.value,
           ...filter
         }
-      }); */
+      });
     };
 
     return {
@@ -273,7 +244,7 @@ export default {
       options,
       breadcrumbs,
       qty,
-      addToCart,
+      addItem,
       loading,
       productGetters,
       productGallery
@@ -299,7 +270,9 @@ export default {
     SfBreadcrumbs,
     SfButton,
     InstagramFeed,
-    RelatedProducts
+    RelatedProducts,
+    MobileStoreBanner,
+    LazyHydrate
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {

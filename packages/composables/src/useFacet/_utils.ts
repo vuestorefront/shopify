@@ -54,7 +54,6 @@ export const buildFacets = (searchData, reduceFn, criteria?: string[]) => {
     input: { filters }
   } = searchData;
 
-  console.log(searchData);
   return Object.keys(facets)
     .filter(filterFacets(criteria))
     .reduce(reduceFn(facets, filters), []);

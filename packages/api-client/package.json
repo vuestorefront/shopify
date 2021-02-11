@@ -20,6 +20,7 @@
     "shopify-buy": "^2.9.3"
   },
   "devDependencies": {
+    "@types/js-cookie": "^2.2.6",
     "graphql-tools": "^4.0.6",
     "jest-transform-graphql": "^2.1.0",
     "rollup-plugin-graphql": "^0.1.0"
