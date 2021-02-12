@@ -220,13 +220,15 @@ export default {
     });
 
     const updateFilter = (filter) => {
-      context.root.$router.push({
+      console.log('Mocked variant selected', filter);
+
+      /* context.root.$router.push({
         path: context.root.$route.path,
         query: {
           ...configuration.value,
           ...filter
         }
-      });
+      });*/
     };
 
     return {
