@@ -63,7 +63,6 @@
   "dependencies": {
     "shopify-api": "^0.2.3",
     "shopify-buy": "^2.11.0",
-    "ssr-cookie": "^1.0.2",
     "swiper": "^6.4.11",
     "vue-awesome-swiper": "^4.1.1"
   }
