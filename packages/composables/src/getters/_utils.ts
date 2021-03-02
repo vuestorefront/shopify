@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AgnosticAttribute, AgnosticPrice } from '@vue-storefront/core';
 
@@ -47,3 +48,21 @@ export const formatSelectedAttributeList = (attributes: Array<any>): AgnosticAtt
       label: attr.name
     };
   });
+
+export const getVariantByAttributes = (products, attributes: any) => {
+  if (!products || products.length === 0) {
+    return null;
+  }
+  const configurationKeys = Object.keys(attributes);
+  return products.variants.find((variant) => {
+    const currentAttributes = formatSelectedAttributeList(
+      variant.selectedOptions
+    );
+    return configurationKeys.every((attrName) =>
+      currentAttributes.find(
+        ({ name, value }) =>
+          attrName === name && attributes[attrName] === value
+      )
+    );
+  });
+};

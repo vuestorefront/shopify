@@ -4,9 +4,14 @@ export type Category = Record<string, unknown>;
 import { ProductVariant } from '@vue-storefront/shopify-api';
 
 export type User = {
+  id?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
+  phone?: string;
+  displayName?: string;
+  token?: string;
+  error?: string;
 };
 
 export type UserAddress = Record<string, unknown>;

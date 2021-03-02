@@ -92,22 +92,25 @@ export type CartItem = {
 export type Wishlist = {}
 export type ProductVariant = {
   __typename?: 'ProductVariant';
-  _id: Maybe<Scalars['String']>;
+  _id?: Maybe<Scalars['String']>;
   _description: Maybe<Scalars['String']>;
   _descriptionHtml: Maybe<Scalars['String']>;
   _slug: Maybe<Scalars['String']>;
   _categoriesRef: string[];
   name: Maybe<Scalars['String']>;
   images: Maybe<Scalars['Array']>;
+  product?: Maybe<Scalars['Array']>;
   options: Maybe<Scalars['Array']>;
+  variantBySelectedOptions?: Maybe<Scalars['Array']>;
   _coverImage: Maybe<Scalars['String']>;
   price: {
     original: number;
     current: number;
   };
+  variants?: Maybe<Scalars['Array']>;
   available?: Maybe<Scalars['Boolean']>;
   productType: Maybe<Scalars['String']>;
-  _availableForSale: Maybe<Scalars['Boolean']>;
+  _availableForSale?: Maybe<Scalars['Boolean']>;
 }
 
 export type Category = {

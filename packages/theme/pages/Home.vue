@@ -30,7 +30,6 @@
         </template>
       </SfBannerGrid>
     </LazyHydrate>
-
     <LazyHydrate when-visible>
     <RelatedProducts
       :products="products"
@@ -48,17 +47,8 @@
         class="call-to-action"
       />
     </LazyHydrate>
-
-    <LazyHydrate when-visible>
-      <featuredProduct :productModel="products" />
-    </LazyHydrate>
-
     <LazyHydrate when-visible>
       <InstagramFeed />
-    </LazyHydrate>
-
-    <LazyHydrate when-visible>
-      <blogPosts />
     </LazyHydrate>
 
     <LazyHydrate when-visible>
@@ -92,15 +82,18 @@ import LazyHydrate from 'vue-lazy-hydration';
 
 export default {
   name: 'Home',
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
     const { products: relatedProducts, search: productsSearch, loading: productsLoading } = useProduct('relatedProducts');
-    const { load: loadCart, addItem: addToCart, isOnCart } = useCart();
+    const { cart, load: loadCart, addItem: addToCart, isOnCart } = useCart();
+
     onSSR(async () => {
       await productsSearch({ catId: 123, limit: 8 });
       await loadCart();
     });
     return {
       products: computed(() => productGetters.getFiltered(relatedProducts.value, { master: true })),
+      getChkId: computed(()=> cart.value.id),
       productsLoading,
       productGetters,
       addToCart,
@@ -126,6 +119,7 @@ export default {
     LazyHydrate,
     featuredProduct
   },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
       heroes: [
@@ -202,6 +196,7 @@ export default {
     };
   },
   methods: {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     toggleWishlist(index) {
       this.products[index].isOnWishlist = !this.products[index].isOnWishlist;
     }

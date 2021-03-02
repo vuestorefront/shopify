@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
   AgnosticMediaGalleryItem,
   AgnosticAttribute,
@@ -5,8 +6,8 @@ import {
   ProductGetters
 } from '@vue-storefront/core';
 import { ProductVariant } from '@vue-storefront/shopify-api/src/types';
-import { enhanceProduct } from '../helpers/internals';
-import { formatAttributeList } from './_utils';
+import { enhanceProduct, enhanceProductVariation } from '../helpers/internals';
+import { formatAttributeList, getVariantByAttributes } from './_utils';
 
 type ProductVariantFilters = any
 
@@ -33,29 +34,43 @@ export const getProductPrice = (product: ProductVariant): AgnosticPrice => {
 export const getProductGallery = (product: ProductVariant): AgnosticMediaGalleryItem[] =>
   (product ? product.images : [])
     .map((image) => ({
-      small: image.src,
-      big: image.src,
-      normal: image.src
+      small: image.originalSrc,
+      big: image.originalSrc,
+      normal: image.originalSrc
     }));
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const getProductCoverImage = product => product?._coverImage?.src || '';
+export const getProductCoverImage = product => {
+  return product?._coverImage?.src || '';
+};
+export const getActiveVariantImage = (product) => {
+  for (let i = 1; i < (product.images).length; i++) {
+    if (product.images[i].originalSrc === product._coverImage.originalSrc) {
+      return i;
+    }
+  }
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getProductFiltered = (products: ProductVariant[], filters: ProductVariantFilters | any = {}): ProductVariant[] => {
+export const getProductFiltered = (products, filters: ProductVariantFilters | any = {}) => {
   if (!products) {
     return [];
   }
   // convert entire product response to productvariant interface
   if (filters.attributes && Object.keys(filters.attributes).length > 0) {
-    // const currentProduct = typeof products === 'object' ? products : products[0];
-    // return [];
+    let selectedVariant = getVariantByAttributes(products, filters.attributes);
+    if (!selectedVariant) {
+      selectedVariant = products.variants[0];
+    }
+    const selectedVariantArr = Array.isArray(selectedVariant) ? selectedVariant : [selectedVariant];
+    return enhanceProductVariation(selectedVariantArr);
   }
   if (filters.master) {
     products = Array.isArray(products) ? products : [products];
   }
-  return products = enhanceProduct(products);
+
+  return enhanceProduct(products);
 
 };
 
@@ -70,9 +85,13 @@ export const getProductAttributes = (products: ProductVariant, filterByAttribute
   if (!products || productList.length === 0) {
     return {} as any;
   }
-  const formatAttributes = (products): AgnosticAttribute[] =>{
+
+  /* const formatAttributes = (products): AgnosticAttribute[] =>{
     return formatAttributeList(products.options);
-  };
+  };*/
+  const formatAttributes = (product: ProductVariant): AgnosticAttribute[] =>
+    formatAttributeList(product.options).filter((attribute) => filterByAttributeName ? filterByAttributeName.includes(attribute.name) : attribute);
+
   const reduceToUniques = (prev, curr) => {
     const isAttributeExist = prev.some((el) => el.name === curr.name && el.value === curr.value);
 
@@ -165,6 +184,7 @@ const productGetters: ProductGetters<ProductVariant, ProductVariantFilters> = {
   getPrice: getProductPrice,
   getGallery: getProductGallery,
   getCoverImage: getProductCoverImage,
+  getVariantImage: getActiveVariantImage,
   getFiltered: getProductFiltered,
   getOptions: getProductOptions,
   getAttributes: getProductAttributes,

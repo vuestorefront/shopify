@@ -2,14 +2,26 @@ import { apiClientFactory } from '@vue-storefront/core';
 import getProduct from './api/getProduct';
 import getCategory from './api/getCategory';
 import getBlogPosts from './api/getBlogPosts';
+import editProfile from './api/editProfile';
+import createCart from './api/createCart';
 import addToCart from './api/addToCart';
+import signUp from './api/signUp';
+import signIn from './api/signIn';
+import signOut from './api/signOut';
+import changePassword from './api/changePassword';
+import fetchCustomer from './api/fetchCustomer';
+import fetchOrders from './api/fetchOrders';
+import fetchAddresses from './api/fetchAddresses';
 import getMe from './api/getMe';
 import isGuest from './api/isGuest';
 import checkOut from './api/checkOut';
 import Client from 'shopify-buy';
-require('isomorphic-fetch');
 
+const CustomClient = require('shopify-buy/index.unoptimized.umd.js');
 const defaultSettings = {};
+const cookies = {
+  cartCookieName: 'vsf-cart'
+};
 
 const onSetup = (settings) => {
   return ({
@@ -17,7 +29,9 @@ const onSetup = (settings) => {
       ...defaultSettings,
       ...settings
     },
-    client: Client.buildClient(settings.api)
+    CustomClient: CustomClient.buildClient(settings.api),
+    client: Client.buildClient(settings.api),
+    cookies: (settings.api).cookies || cookies
   });
 };
 
@@ -28,11 +42,20 @@ const { createApiClient } = apiClientFactory<any, any>({
     getProduct,
     getCategory,
     getBlogPosts,
+    editProfile,
     addToCart,
     isGuest,
     getMe,
-    // createCart,
-    checkOut
+    signUp,
+    signIn,
+    signOut,
+    changePassword,
+    fetchCustomer,
+    fetchOrders,
+    fetchAddresses,
+    createCart,
+    checkOut,
+    cookies
   }
 });
 
