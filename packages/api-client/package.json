@@ -17,10 +17,10 @@
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
     "isomorphic-fetch": "^2.2.1",
-    "shopify-buy": "^2.11.0"
+    "shopify-buy": "^2.11.0",
+    "@types/js-cookie": "^2.2.6"
   },
   "devDependencies": {
-    "@types/js-cookie": "^2.2.6",
     "@types/shopify-buy": "^2.10.5",
     "graphql-tools": "^4.0.6",
     "jest-transform-graphql": "^2.1.0",
