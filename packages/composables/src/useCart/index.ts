@@ -11,7 +11,16 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, { customQuery }) => {
     console.log('Mocked: loadCart');
-    const checkoutId = 'Z2lkOi8vc2hvcGlmeS9DaGVja291dC8xNmY3NmYwMzE3ZmU1NGMyODRmNjhhYTMzOTRlNGUzZj9rZXk9YTQxYmQxODM4YmUyOThjMDY5OWUyZDk2ZDFlNTlhOTc=';
+    // check if cart is already initiated
+    let existngCartId = context.$shopify.config.app.$cookies.get('cart_id');
+
+    if (existngCartId === undefined || existngCartId === '') {
+      existngCartId = await context.$shopify.api.createCart().then((checkout) => {
+        context.$shopify.config.app.$cookies.set('cart_id', checkout);
+        return checkout;
+      });
+    }
+    const checkoutId = existngCartId;
     const plainResp = await context.$shopify.api.checkOut(checkoutId).then((checkout) => {
       // Do something with the checkout
       return checkout;
@@ -32,9 +41,9 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   removeItem: async (context: Context, { currentCart, product, customQuery }) => {
     console.log('Mocked: removeFromCart');
     // Remove an item from the checkout
-    const checkoutId = 'Z2lkOi8vc2hvcGlmeS9DaGVja291dC8xNmY3NmYwMzE3ZmU1NGMyODRmNjhhYTMzOTRlNGUzZj9rZXk9YTQxYmQxODM4YmUyOThjMDY5OWUyZDk2ZDFlNTlhOTc=';
-    return await context.$shopify.client.checkout.removeLineItems(checkoutId, [product.id]).then((checkout) => {
-      // Do something with the updated checkout
+    const checkoutID = currentCart.id;
+    return await context.$shopify.client.checkout.removeLineItems(checkoutID, [product.id]).then((checkout) => {
+      // return updated cart data
       return JSON.parse(JSON.stringify(checkout));
     });
   },
@@ -43,9 +52,9 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   updateItemQty: async (context: Context, { currentCart, product, quantity, customQuery }) => {
     console.log('Mocked: updateQuantity');
     // Update an item Quantity
-    const checkoutId = 'Z2lkOi8vc2hvcGlmeS9DaGVja291dC8xNmY3NmYwMzE3ZmU1NGMyODRmNjhhYTMzOTRlNGUzZj9rZXk9YTQxYmQxODM4YmUyOThjMDY5OWUyZDk2ZDFlNTlhOTc=';
-    return await context.$shopify.client.checkout.updateLineItems(checkoutId, {id: product.id, quantity: quantity}).then((checkout) => {
-      // Do something with the updated checkout
+    const checkoutID = currentCart.id;
+    return await context.$shopify.client.checkout.updateLineItems(checkoutID, {id: product.id, quantity: quantity}).then((checkout) => {
+      // return updated cart data
       return JSON.parse(JSON.stringify(checkout));
     });
   },

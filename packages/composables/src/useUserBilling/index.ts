@@ -112,8 +112,16 @@ const params: UseUserBillingFactoryParams<any, any> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, params?) => {
-    console.log('Mocked: load');
-    return Promise.resolve(billing);
+    console.log('Mocked: addressesload');
+    const token = context.$shopify.config.app.$cookies.get('token');
+    const result: any = await context.$shopify.api.fetchAddresses(token);
+    let addresses = {};
+    if (result) {
+      addresses = result;
+      return addresses;
+    }
+    return addresses;
+    // return Promise.resolve(billing);
   },
 
   setDefaultAddress: async (context: Context, params?) => {

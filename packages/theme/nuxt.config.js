@@ -1,7 +1,7 @@
+require('isomorphic-fetch');
 import webpack from 'webpack';
 
 export default {
-  mode: 'universal',
   server: {
     port: 3000,
     host: '0.0.0.0'
@@ -35,7 +35,7 @@ export default {
         href:
           'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
         media: 'print',
-        onload: "this.media='all'"
+        onload: 'this.media=\'all\''
       }
     ]
   },
@@ -78,7 +78,7 @@ export default {
       {
         api: {
           domain: 'YOUR SHOPIFY STORE DOMAIN',
-          storefrontAccessToken: 'ACCESS TOKEN'
+          storefrontAccessToken: 'YOUR STORE ACCESS TOKEN'
         },
         i18n: {
           useNuxtI18nConfig: true
@@ -88,19 +88,57 @@ export default {
   ],
   modules: ['nuxt-i18n', 'cookie-universal-nuxt', 'vue-scrollto/nuxt'],
   i18n: {
-    locales: ['en'],
+    currency: 'USD',
+    country: 'US',
+    countries: [
+      { name: 'US', label: 'United States' },
+      { name: 'AT', label: 'Austria' },
+      { name: 'DE', label: 'Germany' },
+      { name: 'NL', label: 'Netherlands' }
+    ],
+    currencies: [
+      { name: 'EUR', label: 'Euro' },
+      { name: 'USD', label: 'Dollar' }
+    ],
+    locales: [
+      {
+        code: 'en',
+        label: 'English',
+        file: 'en.js',
+        iso: 'en'
+      },
+      {
+        code: 'de',
+        label: 'German',
+        file: 'de.js',
+        iso: 'de'
+      }
+    ],
     defaultLocale: 'en',
-    strategy: 'no_prefix',
+    lazy: true,
+    seo: true,
+    langDir: 'lang/',
     vueI18n: {
       fallbackLocale: 'en',
-      messages: {
+      numberFormats: {
         en: {
-          welcome: 'Welcome 1'
+          currency: {
+            style: 'currency',
+            currency: 'USD',
+            currencyDisplay: 'symbol'
+          }
         },
         de: {
-          welcome: 'Welcome 2'
+          currency: {
+            style: 'currency',
+            currency: 'EUR',
+            currencyDisplay: 'symbol'
+          }
         }
       }
+    },
+    detectBrowserLanguage: {
+      cookieKey: 'vsf-locale'
     }
   },
   styleResources: {
@@ -130,6 +168,66 @@ export default {
       } else {
         return { x: 0, y: 0 };
       }
+    }
+  },
+  pwa: {
+    manifest: {
+      name: 'VSF Next: Shopify APP',
+      lang: 'en',
+      shortName: 'VSF Next',
+      startUrl: '/',
+      display: 'standalone',
+      backgroundColor: '#fff',
+      themeColor: '#5ece7b',
+      description: 'This is the Shopify PWA app for VSF Next',
+      icons: [
+        {
+          src: '/icons/android-icon-48x48.png',
+          sizes: '48X48',
+          type: 'image/png'
+        },
+        {
+          src: '/icons/android-icon-72x72.png',
+          sizes: '72X72',
+          type: 'image/png'
+        },
+        {
+          src: '/icons/android-icon-96x96.png',
+          sizes: '96X96',
+          type: 'image/png'
+        },
+        {
+          src: '/icons/android-icon-144x144.png',
+          sizes: '144X144',
+          type: 'image/png'
+        },
+        {
+          src: '/icons/android-icon-168x168.png',
+          sizes: '168X168',
+          type: 'image/png'
+        },
+        {
+          src: '/icons/android-icon-192x192.png',
+          sizes: '192X192',
+          type: 'image/png'
+        },
+        {
+          src: '/icons/android-icon-512x512.png',
+          sizes: '512X512',
+          type: 'image/png'
+        }
+      ]
+    },
+    meta: {
+      name: 'VSF Next: Shopify APP',
+      author: 'Aureate labs',
+      description:
+        'This is the Shopify PWA app for VSF Next - Developed by Aureate labs',
+      themeColor: '#5ece7b',
+      ogHost: 'shopify-pwa.aureatelabs.com'
+    },
+    icon: {
+      iconSrc: 'src/static/android-icon-512x512.png'
     }
   }
 };

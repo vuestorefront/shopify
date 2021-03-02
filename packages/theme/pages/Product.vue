@@ -5,7 +5,9 @@
       :breadcrumbs="breadcrumbs"
     />
     <div class="product">
-      <SfGallery v-if='productGallery.length > 0' :images="productGallery" class="product__gallery"/>
+      <LazyHydrate when-idle>
+        <SfGallery v-if='productGallery.length > 0' :images="productGallery" :current="ActiveVariantImage + 1" class="product__gallery"/>
+      </LazyHydrate>
       <div class="product__info">
         <div class="product__header">
           <SfHeading
@@ -51,8 +53,8 @@
           <SfSelect
             data-cy="product-select_size"
             v-if="options.Size"
-            :value="configuration.size"
             @input="size => updateFilter({ size })"
+            :value="configuration.size || options.Size[0].value"
             label="Size"
             class="sf-select--underlined product__select-size"
             :required="true"
@@ -74,6 +76,7 @@
               :color="color.value"
               class="product__color"
               @click="updateFilter({color})"
+
             />
           </div>
           <SfAddToCart
@@ -86,6 +89,7 @@
             @click="addItem({ product, quantity: parseInt(qty) })"
           />
         </div>
+        <LazyHydrate when-idle>
         <SfTabs :open-tab="1" class="product__tabs">
           <SfTab data-cy="product-tab_description" title="Description">
             <div class="product__description" v-if='productDescriptionHtml'>
@@ -139,6 +143,7 @@
           </div>
           </SfTab>
         </SfTabs>
+        </LazyHydrate>
       </div>
     </div>
     <LazyHydrate when-visible>
@@ -194,6 +199,7 @@ export default {
   setup(props, context) {
     const qty = ref(1);
     const { id } = context.root.$route.params;
+    const { slug } = context.root.$route.params;
     const { products, search } = useProduct('products');
     const { products: relatedProducts, search: searchRelatedProducts, loading: relatedLoading } = useProduct('relatedProducts');
     const { addItem, loading } = useCart();
@@ -201,8 +207,8 @@ export default {
     const product = computed(() => productGetters.getFiltered(products.value, { master: true, attributes: context.root.$route.query })[0]);
     const productDescription = computed(() => productGetters.getDescription(product.value));
     const productDescriptionHtml = computed(() => productGetters.getDescription(product.value, true));
-    const options = computed(() => productGetters.getAttributes(product.value));
-    const configuration = computed(() => productGetters.getAttributes(product.value, ['Color', 'Size']));
+    const options = computed(() => productGetters.getAttributes(products.value));
+    const configuration = computed(() => productGetters.getAttributes(product.value, ['color', 'size']));
     const reviews = computed(() => reviewGetters.getItems(productReviews.value));
 
     // TODO: Breadcrumbs are temporary disabled because productGetters return undefined. We have a mocks in data
@@ -210,11 +216,15 @@ export default {
     const productGallery = computed(() => productGetters.getGallery(product.value).map(img => ({
       mobile: { url: img.small },
       desktop: { url: img.normal },
-      big: { url: img.big }
+      big: { url: img.big },
+      alt: product.value._name || product.value.name
     })));
+    const ActiveVariantImage = computed(() => {
+      return productGetters.getVariantImage(product.value) || 0;
+    });
 
     onSSR(async () => {
-      await search({ id });
+      await search({ slug });
       await searchRelatedProducts({ catId: 123, limit: 8 });
       await searchReviews({ productId: id });
     });
@@ -222,13 +232,13 @@ export default {
     const updateFilter = (filter) => {
       console.log('Mocked variant selected', filter);
 
-      /* context.root.$router.push({
+      context.root.$router.push({
         path: context.root.$route.path,
         query: {
           ...configuration.value,
           ...filter
         }
-      });*/
+      });
     };
 
     return {
@@ -239,6 +249,7 @@ export default {
       productDescriptionHtml,
       reviews,
       reviewGetters,
+      ActiveVariantImage,
       averageRating: computed(() => productGetters.getAverageRating(product.value)),
       totalReviews: computed(() => productGetters.getTotalReviews(product.value)),
       relatedProducts: computed(() => productGetters.getFiltered(relatedProducts.value, { master: true })),

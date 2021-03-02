@@ -140,8 +140,8 @@ export default {
   transition: 'fade',
   props: {
     productModel: {
-      default: [],
-      type: Array
+      default: [] || {},
+      type: Array || Object
     }
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

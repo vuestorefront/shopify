@@ -16,11 +16,11 @@
     "@vue-storefront/core": "^2.2.1",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
-    "isomorphic-fetch": "^2.2.1",
-    "shopify-buy": "^2.9.3"
+    "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
     "@types/js-cookie": "^2.2.6",
+    "@types/shopify-buy": "^2.10.5",
     "graphql-tools": "^4.0.6",
     "jest-transform-graphql": "^2.1.0",
     "rollup-plugin-graphql": "^0.1.0"

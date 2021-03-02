@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
-import Cookies from 'js-cookie';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Cookie from 'js-cookie';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function createCart(context, params, customQuery?: CustomQuery) {
+export default async function createCart(context, _params, _customQuery?: CustomQuery) {
+  // return checkout id if already exists
+  if (Cookie.get('CurCart')) {
+    return Cookie.get('CurCart');
+  }
+  // initiate the cart
   return await context.client.checkout.create().then((checkout) => {
-    // Checkout ID
-    let checkoutID = Cookies.get('cart_id');
-    if (!checkoutID) {
-      checkoutID = Cookies.set('cart_id', checkout.id);
-    }
-    return checkoutID;
+    // return checkOut ID
+    Cookie.set('CurCart', checkout.id);
+    return checkout.id;
   });
 }
