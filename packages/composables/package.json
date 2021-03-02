@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@vue-storefront/shopify-api": "0.0.1",
-    "@vue-storefront/core": "^2.2.1"
+    "@vue-storefront/core": "^2.2.1",
+    "@types/js-cookie": "^2.2.6"
   },
   "peerDependencies": {
     "@vue/composition-api": "1.0.0-beta.21"
@@ -24,8 +25,5 @@
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "devDependencies": {
-    "@types/js-cookie": "^2.2.6"
   }
 }
