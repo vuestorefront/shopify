@@ -113,6 +113,7 @@ import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import { email, required, min, confirmed } from 'vee-validate/dist/rules';
 import { SfTabs, SfInput, SfButton, SfAlert } from '@storefront-ui/vue';
 import { useUser, userGetters } from '@vue-storefront/shopify';
+import { onSSR } from '@vue-storefront/core';
 
 extend('email', {
   ...email,
@@ -158,7 +159,7 @@ export default {
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
-    const { user, changePassword, updateUser } = useUser();
+    const { user, load: loadUser, changePassword, updateUser } = useUser();
     const success = ref(null);
     const error = ref(null);
     const resetForm = () => ({
@@ -184,6 +185,9 @@ export default {
     const updatePassword = async () => handleForm(changePassword, true)();
 
     const updateProfile = async () => handleForm(updateUser, false)();
+    onSSR(async () => {
+      await loadUser();
+    });
     return {
       user,
       error,
