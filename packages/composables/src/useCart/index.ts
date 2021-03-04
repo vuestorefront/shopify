@@ -16,7 +16,6 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
 
     if (existngCartId === undefined || existngCartId === '') {
       existngCartId = await context.$shopify.api.createCart().then((checkout) => {
-        context.$shopify.config.app.$cookies.set('cart_id', checkout);
         return checkout;
       });
     }
@@ -32,7 +31,8 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   addItem: async (context: Context, { currentCart, product, quantity, customQuery }) => {
     console.log('Mocked: addItem');
     return await context.$shopify.api.addToCart({ currentCart, product, quantity, customQuery }).then((checkout) => {
-      // Do something with the checkout
+      // store cart id
+      context.$shopify.config.app.$cookies.set('cart_id', currentCart.id);
       return JSON.parse(JSON.stringify(checkout));
     });
   },
