@@ -12,8 +12,8 @@ import useUserBilling from './useUserBilling';
 import useUserOrders from './useUserOrders';
 import useUserShipping from './useUserShipping';
 import useWishlist from './useWishlist';
+import { createApiClient } from '@vue-storefront/shopify-api';
 import { integrationPluginFactory } from '@vue-storefront/core';
-const createApiClient = require('@vue-storefront/shopify-api');
 
 const integrationPlugin = integrationPluginFactory(createApiClient);
 
