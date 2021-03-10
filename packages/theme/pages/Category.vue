@@ -419,7 +419,7 @@ export default {
   &.section {
     padding: var(--spacer-xs);
     @include for-desktop {
-      padding: 0;
+      padding: var(--spacer-lg);
     }
   }
 }

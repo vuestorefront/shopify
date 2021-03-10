@@ -208,7 +208,7 @@ export default {
     const productDescription = computed(() => productGetters.getDescription(product.value));
     const productDescriptionHtml = computed(() => productGetters.getDescription(product.value, true));
     const options = computed(() => productGetters.getAttributes(products.value));
-    const configuration = computed(() => productGetters.getAttributes(product.value, ['color', 'size']));
+    const configuration = computed(() => productGetters.getAttributes(product.value, ['Color', 'Size']));
     const reviews = computed(() => reviewGetters.getItems(productReviews.value));
 
     // TODO: Breadcrumbs are temporary disabled because productGetters return undefined. We have a mocks in data
