@@ -10,7 +10,7 @@ export default async function editProfile(context, params) {
     customer: profile
   };
   // send user data to authenticate, return token if valid
-  return await context.CustomClient.graphQLClient.send(mutation, data).then(({model}) => {
+  return await context.CustomClient.graphQLClient.send(mutation(context), data).then(({model}) => {
     return model;
   });
 }

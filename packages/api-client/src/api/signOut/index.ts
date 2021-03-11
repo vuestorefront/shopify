@@ -9,7 +9,7 @@ export default async function signOut(context, params) {
   };
 
   // Remove customer access token
-  return await context.CustomClient.graphQLClient.send(mutation, data).then(({model}) => {
+  return await context.CustomClient.graphQLClient.send(mutation(context), data).then(({model}) => {
     return model;
   });
 }

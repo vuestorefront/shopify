@@ -10,7 +10,7 @@ export default async function signUp(context, params, customQuery?: CustomQuery)
   };
 
   // send userdata to register
-  return await context.CustomClient.graphQLClient.send(mutation, data).then(({model}) => {
+  return await context.CustomClient.graphQLClient.send(mutation(context), data).then(({model}) => {
     return model;
   });
 }
