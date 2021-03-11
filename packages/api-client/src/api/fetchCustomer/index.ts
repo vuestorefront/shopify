@@ -6,7 +6,7 @@ import { customerQuery as query } from './../customerMutations/buildQueries';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function fetchCustomer(context, params, customQuery?: CustomQuery) {
   // send user data to authenticate, return token if valid
-  return await context.CustomClient.graphQLClient.send(query(params)).then(({model}) => {
+  return await context.CustomClient.graphQLClient.send(query(params, context)).then(({model}) => {
     return model;
   });
 }

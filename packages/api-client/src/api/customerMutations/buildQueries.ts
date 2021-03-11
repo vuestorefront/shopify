@@ -1,14 +1,7 @@
 /* eslint-disable func-names */
-/* TODO: Fetch custom client directly, may be using context  */
-const Customclient = require('shopify-buy/index.unoptimized.umd.js');
-const CustomClient = Customclient.buildClient({
-  domain: 'YOUR SHOPIFY STORE DOMAIN',
-  storefrontAccessToken: 'YOUR STORE ACCESS TOKEN'
-});
+const customerQuery: (token: string, context) => any = (token, context): any => {
 
-const customerQuery: (token: string) => any = (token): any => {
-
-  return CustomClient.graphQLClient.query((root) => {
+  return context.CustomClient.graphQLClient.query((root) => {
     root.add('customer', {
       args: {
         customerAccessToken: token
@@ -27,9 +20,9 @@ const customerQuery: (token: string) => any = (token): any => {
   });
 };
 
-const ordersQuery: (pages: number, token: string) => any = (pages, token): any => {
+const ordersQuery: (pages: number, token: string, context) => any = (pages, token, context): any => {
 
-  return CustomClient.graphQLClient.query((root) => {
+  return context.CustomClient.graphQLClient.query((root) => {
     root.add('customer', {
       args: {
         customerAccessToken: token
@@ -76,9 +69,9 @@ const ordersQuery: (pages: number, token: string) => any = (pages, token): any =
   });
 };
 
-const addressesQuery: (pages: number, token: string) => any = (pages, token): any => {
+const addressesQuery: (pages: number, token: string, context) => any = (pages, token, context): any => {
 
-  return CustomClient.graphQLClient.query((root) => {
+  return context.CustomClient.graphQLClient.query((root) => {
     root.add('customer', {
       args: {
         customerAccessToken: token

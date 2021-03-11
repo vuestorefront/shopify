@@ -1,15 +1,9 @@
 /* TODO: Fetch custom client directly, may be using context  */
-const Customclient = require('shopify-buy/index.unoptimized.umd.js');
-const CustomClient = Customclient.buildClient({
-  domain: 'YOUR SHOPIFY STORE DOMAIN',
-  storefrontAccessToken: 'YOUR STORE ACCESS TOKEN'
-});
+const changePasswordMutation: (context) => any = (context): any => {
+  const customerAccessToken = context.CustomClient.graphQLClient.variable('customerAccessToken', 'String!');
+  const customer = context.CustomClient.graphQLClient.variable('customer', 'CustomerUpdateInput!');
 
-const changePasswordMutation: () => any = (): any => {
-  const customerAccessToken = CustomClient.graphQLClient.variable('customerAccessToken', 'String!');
-  const customer = CustomClient.graphQLClient.variable('customer', 'CustomerUpdateInput!');
-
-  return CustomClient.graphQLClient.mutation('customerUpdate', [customerAccessToken, customer], (root) => {
+  return context.CustomClient.graphQLClient.mutation('customerUpdate', [customerAccessToken, customer], (root) => {
     root.add('customerUpdate', {args: {customerAccessToken, customer}}, (customer) => {
       customer.add('customer', (fields) => {
         fields.add('id');
@@ -32,11 +26,11 @@ const changePasswordMutation: () => any = (): any => {
   });
 };
 
-const forgotPasswordMutation: () => any = (): any => {
+const forgotPasswordMutation: (context) => any = (context): any => {
 
-  const email = CustomClient.graphQLClient.variable('email', 'String!');
+  const email = context.CustomClient.graphQLClient.variable('email', 'String!');
 
-  return CustomClient.graphQLClient.mutation('customerRecover', [email], (root) => {
+  return context.CustomClient.graphQLClient.mutation('customerRecover', [email], (root) => {
     root.add('customerRecover', {args: {email}}, (customer) => {
       customer.add('customerUserErrors', (error) => {
         error.add('code');
@@ -47,12 +41,11 @@ const forgotPasswordMutation: () => any = (): any => {
   });
 };
 
-const editProfileMutation: () => any = (): any => {
+const editProfileMutation: (context) => any = (context): any => {
+  const customerAccessToken = context.CustomClient.graphQLClient.variable('customerAccessToken', 'String!');
+  const customer = context.CustomClient.graphQLClient.variable('customer', 'CustomerUpdateInput!');
 
-  const customerAccessToken = CustomClient.graphQLClient.variable('customerAccessToken', 'String!');
-  const customer = CustomClient.graphQLClient.variable('customer', 'CustomerUpdateInput!');
-
-  return CustomClient.graphQLClient.mutation('customerUpdate', [customerAccessToken, customer], (root) => {
+  return context.CustomClient.graphQLClient.mutation('customerUpdate', [customerAccessToken, customer], (root) => {
     root.add('customerUpdate', {args: {customerAccessToken, customer}}, (customer) => {
       customer.add('customer', (fields) => {
         fields.add('id');
@@ -75,10 +68,10 @@ const editProfileMutation: () => any = (): any => {
   });
 };
 
-const signInMutation: () => any = (): any => {
-  const input = CustomClient.graphQLClient.variable('input', 'CustomerAccessTokenCreateInput!');
+const signInMutation: (context) => any = (context): any => {
+  const input = context.CustomClient.graphQLClient.variable('input', 'CustomerAccessTokenCreateInput!');
 
-  return CustomClient.graphQLClient.mutation('customerAccessTokenCreate', [input], (root) => {
+  return context.CustomClient.graphQLClient.mutation('customerAccessTokenCreate', [input], (root) => {
     root.add('customerAccessTokenCreate', {args: {input}}, (customer) => {
       customer.add('customerAccessToken', (token) => {
         token.add('accessToken');
@@ -93,11 +86,11 @@ const signInMutation: () => any = (): any => {
   });
 };
 
-const signOutMutation: () => any = (): any => {
+const signOutMutation: (context) => any = (context): any => {
 
-  const customerAccessToken = CustomClient.graphQLClient.variable('customerAccessToken', 'String!');
+  const customerAccessToken = context.CustomClient.graphQLClient.variable('customerAccessToken', 'String!');
 
-  return CustomClient.graphQLClient.mutation('customerAccessTokenDelete', [customerAccessToken], (root) => {
+  return context.CustomClient.graphQLClient.mutation('customerAccessTokenDelete', [customerAccessToken], (root) => {
     root.add('customerAccessTokenDelete', {args: {customerAccessToken}}, (customer) => {
       customer.add('deletedAccessToken');
       customer.add('deletedCustomerAccessTokenId');
@@ -109,11 +102,11 @@ const signOutMutation: () => any = (): any => {
   });
 };
 
-const signUpMutation: () => any = (): any => {
+const signUpMutation: (context) => any = (context): any => {
 
-  const input = CustomClient.graphQLClient.variable('input', 'CustomerCreateInput!');
+  const input = context.CustomClient.graphQLClient.variable('input', 'CustomerCreateInput!');
 
-  return CustomClient.graphQLClient.mutation('customerCreate', [input], (root) => {
+  return context.CustomClient.graphQLClient.mutation('customerCreate', [input], (root) => {
     root.add('customerCreate', {args: {input}}, (customer) => {
       customer.add('customer', (token) => {
         token.add('id');
