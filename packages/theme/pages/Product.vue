@@ -5,9 +5,7 @@
       :breadcrumbs="breadcrumbs"
     />
     <div class="product">
-      <LazyHydrate when-idle>
         <SfGallery v-if='productGallery.length > 0' :images="productGallery" :current="ActiveVariantImage + 1" class="product__gallery"/>
-      </LazyHydrate>
       <div class="product__info">
         <div class="product__header">
           <SfHeading
@@ -31,7 +29,7 @@
             :special="productGetters.getFormattedPrice(productGetters.getPrice(product).special)"
           />
           <div>
-            <div class="product__rating">
+            <!-- div class="product__rating">
               <SfRating
                 :score="averageRating"
                 :max="5"
@@ -39,8 +37,8 @@
               <a v-if="!!totalReviews" href="#" class="product__count">
                 ({{ totalReviews }})
               </a>
-            </div>
-            <SfButton data-cy="product-btn_read-all" class="sf-button--text">{{ $t('Read all reviews') }}</SfButton>
+            </!-->
+            <!--SfButton data-cy="product-btn_read-all" class="sf-button--text">{{ $t('Read all reviews') }}</!--SfButton-->
           </div>
         </div>
         <div>
@@ -76,6 +74,7 @@
               :color="color.value"
               class="product__color"
               @click="updateFilter({color})"
+              :selected="configuration.color ? (configuration.color.value === color.value? true : false) : (i === 0 ? true : false) "
 
             />
           </div>
@@ -109,7 +108,7 @@
               </template>
             </SfProperty>
           </SfTab>
-          <SfTab title="Read reviews" data-cy="product-tab_reviews">
+          <!--SfTab title="Read reviews" data-cy="product-tab_reviews">
             <SfReview
               v-for="review in reviews"
               :key="reviewGetters.getReviewId(review)"
@@ -123,7 +122,7 @@
               hide-full-text="Read less"
               class="product__review"
             />
-          </SfTab>
+          </!--SfTab-->
           <SfTab
             title="Additional Information"
             data-cy="product-tab_additional"
@@ -187,7 +186,7 @@ import {
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
 import { ref, computed } from '@vue/composition-api';
-import { useProduct, useCart, productGetters, useReview, reviewGetters } from '@vue-storefront/shopify';
+import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { onSSR } from '@vue-storefront/core';
@@ -198,18 +197,21 @@ export default {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
     const qty = ref(1);
-    const { id } = context.root.$route.params;
+    // const { id } = context.root.$route.params;
     const { slug } = context.root.$route.params;
     const { products, search } = useProduct('products');
     const { products: relatedProducts, search: searchRelatedProducts, loading: relatedLoading } = useProduct('relatedProducts');
     const { addItem, loading } = useCart();
-    const { reviews: productReviews, search: searchReviews } = useReview('productReviews');
+    // const { reviews: productReviews, search: searchReviews } = useReview('productReviews');
     const product = computed(() => productGetters.getFiltered(products.value, { master: true, attributes: context.root.$route.query })[0]);
     const productDescription = computed(() => productGetters.getDescription(product.value));
     const productDescriptionHtml = computed(() => productGetters.getDescription(product.value, true));
     const options = computed(() => productGetters.getAttributes(products.value));
-    const configuration = computed(() => productGetters.getAttributes(product.value, ['Color', 'Size']));
-    const reviews = computed(() => reviewGetters.getItems(productReviews.value));
+    const configuration = computed(() => {
+      return productGetters.getSelectedVariant(products.value, context.root.$route.query);
+    });
+    console.log(configuration);
+    // const reviews = computed(() => reviewGetters.getItems(productReviews.value));
 
     // TODO: Breadcrumbs are temporary disabled because productGetters return undefined. We have a mocks in data
     const breadcrumbs = computed(() => productGetters.getBreadcrumbs ? productGetters.getBreadcrumbs(product.value) : props.fallbackBreadcrumbs);
@@ -226,12 +228,10 @@ export default {
     onSSR(async () => {
       await search({ slug });
       await searchRelatedProducts({ catId: 123, limit: 8 });
-      await searchReviews({ productId: id });
+      // await searchReviews({ productId: id });
     });
 
     const updateFilter = (filter) => {
-      console.log('Mocked variant selected', filter);
-
       context.root.$router.push({
         path: context.root.$route.path,
         query: {
@@ -247,8 +247,8 @@ export default {
       product,
       productDescription,
       productDescriptionHtml,
-      reviews,
-      reviewGetters,
+      // reviews,
+      // reviewGetters,
       ActiveVariantImage,
       averageRating: computed(() => productGetters.getAverageRating(product.value)),
       totalReviews: computed(() => productGetters.getTotalReviews(product.value)),
