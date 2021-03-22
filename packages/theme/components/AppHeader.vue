@@ -21,9 +21,6 @@
     <template #navigation v-if="categories.length > 0">
       <SfHeaderNavigationItem v-for='cat in categories' :key="cat.id" class="nav-item" :data-cy="'app-header-url_' + cat.handle"  :label="cat.title" :link="localePath('/c/' + cat.handle )" />
     </template>
-    <template #aside>
-      <LocaleSelector class="smartphone-only" />
-    </template>
   </SfHeader>
 </template>
 
@@ -34,13 +31,11 @@ import { useCart, useWishlist, useUser, cartGetters, useCategory } from '@vue-st
 import { computed, ref } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useUiHelpers } from '~/composables';
-import LocaleSelector from './LocaleSelector';
 
 export default {
   components: {
     SfHeader,
-    SfImage,
-    LocaleSelector
+    SfImage
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, { root }) {
