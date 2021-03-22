@@ -210,7 +210,6 @@ export default {
     const configuration = computed(() => {
       return productGetters.getSelectedVariant(products.value, context.root.$route.query);
     });
-    console.log(configuration);
     // const reviews = computed(() => reviewGetters.getItems(productReviews.value));
 
     // TODO: Breadcrumbs are temporary disabled because productGetters return undefined. We have a mocks in data
