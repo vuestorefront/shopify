@@ -73,7 +73,6 @@ export const getCartTotals = (cart: Cart): AgnosticTotals => {
 export const getCartShippingPrice = (cart: Cart): number => 0;
 
 export const getcheckoutURL = (cart: Cart): string => {
-  console.log('cart::', cart);
   return cart.webUrl || '';
 };
 
