@@ -72,6 +72,11 @@ export const getCartTotals = (cart: Cart): AgnosticTotals => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartShippingPrice = (cart: Cart): number => 0;
 
+export const getcheckoutURL = (cart: Cart): string => {
+  console.log('cart::', cart);
+  return cart.webUrl || '';
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartTotalItems = (cart: Cart): number => {
   if (cart) {
@@ -101,7 +106,8 @@ const cartGetters: CartGetters<Cart, LineItem> = {
   getFormattedPrice: getFormattedPrice,
   getTotalItems: getCartTotalItems,
   getCoupons,
-  getDiscounts
+  getDiscounts,
+  getcheckoutURL
 };
 
 export default cartGetters;

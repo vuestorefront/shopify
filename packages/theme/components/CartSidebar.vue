@@ -84,10 +84,8 @@
                 <SfPrice :regular="$n(totals.subtotal, 'currency')" />
               </template>
             </SfProperty>
-            <nuxt-link
-              :to="`/checkout/${
-                isAuthenticated ? 'shipping' : 'personal-details'
-              }`"
+            <SfLink
+              :link="checkoutURL"
             >
               <SfButton
                 class="sf-button--full-width color-secondary"
@@ -95,7 +93,7 @@
               >
                 {{ $t("Go to checkout") }}
               </SfButton>
-            </nuxt-link>
+            </SfLink>
           </div>
           <div v-else>
             <SfButton
@@ -118,7 +116,8 @@ import {
   SfProperty,
   SfPrice,
   SfCollectedProduct,
-  SfImage
+  SfImage,
+  SfLink
 } from '@storefront-ui/vue';
 import { computed } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
@@ -135,7 +134,8 @@ export default {
     SfProperty,
     SfPrice,
     SfCollectedProduct,
-    SfImage
+    SfImage,
+    SfLink
   },
   setup() {
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
@@ -144,6 +144,7 @@ export default {
     const products = computed(() => cartGetters.getItems(cart.value));
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
+    const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
     onSSR(async () => {
       await loadCart();
     });
@@ -157,7 +158,8 @@ export default {
       toggleCartSidebar,
       totals,
       totalItems,
-      cartGetters
+      cartGetters,
+      checkoutURL
     };
   }
 };
