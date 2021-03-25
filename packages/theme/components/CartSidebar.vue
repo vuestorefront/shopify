@@ -17,6 +17,7 @@
       <transition name="sf-fade" mode="out-in">
         <div v-if="totalItems" key="my-cart" class="my-cart">
           <div class="collected-product-list">
+            {{ products }}
             <transition-group name="sf-fade" tag="div">
               <SfCollectedProduct
                 data-cy="collected-product-cart-sidebar"
@@ -118,15 +119,15 @@ import {
   SfProperty,
   SfPrice,
   SfCollectedProduct,
-  SfImage,
-} from "@storefront-ui/vue";
-import { computed } from "@vue/composition-api";
-import { useCart, useUser, cartGetters } from "@vue-storefront/shopify";
-import { useUiState } from "~/composables";
-import { onSSR } from "@vue-storefront/core";
+  SfImage
+} from '@storefront-ui/vue';
+import { computed } from '@vue/composition-api';
+import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
+import { useUiState } from '~/composables';
+import { onSSR } from '@vue-storefront/core';
 
 export default {
-  name: "Cart",
+  name: 'Cart',
   components: {
     SfSidebar,
     SfButton,
@@ -135,7 +136,7 @@ export default {
     SfProperty,
     SfPrice,
     SfCollectedProduct,
-    SfImage,
+    SfImage
   },
   setup() {
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
@@ -157,9 +158,9 @@ export default {
       toggleCartSidebar,
       totals,
       totalItems,
-      cartGetters,
+      cartGetters
     };
-  },
+  }
 };
 </script>
 

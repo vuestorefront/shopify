@@ -1,17 +1,17 @@
 <template>
   <div id="home">
     <SfHero class="hero">
-        <SfHeroItem
-          v-for="(hero, i) in heroes"
-          :key="i"
-          :title="hero.title"
-          :subtitle="hero.subtitle"
-          :button-text="hero.buttonText"
-          :background="hero.background"
-          :image="hero.image"
-          :class="hero.className"
-        />
-      </SfHero>
+      <SfHeroItem
+        v-for="(hero, i) in heroes"
+        :key="i"
+        :title="hero.title"
+        :subtitle="hero.subtitle"
+        :button-text="hero.buttonText"
+        :background="hero.background"
+        :image="hero.image"
+        :class="hero.className"
+      />
+    </SfHero>
     <LazyHydrate when-visible>
       <SfBannerGrid :banner-grid="1" class="banner-grid">
         <template v-for="item in banners" v-slot:[item.slot]>
@@ -28,11 +28,11 @@
       </SfBannerGrid>
     </LazyHydrate>
     <LazyHydrate when-visible>
-    <RelatedProducts
-      :products="products"
-      :loading="productsLoading"
-      title="Match it with"
-    />
+      <RelatedProducts
+        :products="products"
+        :loading="productsLoading"
+        title="Match it with"
+      />
     </LazyHydrate>
 
     <LazyHydrate when-visible>
@@ -49,12 +49,12 @@
     </LazyHydrate>
 
     <LazyHydrate when-visible>
-      <MobileStoreBanner/>
+      <MobileStoreBanner />
     </LazyHydrate>
   </div>
 </template>
 <script type="module">
-import { 
+import {
   /* webpackChunkName: 'SfHero' */ SfHero,
   /* webpackChunkName: 'SfBanner' */ SfBanner,
   /* webpackChunkName: 'SfCallToAction' */ SfCallToAction,
@@ -67,12 +67,16 @@ import {
   /* webpackChunkName: 'SfArrow' */ SfArrow,
   /* webpackChunkName: 'SfButton' */ SfButton
 } from '@storefront-ui/vue';
-import featuredProduct from '../components/FeaturedProduct';
-import blogPosts from '../components/BlogPosts';
 import RelatedProducts from '~/components/RelatedProducts.vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
-import { /* webpackChunkName: 'useProduct' */ useProduct, /* webpackChunkName: 'useCart' */ useCart, /* webpackChunkName: 'productGetters' */ productGetters } from '@vue-storefront/shopify';
-import { /* webpackChunkName: 'computed' */ computed } from '@vue/composition-api';
+import {
+  /* webpackChunkName: 'useProduct' */ useProduct,
+  /* webpackChunkName: 'useCart' */ useCart,
+  /* webpackChunkName: 'productGetters' */ productGetters
+} from '@vue-storefront/shopify';
+import {
+  /* webpackChunkName: 'computed' */ computed
+} from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
@@ -81,7 +85,11 @@ export default {
   name: 'Home',
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
-    const { products: relatedProducts, search: productsSearch, loading: productsLoading } = useProduct('relatedProducts');
+    const {
+      products: relatedProducts,
+      search: productsSearch,
+      loading: productsLoading
+    } = useProduct('relatedProducts');
     const { cart, load: loadCart, addItem: addToCart, isOnCart } = useCart();
 
     onSSR(async () => {
@@ -89,8 +97,10 @@ export default {
       await loadCart();
     });
     return {
-      products: computed(() => productGetters.getFiltered(relatedProducts.value, { master: true })),
-      getChkId: computed(()=> cart.value.id),
+      products: computed(() =>
+        productGetters.getFiltered(relatedProducts.value, { master: true })
+      ),
+      getChkId: computed(() => cart.value.id),
       productsLoading,
       productGetters,
       addToCart,
@@ -105,7 +115,6 @@ export default {
     SfCallToAction,
     SfSection,
     SfCarousel,
-    blogPosts,
     SfProductCard,
     SfImage,
     SfBannerGrid,
@@ -113,8 +122,7 @@ export default {
     SfArrow,
     SfButton,
     MobileStoreBanner,
-    LazyHydrate,
-    featuredProduct
+    LazyHydrate
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
@@ -126,8 +134,10 @@ export default {
           buttonText: 'Learn more',
           background: '#eceff1',
           image: {
-            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerB_328x224.jpg',
-            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerB_1240x400.jpg'
+            mobile:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerB_328x224.jpg',
+            desktop:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerB_1240x400.jpg'
           },
           link: '/c/women/women-clothing-shirts'
         },
@@ -137,8 +147,10 @@ export default {
           buttonText: 'Learn more',
           background: '#fce4ec',
           image: {
-            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerH_328x224.jpg',
-            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerH_1240x400.jpg'
+            mobile:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerH_328x224.jpg',
+            desktop:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerH_1240x400.jpg'
           },
           link: '/c/women/women-clothing-dresses'
         },
@@ -148,8 +160,10 @@ export default {
           buttonText: 'Learn more',
           background: '#efebe9',
           image: {
-            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerA_328x224.jpg',
-            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerA_1240x400.jpg'
+            mobile:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerA_328x224.jpg',
+            desktop:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerA_1240x400.jpg'
           },
           link: '/c/women/women-shoes-sandals',
           className:
@@ -165,8 +179,10 @@ export default {
             'Find stunning women\'s cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses from all your favorite brands.',
           buttonText: 'Shop now',
           image: {
-            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerB_328x343.jpg',
-            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerF_332x840.jpg'
+            mobile:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerB_328x343.jpg',
+            desktop:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerF_332x840.jpg'
           },
           class: 'sf-banner--slim desktop-only',
           link: '/c/women/women-clothing-skirts'
@@ -179,8 +195,10 @@ export default {
             'Find stunning women\'s cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses from all your favorite brands.',
           buttonText: 'Shop now',
           image: {
-            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerE_328x343.jpg',
-            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerE_496x840.jpg'
+            mobile:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerE_328x343.jpg',
+            desktop:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerE_496x840.jpg'
           },
           class: 'sf-banner--slim banner-central desktop-only',
           link: '/c/women/women-clothing-dresses'
@@ -190,8 +208,10 @@ export default {
           subtitle: 'T-Shirts',
           title: 'The Office Life',
           image: {
-            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerC_328x343.jpg',
-            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerC_332x400.jpg'
+            mobile:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerC_328x343.jpg',
+            desktop:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerC_332x400.jpg'
           },
           class: 'sf-banner--slim banner__tshirt',
           link: '/c/women/women-clothing-shirts'
@@ -201,8 +221,10 @@ export default {
           subtitle: 'Summer Sandals',
           title: 'Eco Sandals',
           image: {
-            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerG_328x343.jpg',
-            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerG_332x400.jpg'
+            mobile:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerG_328x343.jpg',
+            desktop:
+              'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerG_332x400.jpg'
           },
           class: 'sf-banner--slim',
           link: '/c/women/women-shoes-sandals'
@@ -220,23 +242,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.article-meta h4 a{
-    color: #111111;
-    font-weight: 600;
-    font-size: 20px;
+.article-meta h4 a {
+  color: #111111;
+  font-weight: 600;
+  font-size: 20px;
 }
 .article-meta {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 .article-item__meta-item:not(:last-child)::after {
-    display: inline-block;
-    content: "";
-    width: 5px;
-    height: 5px;
-    margin: -1px 10px 0 10px;
-    border-radius: 100%;
-    background: rgba(0,0,0, 0.4);
-    vertical-align: middle;
+  display: inline-block;
+  content: "";
+  width: 5px;
+  height: 5px;
+  margin: -1px 10px 0 10px;
+  border-radius: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  vertical-align: middle;
 }
 #home {
   box-sizing: border-box;
@@ -265,7 +287,8 @@ export default {
         --hero-item-wrapper-text-align: right;
         --hero-item-subtitle-width: 100%;
         --hero-item-title-width: 100%;
-        --hero-item-wrapper-padding: var(--spacer-sm) var(--spacer-sm) var(--spacer-sm) var(--spacer-2xl);
+        --hero-item-wrapper-padding: var(--spacer-sm) var(--spacer-sm)
+          var(--spacer-sm) var(--spacer-2xl);
       }
     }
   }
@@ -323,7 +346,7 @@ export default {
 }
 
 .carousel {
-    margin: 0 calc(var(--spacer-sm) * -1) 0 0;
+  margin: 0 calc(var(--spacer-sm) * -1) 0 0;
   @include for-desktop {
     margin: 0;
   }
@@ -337,5 +360,4 @@ export default {
     }
   }
 }
-
 </style>

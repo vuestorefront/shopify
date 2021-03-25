@@ -20,10 +20,10 @@
             class="navbar__filters-icon"
             data-cy="category-icon_"
           />
-           {{ $t('Filters') }}
+          {{ $t("Filters") }}
         </SfButton>
         <div class="navbar__sort desktop-only">
-          <span class="navbar__label">{{ $t('Sort by') }}:</span>
+          <span class="navbar__label">{{ $t("Sort by") }}:</span>
           <SfSelect
             :value="sortBy.selected"
             placeholder="Select sorting"
@@ -41,12 +41,16 @@
           </SfSelect>
         </div>
         <div class="navbar__counter">
-          <span class="navbar__label desktop-only">{{ $t('Products found') }}: </span>
+          <span class="navbar__label desktop-only"
+            >{{ $t("Products found") }}:
+          </span>
           <span class="desktop-only">{{ pagination.totalItems }}</span>
-          <span class="navbar__label smartphone-only">{{ pagination.totalItems }} Items</span>
+          <span class="navbar__label smartphone-only"
+            >{{ pagination.totalItems }} Items</span
+          >
         </div>
         <div class="navbar__view">
-          <span class="navbar__view-label desktop-only">{{ $t('View') }}</span>
+          <span class="navbar__view-label desktop-only">{{ $t("View") }}</span>
           <SfIcon
             data-cy="category-icon_grid-view"
             class="navbar__view-icon"
@@ -90,16 +94,27 @@
               :style="{ '--index': i }"
               :title="productGetters.getName(product)"
               :image="productGetters.getCoverImage(product)"
-              :regular-price="$n(productGetters.getPrice(product).regular, 'currency')"
-              :special-price="productGetters.getPrice(product).special && $n(productGetters.getPrice(product).special, 'currency')"
+              :regular-price="
+                $n(productGetters.getPrice(product).regular, 'currency')
+              "
+              :special-price="
+                productGetters.getPrice(product).special &&
+                $n(productGetters.getPrice(product).special, 'currency')
+              "
               :max-rating="5"
               :score-rating="productGetters.getAverageRating(product)"
               :show-add-to-cart-button="true"
               :isOnWishlist="false"
-              :isAddedToCart="isOnCart({product})"
-              :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
+              :isAddedToCart="isOnCart({ product })"
+              :link="
+                localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )
+              "
               class="products__product-card"
-              @click:wishlist="addItemToWishlist({product})"
+              @click:wishlist="addItemToWishlist({ product })"
               @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
             />
           </transition-group>
@@ -118,36 +133,47 @@
               :title="productGetters.getName(product)"
               :description="productGetters.getDescription(product)"
               :image="productGetters.getCoverImage(product)"
-              :regular-price="$n(productGetters.getPrice(product).regular, 'currency')"
-              :special-price="productGetters.getPrice(product).special && $n(productGetters.getPrice(product).special, 'currency')"
+              :regular-price="
+                $n(productGetters.getPrice(product).regular, 'currency')
+              "
+              :special-price="
+                productGetters.getPrice(product).special &&
+                $n(productGetters.getPrice(product).special, 'currency')
+              "
               :max-rating="5"
               :score-rating="3"
               :is-on-wishlist="false"
               class="products__product-card-horizontal"
               @click:wishlist="addItemToWishlist({ product })"
               @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-              :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
+              :link="
+                localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )
+              "
             >
               <template #configuration>
                 <SfProperty
                   class="desktop-only"
                   name="Size"
                   value="XS"
-                  style="margin: 0 0 1rem 0;"
+                  style="margin: 0 0 1rem 0"
                 />
                 <SfProperty class="desktop-only" name="Color" value="white" />
               </template>
               <template #actions>
                 <SfButton
                   class="sf-button--text desktop-only"
-                  style="margin: 0 0 1rem auto; display: block;"
+                  style="margin: 0 0 1rem auto; display: block"
                   @click="() => {}"
                 >
                   Save for later
                 </SfButton>
                 <SfButton
                   class="sf-button--text desktop-only"
-                  style="margin: 0 0 0 auto; display: block;"
+                  style="margin: 0 0 0 auto; display: block"
                   @click="() => {}"
                 >
                   Add to compare
@@ -201,32 +227,32 @@
             class="filters__title sf-heading--left"
             :key="`filter-title-${facet.id}`"
           />
-            <div
-              v-if="isFacetColor(facet)"
-              class="filters__colors"
-              :key="`${facet.id}-colors`"
-            >
-              <SfColor
-                v-for="option in facet.options"
-                :key="`${facet.id}-${option.value}`"
-                :data-cy="`category-filter_color_${option.value}`"
-                :color="option.value"
-                :selected="isFilterSelected(facet, option)"
-                class="filters__color"
-                @click="() => selectFilter(facet, option)"
-              />
-            </div>
-            <div v-else>
-              <SfFilter
-                v-for="option in facet.options"
-                :key="`${facet.id}-${option.value}`"
-                :data-cy="`category-filter_${facet.id}_${option.value}`"
-                :label="option.id + `${option.count ? ` (${option.count})` : ''}`"
-                :selected="isFilterSelected(facet, option)"
-                class="filters__item"
-                @change="() => selectFilter(facet, option)"
-              />
-            </div>
+          <div
+            v-if="isFacetColor(facet)"
+            class="filters__colors"
+            :key="`${facet.id}-colors`"
+          >
+            <SfColor
+              v-for="option in facet.options"
+              :key="`${facet.id}-${option.value}`"
+              :data-cy="`category-filter_color_${option.value}`"
+              :color="option.value"
+              :selected="isFilterSelected(facet, option)"
+              class="filters__color"
+              @click="() => selectFilter(facet, option)"
+            />
+          </div>
+          <div v-else>
+            <SfFilter
+              v-for="option in facet.options"
+              :key="`${facet.id}-${option.value}`"
+              :data-cy="`category-filter_${facet.id}_${option.value}`"
+              :label="option.id + `${option.count ? ` (${option.count})` : ''}`"
+              :selected="isFilterSelected(facet, option)"
+              class="filters__item"
+              @change="() => selectFilter(facet, option)"
+            />
+          </div>
         </div>
       </div>
       <SfAccordion class="filters smartphone-only">
@@ -236,22 +262,20 @@
             :header="facet.label"
             class="filters__accordion-item"
           >
-          <SfFilter
-            v-for="option in facet.options"
-            :key="`${facet.id}-${option.id}`"
-            :label="option.id"
-            :selected="isFilterSelected(facet, option)"
-            class="filters__item"
-            @change="() => selectFilter(facet, option)"
-          />
-        </SfAccordionItem>
-      </div>
+            <SfFilter
+              v-for="option in facet.options"
+              :key="`${facet.id}-${option.id}`"
+              :label="option.id"
+              :selected="isFilterSelected(facet, option)"
+              class="filters__item"
+              @change="() => selectFilter(facet, option)"
+            />
+          </SfAccordionItem>
+        </div>
       </SfAccordion>
       <template #content-bottom>
         <div class="filters__buttons">
-          <SfButton
-            class="sf-button--full-width"
-            @click="applyFilters"
+          <SfButton class="sf-button--full-width" @click="applyFilters"
             >Done</SfButton
           >
           <SfButton
@@ -269,10 +293,8 @@
 import {
   SfSidebar,
   SfButton,
-  SfList,
   SfIcon,
   SfHeading,
-  SfMenuItem,
   SfFilter,
   SfProductCard,
   SfProductCardHorizontal,
@@ -284,9 +306,14 @@ import {
   SfColor,
   SfProperty
 } from '@storefront-ui/vue';
-import categorySidebar from '~/components/categorySidebar';
 import { ref, computed, onMounted } from '@vue/composition-api';
-import { useCart, useWishlist, productGetters, useFacet, facetGetters } from '@vue-storefront/shopify';
+import {
+  useCart,
+  useWishlist,
+  productGetters,
+  useFacet,
+  facetGetters
+} from '@vue-storefront/shopify';
 import { useUiHelpers, useUiState } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
 import Vue from 'vue';
@@ -302,14 +329,20 @@ export default {
     const { addItem: addItemToWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
     const products = computed(() => facetGetters.getProducts(result.value));
-    const categoryTree = computed(() => facetGetters.getCategoryTree(result.value));
-    const breadcrumbs = computed(() => facetGetters.getBreadcrumbs(result.value));
+    const categoryTree = computed(() =>
+      facetGetters.getCategoryTree(result.value)
+    );
+    const breadcrumbs = computed(() =>
+      facetGetters.getBreadcrumbs(result.value)
+    );
     const sortBy = computed(() => facetGetters.getSortOptions(result.value));
-    const facets = computed(() => facetGetters.getGrouped(result.value, ['color', 'size']));
+    const facets = computed(() =>
+      facetGetters.getGrouped(result.value, ['color', 'size'])
+    );
     const pagination = computed(() => facetGetters.getPagination(result.value));
     const activeCategory = computed(() => {
       const items = categoryTree.value;
-      if (items === null || (items.length === undefined)) {
+      if (items === null || items.length === undefined) {
         return '';
       }
 
@@ -329,23 +362,27 @@ export default {
     onMounted(() => {
       context.root.$scrollTo(context.root.$el, 2000);
       if (!facets.value.length) return;
-      selectedFilters.value = facets.value.reduce((prev, curr) => ({
-        ...prev,
-        [curr.id]: curr.options
-          .filter(o => o.selected)
-          .map(o => o.id)
-      }), {});
+      selectedFilters.value = facets.value.reduce(
+        (prev, curr) => ({
+          ...prev,
+          [curr.id]: curr.options.filter((o) => o.selected).map((o) => o.id)
+        }),
+        {}
+      );
     });
 
-    const isFilterSelected = (facet, option) => (selectedFilters.value[facet.id] || []).includes(option.id);
+    const isFilterSelected = (facet, option) =>
+      (selectedFilters.value[facet.id] || []).includes(option.id);
 
     const selectFilter = (facet, option) => {
       if (!selectedFilters.value[facet.id]) {
         Vue.set(selectedFilters.value, facet.id, []);
       }
 
-      if (selectedFilters.value[facet.id].find(f => f === option.id)) {
-        selectedFilters.value[facet.id] = selectedFilters.value[facet.id].filter(f => f !== option.id);
+      if (selectedFilters.value[facet.id].find((f) => f === option.id)) {
+        selectedFilters.value[facet.id] = selectedFilters.value[
+          facet.id
+        ].filter((f) => f !== option.id);
         return;
       }
 
@@ -400,8 +437,7 @@ export default {
     SfLoader,
     SfColor,
     SfHeading,
-    SfProperty,
-    categorySidebar
+    SfProperty
   }
 };
 </script>
