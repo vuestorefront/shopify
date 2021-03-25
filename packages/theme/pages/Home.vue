@@ -1,7 +1,6 @@
 <template>
   <div id="home">
-    <LazyHydrate when-idle>
-      <SfHero class="hero">
+    <SfHero class="hero">
         <SfHeroItem
           v-for="(hero, i) in heroes"
           :key="i"
@@ -13,8 +12,6 @@
           :class="hero.className"
         />
       </SfHero>
-    </LazyHydrate>
-
     <LazyHydrate when-visible>
       <SfBannerGrid :banner-grid="1" class="banner-grid">
         <template v-for="item in banners" v-slot:[item.slot]>
@@ -43,7 +40,7 @@
         title="Subscribe to Newsletters"
         button-text="Subscribe"
         description="Be aware of upcoming sales and events. Receive gifts and special offers!"
-        image="/homepage/newsletter.webp"
+        image="https://cdn.shopify.com/s/files/1/0407/1902/4288/files/newsletter_1240x202.jpg?v=1616496568"
         class="call-to-action"
       />
     </LazyHydrate>
@@ -56,26 +53,26 @@
     </LazyHydrate>
   </div>
 </template>
-<script>
-import {
-  SfHero,
-  SfBanner,
-  SfCallToAction,
-  SfSection,
-  SfCarousel,
-  SfProductCard,
-  SfImage,
-  SfBannerGrid,
-  SfHeading,
-  SfArrow,
-  SfButton
+<script type="module">
+import { 
+  /* webpackChunkName: 'SfHero' */ SfHero,
+  /* webpackChunkName: 'SfBanner' */ SfBanner,
+  /* webpackChunkName: 'SfCallToAction' */ SfCallToAction,
+  /* webpackChunkName: 'SfSection' */ SfSection,
+  /* webpackChunkName: 'SfCarousel' */ SfCarousel,
+  /* webpackChunkName: 'SfProductCard' */ SfProductCard,
+  /* webpackChunkName: 'SfImage' */ SfImage,
+  /* webpackChunkName: 'SfBannerGrid' */ SfBannerGrid,
+  /* webpackChunkName: 'SfHeading' */ SfHeading,
+  /* webpackChunkName: 'SfArrow' */ SfArrow,
+  /* webpackChunkName: 'SfButton' */ SfButton
 } from '@storefront-ui/vue';
 import featuredProduct from '../components/FeaturedProduct';
 import blogPosts from '../components/BlogPosts';
 import RelatedProducts from '~/components/RelatedProducts.vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
-import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
-import { computed } from '@vue/composition-api';
+import { /* webpackChunkName: 'useProduct' */ useProduct, /* webpackChunkName: 'useCart' */ useCart, /* webpackChunkName: 'productGetters' */ productGetters } from '@vue-storefront/shopify';
+import { /* webpackChunkName: 'computed' */ computed } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
@@ -125,29 +122,38 @@ export default {
       heroes: [
         {
           title: 'Colorful summer dresses are already in store',
-          subtitle: 'SUMMER COLLECTION 2019',
+          subtitle: 'SUMMER COLLECTION 2021',
           buttonText: 'Learn more',
           background: '#eceff1',
-          image: '/homepage/bannerH.webp',
+          image: {
+            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerB_328x224.jpg',
+            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerB_1240x400.jpg'
+          },
           link: '/c/women/women-clothing-shirts'
         },
         {
           title: 'Colorful summer dresses are already in store',
-          subtitle: 'SUMMER COLLECTION 2019',
+          subtitle: 'SUMMER COLLECTION 2021',
           buttonText: 'Learn more',
-          background: '#efebe9',
-          image: '/homepage/bannerA.webp',
-          link: '/c/women/women-shoes-sandals',
-          className:
-            'sf-hero-item--position-bg-top-left sf-hero-item--align-right'
+          background: '#fce4ec',
+          image: {
+            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerH_328x224.jpg',
+            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerH_1240x400.jpg'
+          },
+          link: '/c/women/women-clothing-dresses'
         },
         {
           title: 'Colorful summer dresses are already in store',
-          subtitle: 'SUMMER COLLECTION 2019',
+          subtitle: 'SUMMER COLLECTION 2021',
           buttonText: 'Learn more',
-          background: '#fce4ec',
-          image: '/homepage/bannerB.webp',
-          link: '/c/women/women-clothing-dresses'
+          background: '#efebe9',
+          image: {
+            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerA_328x224.jpg',
+            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerA_1240x400.jpg'
+          },
+          link: '/c/women/women-shoes-sandals',
+          className:
+            'sf-hero-item--position-bg-top-left sf-hero-item--align-right'
         }
       ],
       banners: [
@@ -159,8 +165,8 @@ export default {
             'Find stunning women\'s cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses from all your favorite brands.',
           buttonText: 'Shop now',
           image: {
-            mobile: '/homepage/bannerB.webp',
-            desktop: '/homepage/bannerF.webp'
+            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerB_328x343.jpg',
+            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerF_332x840.jpg'
           },
           class: 'sf-banner--slim desktop-only',
           link: '/c/women/women-clothing-skirts'
@@ -172,7 +178,10 @@ export default {
           description:
             'Find stunning women\'s cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses from all your favorite brands.',
           buttonText: 'Shop now',
-          image: '/homepage/bannerE.webp',
+          image: {
+            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerE_328x343.jpg',
+            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerE_496x840.jpg'
+          },
           class: 'sf-banner--slim banner-central desktop-only',
           link: '/c/women/women-clothing-dresses'
         },
@@ -180,7 +189,10 @@ export default {
           slot: 'banner-C',
           subtitle: 'T-Shirts',
           title: 'The Office Life',
-          image: '/homepage/bannerC.webp',
+          image: {
+            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerC_328x343.jpg',
+            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerC_332x400.jpg'
+          },
           class: 'sf-banner--slim banner__tshirt',
           link: '/c/women/women-clothing-shirts'
         },
@@ -188,7 +200,10 @@ export default {
           slot: 'banner-D',
           subtitle: 'Summer Sandals',
           title: 'Eco Sandals',
-          image: '/homepage/bannerG.webp',
+          image: {
+            mobile: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerG_328x343.jpg',
+            desktop: 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/bannerG_332x400.jpg'
+          },
           class: 'sf-banner--slim',
           link: '/c/women/women-shoes-sandals'
         }

@@ -1,4 +1,4 @@
-import { apiClientFactory } from '@vue-storefront/core';
+import { /* webpackChunkName: 'apiClientFactory' */ apiClientFactory } from '@vue-storefront/core';
 import getProduct from './api/getProduct';
 import getCategory from './api/getCategory';
 import getBlogPosts from './api/getBlogPosts';

@@ -3,14 +3,15 @@ import webpack from 'webpack';
 
 export default {
   server: {
-    port: 3000,
+    port: 3001,
     host: '0.0.0.0'
   },
   head: {
-    title: 'Vue Storefront',
+    title: 'Shopify | Vue Storefront Next',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'theme-color', content: '#5ece7b' },
       {
         hid: 'description',
         name: 'description',
@@ -43,6 +44,7 @@ export default {
   plugins: [],
   buildModules: [
     // to core
+    '@nuxtjs/pwa',
     '@nuxt/typescript-build',
     '@nuxtjs/style-resources',
     [
@@ -78,7 +80,7 @@ export default {
       {
         api: {
           domain: 'YOUR SHOPIFY STORE DOMAIN',
-          storefrontAccessToken: 'YOUR STORE ACCESS TOKEN'
+          storefrontAccessToken: 'SHOPIFY STORE API KEY'
         },
         i18n: {
           useNuxtI18nConfig: true
@@ -168,7 +170,7 @@ export default {
       } else {
         return { x: 0, y: 0 };
       }
-    }
+    },
   },
   pwa: {
     manifest: {
@@ -177,43 +179,43 @@ export default {
       shortName: 'VSF Next',
       startUrl: '/',
       display: 'standalone',
-      backgroundColor: '#fff',
+      backgroundColor: '#5ece7b',
       themeColor: '#5ece7b',
       description: 'This is the Shopify PWA app for VSF Next',
       icons: [
         {
           src: '/icons/android-icon-48x48.png',
-          sizes: '48X48',
+          sizes: '48x48',
           type: 'image/png'
         },
         {
           src: '/icons/android-icon-72x72.png',
-          sizes: '72X72',
+          sizes: '72x72',
           type: 'image/png'
         },
         {
           src: '/icons/android-icon-96x96.png',
-          sizes: '96X96',
+          sizes: '96x96',
           type: 'image/png'
         },
         {
           src: '/icons/android-icon-144x144.png',
-          sizes: '144X144',
+          sizes: '144x144',
           type: 'image/png'
         },
         {
           src: '/icons/android-icon-168x168.png',
-          sizes: '168X168',
+          sizes: '168x168',
           type: 'image/png'
         },
         {
           src: '/icons/android-icon-192x192.png',
-          sizes: '192X192',
+          sizes: '192x192',
           type: 'image/png'
         },
         {
           src: '/icons/android-icon-512x512.png',
-          sizes: '512X512',
+          sizes: '512x512',
           type: 'image/png'
         }
       ]
@@ -221,10 +223,11 @@ export default {
     meta: {
       name: 'VSF Next: Shopify APP',
       author: 'Aureate labs',
+      backgroundColor: '#5ece7b',
       description:
         'This is the Shopify PWA app for VSF Next - Developed by Aureate labs',
       themeColor: '#5ece7b',
-      ogHost: 'shopify-pwa.aureatelabs.com'
+      ogHost: 'shopify-pwa-beta.aureatelabs.com'
     },
     icon: {
       iconSrc: 'src/static/android-icon-512x512.png'

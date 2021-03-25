@@ -149,7 +149,7 @@
     </transition>
   </SfModal>
 </template>
-<script>
+<script type="module">
 import { ref, watch } from '@vue/composition-api';
 import { SfModal, SfInput, SfButton, SfCheckbox, SfLoader, SfAlert, SfBar } from '@storefront-ui/vue';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';

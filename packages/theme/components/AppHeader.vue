@@ -14,28 +14,33 @@
     <!-- TODO: add mobile view buttons after SFUI team PR -->
     <template #logo>
       <nuxt-link data-cy="app-header-url_logo" :to="localePath('/')" class="sf-header__logo">
-        <SfImage src="/icons/logo.svg" alt="Vue Storefront Next" class="sf-header__logo-image"/>
+        <img src="https://cdn.shopify.com/s/files/1/0407/1902/4288/files/logo.svg?v=1616475953" alt="Vue Storefront Next" width="34" height="35" class="sf-header__logo-image"/>
       </nuxt-link>
     </template>
 
     <template #navigation v-if="categories.length > 0">
       <SfHeaderNavigationItem v-for='cat in categories' :key="cat.id" class="nav-item" :data-cy="'app-header-url_' + cat.handle"  :label="cat.title" :link="localePath('/c/' + cat.handle )" />
     </template>
+    <template #aside>
+      <LocaleSelector class="smartphone-only" />
+    </template>
   </SfHeader>
 </template>
 
-<script>
+<script type="module">
 import { SfHeader, SfImage } from '@storefront-ui/vue';
 import { useUiState } from '~/composables';
 import { useCart, useWishlist, useUser, cartGetters, useCategory } from '@vue-storefront/shopify';
 import { computed, ref } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useUiHelpers } from '~/composables';
+import LocaleSelector from './LocaleSelector';
 
 export default {
   components: {
     SfHeader,
-    SfImage
+    SfImage,
+    LocaleSelector
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, { root }) {

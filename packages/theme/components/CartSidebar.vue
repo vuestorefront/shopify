@@ -24,8 +24,13 @@
                 :key="cartGetters.getItemSku(product)"
                 :image="cartGetters.getItemImage(product)"
                 :title="cartGetters.getItemName(product)"
-                :regular-price="cartGetters.getItemPrice(product).regular"
-                :special-price="cartGetters.getItemPrice(product).special"
+                :regular-price="
+                  $n(cartGetters.getItemPrice(product).regular, 'currency')
+                "
+                :special-price="
+                  cartGetters.getItemPrice(product).special &&
+                  $n(cartGetters.getItemPrice(product).special, 'currency')
+                "
                 :stock="99999"
                 :qty="cartGetters.getItemQty(product)"
                 @input="updateItemQty({ product, quantity: $event })"
@@ -35,7 +40,12 @@
                 <template #configuration>
                   <div class="collected-product__properties">
                     <SfProperty
-                      v-for="(attribute, key) in cartGetters.getItemAttributes(product, ['color', 'size'])"
+                      v-for="(
+                        attribute, key
+                      ) in cartGetters.getItemAttributes(product, [
+                        'color',
+                        'size',
+                      ])"
                       :key="key"
                       :name="key"
                       :value="attribute"
@@ -71,15 +81,19 @@
               class="sf-property--full-width sf-property--large my-cart__total-price"
             >
               <template #value>
-                <SfPrice :regular="$n(totals.subtotal)" />
+                <SfPrice :regular="$n(totals.subtotal, 'currency')" />
               </template>
             </SfProperty>
-            <nuxt-link :to="`/checkout/${isAuthenticated ? 'shipping' : 'personal-details'}`">
-            <SfButton
-              class="sf-button--full-width color-secondary"
-              @click="toggleCartSidebar"
+            <nuxt-link
+              :to="`/checkout/${
+                isAuthenticated ? 'shipping' : 'personal-details'
+              }`"
+            >
+              <SfButton
+                class="sf-button--full-width color-secondary"
+                @click="toggleCartSidebar"
               >
-                {{ $t('Go to checkout') }}
+                {{ $t("Go to checkout") }}
               </SfButton>
             </nuxt-link>
           </div>
@@ -87,7 +101,7 @@
             <SfButton
               class="sf-button--full-width color-primary"
               @click="toggleCartSidebar"
-              >{{ $t('Go back shopping') }}</SfButton
+              >{{ $t("Go back shopping") }}</SfButton
             >
           </div>
         </transition>
@@ -95,7 +109,7 @@
     </SfSidebar>
   </div>
 </template>
-<script>
+<script type="module">
 import {
   SfSidebar,
   SfHeading,
@@ -104,15 +118,15 @@ import {
   SfProperty,
   SfPrice,
   SfCollectedProduct,
-  SfImage
-} from '@storefront-ui/vue';
-import { computed } from '@vue/composition-api';
-import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
-import { useUiState } from '~/composables';
-import { onSSR } from '@vue-storefront/core';
+  SfImage,
+} from "@storefront-ui/vue";
+import { computed } from "@vue/composition-api";
+import { useCart, useUser, cartGetters } from "@vue-storefront/shopify";
+import { useUiState } from "~/composables";
+import { onSSR } from "@vue-storefront/core";
 
 export default {
-  name: 'Cart',
+  name: "Cart",
   components: {
     SfSidebar,
     SfButton,
@@ -121,7 +135,7 @@ export default {
     SfProperty,
     SfPrice,
     SfCollectedProduct,
-    SfImage
+    SfImage,
   },
   setup() {
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
@@ -143,9 +157,9 @@ export default {
       toggleCartSidebar,
       totals,
       totalItems,
-      cartGetters
+      cartGetters,
     };
-  }
+  },
 };
 </script>
 

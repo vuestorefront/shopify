@@ -25,7 +25,7 @@
   </SfSection>
 </template>
 
-<script lang="ts">
+<script lang="ts" type="module">
 
 import {
   SfCarousel,
