@@ -19,8 +19,10 @@ This repository is a monorepo containing three projects:
 
 ## How to start?
 1. Configure packages/theme/nuxt.config.js to establish the connection to your Shopify store.
-- domain: 'yourdomain.myshopify.com',
-- storefrontAccessToken: 'your shopify store access token'
+```sh 
+domain: 'YOUR SHOPIFY STORE DOMAIN'
+storefrontAccessToken: 'SHOPIFY STORE API KEY'
+```
 
 2. Install all required dependencies:
 
