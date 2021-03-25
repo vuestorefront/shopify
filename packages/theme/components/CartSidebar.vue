@@ -17,7 +17,6 @@
       <transition name="sf-fade" mode="out-in">
         <div v-if="totalItems" key="my-cart" class="my-cart">
           <div class="collected-product-list">
-            {{ products }}
             <transition-group name="sf-fade" tag="div">
               <SfCollectedProduct
                 data-cy="collected-product-cart-sidebar"
