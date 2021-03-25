@@ -5,7 +5,12 @@
       :breadcrumbs="breadcrumbs"
     />
     <div class="product">
-        <SfGallery v-if='productGallery.length > 0' :images="productGallery" :current="ActiveVariantImage + 1" class="product__gallery"/>
+      <SfGallery
+        v-if="productGallery.length > 0"
+        :images="productGallery"
+        :current="ActiveVariantImage + 1"
+        class="product__gallery"
+      />
       <div class="product__info">
         <div class="product__header">
           <SfHeading
@@ -13,8 +18,17 @@
             :level="3"
             class="sf-heading--no-underline sf-heading--left"
           />
-          <SfBadge class="sf-badge--number" :class="productGetters.getStatus(product) ? 'color-success' : 'color-danger'">
-            {{ productGetters.getStatus(product) ? 'In stock' : 'Out of Stock' }}
+          <SfBadge
+            class="sf-badge--number"
+            :class="
+              productGetters.getStatus(product)
+                ? 'color-success'
+                : 'color-danger'
+            "
+          >
+            {{
+              productGetters.getStatus(product) ? "In stock" : "Out of Stock"
+            }}
           </SfBadge>
           <SfIcon
             icon="drag"
@@ -25,33 +39,31 @@
         </div>
         <div class="product__price-and-rating">
           <SfPrice
-            :regular="productGetters.getFormattedPrice(productGetters.getPrice(product).regular)"
-            :special="productGetters.getFormattedPrice(productGetters.getPrice(product).special)"
+            :regular="$n(productGetters.getPrice(product).regular, 'currency')"
+            :special="
+              productGetters.getPrice(product).special &&
+              $n(productGetters.getPrice(product).special, 'currency')
+            "
           />
-          <div>
-            <!-- div class="product__rating">
-              <SfRating
-                :score="averageRating"
-                :max="5"
-              />
-              <a v-if="!!totalReviews" href="#" class="product__count">
-                ({{ totalReviews }})
-              </a>
-            </!-->
-            <!--SfButton data-cy="product-btn_read-all" class="sf-button--text">{{ $t('Read all reviews') }}</!--SfButton-->
-          </div>
+          <div></div>
         </div>
         <div>
-          <p class="product__description desktop-only" v-if='productDescription'>
+          <p
+            class="product__description desktop-only"
+            v-if="productDescription"
+          >
             {{ productDescription }}
           </p>
-          <SfButton data-cy="product-btn_size-guide" class="sf-button--text desktop-only product__guide">
-             {{ $t('Size guide') }}
+          <SfButton
+            data-cy="product-btn_size-guide"
+            class="sf-button--text desktop-only product__guide"
+          >
+            {{ $t("Size guide") }}
           </SfButton>
           <SfSelect
             data-cy="product-select_size"
             v-if="options.Size"
-            @input="size => updateFilter({ size })"
+            @input="(size) => updateFilter({ size })"
             :value="configuration.size || options.Size[0].value"
             label="Size"
             class="sf-select--underlined product__select-size"
@@ -62,20 +74,30 @@
               :key="size.value"
               :value="size.value"
             >
-              {{size.value}}
+              {{ size.value }}
             </SfSelectOption>
           </SfSelect>
-          <div v-if="options.Color&& options.Color.length > 1" class="product__colors desktop-only">
-            <p class="product__color-label">{{ $t('Color') }}:</p>
+          <div
+            v-if="options.Color && options.Color.length > 1"
+            class="product__colors desktop-only"
+          >
+            <p class="product__color-label">{{ $t("Color") }}:</p>
             <SfColor
               data-cy="product-color_update"
               v-for="(color, i) in options.Color"
               :key="i"
               :color="color.value"
               class="product__color"
-              @click="updateFilter({color})"
-              :selected="configuration.color ? (configuration.color.value === color.value? true : false) : (i === 0 ? true : false) "
-
+              @click="updateFilter({ color })"
+              :selected="
+                configuration.color
+                  ? configuration.color.value === color.value
+                    ? true
+                    : false
+                  : i === 0
+                  ? true
+                  : false
+              "
             />
           </div>
           <SfAddToCart
@@ -89,77 +111,63 @@
           />
         </div>
         <LazyHydrate when-idle>
-        <SfTabs :open-tab="1" class="product__tabs">
-          <SfTab data-cy="product-tab_description" title="Description">
-            <div class="product__description" v-if='productDescriptionHtml'>
+          <SfTabs :open-tab="1" class="product__tabs">
+            <SfTab data-cy="product-tab_description" title="Description">
+              <div class="product__description" v-if="productDescriptionHtml">
                 {{ productDescriptionHtml }}
-            </div>
-            <SfProperty
-              v-for="(property, i) in properties"
-              :key="i"
-              :name="property.name"
-              :value="property.value"
-              class="product__property"
+              </div>
+              <SfProperty
+                v-for="(property, i) in properties"
+                :key="i"
+                :name="property.name"
+                :value="property.value"
+                class="product__property"
+              >
+                <template v-if="property.name === 'Category'" #value>
+                  <SfButton class="product__property__button sf-button--text">
+                    {{ property.value }}
+                  </SfButton>
+                </template>
+              </SfProperty>
+            </SfTab>
+            <SfTab
+              title="Additional Information"
+              data-cy="product-tab_additional"
+              class="product__additional-info"
             >
-              <template v-if="property.name === 'Category'" #value>
-                <SfButton class="product__property__button sf-button--text">
-                  {{ property.value }}
-                </SfButton>
-              </template>
-            </SfProperty>
-          </SfTab>
-          <!--SfTab title="Read reviews" data-cy="product-tab_reviews">
-            <SfReview
-              v-for="review in reviews"
-              :key="reviewGetters.getReviewId(review)"
-              :author="reviewGetters.getReviewAuthor(review)"
-              :date="reviewGetters.getReviewDate(review)"
-              :message="reviewGetters.getReviewMessage(review)"
-              :max-rating="5"
-              :rating="reviewGetters.getReviewRating(review)"
-              :char-limit="250"
-              read-more-text="Read more"
-              hide-full-text="Read less"
-              class="product__review"
-            />
-          </!--SfTab-->
-          <SfTab
-            title="Additional Information"
-            data-cy="product-tab_additional"
-            class="product__additional-info"
-          >
-          <div class="product__additional-info">
-            <p class="product__additional-info__title">{{ $t('Brand') }}</p>
-            <p>{{ brand }}</p>
-            <p class="product__additional-info__title">{{ $t('Instruction1') }}</p>
-            <p class="product__additional-info__paragraph">
-              {{ $t('Instruction2') }}
-            </p>
-            <p class="product__additional-info__paragraph">
-              {{ $t('Instruction3') }}
-            </p>
-            <p>{{ careInstructions }}</p>
-          </div>
-          </SfTab>
-        </SfTabs>
+              <div class="product__additional-info">
+                <p class="product__additional-info__title">{{ $t("Brand") }}</p>
+                <p>{{ brand }}</p>
+                <p class="product__additional-info__title">
+                  {{ $t("Instruction1") }}
+                </p>
+                <p class="product__additional-info__paragraph">
+                  {{ $t("Instruction2") }}
+                </p>
+                <p class="product__additional-info__paragraph">
+                  {{ $t("Instruction3") }}
+                </p>
+                <p>{{ careInstructions }}</p>
+              </div>
+            </SfTab>
+          </SfTabs>
         </LazyHydrate>
       </div>
     </div>
     <LazyHydrate when-visible>
-    <RelatedProducts
-      :products="relatedProducts"
-      :loading="relatedLoading"
-      title="Match it with"
-    />
+      <RelatedProducts
+        :products="relatedProducts"
+        :loading="relatedLoading"
+        title="Match it with"
+      />
     </LazyHydrate>
     <LazyHydrate when-visible>
-    <InstagramFeed />
+      <InstagramFeed />
     </LazyHydrate>
-     <LazyHydrate when-visible>
+    <LazyHydrate when-visible>
       <MobileStoreBanner />
     </LazyHydrate>
   </div>
-
 </template>
 <script>
 import {
@@ -180,47 +188,68 @@ import {
   SfReview,
   SfBreadcrumbs,
   SfButton,
-  SfColor
-} from '@storefront-ui/vue';
+  SfColor,
+} from "@storefront-ui/vue";
 
-import InstagramFeed from '~/components/InstagramFeed.vue';
-import RelatedProducts from '~/components/RelatedProducts.vue';
-import { ref, computed } from '@vue/composition-api';
-import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
-import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
-import LazyHydrate from 'vue-lazy-hydration';
-import { onSSR } from '@vue-storefront/core';
+import InstagramFeed from "~/components/InstagramFeed.vue";
+import RelatedProducts from "~/components/RelatedProducts.vue";
+import { ref, computed } from "@vue/composition-api";
+import { useProduct, useCart, productGetters } from "@vue-storefront/shopify";
+import MobileStoreBanner from "~/components/MobileStoreBanner.vue";
+import LazyHydrate from "vue-lazy-hydration";
+import { onSSR } from "@vue-storefront/core";
 
 export default {
-  name: 'Product',
-  transition: 'fade',
+  name: "Product",
+  transition: "fade",
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
     const qty = ref(1);
-    // const { id } = context.root.$route.params;
     const { slug } = context.root.$route.params;
-    const { products, search } = useProduct('products');
-    const { products: relatedProducts, search: searchRelatedProducts, loading: relatedLoading } = useProduct('relatedProducts');
+    const { products, search } = useProduct("products");
+    const {
+      products: relatedProducts,
+      search: searchRelatedProducts,
+      loading: relatedLoading,
+    } = useProduct("relatedProducts");
     const { addItem, loading } = useCart();
-    // const { reviews: productReviews, search: searchReviews } = useReview('productReviews');
-    const product = computed(() => productGetters.getFiltered(products.value, { master: true, attributes: context.root.$route.query })[0]);
-    const productDescription = computed(() => productGetters.getDescription(product.value));
-    const productDescriptionHtml = computed(() => productGetters.getDescription(product.value, true));
-    const options = computed(() => productGetters.getAttributes(products.value));
-    const configuration = computed(() => {
-      return productGetters.getSelectedVariant(products.value, context.root.$route.query);
-    });
-    console.log(configuration);
-    // const reviews = computed(() => reviewGetters.getItems(productReviews.value));
 
-    // TODO: Breadcrumbs are temporary disabled because productGetters return undefined. We have a mocks in data
-    const breadcrumbs = computed(() => productGetters.getBreadcrumbs ? productGetters.getBreadcrumbs(product.value) : props.fallbackBreadcrumbs);
-    const productGallery = computed(() => productGetters.getGallery(product.value).map(img => ({
-      mobile: { url: img.small },
-      desktop: { url: img.normal },
-      big: { url: img.big },
-      alt: product.value._name || product.value.name
-    })));
+    const product = computed(
+      () =>
+        productGetters.getFiltered(products.value, {
+          master: true,
+          attributes: context.root.$route.query,
+        })[0]
+    );
+    const productDescription = computed(() =>
+      productGetters.getDescription(product.value)
+    );
+    const productDescriptionHtml = computed(() =>
+      productGetters.getDescription(product.value, true)
+    );
+    const options = computed(() =>
+      productGetters.getAttributes(products.value)
+    );
+    const configuration = computed(() => {
+      return productGetters.getSelectedVariant(
+        products.value,
+        context.root.$route.query
+      );
+    });
+
+    const breadcrumbs = computed(() =>
+      productGetters.getBreadcrumbs
+        ? productGetters.getBreadcrumbs(product.value)
+        : props.fallbackBreadcrumbs
+    );
+    const productGallery = computed(() =>
+      productGetters.getGallery(product.value).map((img) => ({
+        mobile: { url: img.small },
+        desktop: { url: img.normal },
+        big: { url: img.big },
+        alt: product.value._name || product.value.name,
+      }))
+    );
     const ActiveVariantImage = computed(() => {
       return productGetters.getVariantImage(product.value) || 0;
     });
@@ -228,7 +257,6 @@ export default {
     onSSR(async () => {
       await search({ slug });
       await searchRelatedProducts({ catId: 123, limit: 8 });
-      // await searchReviews({ productId: id });
     });
 
     const updateFilter = (filter) => {
@@ -236,8 +264,8 @@ export default {
         path: context.root.$route.path,
         query: {
           ...configuration.value,
-          ...filter
-        }
+          ...filter,
+        },
       });
     };
 
@@ -247,12 +275,10 @@ export default {
       product,
       productDescription,
       productDescriptionHtml,
-      // reviews,
-      // reviewGetters,
       ActiveVariantImage,
-      averageRating: computed(() => productGetters.getAverageRating(product.value)),
-      totalReviews: computed(() => productGetters.getTotalReviews(product.value)),
-      relatedProducts: computed(() => productGetters.getFiltered(relatedProducts.value, { master: true })),
+      relatedProducts: computed(() =>
+        productGetters.getFiltered(relatedProducts.value, { master: true })
+      ),
       relatedLoading,
       options,
       breadcrumbs,
@@ -260,7 +286,7 @@ export default {
       addItem,
       loading,
       productGetters,
-      productGallery
+      productGallery,
     };
   },
   components: {
@@ -285,7 +311,7 @@ export default {
     InstagramFeed,
     RelatedProducts,
     MobileStoreBanner,
-    LazyHydrate
+    LazyHydrate,
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
@@ -293,29 +319,30 @@ export default {
       stock: 5,
       properties: [
         {
-          name: 'Product Code',
-          value: '578902-00'
+          name: "Product Code",
+          value: "578902-00",
         },
         {
-          name: 'Category',
-          value: 'Pants'
+          name: "Category",
+          value: "Pants",
         },
         {
-          name: 'Material',
-          value: 'Cotton'
+          name: "Material",
+          value: "Cotton",
         },
         {
-          name: 'Country',
-          value: 'Germany'
-        }
+          name: "Country",
+          value: "Germany",
+        },
       ],
-      description: 'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
+      description:
+        "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
       detailsIsActive: false,
       brand:
-          'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',
-      careInstructions: 'Do not wash!'
+        "Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.",
+      careInstructions: "Do not wash!",
     };
-  }
+  },
 };
 </script>
 

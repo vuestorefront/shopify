@@ -27,7 +27,7 @@
   </SfBottomNavigation>
 </template>
 
-<script>
+<script type="module">
 import { SfBottomNavigation, SfIcon, SfCircleIcon } from '@storefront-ui/vue';
 import { useUiState } from '~/composables';
 import { useUser } from '@vue-storefront/shopify';

@@ -7,15 +7,18 @@ import {
 } from '@vue-storefront/core';
 import { Cart, CartItem, Coupon, Product } from '../types';
 
+const getBasketItemByProduct = ({ currentCart, product }) => {
+  return currentCart.lineItems.find((item) => item.variant.id === product.variants[0].id);
+};
+
 const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, { customQuery }) => {
     console.log('Mocked: loadCart');
     // check if cart is already initiated
     let existngCartId = context.$shopify.config.app.$cookies.get('cart_id');
-
     if (existngCartId === undefined || existngCartId === '') {
-      existngCartId = await context.$shopify.api.createCart().then((checkout) => {
+        existngCartId = await context.$shopify.api.createCart().then((checkout) => {
         return checkout;
       });
     }
@@ -80,7 +83,7 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isOnCart: (context: Context, { currentCart, product }) => {
     console.log('Mocked: isOnCart');
-    return false;
+    return Boolean(currentCart && getBasketItemByProduct({ currentCart, product }));
   }
 };
 

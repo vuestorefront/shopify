@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 const customerQuery: (token: string, context) => any = (token, context): any => {
 
-  return context.CustomClient.graphQLClient.query((root) => {
+  return context.client.graphQLClient.query((root) => {
     root.add('customer', {
       args: {
         customerAccessToken: token
@@ -22,7 +22,7 @@ const customerQuery: (token: string, context) => any = (token, context): any => 
 
 const ordersQuery: (pages: number, token: string, context) => any = (pages, token, context): any => {
 
-  return context.CustomClient.graphQLClient.query((root) => {
+  return context.client.graphQLClient.query((root) => {
     root.add('customer', {
       args: {
         customerAccessToken: token
@@ -71,7 +71,7 @@ const ordersQuery: (pages: number, token: string, context) => any = (pages, toke
 
 const addressesQuery: (pages: number, token: string, context) => any = (pages, token, context): any => {
 
-  return context.CustomClient.graphQLClient.query((root) => {
+  return context.client.graphQLClient.query((root) => {
     root.add('customer', {
       args: {
         customerAccessToken: token

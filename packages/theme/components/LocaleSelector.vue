@@ -5,7 +5,7 @@
       class="container__lang container__lang--selected"
       @click="isLangModalOpen = !isLangModalOpen"
     >
-      <SfImage :src="`/icons/langs/${locale}.webp`" :alt="`${locale}`" width="20" />
+      <img :src="`https://cdn.shopify.com/s/files/1/0407/1902/4288/files/${locale}_20x20.jpg`" width="20" height="20"/>
     </SfButton>
     <SfBottomModal :is-open="isLangModalOpen" title="Choose language" @click:close="isLangModalOpen = !isLangModalOpen">
       <SfList>
@@ -16,7 +16,7 @@
                 <span>{{ lang.label }}</span>
               </template>
               <template #icon>
-                <SfImage :src="`/icons/langs/${lang.code}.webp`" :alt="`${lang.code}`" width="20"/>
+                <img :src="`https://cdn.shopify.com/s/files/1/0407/1902/4288/files/${lang.code}_20x20.jpg`" width="20" height="20"/>
               </template>
             </SfCharacteristic>
           </a>
@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script>
+<script type="module">
 import {
   SfImage,
   SfSelect,

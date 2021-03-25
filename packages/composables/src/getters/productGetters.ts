@@ -73,7 +73,9 @@ export const getProductFiltered = (products, filters: ProductVariantFilters | an
   return enhanceProduct(products);
 
 };
-
+export const getSelectedVariant = (product: ProductVariant, attribs) => {
+  return attribs;
+};
 export const getProductOptions = (product: ProductVariant): Record<string, AgnosticAttribute | string> => {
   const productOptions = (product as any).options;
   return productOptions;
@@ -195,7 +197,8 @@ const productGetters: ProductGetters<ProductVariant, ProductVariantFilters> = {
   getFormattedPrice: getFormattedPrice,
   getTotalReviews: getProductTotalReviews,
   getAverageRating: getProductAverageRating,
-  getBreadcrumbs: getBreadcrumbs
+  getBreadcrumbs: getBreadcrumbs,
+  getSelectedVariant
 };
 
 export default productGetters;

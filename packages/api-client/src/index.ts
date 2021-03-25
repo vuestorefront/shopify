@@ -1,4 +1,4 @@
-import { apiClientFactory } from '@vue-storefront/core';
+import { /* webpackChunkName: 'apiClientFactory' */ apiClientFactory } from '@vue-storefront/core';
 import getProduct from './api/getProduct';
 import getCategory from './api/getCategory';
 import getBlogPosts from './api/getBlogPosts';
@@ -15,9 +15,8 @@ import fetchAddresses from './api/fetchAddresses';
 import getMe from './api/getMe';
 import isGuest from './api/isGuest';
 import checkOut from './api/checkOut';
-import Client from 'shopify-buy';
 
-const CustomClient = require('shopify-buy/index.unoptimized.umd.js');
+const CustomClient = require('shopify-buy/index.unoptimized.umd.min.js');
 const defaultSettings = {};
 const cookies = {
   cartCookieName: 'vsf-cart'
@@ -29,8 +28,7 @@ const onSetup = (settings) => {
       ...defaultSettings,
       ...settings
     },
-    CustomClient: CustomClient.buildClient(settings.api),
-    client: Client.buildClient(settings.api),
+    client: CustomClient.buildClient(settings.api),
     cookies: (settings.api).cookies || cookies
   });
 };

@@ -52,7 +52,7 @@
     </SfLoader>
   </div>
 </template>
-<script>
+<script type="module">
 import {
   SfLoader,
   SfAccordion,

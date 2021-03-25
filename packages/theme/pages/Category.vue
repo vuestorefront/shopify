@@ -6,9 +6,6 @@
     />
     <!-- sorting features panel -->
     <div class="navbar section">
-      <div class="navbar__aside desktop-only">
-        <SfHeading :level="3" :title="$t('Categories')" class="navbar__title" />
-      </div>
       <div class="navbar__main">
         <SfButton
           class="sf-button--text navbar__filters-button"
@@ -77,7 +74,6 @@
     </div>
     <div class="main section">
       <!-- Category sidebar here -->
-      <categorySidebar :visible="true" :sidebarData="categoryTree" :loading="loading"/>
       <SfLoader :class="{ loading }" :loading="loading">
         <div class="products" v-if="!loading">
           <transition-group
@@ -94,17 +90,17 @@
               :style="{ '--index': i }"
               :title="productGetters.getName(product)"
               :image="productGetters.getCoverImage(product)"
-              :regular-price="productGetters.getFormattedPrice(productGetters.getPrice(product).regular)"
-              :special-price="productGetters.getFormattedPrice(productGetters.getPrice(product).special)"
+              :regular-price="$n(productGetters.getPrice(product).regular, 'currency')"
+              :special-price="productGetters.getPrice(product).special && $n(productGetters.getPrice(product).special, 'currency')"
               :max-rating="5"
               :score-rating="productGetters.getAverageRating(product)"
               :show-add-to-cart-button="true"
               :isOnWishlist="false"
-              :isAddedToCart="isOnCart(product)"
+              :isAddedToCart="isOnCart({product})"
               :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
               class="products__product-card"
-              @click:wishlist="addToWishlist(product)"
-              @click="addItem({ product, quantity: 1 })"
+              @click:wishlist="addItemToWishlist({product})"
+              @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
             />
           </transition-group>
           <transition-group
@@ -122,13 +118,14 @@
               :title="productGetters.getName(product)"
               :description="productGetters.getDescription(product)"
               :image="productGetters.getCoverImage(product)"
-              :regular-price="productGetters.getFormattedPrice(productGetters.getPrice(product).regular)"
-              :special-price="productGetters.getFormattedPrice(productGetters.getPrice(product).special)"
+              :regular-price="$n(productGetters.getPrice(product).regular, 'currency')"
+              :special-price="productGetters.getPrice(product).special && $n(productGetters.getPrice(product).special, 'currency')"
               :max-rating="5"
               :score-rating="3"
               :is-on-wishlist="false"
               class="products__product-card-horizontal"
-              @click:wishlist="addToWishlist(product)"
+              @click:wishlist="addItemToWishlist({ product })"
+              @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
               :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
             >
               <template #configuration>
@@ -173,7 +170,7 @@
           >
             <span class="products__show-on-page__label">Show on page:</span>
             <SfSelect
-              :value='pagination.itemsPerPage + ""'
+              :value="pagination.itemsPerPage.toString()"
               class="products__items-per-page"
               @input="th.changeItemsPerPage"
             >
@@ -224,7 +221,7 @@
                 v-for="option in facet.options"
                 :key="`${facet.id}-${option.value}`"
                 :data-cy="`category-filter_${facet.id}_${option.value}`"
-                :label="option.id + `${option.count && ` (${option.count})`}`"
+                :label="option.id + `${option.count ? ` (${option.count})` : ''}`"
                 :selected="isFilterSelected(facet, option)"
                 class="filters__item"
                 @change="() => selectFilter(facet, option)"
@@ -268,12 +265,14 @@
   </div>
 </template>
 
-<script>
+<script type="module">
 import {
   SfSidebar,
   SfButton,
+  SfList,
   SfIcon,
   SfHeading,
+  SfMenuItem,
   SfFilter,
   SfProductCard,
   SfProductCardHorizontal,
@@ -299,8 +298,8 @@ export default {
     const th = useUiHelpers();
     const slug = context.root.$route.params.slug_1;
     const uiState = useUiState();
-    const { addItem: addToCart, isOnCart } = useCart();
-    const { addItem: addToWishlist } = useWishlist();
+    const { addItem: addItemToCart, isOnCart } = useCart();
+    const { addItem: addItemToWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
     const products = computed(() => facetGetters.getProducts(result.value));
     const categoryTree = computed(() => facetGetters.getCategoryTree(result.value));
@@ -376,8 +375,8 @@ export default {
       sortBy,
       facets,
       breadcrumbs,
-      addToWishlist,
-      addToCart,
+      addItemToWishlist,
+      addItemToCart,
       isOnCart,
       isFacetColor,
       selectFilter,
@@ -419,7 +418,7 @@ export default {
   &.section {
     padding: var(--spacer-xs);
     @include for-desktop {
-      padding: var(--spacer-lg);
+      padding: 0;
     }
   }
 }
@@ -640,7 +639,7 @@ export default {
       margin: var(--spacer-lg) 0;
     }
     &__product-card {
-      flex: 1 1 25%;
+      flex: 1 1 20%;
     }
     &__list {
       margin: 0 0 0 var(--spacer-sm);

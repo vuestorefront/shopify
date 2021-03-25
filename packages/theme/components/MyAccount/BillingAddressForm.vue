@@ -162,7 +162,7 @@
   </ValidationObserver>
 </template>
 
-<script>
+<script type="module">
 import {
   SfInput,
   SfButton,

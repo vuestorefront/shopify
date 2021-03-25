@@ -14,7 +14,7 @@
     <!-- TODO: add mobile view buttons after SFUI team PR -->
     <template #logo>
       <nuxt-link data-cy="app-header-url_logo" :to="localePath('/')" class="sf-header__logo">
-        <SfImage src="/icons/logo.svg" alt="Vue Storefront Next" class="sf-header__logo-image"/>
+        <img src="https://cdn.shopify.com/s/files/1/0407/1902/4288/files/logo.svg?v=1616475953" alt="Vue Storefront Next" width="34" height="35" class="sf-header__logo-image"/>
       </nuxt-link>
     </template>
 
@@ -27,7 +27,7 @@
   </SfHeader>
 </template>
 
-<script>
+<script type="module">
 import { SfHeader, SfImage } from '@storefront-ui/vue';
 import { useUiState } from '~/composables';
 import { useCart, useWishlist, useUser, cartGetters, useCategory } from '@vue-storefront/shopify';

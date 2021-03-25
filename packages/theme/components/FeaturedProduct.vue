@@ -112,7 +112,7 @@
     </div>
   </section>
 </template>
-<script>
+<script type="module">
 import {
   SfHeading,
   SfPrice,

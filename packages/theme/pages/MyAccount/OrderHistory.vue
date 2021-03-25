@@ -112,7 +112,7 @@
   </SfTabs>
 </template>
 
-<script>
+<script type="module">
 import {
   SfTabs,
   SfTable,

@@ -13,7 +13,7 @@ export default async function signIn(context, params, customQuery?: CustomQuery)
     }
   };
   // send user data to authenticate, return token if valid
-  return await context.CustomClient.graphQLClient.send(mutation(context), data).then(({model}) => {
+  return await context.client.graphQLClient.send(mutation(context), data).then(({model}) => {
     return model;
   });
 }

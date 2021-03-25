@@ -48,6 +48,9 @@ const getCategoryTree = (searchData) => {
 };
 
 const identifyCurrentCat = (searchData): any => {
+  if (searchData.input === null) {
+    return 0;
+  }
   // fetch curren category slug
   const curCategoryPage = searchData.input.categorySlug;
   const allCategories = searchData.data.categories;
@@ -66,9 +69,17 @@ const identifyCurrentCat = (searchData): any => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getProducts = (searchData): any => {
-  const curCatIndex = identifyCurrentCat(searchData);
+  if (searchData.input === null || searchData.data === null) {
+    return {};
+  }
+  let catProducts = [];
   const sortBy = searchData.input.sort;
-  const catProducts = getSortedProducts(enhanceProduct(searchData.data.categories[curCatIndex].products), sortBy);
+  if (!Array.isArray(searchData.data.categories)) {
+    catProducts = getSortedProducts(enhanceProduct(searchData.data.categories.products), sortBy);
+  } else {
+    const curCatIndex = identifyCurrentCat(searchData);
+    catProducts = getSortedProducts(enhanceProduct(searchData.data.categories[curCatIndex].products), sortBy);
+  }
   const products = enhanceProduct(catProducts);
   return products;
 };
@@ -78,11 +89,10 @@ const getPagination = (searchData): AgnosticPagination => {
   if (!searchData.data) {
     return {} as any;
   }
-  const curCatIndex = identifyCurrentCat(searchData);
   return {
     currentPage: searchData.input.page,
-    totalPages: Math.ceil(searchData.data.categories[curCatIndex].products.length / searchData.data.itemsPerPage),
-    totalItems: searchData.data.categories[curCatIndex].products.length,
+    totalPages: Math.ceil(searchData.data.categories.products.length / searchData.data.itemsPerPage),
+    totalItems: searchData.data.categories.products.length,
     itemsPerPage: searchData.input.itemsPerPage,
     pageOptions: searchData.data.perPageOptions
   };
@@ -93,11 +103,9 @@ const getBreadcrumbs = (searchData): AgnosticBreadcrumb[] => {
   if (!searchData.data) {
     return [];
   }
-  const curCatIndex = identifyCurrentCat(searchData);
-
   return [
     { text: 'Home', link: '/' },
-    ...buildBreadcrumbs(searchData.data.categories[curCatIndex]).map(b => ({ ...b, link: `/c${b.link}` }))
+    ...buildBreadcrumbs(searchData.data.categories).map(b => ({ ...b, link: `/c${b.link}` }))
   ];
 };
 

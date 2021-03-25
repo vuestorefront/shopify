@@ -10,7 +10,7 @@ export default async function getProduct(
   customQuery?: CustomQuery
 ) {
   if (params.slug) {
-    const getProductByHandleQuery = context.CustomClient.graphQLClient.query(
+    const getProductByHandleQuery = context.client.graphQLClient.query(
       (root) => {
         root.add(
           'productByHandle',
@@ -95,7 +95,7 @@ export default async function getProduct(
         );
       }
     );
-    return context.CustomClient.graphQLClient
+    return context.client.graphQLClient
       .send(getProductByHandleQuery)
       .then(({ model, product }) => {
         if (model) {
