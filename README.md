@@ -36,7 +36,7 @@ yarn install or yarn
 yarn build
 ```
 
-4. If everything built properly, you can start creating your new integration with:
+4. If everything built properly, you can start customizing your storefront:
 
 ```sh
 yarn dev
