@@ -114,7 +114,7 @@
           <SfTabs :open-tab="1" class="product__tabs">
             <SfTab data-cy="product-tab_description" title="Description">
               <div class="product__description" v-if="productDescriptionHtml">
-                {{ productDescriptionHtml }}
+                <div v-html="productDescriptionHtml"></div>
               </div>
               <SfProperty
                 v-for="(property, i) in properties"
@@ -188,37 +188,37 @@ import {
   SfReview,
   SfBreadcrumbs,
   SfButton,
-  SfColor,
-} from "@storefront-ui/vue";
+  SfColor
+} from '@storefront-ui/vue';
 
-import InstagramFeed from "~/components/InstagramFeed.vue";
-import RelatedProducts from "~/components/RelatedProducts.vue";
-import { ref, computed } from "@vue/composition-api";
-import { useProduct, useCart, productGetters } from "@vue-storefront/shopify";
-import MobileStoreBanner from "~/components/MobileStoreBanner.vue";
-import LazyHydrate from "vue-lazy-hydration";
-import { onSSR } from "@vue-storefront/core";
+import InstagramFeed from '~/components/InstagramFeed.vue';
+import RelatedProducts from '~/components/RelatedProducts.vue';
+import { ref, computed } from '@vue/composition-api';
+import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
+import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
+import LazyHydrate from 'vue-lazy-hydration';
+import { onSSR } from '@vue-storefront/core';
 
 export default {
-  name: "Product",
-  transition: "fade",
+  name: 'Product',
+  transition: 'fade',
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
     const qty = ref(1);
     const { slug } = context.root.$route.params;
-    const { products, search } = useProduct("products");
+    const { products, search } = useProduct('products');
     const {
       products: relatedProducts,
       search: searchRelatedProducts,
-      loading: relatedLoading,
-    } = useProduct("relatedProducts");
+      loading: relatedLoading
+    } = useProduct('relatedProducts');
     const { addItem, loading } = useCart();
 
     const product = computed(
       () =>
         productGetters.getFiltered(products.value, {
           master: true,
-          attributes: context.root.$route.query,
+          attributes: context.root.$route.query
         })[0]
     );
     const productDescription = computed(() =>
@@ -247,7 +247,7 @@ export default {
         mobile: { url: img.small },
         desktop: { url: img.normal },
         big: { url: img.big },
-        alt: product.value._name || product.value.name,
+        alt: product.value._name || product.value.name
       }))
     );
     const ActiveVariantImage = computed(() => {
@@ -264,8 +264,8 @@ export default {
         path: context.root.$route.path,
         query: {
           ...configuration.value,
-          ...filter,
-        },
+          ...filter
+        }
       });
     };
 
@@ -286,7 +286,7 @@ export default {
       addItem,
       loading,
       productGetters,
-      productGallery,
+      productGallery
     };
   },
   components: {
@@ -311,7 +311,7 @@ export default {
     InstagramFeed,
     RelatedProducts,
     MobileStoreBanner,
-    LazyHydrate,
+    LazyHydrate
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
@@ -319,30 +319,30 @@ export default {
       stock: 5,
       properties: [
         {
-          name: "Product Code",
-          value: "578902-00",
+          name: 'Product Code',
+          value: '578902-00'
         },
         {
-          name: "Category",
-          value: "Pants",
+          name: 'Category',
+          value: 'Pants'
         },
         {
-          name: "Material",
-          value: "Cotton",
+          name: 'Material',
+          value: 'Cotton'
         },
         {
-          name: "Country",
-          value: "Germany",
-        },
+          name: 'Country',
+          value: 'Germany'
+        }
       ],
       description:
-        "Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.",
+        'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
       detailsIsActive: false,
       brand:
-        "Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.",
-      careInstructions: "Do not wash!",
+        'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',
+      careInstructions: 'Do not wash!'
     };
-  },
+  }
 };
 </script>
 
