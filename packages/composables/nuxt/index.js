@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import path from 'path';
-import { createMiddleware } from '@vue-storefront/core/server';
 
 const mapI18nSettings = (i18n) => ({
   locale: i18n.defaultLocale,
@@ -28,8 +27,6 @@ const getMissingFields = (options) =>
 
 // eslint-disable-next-line func-names
 export default function(moduleOptions) {
-  const { middleware } = createMiddleware(moduleOptions);
-
   const options = isNuxtI18nUsed(moduleOptions)
     ? { ...moduleOptions, ...mapI18nSettings(this.options.i18n) }
     : moduleOptions;
@@ -51,8 +48,4 @@ export default function(moduleOptions) {
     src: path.resolve(__dirname, './plugin.js'),
     options
   });
-
-  if (moduleOptions.apiMiddleware !== false) {
-    this.addServerMiddleware(middleware);
-  }
 }

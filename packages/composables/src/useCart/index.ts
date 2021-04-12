@@ -18,7 +18,7 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
     // check if cart is already initiated
     let existngCartId = context.$shopify.config.app.$cookies.get('cart_id');
     if (existngCartId === undefined || existngCartId === '') {
-        existngCartId = await context.$shopify.api.createCart().then((checkout) => {
+      existngCartId = await context.$shopify.api.createCart().then((checkout) => {
         return checkout;
       });
     }
@@ -81,8 +81,8 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isOnCart: (context: Context, { currentCart, product }) => {
-    console.log('Mocked: isOnCart');
+  isInCart: (context: Context, { currentCart, product }) => {
+    console.log('Mocked: isInCart');
     return Boolean(currentCart && getBasketItemByProduct({ currentCart, product }));
   }
 };

@@ -1,5 +1,5 @@
 import { SP_TOKEN_COOKIE_NAME } from '@vue-storefront/shopify/nuxt/helpers';
-import { integrationPlugin } from '@vue-storefront/shopify';
+import { integrationPlugin } from '@vue-storefront/core';
 
 const moduleOptions = JSON.parse('<%= JSON.stringify(options) %>');
 
@@ -25,7 +25,7 @@ export default integrationPlugin(({ app, integration }) => {
     return app.$cookies.get(SP_TOKEN_COOKIE_NAME);
   };
 
-  integration.configure({
+  integration.configure('shopify', {
     ...moduleOptions,
     app,
     additionalProperties: {

@@ -105,7 +105,7 @@
               :score-rating="productGetters.getAverageRating(product)"
               :show-add-to-cart-button="true"
               :isOnWishlist="false"
-              :isAddedToCart="isOnCart({ product })"
+              :isAddedToCart="isInCart({ product })"
               :link="
                 localePath(
                   `/p/${productGetters.getId(product)}/${productGetters.getSlug(
@@ -314,7 +314,8 @@ import {
   useFacet,
   facetGetters
 } from '@vue-storefront/shopify';
-import { useUiHelpers, useUiState } from '~/composables';
+import useUiHelpers from '~/composables/useUiHelpers';
+import useUiState from '~/composables/useUiState';
 import { onSSR } from '@vue-storefront/core';
 import Vue from 'vue';
 
@@ -325,7 +326,7 @@ export default {
     const th = useUiHelpers();
     const slug = context.root.$route.params.slug_1;
     const uiState = useUiState();
-    const { addItem: addItemToCart, isOnCart } = useCart();
+    const { addItem: addItemToCart, isInCart } = useCart();
     const { addItem: addItemToWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
     const products = computed(() => facetGetters.getProducts(result.value));
@@ -414,7 +415,7 @@ export default {
       breadcrumbs,
       addItemToWishlist,
       addItemToCart,
-      isOnCart,
+      isInCart,
       isFacetColor,
       selectFilter,
       isFilterSelected,

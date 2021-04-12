@@ -29,11 +29,11 @@
 
 <script type="module">
 import { SfHeader, SfImage } from '@storefront-ui/vue';
-import { useUiState } from '~/composables';
+import useUiState from '~/composables/useUiState';
 import { useCart, useWishlist, useUser, cartGetters, useCategory } from '@vue-storefront/shopify';
 import { computed, ref } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
-import { useUiHelpers } from '~/composables';
+import useUiHelpers from '~/composables/useUiHelpers';
 import LocaleSelector from './LocaleSelector';
 
 export default {
