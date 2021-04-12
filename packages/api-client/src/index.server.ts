@@ -33,34 +33,6 @@ const onCreate = (settings) => {
   });
 };
 
-// const tokenExtension = {
-//   name: 'tokenExtension',
-//   hooks: (req, res) => {
-//     const rawCurrentToken = req.cookies['vsf-shopify-token'];
-//     const currentToken = parseToken(rawCurrentToken);
-
-//     return {
-//       beforeCreate: ({ configuration }) => ({
-//         ...configuration,
-//         auth: {
-//           onTokenChange: (newToken) => {
-//             if (!currentToken || currentToken.access_token !== newToken.access_token) {
-//               res.cookie('vsf-shopify-token', JSON.stringify(newToken));
-//             }
-//           },
-//           onTokenRead: () => {
-//             res.cookie('vsf-shopify-token', rawCurrentToken);
-//             return currentToken;
-//           },
-//           onTokenRemove: () => {
-//             delete req.cookies['vsf-shopify-token'];
-//           }
-//         }
-//       })
-//     };
-//   },
-// };
-
 const { createApiClient } = apiClientFactory<any, any>({
   onCreate,
   api: {
@@ -82,15 +54,8 @@ const { createApiClient } = apiClientFactory<any, any>({
     checkOut,
     cookies
   }
-  // extensions: [tokenExtension]
 });
 
 export {
   createApiClient
 };
-
-export * from './types';
-export * from './fragments';
-export * from './types/Api';
-export * from './helpers/queries';
-
