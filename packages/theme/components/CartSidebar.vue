@@ -121,7 +121,7 @@ import {
 } from '@storefront-ui/vue';
 import { computed } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
-import { useUiState } from '~/composables';
+import useUiState from '~/composables/useUiState';
 import { onSSR } from '@vue-storefront/core';
 
 export default {

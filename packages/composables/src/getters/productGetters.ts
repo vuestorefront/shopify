@@ -144,7 +144,7 @@ export const getProductStatus = (product: ProductVariant): boolean => {
   return false;
 };
 
-export const checkForWishlist = (product: ProductVariant): boolean => (product as any).isOnWishlist ?? false;
+export const checkForWishlist = (product: ProductVariant): boolean => (product as any).isInWishlist ?? false;
 
 export const getBreadcrumbs = (product: ProductVariant): any => {
   const breadCrumbs = [

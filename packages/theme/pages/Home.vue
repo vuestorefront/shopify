@@ -90,7 +90,7 @@ export default {
       search: productsSearch,
       loading: productsLoading
     } = useProduct('relatedProducts');
-    const { cart, load: loadCart, addItem: addToCart, isOnCart } = useCart();
+    const { cart, load: loadCart, addItem: addToCart, isInCart } = useCart();
 
     onSSR(async () => {
       await productsSearch({ catId: 123, limit: 8 });
@@ -104,7 +104,7 @@ export default {
       productsLoading,
       productGetters,
       addToCart,
-      isOnCart
+      isInCart
     };
   },
   components: {
@@ -235,7 +235,7 @@ export default {
   methods: {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     toggleWishlist(index) {
-      this.products[index].isOnWishlist = !this.products[index].isOnWishlist;
+      this.products[index].isInWishlist = !this.products[index].isInWishlist;
     }
   }
 };

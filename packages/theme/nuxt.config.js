@@ -41,7 +41,6 @@ export default {
     ]
   },
   loading: { color: '#fff' },
-  plugins: [],
   buildModules: [
     // to core
     '@nuxtjs/pwa',
@@ -78,17 +77,18 @@ export default {
     [
       '@vue-storefront/shopify/nuxt',
       {
-        api: {
-          domain: 'YOUR SHOPIFY STORE DOMAIN',
-          storefrontAccessToken: 'SHOPIFY STORE API KEY'
-        },
         i18n: {
           useNuxtI18nConfig: true
         }
       }
     ]
   ],
-  modules: ['nuxt-i18n', 'cookie-universal-nuxt', 'vue-scrollto/nuxt'],
+  modules: [
+    'nuxt-i18n',
+    'cookie-universal-nuxt',
+    'vue-scrollto/nuxt',
+    '@vue-storefront/middleware/nuxt'
+  ],
   i18n: {
     currency: 'USD',
     country: 'US',
@@ -170,7 +170,7 @@ export default {
       } else {
         return { x: 0, y: 0 };
       }
-    },
+    }
   },
   pwa: {
     manifest: {

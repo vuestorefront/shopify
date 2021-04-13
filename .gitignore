@@ -1,0 +1,6 @@
+lib
+server
+.gitgnore
+.nuxt
+_theme
+node_modules

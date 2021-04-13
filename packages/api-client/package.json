@@ -6,6 +6,7 @@
   "main": "lib/index.cjs.js",
   "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
+  "server": "server/index.js",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
@@ -13,7 +14,7 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@vue-storefront/core": "^2.2.1",
+    "@vue-storefront/core": "^2.3.0-rc.3",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
     "isomorphic-fetch": "^2.2.1",
@@ -27,7 +28,8 @@
     "rollup-plugin-graphql": "^0.1.0"
   },
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "server/**/*"
   ],
   "publishConfig": {
     "access": "public"
