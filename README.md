@@ -18,7 +18,7 @@ This repository is a monorepo containing three projects:
 - **theme** - `nuxt` project that glues everything together. It extends our core theme and uses `composables` to retrieve data.
 
 ## How to start?
-1. Configure packages/theme/nuxt.config.js to establish the connection to your Shopify store.
+1. Configure packages/theme/middleware.config.js to establish the connection to your Shopify store.
 ```sh 
 domain: 'YOUR SHOPIFY STORE DOMAIN'
 storefrontAccessToken: 'SHOPIFY STORE API KEY'

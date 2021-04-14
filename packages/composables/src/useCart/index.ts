@@ -44,8 +44,7 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   removeItem: async (context: Context, { currentCart, product, customQuery }) => {
     console.log('Mocked: removeFromCart');
     // Remove an item from the checkout
-    const checkoutID = currentCart.id;
-    return await context.$shopify.client.checkout.removeLineItems(checkoutID, [product.id]).then((checkout) => {
+    return await context.$shopify.api.removeFromCart({currentCart, product}).then((checkout) => {
       // return updated cart data
       return JSON.parse(JSON.stringify(checkout));
     });
@@ -55,8 +54,7 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   updateItemQty: async (context: Context, { currentCart, product, quantity, customQuery }) => {
     console.log('Mocked: updateQuantity');
     // Update an item Quantity
-    const checkoutID = currentCart.id;
-    return await context.$shopify.client.checkout.updateLineItems(checkoutID, {id: product.id, quantity: quantity}).then((checkout) => {
+    return await context.$shopify.api.updateCart({currentCart, product, quantity}).then((checkout) => {
       // return updated cart data
       return JSON.parse(JSON.stringify(checkout));
     });

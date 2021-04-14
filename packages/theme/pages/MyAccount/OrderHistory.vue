@@ -21,17 +21,17 @@
           />
           <SfProperty
             name="Subtotal"
-            :value="$n(orderGetters.getSubtotalPrice(currentOrder))"
+            :value="$n(orderGetters.getSubtotalPrice(currentOrder), 'currency')"
             class="sf-property--full-width property"
           />
           <SfProperty
             name="Tax"
-            :value="$n(orderGetters.getTaxPrice(currentOrder))"
+            :value="$n(orderGetters.getTaxPrice(currentOrder), 'currency')"
             class="sf-property--full-width property"
           />
           <SfProperty
             name="Total"
-            :value="$n(orderGetters.getPrice(currentOrder))"
+            :value="$n(orderGetters.getPrice(currentOrder), 'currency')"
             class="sf-property--full-width property"
           />
           <SfProperty
@@ -53,7 +53,7 @@
               </nuxt-link>
             </SfTableData>
             <SfTableData>{{orderGetters.getItemQty(item)}}</SfTableData>
-            <SfTableData>{{$n(orderGetters.getItemPrice(item))}}</SfTableData>
+            <SfTableData>{{$n(orderGetters.getItemPrice(item), 'currency')}}</SfTableData>
           </SfTableRow>
         </SfTable>
       </div>
@@ -85,7 +85,7 @@
           <SfTableRow v-for="order in orders.data" :key="orderGetters.getId(order)">
             <SfTableData>#{{ orderGetters.getId(order) }}</SfTableData>
             <SfTableData>{{ orderGetters.getDate(order) }}</SfTableData>
-            <SfTableData>{{ $n(orderGetters.getPrice(order)) }}</SfTableData>
+            <SfTableData>{{ $n(orderGetters.getPrice(order), 'currency') }}</SfTableData>
             <SfTableData>
               <span :class="getStatusTextClass(order)">{{ orderGetters.getStatus(order) }}</span>
             </SfTableData>
@@ -132,6 +132,7 @@ export default {
     SfButton,
     SfProperty
   },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
     const { orders, search } = useUserOrders();
     const currentOrder = ref(null);

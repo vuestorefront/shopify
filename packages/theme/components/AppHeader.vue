@@ -14,7 +14,7 @@
     <!-- TODO: add mobile view buttons after SFUI team PR -->
     <template #logo>
       <nuxt-link data-cy="app-header-url_logo" :to="localePath('/')" class="sf-header__logo">
-        <img src="https://cdn.shopify.com/s/files/1/0407/1902/4288/files/logo.svg?v=1616475953" alt="Vue Storefront Next" width="34" height="35" class="sf-header__logo-image"/>
+        <img src="/icon.png" alt="Vue Storefront Next" width="34" height="35" class="sf-header__logo-image"/>
       </nuxt-link>
     </template>
 
