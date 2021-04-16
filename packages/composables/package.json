@@ -21,7 +21,8 @@
     "@vue/composition-api": "1.0.0-beta.21"
   },
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "nuxt/**/*"
   ],
   "publishConfig": {
     "access": "public"
