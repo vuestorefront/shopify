@@ -10,7 +10,7 @@
     "build:api-client": "cd packages/api-client && yarn build",
     "build:composables": "cd packages/composables && yarn build",
     "build:theme": "cd packages/theme && yarn build",
-    "dev": "concurrently \"yarn:dev:*\"",
+    "dev": "concurrently \"yarn dev:api-client\" \"yarn dev:composables\" \"yarn dev:theme\"",
     "dev:api-client": "cd packages/api-client && yarn dev",
     "dev:composables": "cd packages/composables && yarn dev",
     "dev:theme": "cd packages/theme && yarn dev",
