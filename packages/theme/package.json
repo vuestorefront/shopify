@@ -11,6 +11,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@nuxtjs/pwa": "^3.3.5",
+    "isomorphic-fetch": "^2.2.1",
     "@storefront-ui/vue": "^0.9.1",
     "@vue-storefront/shopify": "0.1.1",
     "@vue-storefront/nuxt": "^2.3.0-rc.3",
