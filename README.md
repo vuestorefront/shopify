@@ -27,7 +27,7 @@ Want to contribute? Ping us on `shopify` channel on [our Discord](discord.vuesto
 ## Resources
 
 - [Vue Storefront Documentation](https://docs.vuestorefront.io/v2/)
-- [SFCC integration Documentation](https://docs.vuestorefront.io/v2/shopify)
+- [Shopify integration Documentation](https://docs.vuestorefront.io/v2/shopify)
 - [Community Chat](https://discord.vuestorefront.io)
 
 ## Support
