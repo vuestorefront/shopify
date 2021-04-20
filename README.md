@@ -5,6 +5,8 @@
 This project is a Shopify integration for [Vue Storefront 2](https://github.com/vuestorefront/vue-storefront/).
 This integration is being developed and maintained by superheroes from [Aureate Labs](https://forkpoint.com/) ❤️
 
+Check the [demo](https://shopify-pwa-beta.aureatelabs.com)
+
 ## How to start if you want to try out the integration
 
 ```
