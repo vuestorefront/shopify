@@ -1,43 +1,35 @@
-![Vue Storefront](https://camo.githubusercontent.com/48c886ac0703e3a46bc0ec963e20f126337229fc/68747470733a2f2f643968687267346d6e767a6f772e636c6f756466726f6e742e6e65742f7777772e76756573746f726566726f6e742e696f2f32383062313964302d6c6f676f2d76735f3062793032633062793032633030303030302e6a7067)
+<img src="https://blog.vuestorefront.io/wp-content/uploads/2020/01/1QU9F6hQlFyHsJIbsdmt6FA.png" height="100px" />
 
-# Vue Storefront Next Shopify Integration
+## Vue Storefront 2 integration with Shopify (beta)
 
-<a href="https://slack.vuestorefront.io">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)</a>
+This project is a Salesforce Commerce Cloud integration for [Vue Storefront 2](https://github.com/vuestorefront/vue-storefront/).
+This integration is being developed and maintained by superheroes from [Aureate Labs](https://forkpoint.com/) ❤️
 
-> **Disclaimer:** This project is still in beta phase.
+## How to start if you want to try out the integration
 
-This repository is a starting point for creating new integrations for [Vue Storefront Next with Shopify](https://github.com/DivanteLtd/vue-storefront/tree/next).
-
-- [Demo](https://shopify-pwa-beta.aureatelabs.com/) (WIP)
-- [Documentation](https://docs-next.vuestorefront.io/shopify/) (WIP)
-
-This repository is a monorepo containing three projects:
-
-- **api-client** - communicates with a shopify backend;
-- **composables** - exposes composable functions used to retrieve data using `api-client` and to map them to universal data formats using `getters`;
-- **theme** - `nuxt` project that glues everything together. It extends our core theme and uses `composables` to retrieve data.
-
-## How to start?
-1. Configure packages/theme/middleware.config.js to establish the connection to your Shopify store.
-```sh 
-domain: 'YOUR SHOPIFY STORE DOMAIN'
-storefrontAccessToken: 'SHOPIFY STORE API KEY'
+```
+yarn global add @vue-storefront/cli
+```
+```
+vsf init <project_name> && cd <project_name> && yarn && yarn dev
 ```
 
-2. Install all required dependencies:
+## How to start if you want to contribute?
 
-```sh
-yarn install or yarn
-```
+Want to contribute? Ping us on `shopify` channel on [our Discord](discord.vuestorefront.io)!
 
-3. (optional) Then you can verify if everything works properly by building all three projects:
+1. CLone the repo
+2. Run `yarn` to install dependencies
+3. Build dependencies `yarn build:api-client && yarn build:composables`
+4. Run `yarn dev:theme` to run theme. You can find other commands in `package.json`
+5. If you need HMR on Api Client/Composables run `yarn dev:api-client` or `yarn dev:composables` on a separate terminal window.
 
-```sh
-yarn build
-```
+## Resources
 
-4. If everything built properly, you can start customizing your storefront:
+- [Vue Storefront Documentation](https://docs.vuestorefront.io/v2/)
+- [SFCC integration Documentation](https://docs.vuestorefront.io/v2/shopify)
+- [Community Chat](https://discord.vuestorefront.io)
 
-```sh
-yarn dev
-```
+## Support
+
+If you have any questions about this integration we will be happy to answer them on  `shopify` channel on [our Discord](discord.vuestorefront.io).
