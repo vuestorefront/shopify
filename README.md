@@ -2,7 +2,7 @@
 
 ## Vue Storefront 2 integration with Shopify (beta)
 
-This project is a Salesforce Commerce Cloud integration for [Vue Storefront 2](https://github.com/vuestorefront/vue-storefront/).
+This project is a Shopify integration for [Vue Storefront 2](https://github.com/vuestorefront/vue-storefront/).
 This integration is being developed and maintained by superheroes from [Aureate Labs](https://forkpoint.com/) ❤️
 
 ## How to start if you want to try out the integration
