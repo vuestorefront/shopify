@@ -3,7 +3,7 @@
 ## Vue Storefront 2 integration with Shopify (beta)
 
 This project is a Shopify integration for [Vue Storefront 2](https://github.com/vuestorefront/vue-storefront/).
-This integration is being developed and maintained by superheroes from [Aureate Labs](https://forkpoint.com/) ❤️
+This integration is being developed and maintained by superheroes from [Aureate Labs](https://aureatelabs.com/) ❤️
 
 Check the [demo](https://shopify-pwa-beta.aureatelabs.com)
 
@@ -20,7 +20,7 @@ vsf init <project_name> && cd <project_name> && yarn && yarn dev
 
 Want to contribute? Ping us on `shopify` channel on [our Discord](discord.vuestorefront.io)!
 
-1. CLone the repo
+1. Clone the repo
 2. Run `yarn` to install dependencies
 3. Build dependencies `yarn build:api-client && yarn build:composables`
 4. Run `yarn dev:theme` to run theme. You can find other commands in `package.json`
