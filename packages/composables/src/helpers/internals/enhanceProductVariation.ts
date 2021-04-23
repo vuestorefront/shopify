@@ -11,6 +11,7 @@ const enhanceProductVariation = (productResponse) => {
     productType: variant.product.productType,
     options: variant.product.options,
     variantId: variant.id,
+    id: variant.id,
     _description: variant.product.description,
     _descriptionHtml: variant.product.descriptionHtml,
     _categoriesRef: [],

@@ -63,7 +63,7 @@
           <SfSelect
             data-cy="product-select_size"
             v-if="options.Size"
-            @input="(size) => updateFilter({ size })"
+            @input="(value) => updateFilter({ Size: value })"
             :value="configuration.size || options.Size[0].value"
             label="Size"
             class="sf-select--underlined product__select-size"
