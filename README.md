@@ -18,7 +18,7 @@ vsf init <project_name> && cd <project_name> && yarn && yarn dev
 
 ## How to start if you want to contribute?
 
-Want to contribute? Ping us on `shopify` channel on [our Discord](discord.vuestorefront.io)!
+Want to contribute? Ping us on `shopify` channel on [our Discord](https://discord.vuestorefront.io)!
 
 1. Clone the repo
 2. Run `yarn` to install dependencies
