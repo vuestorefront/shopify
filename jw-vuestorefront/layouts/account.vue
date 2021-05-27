@@ -31,6 +31,10 @@ export default {
 
 <style lang="scss">
 @import "~@storefront-ui/vue/styles";
+/* Using SCSS variables to store breakpoints */
+$breakpoint-desktop: 1024px;
+$breakpoint-tablet: 768px;
+$breakpoint-mobile: 480px;
 
 body {
   padding: 0;
@@ -39,7 +43,7 @@ body {
 
 #layout {
   box-sizing: border-box;
-  @include for-desktop {
+  @media (min-width: $breakpoint-desktop) {
     max-width: 1240px;
     margin: auto;
   }
