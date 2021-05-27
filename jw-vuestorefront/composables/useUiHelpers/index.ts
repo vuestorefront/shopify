@@ -1,3 +1,4 @@
+// noinspection DuplicatedCode
 import {getCurrentInstance} from '@vue/composition-api';
 import {Category} from '@vue-storefront/shopify-api';
 import {AgnosticFacet} from '@vue-storefront/core';

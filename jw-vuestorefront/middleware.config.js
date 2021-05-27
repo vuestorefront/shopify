@@ -5,8 +5,7 @@ module.exports = {
       configuration: {
         api: {
           domain: 'jw-vuestorfront.myshopify.com',
-          storefrontAccessToken: '71b9e94e154874b1b9db212e7fba7317' +
-              ''
+          storefrontAccessToken: '71b9e94e154874b1b9db212e7fba7317' + ''
         },
         currency: 'USD',
         country: 'US'

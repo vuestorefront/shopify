@@ -4,9 +4,6 @@
     @click:cart="toggleCartSidebar"
     @click:wishlist="toggleWishlistSidebar"
     @click:account="handleAccountClick"
-    @enter:search="changeSearchTerm"
-    @change:search="p => term = p"
-    :searchValue="term"
     :cartItemsQty="cartTotalItems"
     :accountIcon="accountIcon"
     class="sf-header--has-mobile-search"
@@ -14,15 +11,20 @@
     <!-- TODO: add mobile view buttons after SFUI team PR -->
     <template #logo>
       <nuxt-link data-cy="app-header-url_logo" :to="localePath('/')" class="sf-header__logo">
+        <!--suppress CheckImageSize -->
         <img src="/icon.png" alt="Vue Storefront Next" width="34" height="35" class="sf-header__logo-image"/>
       </nuxt-link>
     </template>
-
+    <!-- Navigation override of vsf default -->
     <template #navigation v-if="categories.length > 0">
       <SfHeaderNavigationItem v-for='cat in categories' :key="cat.id" class="nav-item" :data-cy="'app-header-url_' + cat.handle"  :label="cat.title" :link="localePath('/c/' + cat.handle )" />
     </template>
     <template #aside>
       <LocaleSelector class="smartphone-only" />
+    </template>
+    <!-- Override search bar with Algolia component -->
+    <template #search>
+      <SearchBarAlgolia/>
     </template>
   </SfHeader>
 </template>
@@ -35,22 +37,24 @@ import {computed, ref} from '@vue/composition-api';
 import {onSSR} from '@vue-storefront/core';
 import useUiHelpers from '~/composables/useUiHelpers';
 import LocaleSelector from './LocaleSelector';
+// Import of Algolia Search Bar component
+import SearchBarAlgolia from '~/components/SearchAlgolia/SearchBarAlgolia.vue';
 
 export default {
   components: {
     SfHeader,
     SfImage,
-    LocaleSelector
+    LocaleSelector,
+    SearchBarAlgolia
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(props, { root }) {
-    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } = useUiState();
-    const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
-    const { isAuthenticated, load: loadUser } = useUser();
-    const { cart, load: loadCart } = useCart();
-    const { search, categories } = useCategory('menuCategories');
-    const { load: loadWishlist } = useWishlist();
-    const term = ref(getFacetsFromURL().term);
+  setup(props, {root}) {
+    const {toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal} = useUiState();
+    const {getFacetsFromURL} = useUiHelpers();
+    const {isAuthenticated, load: loadUser} = useUser();
+    const {cart, load: loadCart} = useCart();
+    const {categories} = useCategory('menuCategories');
+    const {load: loadWishlist} = useWishlist();
     const curCatSlug = ref(getFacetsFromURL().categorySlug);
     const cartTotalItems = computed(() => {
       const count = cartGetters.getTotalItems(cart.value);
@@ -67,12 +71,11 @@ export default {
 
       toggleLoginModal();
     };
-
     onSSR(async () => {
       await loadUser();
       await loadCart();
       await loadWishlist();
-      await search({slug: ''});
+      // await search({slug: ''});
     });
 
     return {
@@ -81,8 +84,8 @@ export default {
       handleAccountClick,
       toggleCartSidebar,
       toggleWishlistSidebar,
-      changeSearchTerm,
-      term,
+      // changeSearchTerm,
+      // term,
       curCatSlug,
       categories
     };
@@ -91,9 +94,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* Using SCSS variables to store breakpoints */
+$breakpoint-desktop: 1024px;
+$breakpoint-tablet: 768px;
+$breakpoint-mobile: 480px;
 .sf-header {
   --header-padding:  var(--spacer-sm);
-  @include for-desktop {
+  @media (min-width: $breakpoint-desktop) {
     --header-padding: 0;
   }
   &__logo-image {

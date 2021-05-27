@@ -9,9 +9,9 @@ export default {
   head: {
     title: 'Shopify | Vue Storefront Next',
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'theme-color', content: '#5ece7b' },
+      {charset: 'utf-8'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {name: 'theme-color', content: '#5ece7b'},
       {
         hid: 'description',
         name: 'description',
@@ -19,7 +19,7 @@ export default {
       }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
       {
         rel: 'preconnect',
         href: 'https://fonts.gstatic.com',
@@ -28,19 +28,19 @@ export default {
       {
         rel: 'preload',
         href:
-          'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
+            'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
         as: 'style'
       },
       {
         rel: 'stylesheet',
         href:
-          'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
+            'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
         media: 'print',
         onload: 'this.media=\'all\''
       }
     ]
   },
-  loading: { color: '#fff' },
+  loading: {color: '#fff'},
   buildModules: [
     // to core
     '@nuxtjs/pwa',
@@ -75,14 +75,14 @@ export default {
     currency: 'USD',
     country: 'US',
     countries: [
-      { name: 'US', label: 'United States' },
-      { name: 'AT', label: 'Austria' },
-      { name: 'DE', label: 'Germany' },
-      { name: 'NL', label: 'Netherlands' }
+      {name: 'US', label: 'United States'},
+      {name: 'AT', label: 'Austria'},
+      {name: 'DE', label: 'Germany'},
+      {name: 'NL', label: 'Netherlands'}
     ],
     currencies: [
-      { name: 'EUR', label: 'Euro' },
-      { name: 'USD', label: 'Dollar' }
+      {name: 'EUR', label: 'Euro'},
+      {name: 'USD', label: 'Dollar'}
     ],
     locales: [
       {
@@ -133,7 +133,11 @@ export default {
     ]
   },
   build: {
-    transpile: ['vee-validate/dist/rules'],
+    transpile: [
+      'vee-validate/dist/rules',
+      'vue-instantsearch',
+      'instantsearch.js/es'
+    ],
     plugins: [
       new webpack.DefinePlugin({
         'process.VERSION': JSON.stringify({
@@ -150,69 +154,16 @@ export default {
       if (savedPosition) {
         return savedPosition;
       } else {
-        return { x: 0, y: 0 };
+        return {x: 0, y: 0};
       }
-    }
-  },
-  pwa: {
-    manifest: {
-      name: 'VSF Next: Shopify APP',
-      lang: 'en',
-      shortName: 'VSF Next',
-      startUrl: '/',
-      display: 'standalone',
-      backgroundColor: '#5ece7b',
-      themeColor: '#5ece7b',
-      description: 'This is the Shopify PWA app for VSF Next',
-      icons: [
-        {
-          src: '/icons/android-icon-48x48.png',
-          sizes: '48x48',
-          type: 'image/png'
-        },
-        {
-          src: '/icons/android-icon-72x72.png',
-          sizes: '72x72',
-          type: 'image/png'
-        },
-        {
-          src: '/icons/android-icon-96x96.png',
-          sizes: '96x96',
-          type: 'image/png'
-        },
-        {
-          src: '/icons/android-icon-144x144.png',
-          sizes: '144x144',
-          type: 'image/png'
-        },
-        {
-          src: '/icons/android-icon-168x168.png',
-          sizes: '168x168',
-          type: 'image/png'
-        },
-        {
-          src: '/icons/android-icon-192x192.png',
-          sizes: '192x192',
-          type: 'image/png'
-        },
-        {
-          src: '/icons/android-icon-512x512.png',
-          sizes: '512x512',
-          type: 'image/png'
-        }
-      ]
     },
-    meta: {
-      name: 'VSF Next: Shopify APP',
-      author: 'Aureate labs',
-      backgroundColor: '#5ece7b',
-      description:
-        'This is the Shopify PWA app for VSF Next - Developed by Aureate labs',
-      themeColor: '#5ece7b',
-      ogHost: 'shopify-pwa-beta.aureatelabs.com'
+    // TODO evaluate the potential for removing "require" as it is flagged via the ESlint
+    parseQuery(queryString) {
+      return require('qs').parse(queryString);
     },
-    icon: {
-      iconSrc: 'src/static/android-icon-512x512.png'
+    stringifyQuery(object) {
+      const queryString = require('qs').stringify(object);
+      return queryString ? '?' + queryString : '';
     }
   }
 };
