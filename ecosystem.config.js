@@ -1,21 +1,21 @@
 module.exports = {
   apps: [
     {
-      name: "Shopify-Beta-App",
-      script: "yarn start",
+      name: 'Shopify-Beta-App',
+      script: 'yarn start',
       // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
-      args: "",
+      args: '',
       instances: 1,
       autorestart: true,
       watch: true,
-      maxMemoryRestart: "2G",
+      maxMemoryRestart: '2G',
       env: {
-        NODE_ENV: "development",
+        NODE_ENV: 'development'
       },
       envProduction: {
-        NODE_ENV: "production",
-      },
-    },
-  ],
+        NODE_ENV: 'production'
+      }
+    }
+  ]
 };
 

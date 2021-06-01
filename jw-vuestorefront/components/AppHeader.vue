@@ -1,4 +1,5 @@
 <template>
+  <!-- Vue Storefront inheritance -->
   <SfHeader
     data-cy="app-header"
     @click:cart="toggleCartSidebar"
@@ -9,11 +10,14 @@
     class="sf-header--has-mobile-search"
   >
     <!-- TODO: add mobile view buttons after SFUI team PR -->
+    <!-- LOGO OVERRIDE - overrides vuestorefront.ui -->
     <template #logo>
       <nuxt-link data-cy="app-header-url_logo" :to="localePath('/')" class="sf-header__logo">
         <!--suppress CheckImageSize -->
-        <img src="/icon.png" alt="Vue Storefront Next" width="34" height="35" class="sf-header__logo-image"/>
+        <!-- Logo is pulled from path /static -->
+        <img src="/BORN_GROUP_Inc_logo.svg" alt="Vue Storefront Next" width="200" class="sf-header__logo-image"/>
       </nuxt-link>
+     <!-- NAVIGATION OVERRIDE - overrides vuestorefront.ui -->
     </template>
     <!-- Navigation override of vsf default -->
     <template #navigation v-if="categories.length > 0">
@@ -24,7 +28,7 @@
     </template>
     <!-- Override search bar with Algolia component -->
     <template #search>
-      <SearchBarAlgolia/>
+    <SearchBarAlgolia/>
     </template>
   </SfHeader>
 </template>
@@ -94,6 +98,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* Scoped restricts application of css to this component only */
+
 /* Using SCSS variables to store breakpoints */
 $breakpoint-desktop: 1024px;
 $breakpoint-tablet: 768px;

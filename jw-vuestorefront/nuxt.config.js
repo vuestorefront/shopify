@@ -71,6 +71,12 @@ export default {
     'vue-scrollto/nuxt',
     '@vue-storefront/middleware/nuxt'
   ],
+  loaders: [
+    {
+      test: /\.css$/,
+      loaders: ['style?insertAt=top', 'css']
+    }
+  ],
   i18n: {
     currency: 'USD',
     country: 'US',
@@ -134,6 +140,7 @@ export default {
   },
   build: {
     transpile: [
+      '/^@storefront-ui/',
       'vee-validate/dist/rules',
       'vue-instantsearch',
       'instantsearch.js/es'
@@ -149,18 +156,12 @@ export default {
     ]
   },
   router: {
+    // TODO evaluate the potential for removing "require" as it is flagged via the eslint
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    scrollBehavior(_to, _from, savedPosition) {
-      if (savedPosition) {
-        return savedPosition;
-      } else {
-        return {x: 0, y: 0};
-      }
-    },
-    // TODO evaluate the potential for removing "require" as it is flagged via the ESlint
     parseQuery(queryString) {
       return require('qs').parse(queryString);
     },
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     stringifyQuery(object) {
       const queryString = require('qs').stringify(object);
       return queryString ? '?' + queryString : '';

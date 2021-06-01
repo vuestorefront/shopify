@@ -4,6 +4,10 @@ Vue Storefront 2 template for Shopify.
 
 > Please keep in mind this project is in beta phase. Please report all bugs you will spot on GitHub or help us by reolving them by yourself. It will help us to resolve them faster and make this project production-ready sooner!
 
+## Developer Documentation References
+#### storefront.ui
+The storefront.ui is utilized to provide the base UI / UX code for the project -  https://docs.storefrontui.io/
+
 ## Setup
 
 1. Fill in the project credentials in `middleware.config.js` (env. variables suggested)
