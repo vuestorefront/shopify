@@ -1,6 +1,6 @@
 {
-  "name": "@vue-storefront/shopify-theme",
-  "version": "0.1.1",
+  "name": "@lightswitch/shopify-theme",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -15,6 +15,7 @@
     "isomorphic-fetch": "^2.2.1",
     "@storefront-ui/vue": "^0.9.1",
     "@vue-storefront/shopify": "0.1.1",
+    "@lightswitch/shopify": "0.1.0",
     "@vue-storefront/nuxt": "^2.3.0-rc.3",
     "@vue-storefront/nuxt-theme": "^2.3.0-rc.3",
     "@vue-storefront/middleware": "^2.3.0-rc.3",
