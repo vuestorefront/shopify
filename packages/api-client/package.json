@@ -14,7 +14,7 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@vue-storefront/core": "^2.3.0-rc.3",
+    "@vue-storefront/core": "^2.3.3",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
     "shopify-buy": "^2.11.0",

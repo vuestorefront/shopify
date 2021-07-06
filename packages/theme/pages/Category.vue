@@ -357,7 +357,7 @@ export default {
     });
 
     const { changeFilters, isFacetColor } = useUiHelpers();
-    const { toggleFilterSidebar } = useUiState();
+    const { toggleFilterSidebar, toggleCategoryGridView } = useUiState();
     const selectedFilters = ref({});
 
     onMounted(() => {
@@ -421,7 +421,8 @@ export default {
       isFilterSelected,
       selectedFilters,
       clearFilters,
-      applyFilters
+      applyFilters,
+      toggleCategoryGridView
     };
   },
   components: {

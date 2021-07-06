@@ -14,7 +14,6 @@ const getBasketItemByProduct = ({ currentCart, product }) => {
 const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, { customQuery }) => {
-    console.log('Mocked: loadCart');
     // check if cart is already initiated
     let existngCartId = context.$shopify.config.app.$cookies.get('cart_id');
     if (existngCartId === undefined || existngCartId === '') {

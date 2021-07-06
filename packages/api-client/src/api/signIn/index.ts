@@ -4,7 +4,7 @@ import { signInMutation as mutation } from './../customerMutations/buildMutation
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function signIn(context, params, customQuery?: CustomQuery) {
+export default async function signIn(context, params) {
   const { username, password } = params;
   const data = {
     input: {
