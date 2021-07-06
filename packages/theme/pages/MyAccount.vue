@@ -34,7 +34,6 @@
           <OrderHistory />
         </SfContentPage>
 
-        
       </SfContentCategory>
 
       <SfContentPage data-cy="my-account-page_log-out" title="Log out" />
@@ -66,6 +65,9 @@ export default {
     OrderHistory,
     MyReviews
   },
+  middleware: [
+    'authenticated'
+  ],
   setup(props, context) {
     const { $router, $route } = context.root;
     const { logout } = useUser();
