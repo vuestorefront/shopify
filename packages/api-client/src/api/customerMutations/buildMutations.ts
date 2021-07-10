@@ -41,6 +41,77 @@ const forgotPasswordMutation: (context) => any = (context): any => {
   });
 };
 
+const resetPasswordByUrlMutation: (context) => any = (context): any => {
+
+  const resetUrl = context.client.graphQLClient.variable('resetUrl', 'URL!');
+  const password = context.client.graphQLClient.variable('password', 'String!');
+
+  return context.client.graphQLClient.mutation('customerRecover', [resetUrl, password], (root) => {
+    root.add('customerRecover', {args: {resetUrl, password}}, (customer) => {
+      customer.add('customerUserErrors', (error) => {
+        error.add('code');
+        error.add('field');
+        error.add('message');
+      });
+    });
+  });
+};
+
+const customerAddressDeleteMutation: (context) => any = (context): any => {
+
+  const id = context.client.graphQLClient.variable('id', 'ID!');
+  const customerAccessToken = context.client.graphQLClient.variable('customerAccessToken', 'String!');
+
+  return context.client.graphQLClient.mutation('customerAddressDelete', [id, customerAccessToken], (root) => {
+    root.add('customerAddressDelete', {args: {id, customerAccessToken}}, (customer) => {
+      customer.add('customerUserErrors', (error) => {
+        error.add('code');
+        error.add('field');
+        error.add('message');
+      });
+      customer.add('deletedCustomerAddressId');
+    });
+  });
+};
+
+const customerAddressAddMutation: (context) => any = (context): any => {
+
+  const address = context.client.graphQLClient.variable('address', 'MailingAddressInput!');
+  const customerAccessToken = context.client.graphQLClient.variable('customerAccessToken', 'String!');
+
+  return context.client.graphQLClient.mutation('customerAddressCreate', [customerAccessToken, address], (root) => {
+    root.add('customerAddressCreate', {args: {address: address, customerAccessToken: customerAccessToken}}, (customer) => {
+      customer.add('customerAddress', (addressInfo) => {
+        addressInfo.add('id');
+      });
+      customer.add('customerUserErrors', (error) => {
+        error.add('code');
+        error.add('field');
+        error.add('message');
+      });
+    });
+  });
+};
+const customerAddressUpdateMutation: (context) => any = (context): any => {
+
+  const customerAccessToken = context.client.graphQLClient.variable('customerAccessToken', 'String!');
+  const id = context.client.graphQLClient.variable('id', 'ID!');
+  const address = context.client.graphQLClient.variable('address', 'MailingAddressInput!');
+
+  return context.client.graphQLClient.mutation('customerAddressUpdate', [customerAccessToken, id, address], (root) => {
+    root.add('customerAddressUpdate', {args: {address: address, id: id, customerAccessToken: customerAccessToken}}, (customer) => {
+      customer.add('customerAddress', (addressInfo) => {
+        addressInfo.add('id');
+      });
+      customer.add('customerUserErrors', (error) => {
+        error.add('code');
+        error.add('field');
+        error.add('message');
+      });
+    });
+  });
+};
+
 const editProfileMutation: (context) => any = (context): any => {
   const customerAccessToken = context.client.graphQLClient.variable('customerAccessToken', 'String!');
   const customer = context.client.graphQLClient.variable('customer', 'CustomerUpdateInput!');
@@ -126,5 +197,9 @@ export {
   editProfileMutation,
   signInMutation,
   signOutMutation,
-  signUpMutation
+  signUpMutation,
+  resetPasswordByUrlMutation,
+  customerAddressDeleteMutation,
+  customerAddressAddMutation,
+  customerAddressUpdateMutation
 };

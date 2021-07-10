@@ -39,7 +39,7 @@ const billing = {
   addresses
 };
 
-const findBiggestId = () => addresses.reduce((highest, { id }) => Math.max(highest, id), 0);
+// const findBiggestId = () => Math.random().toString().substr(2);
 
 const disableOldDefault = () => {
   const oldDefault = addresses.find(address => address.isDefault);
@@ -59,61 +59,69 @@ const sortDefaultAtTop = (a, b) => {
 
 const params: UseUserBillingFactoryParams<any, any> = {
   addAddress: async (context: Context, params?) => {
-    console.log('Mocked: addAddress', params.address);
-
-    const newAddress = {
-      ...params.address,
-      id: findBiggestId() + 1
+    const appKey = context.$shopify.config.app.$config.appKey;
+    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
+    const formatedAddress = {
+      address1: params.address.streetName,
+      address2: params.address.apartment,
+      city: params.address.city,
+      company: params.address.company,
+      country: 'United States',
+      firstName: params.address.firstName,
+      lastName: params.address.lastName,
+      phone: params.address.phone,
+      province: params.address.state,
+      zip: params.address.postalCode
     };
-
-    if (params.address.isDefault) {
-      disableOldDefault();
-      addresses.unshift(newAddress);
-    } else {
-      addresses.push(newAddress);
+    const result: any = await context.$shopify.api.addAddress({ token: token, address: formatedAddress});
+    if (result) {
+      if (result.customerUserErrors.length === 0) {
+        return true;
+      }
+      return false;
     }
-
-    return Promise.resolve(billing);
   },
 
-  deleteAddress: async (context: Context, params?) => {
-    console.log('Mocked: deleteAddress', params);
-
-    const indexToRemove = addresses.findIndex(address => address.id === params.address.id);
-    if (indexToRemove < 0) {
-      return Promise.reject('This address does not exist');
+  deleteAddress: async (context: Context, params) => {
+    const appKey = context.$shopify.config.app.$config.appKey;
+    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
+    const result: any = await context.$shopify.api.deleteAddress({ token: token, AddressId: params.address.id });
+    if (result) {
+      if (result.customerUserErrors.length === 0) {
+        return true;
+      }
+      return false;
     }
-
-    addresses.splice(indexToRemove, 1);
-    return Promise.resolve(billing);
   },
 
   updateAddress: async (context: Context, params?) => {
-    console.log('Mocked: updateAddress', params);
-
-    const indexToUpdate = addresses.findIndex(address => address.id === params.address.id);
-    if (indexToUpdate < 0) {
-      return Promise.reject('This address does not exist');
+    const appKey = context.$shopify.config.app.$config.appKey;
+    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
+    const formatedAddress = {
+      address1: params.address.streetName,
+      address2: params.address.apartment,
+      city: params.address.city,
+      company: params.address.company,
+      country: 'United States',
+      firstName: params.address.firstName,
+      lastName: params.address.lastName,
+      phone: params.address.phone,
+      province: params.address.state,
+      zip: params.address.postalCode
+    };
+    const result: any = await context.$shopify.api.updateAddress({ token: token, AddressId: params.address.id, address: formatedAddress});
+    if (result) {
+      if (result.customerUserErrors.length === 0) {
+        return true;
+      }
+      return false;
     }
-
-    const isNewDefault = params.address.isDefault && addresses[0].id !== params.address.id;
-
-    if (isNewDefault) {
-      disableOldDefault();
-    }
-
-    addresses[indexToUpdate] = params.address;
-
-    if (isNewDefault) {
-      addresses.sort(sortDefaultAtTop);
-    }
-    return Promise.resolve(billing);
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, params?) => {
-    console.log('Mocked: addressesload');
-    const token = context.$shopify.config.app.$cookies.get('token');
+    const appKey = context.$shopify.config.app.$config.appKey;
+    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
     const result: any = await context.$shopify.api.fetchAddresses(token);
     let addresses = {};
     if (result) {
@@ -121,7 +129,6 @@ const params: UseUserBillingFactoryParams<any, any> = {
       return addresses;
     }
     return addresses;
-    // return Promise.resolve(billing);
   },
 
   setDefaultAddress: async (context: Context, params?) => {

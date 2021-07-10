@@ -19,7 +19,9 @@ export const getProductName = (product: ProductVariant): string => product?.name
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductSlug = (product: ProductVariant): string => {
-  return product._slug;
+  if (product) {
+    return product._slug;
+  }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,19 +33,32 @@ export const getProductPrice = (product: ProductVariant): AgnosticPrice => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const getProductDiscountPercentage = (product): number => {
+  const regular = parseFloat(product?.price?.original) || 0;
+  const special = parseFloat(product?.price?.current) || 0;
+  if (special < regular) {
+    const discount = regular - special;
+    const discountPercentage = (discount / regular) * 100;
+    return Math.round(discountPercentage);
+  }
+  return 0;
+};
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductGallery = (product: ProductVariant): AgnosticMediaGalleryItem[] =>
   (product ? product.images : [])
-    .map((image) => ({
-      small: image.originalSrc,
-      big: image.originalSrc,
-      normal: image.originalSrc
-    }));
+    .map((image) => {
+      const imgPath = image.originalSrc.substring(0, image.originalSrc.lastIndexOf('.'));
+      const imgext = image.originalSrc.split('.').pop();
+      const imgSmall = imgPath + '_160x160.' + imgext;
+      const imgBig = imgPath + '_295x295.' + imgext;
+      const imgNormal = imgPath + '_600x600.' + imgext;
+      return ({
+        small: imgSmall,
+        big: imgBig,
+        normal: imgNormal
+      });
+    });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const getProductCoverImage = product => {
-  return product?._coverImage?.src || '';
-};
 export const getActiveVariantImage = (product) => {
   for (let i = 1; i < (product.images).length; i++) {
     if (product.images[i].originalSrc === product._coverImage.originalSrc) {
@@ -73,6 +88,14 @@ export const getProductFiltered = (products, filters: ProductVariantFilters | an
   return enhanceProduct(products);
 
 };
+export const getFilteredSingle = (product) => {
+  if (!product) {
+    return [];
+  }
+  product = Array.isArray(product) ? product : [product];
+  return enhanceProduct(product);
+};
+
 export const getSelectedVariant = (product: ProductVariant, attribs) => {
   return attribs;
 };
@@ -132,18 +155,72 @@ export const getProductDescription = (product: ProductVariant, isWantHtml?: bool
 
 export const getProductCategoryIds = (product: ProductVariant): string[] => (product as any)?._categoriesRef || '';
 
+export const getProductVariantId = (product: ProductVariant): string => (product as any)?.variants[0].id || '';
+
 export const getProductId = (product: ProductVariant): string => (product as any)?._id || '';
+
+export const getProductOriginalId = (product): string => {
+  if (product && product?._id) {
+    const buff = Buffer.from(product?._id, 'base64');
+    const decodedId = buff.toString('ascii');
+    const extractedInfo = decodedId.split(/[\s/]+/).pop();
+    return extractedInfo;
+  }
+  return '';
+};
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const getFormattedPrice = (price: number) => String(price);
 
-export const getProductStatus = (product: ProductVariant): boolean => {
-  if (product && (product._availableForSale || product.available)) {
+export const getProductSaleStatus = (product: ProductVariant): boolean => {
+  if (product && (product.availableForSale)) {
     return true;
   }
   return false;
 };
+export const getProductCoverImage = (product, size = 'normal') => {
+  let imgResolution = '600x600';
+  if (size === 'medium') {
+    imgResolution = '295x295';
+  } else if (size === 'small') {
+    imgResolution = '80x80';
+  }
+  if (product && product._coverImage && product._coverImage.src) {
+    const imgPath = product._coverImage.src.substring(0, product._coverImage.src.lastIndexOf('.'));
+    const imgext = product._coverImage.src.split('.').pop();
+    const resizedImg = imgPath + '_' + imgResolution + '.' + imgext;
+    return resizedImg;
+  }
+  return 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/placeholder_' + imgResolution + '.jpg?v=1625742127';
+};
+export const getPDPProductCoverImage = (product, size = 'normal') => {
+  let imgResolution = '600x600';
+  if (size === 'medium') {
+    imgResolution = '295x295';
+  } else if (size === 'small') {
+    imgResolution = '80x80';
+  }
+  if (product && product._coverImage && product._coverImage.originalSrc) {
+    const imgPath = product._coverImage.originalSrc.substring(0, product._coverImage.originalSrc.lastIndexOf('.'));
+    const imgext = product._coverImage.originalSrc.split('.').pop();
+    const resizedImg = imgPath + '_' + imgResolution + '.' + imgext;
+    return resizedImg;
+  }
+  return 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/placeholder_' + imgResolution + '.jpg?v=1625742127';
+};
 
+export const getProductStockStatus = (product: ProductVariant): boolean => {
+  if (product && product.totalInventory > 0) {
+    return true;
+  }
+  return false;
+};
+export const getProductStock = (product: ProductVariant): number => {
+  if (product && product.totalInventory) {
+    return product.totalInventory;
+  }
+  return 0;
+};
 export const checkForWishlist = (product: ProductVariant): boolean => (product as any).isInWishlist ?? false;
 
 export const getBreadcrumbs = (product: ProductVariant): any => {
@@ -188,12 +265,19 @@ const productGetters: ProductGetters<ProductVariant, ProductVariantFilters> = {
   getCoverImage: getProductCoverImage,
   getVariantImage: getActiveVariantImage,
   getFiltered: getProductFiltered,
+  getDiscountPercentage: getProductDiscountPercentage,
+  getFilteredSingle,
+  getProductOriginalId,
   getOptions: getProductOptions,
   getAttributes: getProductAttributes,
   getDescription: getProductDescription,
   getCategoryIds: getProductCategoryIds,
   getId: getProductId,
-  getStatus: getProductStatus,
+  getPDPCoverImage: getPDPProductCoverImage,
+  getVariantId: getProductVariantId,
+  getSaleStatus: getProductSaleStatus,
+  getStockStatus: getProductStockStatus,
+  getStock: getProductStock,
   getFormattedPrice: getFormattedPrice,
   getTotalReviews: getProductTotalReviews,
   getAverageRating: getProductAverageRating,

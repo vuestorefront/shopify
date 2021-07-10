@@ -1,27 +1,19 @@
 <template>
   <div id="category">
-    <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
-      :breadcrumbs="breadcrumbs"
-    />
+    <SfBreadcrumbs class="breadcrumbs breadcrumbs-center" :breadcrumbs="breadcrumbs">
+      <template #link="{breadcrumb}">
+        <nuxt-link
+          :data-testid="breadcrumb.text"
+          :to="breadcrumb.route.link"
+          class="sf-link disable-active-link sf-breadcrumbs__breadcrumb"
+        >
+          {{ breadcrumb.text }}
+        </nuxt-link>
+      </template>
+    </SfBreadcrumbs>
     <!-- sorting features panel -->
     <div class="navbar section">
       <div class="navbar__main">
-        <SfButton
-          class="sf-button--text navbar__filters-button"
-          data-cy="category-btn_filters"
-          aria-label="Filters"
-          @click="toggleFilterSidebar"
-        >
-          <SfIcon
-            size="24px"
-            color="dark-secondary"
-            icon="filter2"
-            class="navbar__filters-icon"
-            data-cy="category-icon_"
-          />
-          {{ $t("Filters") }}
-        </SfButton>
         <div class="navbar__sort desktop-only">
           <span class="navbar__label">{{ $t("Sort by") }}:</span>
           <SfSelect
@@ -115,7 +107,7 @@
               "
               class="products__product-card"
               @click:wishlist="addItemToWishlist({ product })"
-              @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+              @click:add-to-cart="HandleAddTocart({ product, qty:1 })"
             />
           </transition-group>
           <transition-group
@@ -145,7 +137,7 @@
               :is-on-wishlist="false"
               class="products__product-card-horizontal"
               @click:wishlist="addItemToWishlist({ product })"
-              @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
+              @click:add-to-cart="HandleAddTocart({ product, qty:1 })"
               :link="
                 localePath(
                   `/p/${productGetters.getId(product)}/${productGetters.getSlug(
@@ -306,7 +298,7 @@ import {
   SfColor,
   SfProperty
 } from '@storefront-ui/vue';
-import { ref, computed, onMounted } from '@vue/composition-api';
+import { computed, onMounted } from '@vue/composition-api';
 import {
   useCart,
   useWishlist,
@@ -314,114 +306,66 @@ import {
   useFacet,
   facetGetters
 } from '@vue-storefront/shopify';
-import useUiHelpers from '~/composables/useUiHelpers';
-import useUiState from '~/composables/useUiState';
+import { useUiHelpers, useUiState, useUiNotification } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
-import Vue from 'vue';
 
 export default {
   transition: 'fade',
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  data() {
+    return {
+      currentCate: '',
+      breadcrumbs: [
+        {
+          text: 'Home',
+          route: { link: '/' }
+        },
+        {
+          text: this.removeSpaceFromText(this.$route.params.slug_1),
+          route: { link: '#' }
+        }
+      ]
+    };
+  },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
     const th = useUiHelpers();
-    const slug = context.root.$route.params.slug_1;
     const uiState = useUiState();
     const { addItem: addItemToCart, isInCart } = useCart();
+    const { send: sendNotification } = useUiNotification();
     const { addItem: addItemToWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
     const products = computed(() => facetGetters.getProducts(result.value));
-    const categoryTree = computed(() =>
-      facetGetters.getCategoryTree(result.value)
-    );
-    const breadcrumbs = computed(() =>
-      facetGetters.getBreadcrumbs(result.value)
-    );
     const sortBy = computed(() => facetGetters.getSortOptions(result.value));
     const facets = computed(() =>
       facetGetters.getGrouped(result.value, ['color', 'size'])
     );
     const pagination = computed(() => facetGetters.getPagination(result.value));
-    const activeCategory = computed(() => {
-      const items = categoryTree.value;
-      if (items === null || items.length === undefined) {
-        return '';
-      }
-
-      // const category = items.find(({ isCurrent, items }) => isCurrent || items.find(({ isCurrent }) => isCurrent));
-      const category = items.find((curCat) => curCat.slug === slug);
-      return category?.label || items[0].label;
-    });
-
     onSSR(async () => {
       await search(th.getFacetsFromURL());
     });
 
-    const { changeFilters, isFacetColor } = useUiHelpers();
-    const { toggleFilterSidebar, toggleCategoryGridView } = useUiState();
-    const selectedFilters = ref({});
+    const { isFacetColor } = useUiHelpers();
+    const { toggleCategoryGridView } = useUiState();
 
     onMounted(() => {
       context.root.$scrollTo(context.root.$el, 2000);
-      if (!facets.value.length) return;
-      selectedFilters.value = facets.value.reduce(
-        (prev, curr) => ({
-          ...prev,
-          [curr.id]: curr.options.filter((o) => o.selected).map((o) => o.id)
-        }),
-        {}
-      );
     });
-
-    const isFilterSelected = (facet, option) =>
-      (selectedFilters.value[facet.id] || []).includes(option.id);
-
-    const selectFilter = (facet, option) => {
-      if (!selectedFilters.value[facet.id]) {
-        Vue.set(selectedFilters.value, facet.id, []);
-      }
-
-      if (selectedFilters.value[facet.id].find((f) => f === option.id)) {
-        selectedFilters.value[facet.id] = selectedFilters.value[
-          facet.id
-        ].filter((f) => f !== option.id);
-        return;
-      }
-
-      selectedFilters.value[facet.id].push(option.id);
-    };
-
-    const clearFilters = () => {
-      toggleFilterSidebar();
-      selectedFilters.value = {};
-      changeFilters(selectedFilters.value);
-    };
-
-    const applyFilters = () => {
-      toggleFilterSidebar();
-      changeFilters(selectedFilters.value);
-    };
 
     return {
       ...uiState,
       th,
       products,
-      categoryTree,
       loading,
       productGetters,
       pagination,
-      activeCategory,
       sortBy,
       facets,
-      breadcrumbs,
+      sendNotification,
       addItemToWishlist,
       addItemToCart,
       isInCart,
       isFacetColor,
-      selectFilter,
-      isFilterSelected,
-      selectedFilters,
-      clearFilters,
-      applyFilters,
       toggleCategoryGridView
     };
   },
@@ -440,6 +384,29 @@ export default {
     SfColor,
     SfHeading,
     SfProperty
+  },
+  methods: {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    HandleAddTocart(productObj) {
+      this.addItemToCart(productObj).then(() => {
+        this.sendNotification({
+          key: 'added_to_cart',
+          message: 'Product has been successfully added to cart !',
+          type: 'success',
+          title: 'Product added!',
+          icon: 'check'
+        });
+      });
+    },
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    removeSpaceFromText(str) {
+      let i;
+      const frags = str.split('-');
+      for (i = 0; i < frags.length; i++) {
+        frags[i] = frags[i].charAt(0).toUpperCase() + frags[i].slice(1);
+      }
+      return frags.join(' ');
+    }
   }
 };
 </script>

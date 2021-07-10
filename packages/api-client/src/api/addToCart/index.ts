@@ -10,7 +10,6 @@ export default async function addToCart(context, params, _customQuery?: CustomQu
     variantId: product.variantId,
     quantity: quantity
   }];
-
   // Add an item to the checkout
   return await context.client.checkout.addLineItems(checkoutID, lineItemsToAdd).then((checkout) => checkout);
 }

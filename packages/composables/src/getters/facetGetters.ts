@@ -1,25 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   FacetsGetters,
-  AgnosticCategoryTree,
   AgnosticGroupedFacet,
   AgnosticPagination,
   AgnosticSort,
   AgnosticBreadcrumb,
   AgnosticFacet
 } from '@vue-storefront/core';
-import { buildBreadcrumbs, buildFacets, reduceForFacets } from './../useFacet/_utils';
+import { buildBreadcrumbs, buildFacets, reduceForGroupedFacets, reduceForFacets } from './../useFacet/_utils';
 import { getCategoryTree as buildCategoryTree } from './categoryGetters';
 import { enhanceProduct, getSortedProducts } from '../helpers/internals';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getAll = (searchData, criteria?: string[]): AgnosticFacet[] => buildFacets(searchData, reduceForFacets, criteria);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const getGrouped = (searchData, criteria?: string[]): AgnosticGroupedFacet[] => [];
 // buildFacets(searchData, reduceForGroupedFacets, criteria);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const getSortOptions = (searchData): AgnosticSort => {
   const options = [
     { type: 'sort', id: 'latest', value: 'Latest', count: null },
@@ -28,9 +27,7 @@ const getSortOptions = (searchData): AgnosticSort => {
     { type: 'sort', id: 'price-up', value: 'Price: Low to high', count: null },
     { type: 'sort', id: 'price-down', value: 'Price: High to low', count: null }
   ].map(o => ({ ...o, selected: o.id === searchData.input.sort }));
-
   const selected = options.find(o => o.id === searchData.input.sort)?.id || 'latest';
-
   return { options, selected };
 };
 
@@ -97,7 +94,10 @@ const getPagination = (searchData): AgnosticPagination => {
     pageOptions: searchData.data.perPageOptions
   };
 };
-
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const getCurrentPage = (searchData) => {
+  return searchData?.input?.page || 1;
+};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getBreadcrumbs = (searchData): AgnosticBreadcrumb[] => {
   if (!searchData.data) {
@@ -110,6 +110,7 @@ const getBreadcrumbs = (searchData): AgnosticBreadcrumb[] => {
 };
 
 const facetGetters: FacetsGetters<any, any> = {
+  getCurrentPage,
   getSortOptions,
   getGrouped,
   getAll,

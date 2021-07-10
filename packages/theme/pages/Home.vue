@@ -55,27 +55,27 @@
 </template>
 <script type="module">
 import {
-  /* webpackChunkName: 'SfHero' */ SfHero,
-  /* webpackChunkName: 'SfBanner' */ SfBanner,
-  /* webpackChunkName: 'SfCallToAction' */ SfCallToAction,
-  /* webpackChunkName: 'SfSection' */ SfSection,
-  /* webpackChunkName: 'SfCarousel' */ SfCarousel,
-  /* webpackChunkName: 'SfProductCard' */ SfProductCard,
-  /* webpackChunkName: 'SfImage' */ SfImage,
-  /* webpackChunkName: 'SfBannerGrid' */ SfBannerGrid,
-  /* webpackChunkName: 'SfHeading' */ SfHeading,
-  /* webpackChunkName: 'SfArrow' */ SfArrow,
-  /* webpackChunkName: 'SfButton' */ SfButton
+  SfHero,
+  SfBanner,
+  SfCallToAction,
+  SfSection,
+  SfCarousel,
+  SfProductCard,
+  SfImage,
+  SfBannerGrid,
+  SfHeading,
+  SfArrow,
+  SfButton
 } from '@storefront-ui/vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import {
-  /* webpackChunkName: 'useProduct' */ useProduct,
-  /* webpackChunkName: 'useCart' */ useCart,
-  /* webpackChunkName: 'productGetters' */ productGetters
+  useProduct,
+  useCart,
+  productGetters
 } from '@vue-storefront/shopify';
 import {
-  /* webpackChunkName: 'computed' */ computed
+  computed
 } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
@@ -93,7 +93,7 @@ export default {
     const { cart, load: loadCart, addItem: addToCart, isInCart } = useCart();
 
     onSSR(async () => {
-      await productsSearch({ catId: 123, limit: 8 });
+      await productsSearch({ limit: 8 });
       await loadCart();
     });
     return {

@@ -1,4 +1,5 @@
-import { /* webpackChunkName: 'apiClientFactory' */ apiClientFactory } from '@vue-storefront/core';
+import { apiClientFactory } from '@vue-storefront/core';
+import updateNewsLetterPreferences from './api/updateNewsLetterPreferences';
 import getProduct from './api/getProduct';
 import getCategory from './api/getCategory';
 import editProfile from './api/editProfile';
@@ -11,9 +12,13 @@ import signUp from './api/signUp';
 import signIn from './api/signIn';
 import signOut from './api/signOut';
 import changePassword from './api/changePassword';
+import forgotPassword from './api/forgotPassword';
 import fetchCustomer from './api/fetchCustomer';
 import fetchOrders from './api/fetchOrders';
 import fetchAddresses from './api/fetchAddresses';
+import deleteAddress from './api/deleteAddress';
+import addAddress from './api/addAddress';
+import updateAddress from './api/updateAddress';
 import checkOut from './api/checkOut';
 
 const CustomClient = require('shopify-buy/index.unoptimized.umd.min.js');
@@ -47,12 +52,17 @@ const { createApiClient } = apiClientFactory<any, any>({
     signIn,
     signOut,
     changePassword,
+    forgotPassword,
     fetchCustomer,
     fetchOrders,
     fetchAddresses,
+    deleteAddress,
+    addAddress,
+    updateAddress,
     createCart,
     checkOut,
-    cookies
+    cookies,
+    updateNewsLetterPreferences
   }
 });
 

@@ -35,25 +35,45 @@ export const reduceForFacets = (facets, filters) => (prev, curr) => ([
   ...createFacetsFromOptions(facets, filters, curr)
 ]);
 
-export const reduceForGroupedFacets = (facets, filters) => (prev, curr) => ([
-  ...prev,
-  {
-    id: curr,
-    label: curr,
-    options: createFacetsFromOptions(facets, filters, curr),
-    count: null
+export const reduceForGroupedFacets = (facets, filters) => (prev, curr) => {
+  return ([
+    ...prev,
+    {
+      id: curr,
+      label: curr,
+      options: createFacetsFromOptions(facets, filters, curr),
+      count: null
+    }
+  ]);
+};
+
+export const getSectionDataByKey = (sectionDataArray, sectionId) => {
+  for (const [key, value] of Object.entries(sectionDataArray.fields)) {
+    if (key === sectionId) {
+      return value;
+    }
   }
-]);
+};
+
+export const getContentfulAssetById = (ContentfulproductAssets, AssetId) => {
+  if (typeof AssetId !== 'string') return '';
+  const assetData = ContentfulproductAssets.find(asset => asset.sys.id === AssetId);
+  return assetData.fields.file;
+};
+export const getContentfulEntryById = (ContentfulproductEntries, EntryId) => {
+  if (typeof EntryId !== 'string') return '';
+  const entryData = ContentfulproductEntries.find(entry => entry.sys.id === EntryId);
+  return entryData.fields;
+};
 
 export const buildFacets = (searchData, reduceFn, criteria?: string[]) => {
-  if (!searchData.data) {
+  if (!searchData?.data) {
     return [];
   }
   const {
     data: { facets },
     input: { filters }
   } = searchData;
-
   return Object.keys(facets)
     .filter(filterFacets(criteria))
     .reduce(reduceFn(facets, filters), []);
