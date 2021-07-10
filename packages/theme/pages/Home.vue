@@ -45,10 +45,6 @@
       />
     </LazyHydrate>
     <LazyHydrate when-visible>
-      <InstagramFeed />
-    </LazyHydrate>
-
-    <LazyHydrate when-visible>
       <MobileStoreBanner />
     </LazyHydrate>
   </div>
@@ -68,7 +64,6 @@ import {
   SfButton
 } from '@storefront-ui/vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
-import InstagramFeed from '~/components/InstagramFeed.vue';
 import {
   useProduct,
   useCart,
@@ -108,7 +103,6 @@ export default {
     };
   },
   components: {
-    InstagramFeed,
     SfHero,
     RelatedProducts,
     SfBanner,
