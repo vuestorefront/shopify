@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { AgnosticAttribute, AgnosticPrice } from '@vue-storefront/core';
+import { AgnosticAttribute } from '@vue-storefront/core';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const getAttributeValue = (attribute) => {

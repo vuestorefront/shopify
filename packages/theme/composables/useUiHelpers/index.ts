@@ -38,7 +38,7 @@ const useUiHelpers = () => {
       rootCatSlug: params.slug_1,
       categorySlug,
       page: parseInt(query.page, 10) || 1,
-      sort: query.sort || 'manual',
+      sort: query.sort || 'latest',
       filters: getFiltersDataFromUrl(context, true),
       itemsPerPage: parseInt(query.itemsPerPage, 12) || 20,
       term: query.term
@@ -46,7 +46,7 @@ const useUiHelpers = () => {
   };
 
   const getCatLink = (category: Category): string => {
-    return `/collections/${category.slug}`;
+    return `/c/${category.slug}`;
   };
 
   const changeSorting = (sort: string) => {

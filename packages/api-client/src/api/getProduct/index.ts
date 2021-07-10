@@ -102,20 +102,99 @@ export default async function getProduct(
           return model.productByHandle;
         }
       });
+  } else if (params.related) {
+    const getrelatedProductsByIdQuery = context.client.graphQLClient.query(
+      (root) => {
+        root.add(
+          'productRecommendations',
+          { args: { productId: params.productId } },
+          (relatedProductsById) => {
+            // get product basic information
+            relatedProductsById.add('id');
+            relatedProductsById.add('title');
+            relatedProductsById.add('handle');
+            relatedProductsById.add('options', {}, (options) => {
+              options.add('name');
+              options.add('values');
+            });
+            relatedProductsById.addConnection(
+              'images',
+              { args: { first: 20 } },
+              (image) => {
+                image.add('id');
+                image.add('altText');
+                image.add('originalSrc');
+                image.add('transformedSrc');
+              }
+            );
+            relatedProductsById.addConnection(
+              'variants',
+              { args: { first: 20 } },
+              (variants) => {
+                variants.add('title');
+                variants.add('price');
+                variants.add('weight');
+                variants.add('available');
+                variants.add('sku');
+                variants.add('compareAtPrice');
 
-    // return await context.client.product.fetch(params.id).then((products) => {
-    // return products;
-    // });
-  } else if (params.sort) {
+                variants.addField('image', { args: {} }, (image) => {
+                  image.add('id');
+                  image.add('altText');
+                  image.add('originalSrc');
+                  image.add('transformedSrc');
+                });
+
+                variants.addField('selectedOptions', {}, (selectedOptions) => {
+                  selectedOptions.add('name');
+                  selectedOptions.add('value');
+                });
+
+                variants.addField('product', {}, (product) => {
+                  product.add('id');
+                  product.add('title');
+                  product.add('availableForSale');
+                  product.add('handle');
+                  product.add('description');
+                  product.add('descriptionHtml');
+                  product.addConnection(
+                    'images',
+                    { args: { first: 20 } },
+                    (images) => {
+                      images.add('id');
+                      images.add('altText');
+                      images.add('originalSrc');
+                      images.add('transformedSrc');
+                    }
+                  );
+                  product.add('productType');
+                  product.addField('options', {}, (options) => {
+                    options.add('name');
+                    options.add('values');
+                  });
+                });
+              }
+            );
+          }
+        );
+      }
+    );
+    return context.client.graphQLClient
+      .send(getrelatedProductsByIdQuery)
+      .then(({ model }) => {
+        if (model) {
+          return model.productRecommendations;
+        }
+      });
+  } else if (params.id) {
+    return await context.client.product.fetch(params.id).then((product) => {
+      return product;
+    });
+  } else {
     return await context.client.product
-      .fetchQuery({ first: 20, sortKey: 'TITLE', reverse: false })
+      .fetchQuery({ first: (params.limit ? params.limit : 20), sortKey: (params.sortBy ? params.sortBy : 'CREATED_AT'), reverse: false })
       .then((products) => {
         return products;
       });
-  } else {
-    // Use the built-in function
-    return await context.client.product.fetchAll().then((products) => {
-      return products;
-    });
   }
 }

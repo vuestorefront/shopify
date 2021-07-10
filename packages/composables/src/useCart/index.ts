@@ -8,14 +8,25 @@ import {
 import { Cart, CartItem, Coupon, Product } from '../types';
 
 const getBasketItemByProduct = ({ currentCart, product }) => {
-  return currentCart.lineItems.find((item) => item.variant.id === product.variants[0].id);
+  if (product.variants) {
+    let variantId = product.variants[0].id;
+    if (product.barcodes) {
+      // handle & convert plain product Id from BCapp to base64
+      const variationIDPlain = 'gid://shopify/ProductVariant/' + variantId;
+      const buff = Buffer.from(variationIDPlain);
+      variantId = buff.toString('base64');
+    }
+    return currentCart.lineItems.find((item) => item.variant.id === variantId);
+  }
+  return false;
 };
 
 const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, { customQuery }) => {
     // check if cart is already initiated
-    let existngCartId = context.$shopify.config.app.$cookies.get('cart_id');
+    const appKey = context.$shopify.config.app.$config.appKey;
+    let existngCartId = context.$shopify.config.app.$cookies.get(appKey + '_cart_id');
     if (existngCartId === undefined || existngCartId === '') {
       existngCartId = await context.$shopify.api.createCart().then((checkout) => {
         return checkout;
@@ -31,17 +42,16 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addItem: async (context: Context, { currentCart, product, quantity, customQuery }) => {
-    console.log('Mocked: addItem');
+    const appKey = context.$shopify.config.app.$config.appKey;
     return await context.$shopify.api.addToCart({ currentCart, product, quantity, customQuery }).then((checkout) => {
       // store cart id
-      context.$shopify.config.app.$cookies.set('cart_id', currentCart.id);
+      context.$shopify.config.app.$cookies.set(appKey + '_cart_id', currentCart.id);
       return JSON.parse(JSON.stringify(checkout));
     });
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeItem: async (context: Context, { currentCart, product, customQuery }) => {
-    console.log('Mocked: removeFromCart');
     // Remove an item from the checkout
     return await context.$shopify.api.removeFromCart({currentCart, product}).then((checkout) => {
       // return updated cart data
@@ -51,7 +61,6 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateItemQty: async (context: Context, { currentCart, product, quantity, customQuery }) => {
-    console.log('Mocked: updateQuantity');
     // Update an item Quantity
     return await context.$shopify.api.updateCart({currentCart, product, quantity}).then((checkout) => {
       // return updated cart data
@@ -61,7 +70,6 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clear: async (context: Context, { currentCart }) => {
-    console.log('Mocked: clearCart');
     return {};
   },
 
@@ -79,7 +87,6 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isInCart: (context: Context, { currentCart, product }) => {
-    console.log('Mocked: isInCart');
     return Boolean(currentCart && getBasketItemByProduct({ currentCart, product }));
   }
 };

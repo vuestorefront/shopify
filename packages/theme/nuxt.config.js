@@ -6,6 +6,9 @@ export default {
     port: 3001,
     host: '0.0.0.0'
   },
+  publicRuntimeConfig: {
+    appKey: 'vsf2Connector' + Date.now()
+  },
   head: {
     title: 'Shopify | Vue Storefront Next',
     meta: [
@@ -41,6 +44,9 @@ export default {
     ]
   },
   loading: { color: '#fff' },
+  plugins: [
+    '~/plugins/scrollToTop.client.js'
+  ],
   buildModules: [
     // to core
     '@nuxtjs/pwa',
@@ -176,7 +182,7 @@ export default {
     manifest: {
       name: 'VSF Next: Shopify APP',
       lang: 'en',
-      shortName: 'VSF Next',
+      shortName: 'SPVSF2',
       startUrl: '/',
       display: 'standalone',
       backgroundColor: '#5ece7b',
@@ -231,6 +237,41 @@ export default {
     },
     icon: {
       iconSrc: 'src/static/android-icon-512x512.png'
+    },
+    workbox: {
+      offlineStrategy: 'StaleWhileRevalidate',
+      runtimeCaching: [
+        {
+          // Match any request that ends with .png, .jpg, .jpeg or .svg.
+          urlPattern: /\.(?:png|jpg|jpeg|svg|woff|woff2)$/,
+          // Apply a cache-first strategy.
+          handler: 'CacheFirst',
+          options: {
+            // Use a custom cache name.
+            cacheName: 'SPVSF2Assets',
+
+            // Only cache 100 images.
+            expiration: {
+              maxEntries: 100
+            }
+          }
+        },
+        {
+          urlPattern: /^\/(?:(c)?(\/.*)?)$/,
+          handler: 'StaleWhileRevalidate',
+          strategyOptions: {
+            cacheName: 'SPVSF2cached',
+            cacheExpiration: {
+              maxEntries: 200,
+              maxAgeSeconds: 3600
+            }
+          }
+        }
+      ],
+      preCaching: [
+        '//shopify-pwa-beta.aureatelabs.com/c/**',
+        '//shopify-pwa-beta.aureatelabs.com/'
+      ]
     }
   }
 };

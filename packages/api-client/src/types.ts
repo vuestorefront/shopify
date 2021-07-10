@@ -110,7 +110,8 @@ export type ProductVariant = {
   variants?: Maybe<Scalars['Array']>;
   available?: Maybe<Scalars['Boolean']>;
   productType: Maybe<Scalars['String']>;
-  _availableForSale?: Maybe<Scalars['Boolean']>;
+  availableForSale?: Maybe<Scalars['Boolean']>;
+  totalInventory?: Maybe<Scalars['Int']>;
 }
 
 export type Category = {

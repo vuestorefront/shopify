@@ -9,12 +9,21 @@ export type User = {
   lastName?: string;
   email?: string;
   phone?: string;
+  lastIncompleteCheckout?: string;
   displayName?: string;
   token?: string;
+  tags?: Array<any>;
   error?: string;
+  addresses?: Record<string, unknown>;
+  defaultAddress?: Record<string, unknown>;
+  acceptsMarketing?: boolean;
 };
 
 export type UserAddress = Record<string, unknown>;
+
+export type ContentType = Record<string, unknown>;
+
+export type ContentPosition = Record<string, unknown>;
 
 export type Cart = Record<string, unknown>;
 

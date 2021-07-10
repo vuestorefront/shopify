@@ -1,5 +1,6 @@
 import { Context } from '@vue-storefront/core';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const loadCurrentCart = async (context: Context, customQueryFn = (user = null, cart = null) => ({ cart, user })) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user, cart } = customQueryFn();

@@ -5,40 +5,31 @@ import { formatSelectedAttributeList } from './_utils';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItems = (cart: Cart): LineItem[] => {
   return cart.lineItems;
-
-  /*
-  return [{
-    id: '1',
-    description: 'Some description',
-    categoriesRef: [
-      '1',
-      '2'
-    ],
-    name: 'Black jacket',
-    sku: 'black-jacket',
-    images: [
-      'https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/081223_1_large.jpg'
-    ],
-    price: {
-      original: 12.34,
-      current: 10.00
-    },
-    qty: 1
-  }];
-*/
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItemName = (product: any): string => product?.title || 'Product\'s name';
+export const getCartItemId = (product: any): string => product.id || '0';
+export const getCartItemSlug = (product: any): string => {
+  return product.slug || '0';
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getCartItemImage = (product: any): string => product?.variant.image.src || 'https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/081223_1_large.jpg';
+export const getCartItemImage = (product: any): string => {
+  if (product.variant && product?.variant?.image !== null) {
+    const imgPath = product?.variant?.image?.src.substring(0, product?.variant.image.src.lastIndexOf('.'));
+    const imgext = product?.variant?.image?.src.split('.').pop();
+    const cartImg = imgPath + '_120x120.' + imgext;
+    return cartImg;
+  }
+  return '';
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItemPrice = (product: any): AgnosticPrice => {
   return {
-    regular: product?.variant.compareAtPrice || 12,
-    special: product?.variant.price || 10
+    regular: product?.variant.compareAtPrice || null,
+    special: product?.variant.price || null
   };
 };
 
@@ -59,14 +50,16 @@ export const getCartItemAttributes = (product: LineItem, filterByAttributeName?:
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getCartItemSku = (product: any): string => product?.variant.sku || 'some-sku';
+export const getCartItemSku = (product: any): string => product?.variant.sku || '-';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartTotals = (cart: Cart): AgnosticTotals => {
-  return {
-    total: parseFloat(cart.totalPrice),
-    subtotal: parseFloat(cart.subtotalPrice)
-  };
+  if (cart && cart !== null) {
+    return {
+      total: parseFloat(cart.totalPrice),
+      subtotal: parseFloat(cart.subtotalPrice)
+    };
+  }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -79,7 +72,7 @@ export const getcheckoutURL = (cart: Cart): string => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartTotalItems = (cart: Cart): number => {
   if (cart) {
-    return cart.lineItems.length;
+    return cart.lineItems.reduce((n, { quantity }) => n + quantity, 0);
   }
   return 0;
 };
@@ -98,6 +91,8 @@ const cartGetters: CartGetters<Cart, LineItem> = {
   getItems: getCartItems,
   getItemName: getCartItemName,
   getItemImage: getCartItemImage,
+  getItemId: getCartItemId,
+  getItemSlug: getCartItemSlug,
   getItemPrice: getCartItemPrice,
   getItemQty: getCartItemQty,
   getItemAttributes: getCartItemAttributes,
