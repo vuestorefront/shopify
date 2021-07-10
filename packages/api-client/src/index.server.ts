@@ -1,5 +1,4 @@
 import { apiClientFactory } from '@vue-storefront/core';
-import updateNewsLetterPreferences from './api/updateNewsLetterPreferences';
 import getProduct from './api/getProduct';
 import getCategory from './api/getCategory';
 import editProfile from './api/editProfile';
@@ -61,8 +60,7 @@ const { createApiClient } = apiClientFactory<any, any>({
     updateAddress,
     createCart,
     checkOut,
-    cookies,
-    updateNewsLetterPreferences
+    cookies
   }
 });
 

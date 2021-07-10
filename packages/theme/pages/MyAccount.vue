@@ -36,10 +36,6 @@
         <AdressBook />
       </SfContentPage>
 
-      <SfContentPage data-cy="Account-newsletter" title="Newsletter">
-        <MyNewsletter :loading="newsLetterLoading" :isSubscribed="acceptsMarketing" @updatePreferences="updateNewsletterPreference"/>
-      </SfContentPage>
-
       <SfContentPage data-cy="Account-my-orders" title="Order history">
         <OrderHistory />
       </SfContentPage>
@@ -55,7 +51,6 @@ import { useUser, userGetters, useContent } from '@vue-storefront/shopify';
 import MyProfile from './MyAccount/MyProfile';
 import AdressBook from './MyAccount/AdressBook';
 import LoyaltyCard from './MyAccount/LoyaltyCard';
-import MyNewsletter from './MyAccount/MyNewsletter';
 import OrderHistory from './MyAccount/OrderHistory';
 import { onSSR } from '@vue-storefront/core';
 import useUiNotification from '~/composables/useUiNotification';
@@ -69,7 +64,6 @@ export default {
     MyProfile,
     AdressBook,
     LoyaltyCard,
-    MyNewsletter,
     OrderHistory,
     SfLink
   },

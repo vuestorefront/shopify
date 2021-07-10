@@ -226,20 +226,6 @@ export default {
       isNewAddress,
       loading
     };
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  head() {
-    return {
-      title: 'Address Book - Pure Daily Care',
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        {
-          hid: 'Address Book - Pure Daily Care',
-          name: 'Address Book - Pure Daily Care',
-          content: 'Pure Daily Care promotes natural beauty by combining the most modern technologies into easy-to-use, at-home products. Pure Daily Care technologies harness the healing power of naturally occurring phenomenon like steam, electricity and light to drastically improve your skin profile without the use of cosmetics.'
-        }
-      ]
-    };
   }
 };
 </script>

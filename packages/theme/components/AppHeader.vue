@@ -51,7 +51,7 @@
 </template>
 
 <script type="module">
-import { SfHeader, SfImage, SfButton } from '@storefront-ui/vue';
+import { SfHeader, SfImage, SfButton, SfBadge } from '@storefront-ui/vue';
 import useUiState from '~/composables/useUiState';
 import { useCart, useWishlist, useUser, cartGetters, useCategory } from '@vue-storefront/shopify';
 import { computed, ref } from '@vue/composition-api';
@@ -64,7 +64,8 @@ export default {
     SfHeader,
     SfImage,
     LocaleSelector,
-    SfButton
+    SfButton,
+    SfBadge
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, { root }) {
