@@ -48,10 +48,12 @@ export const formatSelectedAttributeList = (attributes: Array<any>): AgnosticAtt
       label: attr.name
     };
   });
-const capitalize = (s) => {
+
+export const capitalize = (s) => {
   if (typeof s !== 'string') return '';
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
+
 export const getVariantByAttributes = (products, attributes: any) => {
   if (!products || products.length === 0) {
     return null;
@@ -64,7 +66,7 @@ export const getVariantByAttributes = (products, attributes: any) => {
     return configurationKeys.every((attrName) =>
       currentAttributes.find(
         ({ name, value }) =>
-          capitalize(attrName) === name && attributes[attrName] === value
+          capitalize(attrName) === capitalize(name) && attributes[attrName] === value
       )
     );
   });

@@ -7,3 +7,5 @@ node_modules
 .history
 yarn.lock
 package-json.lock
+sw.js
+.env

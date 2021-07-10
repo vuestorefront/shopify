@@ -7,7 +7,7 @@ import {
 } from '@vue-storefront/core';
 import { ProductVariant } from '@vue-storefront/shopify-api/src/types';
 import { enhanceProduct, enhanceProductVariation } from '../helpers/internals';
-import { formatAttributeList, getVariantByAttributes } from './_utils';
+import { formatAttributeList, getVariantByAttributes, capitalize } from './_utils';
 
 type ProductVariantFilters = any
 
@@ -129,7 +129,7 @@ export const getProductAttributes = (products: ProductVariant, filterByAttribute
 
   const reduceByAttributeName = (prev, curr) => ({
     ...prev,
-    [curr.name]: isSingleProduct ? curr.value : [
+    [capitalize(curr.name)]: isSingleProduct ? curr.value : [
       ...(prev[curr.name] || []),
       {
         value: curr.value,
