@@ -193,6 +193,28 @@ export const getProductCoverImage = (product, size = 'normal') => {
   }
   return 'https://cdn.shopify.com/s/files/1/0407/1902/4288/files/placeholder_' + imgResolution + '.jpg?v=1625742127';
 };
+
+export const getProductCollections = (product, field = 'all') => {
+  if (!product) {
+    return;
+  }
+  if (product.collections && Object.keys(product.collections).length > 0) {
+    const collections = [];
+    Object.values(product.collections).map((collection: Record<string, unknown>) => {
+      if (field === 'all') {
+        collections.push({
+          id: collection.id,
+          title: collection.title,
+          slug: collection.handle
+        });
+      } else {
+        collections.push(collection[field]);
+      }
+    });
+    return collections;
+  }
+  return [];
+};
 export const getPDPProductCoverImage = (product, size = 'normal') => {
   let imgResolution = '600x600';
   if (size === 'medium') {
@@ -263,6 +285,7 @@ const productGetters: ProductGetters<ProductVariant, ProductVariantFilters> = {
   getPrice: getProductPrice,
   getGallery: getProductGallery,
   getCoverImage: getProductCoverImage,
+  getCollections: getProductCollections,
   getVariantImage: getActiveVariantImage,
   getFiltered: getProductFiltered,
   getDiscountPercentage: getProductDiscountPercentage,

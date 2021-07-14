@@ -358,6 +358,8 @@ export default {
           icon: 'check',
           title: 'linkSent!'
         });
+        isForgotPassword.value = false;
+        isLogin.value = true;
       } else if (user.value.token && user.value.token === 'SignUpSuccess') {
         sendNotification({
           key: 'signup_success',
