@@ -31,7 +31,14 @@ export default async function getProduct(
               options.add('name');
               options.add('values');
             });
-
+            productByHandle.addConnection(
+              'collections',
+              { args: { first: 20 } },
+              (collection) => {
+                collection.add('title');
+                collection.add('handle');
+              }
+            );
             productByHandle.addConnection(
               'images',
               { args: { first: 20 } },
@@ -125,6 +132,14 @@ export default async function getProduct(
                 image.add('altText');
                 image.add('originalSrc');
                 image.add('transformedSrc');
+              }
+            );
+            relatedProductsById.addConnection(
+              'collections',
+              { args: { first: 20 } },
+              (collection) => {
+                collection.add('title');
+                collection.add('handle');
               }
             );
             relatedProductsById.addConnection(
