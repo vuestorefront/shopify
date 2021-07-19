@@ -107,7 +107,7 @@
               "
               class="products__product-card"
               @click:wishlist="addItemToWishlist({ product })"
-              @click:add-to-cart="HandleAddTocart({ product, qty:1 })"
+              @click:add-to-cart="HandleAddTocart({ product, quantity:1 })"
             />
           </transition-group>
           <transition-group
