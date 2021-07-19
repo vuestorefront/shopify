@@ -55,9 +55,6 @@ export const capitalize = (s) => {
 };
 
 export const getVariantByAttributes = (products, attributes: any) => {
-  if (!products || products.length === 0) {
-    return null;
-  }
   const configurationKeys = Object.keys(attributes);
   return products.variants.find((variant) => {
     const currentAttributes = formatSelectedAttributeList(
