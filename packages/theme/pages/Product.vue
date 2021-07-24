@@ -99,51 +99,52 @@
         <p class="product__description desktop-only" v-if="productDescription">
           {{ productDescription }}
         </p>
-        <SfButton
-          data-cy="product-btn_size-guide"
-          class="sf-button--text desktop-only product__guide"
-        >
-          {{ $t("Size guide") }}
-        </SfButton>
-        <SfSelect
-          data-cy="product-select_size"
-          v-if="options.Size"
-          @input="(size) => updateFilter({ size })"
-          :value="configuration.size || options.Size[0].value"
-          label="Size"
-          class="sf-select--underlined product__select-size"
-          :required="true"
-        >
-          <SfSelectOption
-            v-for="size in options.Size"
-            :key="size.value"
-            :value="size.value"
-          >
-            {{ size.value }}
-          </SfSelectOption>
-        </SfSelect>
-        <div
-          v-if="options.Color && options.Color.length > 1"
-          class="product__colors desktop-only"
-        >
-          <p class="product__color-label">{{ $t("Color") }}:</p>
-          <SfColor
-            data-cy="product-color_update"
-            v-for="(color, i) in options.Color"
-            :key="i"
-            :color="color.value"
-            class="product__color"
-            @click="updateFilter({ color })"
-            :selected="
-              configuration.color
-                ? configuration.color.value === color.value
-                  ? true
-                  : false
-                : i === 0
-                ? true
-                : false
-            "
-          />
+        <div v-if="options && Object.keys(options).length > 0">
+          <template v-for="(option, o) in options">
+            <SfSelect
+              v-if="o.toLowerCase() !== 'color'"
+              :key="`attrib-${o}`"
+              :data-cy="`product-select_${o.toLowerCase()}`"
+              :set='atttLbl = o.toLowerCase()'
+              @input="(o) => updateFilter({ [atttLbl]:o, color: configuration.color? configuration.color : options.Color[0].value })"
+              :value="configuration[o.toLowerCase()] || options[o][0].value"
+              :label="$t(`${o}`)"
+              :class="`sf-select--underlined product__select-${o.toLowerCase()}`"
+              :required="true"
+            >
+              <SfSelectOption
+                v-for="(attribs, a) in option"
+                :key="`item-${a}`"
+                :value="attribs.value"
+              >
+                {{ attribs.value }}
+              </SfSelectOption>
+            </SfSelect>
+            <div
+              :key="`attrib-${o.toLowerCase()}`"
+              v-else
+              :class="`product__${o.toLowerCase()}s`"
+            >
+              <p class="product__color-label">{{ $t(`${o}`) }}:</p>
+              <SfColor
+                data-cy="product-color_update"
+                v-for="(attribs, a) in option"
+                :key="`item-${a}`"
+                :color="attribs.value"
+                :class="`product__color ${attribs.value}`"
+                @click="atttLbl = o.toLowerCase(), updateFilter({[atttLbl]:attribs.value, size: configuration.size ? configuration.size : options.Size[0].value})"
+                :selected="
+                  configuration[o.toLowerCase()]
+                    ? configuration[o.toLowerCase()] === attribs.value
+                      ? true
+                      : false
+                    : a === 0
+                    ? true
+                    : false
+                "
+              />
+            </div>
+          </template>
         </div>
         <SfAddToCart
           data-cy="product-cart_add"
@@ -315,6 +316,7 @@ export default {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
     const breadcrumbs = ref([]);
+    const atttLbl = '';
     const qty = ref(1);
     const { slug } = context.root.$route.params;
     const {
@@ -414,6 +416,13 @@ export default {
     });
 
     const updateFilter = (filter) => {
+      // console.log('Object.keys(options.value)::', Object.keys(options.value), 'options.value::', options.value);
+      // if (options.value) {
+      //   (Object.keys(options.value)).forEach((attr)=> {
+      //     configuration[attr.toLowerCase()] = configuration.value[attr.toLowerCase()] ? configuration.value[attr.toLowerCase()] : options.value[attr][0].value;
+      //     console.log('filter::', configuration);
+      //   });
+      // }
       context.root.$router.push({
         path: context.root.$route.path,
         query: {
@@ -447,7 +456,8 @@ export default {
       productloading,
       productGallery,
       productGetters,
-      setBreadcrumb
+      setBreadcrumb,
+      atttLbl
     };
   },
   components: {
