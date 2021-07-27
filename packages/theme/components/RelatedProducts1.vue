@@ -9,16 +9,8 @@
       >
         <SfCarouselItem class="carousel__item" v-for="(product, i) in products" :key="i">
           <SfProductCard
-            v-if="(productGetters.getPrice(product).special) && productGetters.getPrice(product).special < productGetters.getPrice(product).regular"
             :title="productGetters.getName(product)"
             :image="productGetters.getPDPCoverImage(product, 'medium')"
-            :regular-price="
-              $n(productGetters.getPrice(product).regular, 'currency')
-            "
-            :special-price="
-              productGetters.getPrice(product).special &&
-              $n(productGetters.getPrice(product).special, 'currency')
-            "
             :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
             :wishlistIcon="false"
             :imageWidth="295"
@@ -36,53 +28,18 @@
                 </h3>
               </SfLink>
             </template>
-          </SfProductCard>
-          <SfProductCard
-            v-else-if="(productGetters.getPrice(product).special) && productGetters.getPrice(product).special > productGetters.getPrice(product).regular"
-            :title="productGetters.getName(product)"
-            :image="productGetters.getPDPCoverImage(product, 'medium')"
-            :regular-price="
-              $n(productGetters.getPrice(product).special, 'currency')
-            "
-            :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
-            :wishlistIcon="false"
-            :imageWidth="295"
-            :imageHeight="295"
-            class="pdp-product-card"
-          >
-            <template #title>
-              <SfLink
-                class="sf-product-card__link"
-                :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
+            <template #price>
+              <SfPrice
+                class="sf-product-card__price"
               >
-                  <h3 class="sf-product-card__title">
-                  {{ productGetters.getName(product) }}
-                </h3>
-              </SfLink>
-            </template>
-          </SfProductCard>
-          <SfProductCard
-            v-else
-            :title="productGetters.getName(product)"
-            :image="productGetters.getPDPCoverImage(product, 'medium')"
-            :regular-price="
-              $n(productGetters.getPrice(product).regular, 'currency')
-            "
-            :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
-            :wishlistIcon="false"
-            :imageWidth="295"
-            :imageHeight="295"
-            class="pdp-product-card"
-          >
-            <template #title>
-              <SfLink
-                class="sf-product-card__link"
-                :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
-              >
-                  <h3 class="sf-product-card__title">
-                  {{ productGetters.getName(product) }}
-                </h3>
-              </SfLink>
+                <template #special v-if="productGetters.getPrice(product).special">
+                  <ins class="sf-price__special">{{ $n(productGetters.getPrice(product).special, 'currency') }}</ins>
+                </template>
+                <template #old><span/></template>
+                <template #regular v-if="productGetters.getPrice(product).regular > 0">
+                  <del class="sf-price__old">{{ $n(productGetters.getPrice(product).regular, 'currency') }}</del>
+                </template>
+              </SfPrice>
             </template>
           </SfProductCard>
         </SfCarouselItem>
@@ -98,7 +55,8 @@ import {
   SfProductCard,
   SfSection,
   SfLoader,
-  SfLink
+  SfLink,
+  SfPrice
 } from '@storefront-ui/vue';
 import { productGetters } from '@vue-storefront/shopify';
 
@@ -113,7 +71,8 @@ export default {
     SfProductCard,
     SfSection,
     SfLoader,
-    SfLink
+    SfLink,
+    SfPrice
   },
   props: {
     title: String,

@@ -8,8 +8,14 @@ import {
 import { Cart, CartItem, Coupon, Product } from '../types';
 
 const getBasketItemByProduct = ({ currentCart, product }) => {
-  if (product.variants) {
-    let variantId = product.variants[0].id;
+  if (product) {
+    let variantId;
+    if (product && product.variantBySelectedOptions && product.variantBySelectedOptions !== null) {
+      variantId = product.variantBySelectedOptions.id;
+    }
+    if (product.variants) {
+      variantId = product.variants[0].id;
+    }
     if (product.barcodes) {
       // handle & convert plain product Id from BCapp to base64
       const variationIDPlain = 'gid://shopify/ProductVariant/' + variantId;
