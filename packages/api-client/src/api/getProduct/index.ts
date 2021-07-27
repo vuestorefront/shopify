@@ -10,6 +10,10 @@ export default async function getProduct(
   customQuery?: CustomQuery
 ) {
   if (params.slug) {
+    let chosenVariant = [];
+    if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {
+      chosenVariant = Object.entries(params.selectedOptions).map(k => ({ name: k[0], value: k[1] }));
+    }
     const getProductByHandleQuery = context.client.graphQLClient.query(
       (root) => {
         root.add(
@@ -26,7 +30,26 @@ export default async function getProduct(
             productByHandle.add('availableForSale');
             productByHandle.add('totalInventory');
             productByHandle.add('vendor');
-
+            productByHandle.add('variantBySelectedOptions', { args: { selectedOptions: chosenVariant } }, (selectedVariant) => {
+              selectedVariant.add('id');
+              selectedVariant.add('title');
+              selectedVariant.add('sku');
+              selectedVariant.add('availableForSale');
+              selectedVariant.add('quantityAvailable');
+              selectedVariant.addField('image', { args: {} }, (image) => {
+                image.add('altText');
+                image.add('originalSrc');
+                image.add('transformedSrc');
+              });
+              selectedVariant.addField('priceV2', (price) => {
+                price.add('amount');
+                price.add('currencyCode');
+              });
+              selectedVariant.addField('compareAtPriceV2', (price) => {
+                price.add('amount');
+                price.add('currencyCode');
+              });
+            });
             productByHandle.add('options', {}, (options) => {
               options.add('name');
               options.add('values');
@@ -52,7 +75,7 @@ export default async function getProduct(
 
             productByHandle.addConnection(
               'variants',
-              { args: { first: 20 } },
+              { args: { first: 1 } },
               (variants) => {
                 variants.add('title');
                 variants.add('price');

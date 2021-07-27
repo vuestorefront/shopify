@@ -11,11 +11,17 @@
       <template #bar>
         <div></div>
       </template>
-      <template #circle-icon="{close}">
+      <template #circle-icon="{ close }">
         <div class="close-icon" @click="close">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 1L17 17" stroke="#171717" stroke-width="2"/>
-            <path d="M17 1L1 17" stroke="#171717" stroke-width="2"/>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M1 1L17 17" stroke="#171717" stroke-width="2" />
+            <path d="M17 1L1 17" stroke="#171717" stroke-width="2" />
           </svg>
         </div>
       </template>
@@ -28,16 +34,20 @@
             type="secondary"
             v-if="!isLoadervisible"
           >
-          <template #action>
-            <div class="button-wrap">
-              <SfButton class="sf-button_remove_item" @click="handleRemove(productToRemove)">Yes</SfButton>
-              <SfButton @click="visible = false">Cancel</SfButton>
-            </div>
-          </template>
-          <template #close>
-            <div />
-          </template>
-        </SfNotification>
+            <template #action>
+              <div class="button-wrap">
+                <SfButton
+                  class="sf-button_remove_item"
+                  @click="handleRemove(productToRemove)"
+                  >Yes</SfButton
+                >
+                <SfButton @click="visible = false">Cancel</SfButton>
+              </div>
+            </template>
+            <template #close>
+              <div />
+            </template>
+          </SfNotification>
         </div>
       </transition>
       <SfLoader v-if="isLoadervisible" :loading="isLoadervisible">
@@ -50,64 +60,65 @@
               <template v-for="product in products">
                 <SfCollectedProduct
                   data-cy="collected-product-cart-sidebar"
-                  v-if="(cartGetters.getItemPrice(product).special) && cartGetters.getItemPrice(product).special < cartGetters.getItemPrice(product).regular"
                   :key="cartGetters.getItemSku(product)"
                   :image="cartGetters.getItemImage(product)"
-                  :regular-price="
-                    $n(cartGetters.getItemPrice(product).regular, 'currency')
-                  "
-                  :special-price="
-                    cartGetters.getItemPrice(product).special &&
-                    $n(cartGetters.getItemPrice(product).special, 'currency')
-                  "
                   :stock="99999"
-                  :qty="cartGetters.getItemQty(product) > 0 ? cartGetters.getItemQty(product) : 1"
+                  :qty="
+                    cartGetters.getItemQty(product) > 0
+                      ? cartGetters.getItemQty(product)
+                      : 1
+                  "
                   @input="updateItemQty({ product, quantity: $event })"
                   @click:remove="ConfirmRemove({ product })"
                   class="collected-product"
                 >
                   <template #title>
-                    <div class="sf-collected-product__title">{{ cartGetters.getItemName(product) }}</div>
+                    <div class="sf-collected-product__title">
+                      {{ cartGetters.getItemName(product) }}
+                    </div>
                   </template>
-                  <template #configuration>&nbsp;</template>
-                </SfCollectedProduct>
-                <SfCollectedProduct
-                  data-cy="collected-product-cart-sidebar"
-                  v-else-if="(cartGetters.getItemPrice(product).special) && cartGetters.getItemPrice(product).special > cartGetters.getItemPrice(product).regular"
-                  :key="cartGetters.getItemSku(product)"
-                  :image="cartGetters.getItemImage(product)"
-                  :regular-price="
-                    $n(cartGetters.getItemPrice(product).special, 'currency')
-                  "
-                  :stock="99999"
-                  :qty="cartGetters.getItemQty(product) > 0 ? cartGetters.getItemQty(product) : 1"
-                  @input="updateItemQty({ product, quantity: $event })"
-                  @click:remove="ConfirmRemove({ product })"
-                  class="collected-product"
-                >
-                  <template #title>
-                    <div class="sf-collected-product__title">{{ cartGetters.getItemName(product) }}</div>
+                  <template #configuration>
+                    <div class="collected-product__properties">
+                      <SfProperty
+                        v-for="(
+                          attribute, key
+                        ) in cartGetters.getItemAttributes(product, [
+                          'color',
+                          'size',
+                        ])"
+                        :key="key"
+                        :name="key"
+                        :value="attribute"
+                      />
+                    </div>
                   </template>
-                  <template #configuration>&nbsp;</template>
-                </SfCollectedProduct>
-                <SfCollectedProduct
-                  data-cy="collected-product-cart-sidebar"
-                  v-else
-                  :key="cartGetters.getItemSku(product)"
-                  :image="cartGetters.getItemImage(product)"
-                  :regular-price="
-                    $n(cartGetters.getItemPrice(product).regular, 'currency')
-                  "
-                  :stock="99999"
-                  :qty="cartGetters.getItemQty(product) > 0 ? cartGetters.getItemQty(product) : 1"
-                  @input="updateItemQty({ product, quantity: $event })"
-                  @click:remove="ConfirmRemove({ product })"
-                  class="collected-product"
-                >
-                  <template #title>
-                    <div class="sf-collected-product__title">{{ cartGetters.getItemName(product) }}</div>
+                  <template #price>
+                    <SfPrice class="sf-product-card__price">
+                      <template
+                        #special
+                        v-if="cartGetters.getItemPrice(product).special"
+                      >
+                        <ins class="sf-price__special">{{
+                          $n(
+                            cartGetters.getItemPrice(product).special,
+                            "currency"
+                          )
+                        }}</ins>
+                      </template>
+                      <template #old><span /></template>
+                      <template
+                        #regular
+                        v-if="cartGetters.getItemPrice(product).regular > 0"
+                      >
+                        <del class="sf-price__old">{{
+                          $n(
+                            cartGetters.getItemPrice(product).regular,
+                            "currency"
+                          )
+                        }}</del>
+                      </template>
+                    </SfPrice>
                   </template>
-                 <template #configuration>&nbsp;</template>
                 </SfCollectedProduct>
               </template>
             </transition-group>
@@ -135,16 +146,23 @@
           <div v-if="totalItems">
             <SfProperty
               name="Estimated Total"
-              class="sf-property--full-width sf-property--large my-cart__total-price"
+              class="
+                sf-property--full-width sf-property--large
+                my-cart__total-price
+              "
             >
               <template #value>
                 <SfPrice :regular="$n(totals.subtotal, 'currency')" />
               </template>
             </SfProperty>
-            <SfHeading title="" description="Free Shipping On Orders with Subtotals over $100" customClass="sf-heading--left">
-              <template #description="{description}">
+            <SfHeading
+              title=""
+              description="Free Shipping On Orders with Subtotals over $100"
+              customClass="sf-heading--left"
+            >
+              <template #description="{ description }">
                 <div class="cart-free-shipping-text">
-                  {{description}}
+                  {{ description }}
                 </div>
               </template>
             </SfHeading>
@@ -153,7 +171,11 @@
               link="javascript:void(0);"
             >
               <SfButton
-                class="sf-button--full-width color-secondary sf-proceed_to_checkout"
+                class="
+                  sf-button--full-width
+                  color-secondary
+                  sf-proceed_to_checkout
+                "
                 @click="toggleCartSidebar"
               >
                 Go To Checkout
@@ -207,7 +229,7 @@ export default {
     SfLoader
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  data () {
+  data() {
     return {
       visible: false,
       isLoadervisible: false,
@@ -243,7 +265,7 @@ export default {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async handleRemove(productObj) {
       this.isLoadervisible = true;
-      await this.removeItem(productObj).then(()=>{
+      await this.removeItem(productObj).then(() => {
         this.isLoadervisible = false;
         this.visible = false;
         this.sendNotification({
@@ -267,7 +289,7 @@ export default {
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
     const { cart, removeItem, updateItemQty, load: loadCart } = useCart();
     const { isAuthenticated } = useUser();
-    const { send: sendNotification, notifications} = useUiNotification();
+    const { send: sendNotification, notifications } = useUiNotification();
     const products = computed(() => cartGetters.getItems(cart.value));
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
@@ -528,7 +550,10 @@ export default {
     }
     .sf-collected-product__actions {
       display: none;
-      justify-content: var(--collected-product-actions-justify-content, flex-end);
+      justify-content: var(
+        --collected-product-actions-justify-content,
+        flex-end
+      );
       align-items: var(--collected-product-actions-align-items, flex-start);
       flex: 2;
       margin-bottom: 11px;

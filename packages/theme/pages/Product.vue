@@ -95,118 +95,126 @@
             />
           </div>
         </div>
-      <div>
-        <p class="product__description desktop-only" v-if="productDescription">
-          {{ productDescription }}
-        </p>
-        <SfButton
-          data-cy="product-btn_size-guide"
-          class="sf-button--text desktop-only product__guide"
-        >
-          {{ $t("Size guide") }}
-        </SfButton>
-        <SfSelect
-          data-cy="product-select_size"
-          v-if="options.Size"
-          @input="(size) => updateFilter({ size })"
-          :value="configuration.size || options.Size[0].value"
-          label="Size"
-          class="sf-select--underlined product__select-size"
-          :required="true"
-        >
-          <SfSelectOption
-            v-for="size in options.Size"
-            :key="size.value"
-            :value="size.value"
+        <div>
+          <p
+            class="product__description desktop-only"
+            v-if="productDescription"
           >
-            {{ size.value }}
-          </SfSelectOption>
-        </SfSelect>
-        <div
-          v-if="options.Color && options.Color.length > 1"
-          class="product__colors desktop-only"
-        >
-          <p class="product__color-label">{{ $t("Color") }}:</p>
-          <SfColor
-            data-cy="product-color_update"
-            v-for="(color, i) in options.Color"
-            :key="i"
-            :color="color.value"
-            class="product__color"
-            @click="updateFilter({ color })"
-            :selected="
-              configuration.color
-                ? configuration.color.value === color.value
-                  ? true
-                  : false
-                : i === 0
-                ? true
-                : false
-            "
-          />
-        </div>
-        <SfAddToCart
-          data-cy="product-cart_add"
-          :stock="stock"
-          v-model="qty"
-          :canAddToCart="stock > 0"
-          class="product__add-to-cart"
-          v-if="productGetters.getStockStatus(product) === true"
-        >
-          <template #add-to-cart-btn>
-            <SfButton
-              class="sf-add-to-cart__button"
-              :disabled="loading"
-              @click="addingToCart({ product, quantity: parseInt(qty) })"
-            >
-              Add to Bag
-            </SfButton>
-          </template>
-        </SfAddToCart>
-        <LazyHydrate when-idle>
-          <SfTabs :open-tab="1" class="product__tabs">
-            <SfTab data-cy="product-tab_description" title="Description">
-              <div class="product__description" v-if="productDescriptionHtml">
-                <div v-html="productDescriptionHtml"></div>
-              </div>
-              <SfProperty
-                v-for="(property, i) in properties"
-                :key="i"
-                :name="property.name"
-                :value="property.value"
-                class="product__property"
+            {{ productDescription }}
+          </p>
+          <div v-if="options && Object.keys(options).length > 0">
+            <template v-for="(option, o) in options">
+              <SfSelect
+                v-if="o.toLowerCase() !== 'color'"
+                :key="`attrib-${o}`"
+                :data-cy="`product-select_${o.toLowerCase()}`"
+                :set="(atttLbl = o)"
+                @input="(o) => updateFilter({ [atttLbl]: o })"
+                :value="configuration[o] || options[o][0].value"
+                :label="$t(`${o}`)"
+                :class="`sf-select--underlined product__select-${o.toLowerCase()}`"
+                :required="true"
               >
-                <template v-if="property.name === 'Category'" #value>
-                  <SfButton class="product__property__button sf-button--text">
-                    {{ property.value }}
-                  </SfButton>
-                </template>
-              </SfProperty>
-            </SfTab>
-            <SfTab
-              title="Additional Information"
-              data-cy="product-tab_additional"
-              class="product__additional-info"
-            >
-              <div class="product__additional-info">
-                <p class="product__additional-info__title">{{ $t("Brand") }}</p>
-                <p>{{ brand }}</p>
-                <p class="product__additional-info__title">
-                  {{ $t("Instruction1") }}
-                </p>
-                <p class="product__additional-info__paragraph">
-                  {{ $t("Instruction2") }}
-                </p>
-                <p class="product__additional-info__paragraph">
-                  {{ $t("Instruction3") }}
-                </p>
-                <p>{{ careInstructions }}</p>
+                <SfSelectOption
+                  v-for="(attribs, a) in option"
+                  :key="`item-${a}`"
+                  :value="attribs.value"
+                >
+                  {{ attribs.value }}
+                </SfSelectOption>
+              </SfSelect>
+              <div
+                :key="`attrib-${o.toLowerCase()}`"
+                v-else
+                :class="`product__${o.toLowerCase()}s`"
+              >
+                <p class="product__color-label">{{ $t(`${o}`) }}:</p>
+                <SfColor
+                  data-cy="product-color_update"
+                  v-for="(attribs, a) in option"
+                  :key="`item-${a}`"
+                  :color="attribs.value"
+                  :class="`product__color ${attribs.value}`"
+                  @click="
+                    (atttLbl = o), updateFilter({ [atttLbl]: attribs.value })
+                  "
+                  :selected="
+                    configuration[o]
+                      ? configuration[o] === attribs.value
+                        ? true
+                        : false
+                      : a === 0
+                      ? true
+                      : false
+                  "
+                />
               </div>
-            </SfTab>
-          </SfTabs>
-        </LazyHydrate>
+            </template>
+          </div>
+          <SfAddToCart
+            data-cy="product-cart_add"
+            :stock="stock"
+            v-model="qty"
+            :canAddToCart="stock > 0"
+            class="product__add-to-cart"
+            v-if="productGetters.getStockStatus(product) === true"
+          >
+            <template #add-to-cart-btn>
+              <SfButton
+                class="sf-add-to-cart__button"
+                :disabled="loading"
+                @click="addingToCart({ product, quantity: parseInt(qty) })"
+              >
+                Add to Bag
+              </SfButton>
+            </template>
+          </SfAddToCart>
+          <LazyHydrate when-idle>
+            <SfTabs :open-tab="1" class="product__tabs">
+              <SfTab data-cy="product-tab_description" title="Description">
+                <div class="product__description" v-if="productDescriptionHtml">
+                  <div v-html="productDescriptionHtml"></div>
+                </div>
+                <SfProperty
+                  v-for="(property, i) in properties"
+                  :key="i"
+                  :name="property.name"
+                  :value="property.value"
+                  class="product__property"
+                >
+                  <template v-if="property.name === 'Category'" #value>
+                    <SfButton class="product__property__button sf-button--text">
+                      {{ property.value }}
+                    </SfButton>
+                  </template>
+                </SfProperty>
+              </SfTab>
+              <SfTab
+                title="Additional Information"
+                data-cy="product-tab_additional"
+                class="product__additional-info"
+              >
+                <div class="product__additional-info">
+                  <p class="product__additional-info__title">
+                    {{ $t("Brand") }}
+                  </p>
+                  <p>{{ brand }}</p>
+                  <p class="product__additional-info__title">
+                    {{ $t("Instruction1") }}
+                  </p>
+                  <p class="product__additional-info__paragraph">
+                    {{ $t("Instruction2") }}
+                  </p>
+                  <p class="product__additional-info__paragraph">
+                    {{ $t("Instruction3") }}
+                  </p>
+                  <p>{{ careInstructions }}</p>
+                </div>
+              </SfTab>
+            </SfTabs>
+          </LazyHydrate>
+        </div>
       </div>
-    </div>
     </div>
     <LazyHydrate when-visible>
       <RelatedProducts
@@ -315,6 +323,7 @@ export default {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
     const breadcrumbs = ref([]);
+    const atttLbl = '';
     const qty = ref(1);
     const { slug } = context.root.$route.params;
     const {
@@ -409,11 +418,22 @@ export default {
     });
 
     onSSR(async () => {
-      await search({ slug });
+      await search({ slug, selectedOptions: configuration.value });
       await searchRelatedProducts({ productId: id.value, related: true });
     });
 
     const updateFilter = (filter) => {
+      if (options.value) {
+        Object.keys(options.value).forEach((attr) => {
+          if (attr in filter) {
+            return;
+          }
+          filter[attr] =
+            Object.keys(configuration.value).length > 0
+              ? configuration.value[attr]
+              : options.value[attr][0].value;
+        });
+      }
       context.root.$router.push({
         path: context.root.$route.path,
         query: {
@@ -447,7 +467,8 @@ export default {
       productloading,
       productGallery,
       productGetters,
-      setBreadcrumb
+      setBreadcrumb,
+      atttLbl
     };
   },
   components: {

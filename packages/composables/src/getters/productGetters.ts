@@ -6,13 +6,10 @@ import {
   ProductGetters
 } from '@vue-storefront/core';
 import { ProductVariant } from '@vue-storefront/shopify-api/src/types';
-import { enhanceProduct, enhanceProductVariation } from '../helpers/internals';
-import { formatAttributeList, getVariantByAttributes, capitalize } from './_utils';
+import { enhanceProduct } from '../helpers/internals';
+import { formatAttributeList, capitalize } from './_utils';
 
 type ProductVariantFilters = any
-
-// TODO: Add interfaces for some of the methods in core
-// Product
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductName = (product: ProductVariant): string => product?.name || 'Product\'s name';
@@ -60,9 +57,14 @@ export const getProductGallery = (product: ProductVariant): AgnosticMediaGallery
     });
 
 export const getActiveVariantImage = (product) => {
-  for (let i = 1; i < (product.images).length; i++) {
-    if (product.images[i].originalSrc === product._coverImage.originalSrc) {
-      return i;
+  if (product) {
+    let productImg = product._coverImage.originalSrc;
+    if (product.variantBySelectedOptions && product.variantBySelectedOptions !== null)
+      productImg = product.variantBySelectedOptions.image.originalSrc;
+    for (let i = 1; i < (product.images).length; i++) {
+      if (product.images[i].originalSrc === productImg) {
+        return i;
+      }
     }
   }
 };
@@ -72,21 +74,8 @@ export const getProductFiltered = (products, filters: ProductVariantFilters | an
   if (!products) {
     return [];
   }
-  // convert entire product response to productvariant interface
-  if (filters.attributes && Object.keys(filters.attributes).length > 0) {
-    let selectedVariant = getVariantByAttributes(products, filters.attributes);
-    if (!selectedVariant) {
-      selectedVariant = products.variants[0];
-    }
-    const selectedVariantArr = Array.isArray(selectedVariant) ? selectedVariant : [selectedVariant];
-    return enhanceProductVariation(selectedVariantArr);
-  }
-  if (filters.master) {
-    products = Array.isArray(products) ? products : [products];
-  }
-
+  products = Array.isArray(products) ? products : [products];
   return enhanceProduct(products);
-
 };
 export const getFilteredSingle = (product) => {
   if (!product) {

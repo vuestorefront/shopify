@@ -2,13 +2,13 @@
 const enhanceProduct = (productResponse: Array<any>) => {
   const enhancedProductResponse = productResponse.map((product) => ({
     ...product,
-    name: product.title,
+    name: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions.title : product.title,
     images: product?.images,
     price: {
-      original: product.variants[0].compareAtPrice,
-      current: product.variants[0].price
+      original: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions?.compareAtPriceV2?.amount : product.variants[0].compareAtPrice,
+      current: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions?.priceV2?.amount : product.variants[0].price
     },
-    available: product.variants[0].available,
+    available: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions?.quantityAvailable : product.variants[0].available,
     productType: product.productType,
     options: product.options,
     _id: product.id,
