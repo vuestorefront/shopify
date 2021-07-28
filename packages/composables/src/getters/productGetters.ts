@@ -221,13 +221,20 @@ export const getPDPProductCoverImage = (product, size = 'normal') => {
 };
 
 export const getProductStockStatus = (product: ProductVariant): boolean => {
-  if (product && product.totalInventory > 0) {
+  if (product && product.variantBySelectedOptions && product.variantBySelectedOptions !== null) {
+    if (product.variantBySelectedOptions.quantityAvailable > 0) {
+      return true;
+    }
+    return false;
+  } else if (product && product.totalInventory > 0) {
     return true;
   }
   return false;
 };
 export const getProductStock = (product: ProductVariant): number => {
-  if (product && product.totalInventory) {
+  if (product && product.variantBySelectedOptions && product.variantBySelectedOptions !== null) {
+    return product.variantBySelectedOptions.quantityAvailable;
+  } else if (product && product.totalInventory) {
     return product.totalInventory;
   }
   return 0;

@@ -418,7 +418,11 @@ export default {
     });
 
     onSSR(async () => {
-      await search({ slug, selectedOptions: configuration.value });
+      await search({ slug, selectedOptions: configuration.value }).then(() => {
+        if (productTitle.value === 'Product\'s name') {
+          return context.root.error({ statusCode: 404, message: 'This product could not be found' });
+        }
+      });
       await searchRelatedProducts({ productId: id.value, related: true });
     });
 

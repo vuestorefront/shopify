@@ -1,6 +1,6 @@
 {
   "name": "@vue-storefront/shopify-theme",
-  "version": "0.1.2-rc.1",
+  "version": "1.0",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@storefront-ui/vue": "^0.10.3",
-    "@vue-storefront/shopify": "0.1.2-rc.1",
+    "@vue-storefront/shopify": "1.0",
     "@vue-storefront/middleware": "^2.3.3",
     "@vue-storefront/nuxt": "^2.3.3",
     "@vue-storefront/nuxt-theme": "^2.3.3",
