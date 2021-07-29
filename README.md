@@ -1,6 +1,6 @@
 <img src="https://blog.vuestorefront.io/wp-content/uploads/2020/01/1QU9F6hQlFyHsJIbsdmt6FA.png" height="100px" />
 
-## Vue Storefront 2(previously known as Next) integration with Shopify (beta)
+## Vue Storefront 2(previously known as Next) integration with Shopify
 
 This project is a Shopify integration for [Vue Storefront 2](https://github.com/vuestorefront/vue-storefront/).
 This integration is being developed and maintained by superheroes from [Aureate Labs](https://aureatelabs.com/) ❤️
