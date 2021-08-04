@@ -60,7 +60,7 @@ You can help us to make this itegration bug-free by reporting your issues here: 
 ------
 ## Support
 
-If you have any questions about this integration we will be happy to answer them on  `shopify` channel on [our Discord](discord.vuestorefront.io).
+If you have any questions about this integration we will be happy to answer them on  `shopify` channel on [Discord](http://discord.vuestorefront.io).
 
 ## Contributors ✨ <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-green.svg?style=flat-square)](#contributors-)
