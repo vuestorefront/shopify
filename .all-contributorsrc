@@ -9,6 +9,17 @@
   "imageSize": 100,
   "commit": true,
   "commitConvention": "angular",
-  "contributors": [],
+  "contributors": [
+    {
+      "login": "aureate-labs-team",
+      "name": "aureate-labs-team",
+      "avatar_url": "https://avatars.githubusercontent.com/u/65275444?v=4",
+      "profile": "https://aureatelabs.com/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    }
+  ],
   "contributorsPerLine": 6
 }
