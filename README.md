@@ -58,7 +58,7 @@ If you have any questions about this integration we will be happy to answer them
 ## Contributors ✨
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -72,6 +72,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://aureatelabs.com/"><img src="https://avatars.githubusercontent.com/u/65275444?v=4?s=100" width="100px;" alt=""/><br /><sub><b>aureate-labs-team</b></sub></a><br /><a href="https://github.com/vuestorefront/shopify/commits?author=aureate-labs-team" title="Code">💻</a> <a href="https://github.com/vuestorefront/shopify/commits?author=aureate-labs-team" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/oscarmanderj"><img src="https://avatars.githubusercontent.com/u/24467529?v=4?s=100" width="100px;" alt=""/><br /><sub><b>oscarmanderj</b></sub></a><br /><a href="https://github.com/vuestorefront/shopify/commits?author=oscarmanderj" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/andrzejewsky"><img src="https://avatars.githubusercontent.com/u/7943292?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Patryk Andrzejewski</b></sub></a><br /><a href="https://github.com/vuestorefront/shopify/commits?author=andrzejewsky" title="Code">💻</a></td>
   </tr>
 </table>
 
