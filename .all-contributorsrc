@@ -65,6 +65,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "tom-aniol",
+      "name": "Tom Anioł",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33483514?v=4",
+      "profile": "https://github.com/tom-aniol",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 6

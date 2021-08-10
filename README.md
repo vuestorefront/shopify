@@ -58,7 +58,7 @@ If you have any questions about this integration we will be happy to answer them
 ## Contributors ✨
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -76,6 +76,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://rakowski.dev/"><img src="https://avatars.githubusercontent.com/u/15185752?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Filip Rakowski</b></sub></a><br /><a href="https://github.com/vuestorefront/shopify/commits?author=filrak" title="Code">💻</a></td>
     <td align="center"><a href="https://heitor.co/"><img src="https://avatars.githubusercontent.com/u/1626923?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Heitor Ramon Ribeiro</b></sub></a><br /><a href="https://github.com/vuestorefront/shopify/commits?author=bloodf" title="Code">💻</a> <a href="#maintenance-bloodf" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://hoshinotsuyoshi.com/"><img src="https://avatars.githubusercontent.com/u/1394049?v=4?s=100" width="100px;" alt=""/><br /><sub><b>hoshino tsuyoshi</b></sub></a><br /><a href="https://github.com/vuestorefront/shopify/commits?author=hoshinotsuyoshi" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/tom-aniol"><img src="https://avatars.githubusercontent.com/u/33483514?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tom Anioł</b></sub></a><br /><a href="https://github.com/vuestorefront/shopify/commits?author=tom-aniol" title="Documentation">📖</a></td>
   </tr>
 </table>
 
