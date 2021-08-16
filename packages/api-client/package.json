@@ -10,7 +10,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": "jest",
-    "prepublish": "yarn build"
+    "prepublish": "yarn build",
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "@vue-storefront/core": "^2.3.3",
