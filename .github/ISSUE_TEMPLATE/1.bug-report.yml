@@ -58,11 +58,11 @@ body:
     validations:
       required: true
   - type: input
-      attributes:
-        label: What operating system (and version) are you using?
-        description: 'For example: macOS, Windows'
-      validations:
-        required: true
+    attributes:
+      label: What operating system (and version) are you using?
+      description: 'For example: macOS, Windows'
+    validations:
+      required: true
   - type: textarea
     id: logs
     attributes:
