@@ -1,0 +1,80 @@
+{
+  "projectName": "shopify",
+  "projectOwner": "vuestorefront",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 80,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "aureate-labs-team",
+      "name": "aureate-labs-team",
+      "avatar_url": "https://avatars.githubusercontent.com/u/65275444?v=4",
+      "profile": "https://aureatelabs.com/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "oscarmanderj",
+      "name": "oscarmanderj",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24467529?v=4",
+      "profile": "https://github.com/oscarmanderj",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "andrzejewsky",
+      "name": "Patryk Andrzejewski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7943292?v=4",
+      "profile": "https://github.com/andrzejewsky",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "filrak",
+      "name": "Filip Rakowski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15185752?v=4",
+      "profile": "https://rakowski.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bloodf",
+      "name": "Heitor Ramon Ribeiro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1626923?v=4",
+      "profile": "https://heitor.co/",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "hoshinotsuyoshi",
+      "name": "hoshino tsuyoshi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1394049?v=4",
+      "profile": "https://hoshinotsuyoshi.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tom-aniol",
+      "name": "Tom Anioł",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33483514?v=4",
+      "profile": "https://github.com/tom-aniol",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 5
+}
