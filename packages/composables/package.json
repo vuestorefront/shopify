@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@vue-storefront/shopify-api": "1.0.0",
-    "@vue-storefront/core": "^2.3.3",
+    "@vue-storefront/core": "~2.3.3",
     "@types/js-cookie": "^2.2.6"
   },
   "peerDependencies": {
