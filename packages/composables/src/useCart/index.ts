@@ -51,7 +51,7 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
     const appKey = context.$shopify.config.app.$config.appKey;
     return await context.$shopify.api.addToCart({ currentCart, product, quantity, customQuery }).then((checkout) => {
       // store cart id
-      context.$shopify.config.app.$cookies.set(appKey + '_cart_id', currentCart.id);
+      context.$shopify.config.app.$cookies.set(appKey + '_cart_id', currentCart.id, {maxAge: 60 * 60 * 24 * 365});
       return JSON.parse(JSON.stringify(checkout));
     });
   },
