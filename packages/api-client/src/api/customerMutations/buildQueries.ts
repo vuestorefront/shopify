@@ -87,6 +87,7 @@ const addressesQuery: (pages: number, token: string, context) => any = (pages, t
         address.add('lastName');
         address.add('name');
         address.add('phone');
+        address.add('country');
         address.add('province');
         address.add('provinceCode');
         address.add('zip');

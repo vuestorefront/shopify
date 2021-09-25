@@ -3590,7 +3590,7 @@
     "@typescript-eslint/types" "4.29.1"
     eslint-visitor-keys "^2.0.0"
 
-"@vue-storefront/core@^2.3.3":
+"@vue-storefront/core@~2.3.3":
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/@vue-storefront/core/-/core-2.3.4.tgz#e59f92cb1cc0aab9c5cb92ebb09db8cdee9d7b3e"
   integrity sha512-68XDnVnDsVrfP4J4VnJZbeawa/Hj7zNgysQDW8X21ouILmhfgmUb5pJ0uYqaVVIiFNQdzMeEjK4BN9zAPaSGNQ==
