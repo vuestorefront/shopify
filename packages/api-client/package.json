@@ -14,7 +14,7 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
-    "@vue-storefront/core": "~2.3.3",
+    "@vue-storefront/core": "~2.4.2",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
     "shopify-buy": "^2.11.0",
