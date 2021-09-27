@@ -27,7 +27,7 @@ const getBasketItemByProduct = ({ currentCart, product }) => {
   return false;
 };
 
-const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
+const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, { customQuery }) => {
     // check if cart is already initiated
@@ -81,14 +81,19 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applyCoupon: async (context: Context, { currentCart, couponCode, customQuery }) => {
-    console.log('Mocked: applyCoupon');
-    return {updatedCart: {}, updatedCoupon: {}};
+    console.log('Mocked: useCart.applyCoupon');
+    return {
+      updatedCart: {},
+      updatedCoupon: {}
+    };
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeCoupon: async (context: Context, { currentCart, coupon, customQuery }) => {
-    console.log('Mocked: removeCoupon');
-    return {updatedCart: {}};
+  removeCoupon: async (context: Context, { currentCart, couponCode, customQuery }) => {
+    console.log('Mocked: useCart.removeCoupon');
+    return {
+      updatedCart: {}
+    };
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -97,4 +102,4 @@ const params: UseCartFactoryParams<Cart, CartItem, Product, Coupon> = {
   }
 };
 
-export default useCartFactory<Cart, CartItem, Product, Coupon>(params);
+export default useCartFactory<Cart, CartItem, Product>(params);
