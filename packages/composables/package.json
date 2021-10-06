@@ -1,6 +1,6 @@
 {
   "name": "@vue-storefront/shopify",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "sideEffects": false,
   "main": "lib/index.cjs.js",
   "module": "lib/index.es.js",
@@ -13,7 +13,7 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
-    "@vue-storefront/shopify-api": "1.0.1",
+    "@vue-storefront/shopify-api": "1.0.2",
     "@vue-storefront/core": "~2.4.2",
     "@types/js-cookie": "^2.2.6"
   },
