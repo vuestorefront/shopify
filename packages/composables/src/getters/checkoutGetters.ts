@@ -1,4 +1,3 @@
-import { CheckoutGetters} from '@vue-storefront/core';
 import { ShippingMethod } from '@vue-storefront/shopify-api/src/types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -16,7 +15,7 @@ export const getShippingMethodPrice = (shippingMethod: ShippingMethod): number =
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const getFormattedPrice = (price: number) => String(price);
 
-const checkoutGetters: CheckoutGetters<ShippingMethod> = {
+const checkoutGetters = {
   getShippingMethodId,
   getShippingMethodName,
   getShippingMethodDescription,
