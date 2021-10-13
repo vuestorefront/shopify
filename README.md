@@ -50,7 +50,7 @@ You can help us to make this itegration bug-free by reporting your issues here: 
 ## Resources
 
 - [Vue Storefront Documentation](https://docs.vuestorefront.io/v2/)
-- [Shopify integration Documentation](https://docs.vuestorefront.io/v2/shopify)
+- [Shopify integration Documentation](https://docs.vuestorefront.io/shopify)
 - [Community Chat](https://discord.vuestorefront.io)
 ------
 ## Support
