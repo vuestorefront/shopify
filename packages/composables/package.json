@@ -14,11 +14,11 @@
   },
   "dependencies": {
     "@vue-storefront/shopify-api": "1.0.2",
-    "@vue-storefront/core": "~2.4.2",
+    "@vue-storefront/core": "~2.4.3",
     "@types/js-cookie": "^2.2.6"
   },
   "peerDependencies": {
-    "@vue/composition-api": "1.0.0-beta.21"
+ "@vue/composition-api": "1.0.0-beta.21"
   },
   "files": [
     "lib/**/*",
