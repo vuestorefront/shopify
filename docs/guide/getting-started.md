@@ -11,25 +11,11 @@ If you haven't yet generated your project and just to play with Vue Storefront i
 
 First, you need to initiate the fresh project copy from [Vue Storefront CLI](https://docs.vuestorefront.io/v2/general/installation.html).
 
+Create a `.env` inline with `middleware.config.js` file and fill the following required variables
 
-Then set up your credentials in `middleware.config.js`. Replace ```SHOPIFY STORE DOMAIN``` and ```SHOPIFY STORE ACCESS TOKEN``` with yours
+Replace ```SHOPIFY STORE DOMAIN``` and ```SHOPIFY STORE ACCESS TOKEN``` with yours
 
-```js
-// middleware.config.js
-module.exports = {
-  integrations: {
-    shopify: {
-      location: '@vue-storefront/shopify-api/server',
-      configuration: {
-        api: {
-          domain: '<SHOPIFY STORE DOMAIN>',
-          storefrontAccessToken: '<SHOPIFY STORE ACCESS TOKEN>'
-        },
-        currency: 'USD',
-        country: 'US'
-      }
-    }
-  }
-};
-
+```bash
+SHOPIFY_STOREFRONT_TOKEN=<SHOPIFY_ACCESS_TOKEN>
+SHOPIFY_DOMAIN=<SHOPIFY_DOMAIN> # example: vsf-next-pwa.myshopify.com
 ```
