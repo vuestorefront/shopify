@@ -131,13 +131,15 @@
       "files": "*.ts",
       "rules": {
         "no-undef": "off",
-        "no-unused-vars": "off"
+        "no-unused-vars": "off",
+        "no-use-before-define": "off"
       }
     },
     {
       "files": ["*.ts", "*.tsx"],
       "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": ["error"]
+        "@typescript-eslint/explicit-module-boundary-types": ["off"],
+        "@typescript-eslint/no-unused-vars": "off"
       }
     }
   ]
