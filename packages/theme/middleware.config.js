@@ -1,7 +1,3 @@
-console.log();
-
-console.log(this);
-
 module.exports = {
   integrations: {
     shopify: {
