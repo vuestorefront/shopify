@@ -208,7 +208,7 @@ import {
   SfNotification,
   SfLoader
 } from '@storefront-ui/vue';
-import { computed } from '@vue/composition-api';
+import { computed, onBeforeMount } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
 import { useUiState, useUiNotification } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
@@ -285,7 +285,7 @@ export default {
     }
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup() {
+  setup(props, {root}) {
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
     const { cart, removeItem, updateItemQty, load: loadCart } = useCart();
     const { isAuthenticated } = useUser();
@@ -297,6 +297,15 @@ export default {
 
     onSSR(async () => {
       await loadCart();
+    });
+    onBeforeMount(async () => {
+      if (!cart.value) {
+        await loadCart().then(() => {
+          if (cart && cart.value.orderStatusUrl !== null) {
+            root.$cookies.remove(`${root.$config.appKey}_cart_id`);
+          }
+        });
+      }
     });
 
     return {
