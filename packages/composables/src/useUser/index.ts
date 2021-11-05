@@ -37,7 +37,7 @@ const params: UseUserFactoryParams<User, any, any> = {
     const appKey = context.$shopify.config.app.$config.appKey;
     const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
     await context.$shopify.api.editProfile({
-      token: token,
+      token,
       profile: { email: updatedUserData.email,
         firstName: updatedUserData.firstName,
         lastName: updatedUserData.lastName
@@ -48,9 +48,9 @@ const params: UseUserFactoryParams<User, any, any> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   register: async (context: Context, { email, userPassword, firstName, lastName }) => {
     const result: any = await context.$shopify.api.signUp({
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
+      email,
+      firstName,
+      lastName,
       password: userPassword
     });
     const response: User = {

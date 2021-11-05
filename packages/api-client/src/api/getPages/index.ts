@@ -18,7 +18,7 @@ export default async function getPages(context, params, customQuery?: CustomQuer
       });
     });
     // Call the send method with the custom query
-    return context.client.graphQLClient.send(pageByHandleQuery).then(({ model, content }) => {
+    return await context.client.graphQLClient.send(pageByHandleQuery).then(({ model, content }) => {
       return model.pageByHandle;
     });
   } else {
@@ -34,7 +34,7 @@ export default async function getPages(context, params, customQuery?: CustomQuer
       });
     });
     // Call the send method with the custom query
-    return context.client.graphQLClient.send(pagesQuery).then(({ model, content }) => {
+    return await context.client.graphQLClient.send(pagesQuery).then(({ model, content }) => {
       if (model) {
         return model;
       }

@@ -7,8 +7,7 @@
     "build:analyze": "nuxt build -a -m",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "test": "jest",
-    "precommit": "lint-staged"
+    "test": "jest"
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.3.5",
@@ -32,6 +31,7 @@
     "@vue/test-utils": "^1.0.0-beta.27",
     "babel-jest": "^24.1.0",
     "ejs": "^3.0.2",
+    "eslint-plugin-nuxt": "^3.0.0",
     "jest": "^24.1.0",
     "lint-staged": "^11.1.2",
     "vue-jest": "^4.0.0-0"

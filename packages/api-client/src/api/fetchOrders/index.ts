@@ -73,7 +73,7 @@ export default async function fetchOrders(context, params, customQuery?: CustomQ
       );
     }
   );
-  return context.client.graphQLClient
+  return await context.client.graphQLClient
     .send(getCustomerOrders)
     .then(({ model, product }) => {
       if (model) {

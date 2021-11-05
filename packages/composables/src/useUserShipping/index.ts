@@ -73,7 +73,7 @@ const params: UseUserShippingFactoryParams<any, any> = {
       addresses.push(newAddress);
     }
 
-    return Promise.resolve(shipping);
+    return await Promise.resolve(shipping);
   },
 
   deleteAddress: async (context: Context, params?) => {
@@ -81,7 +81,7 @@ const params: UseUserShippingFactoryParams<any, any> = {
 
     const indexToRemove = addresses.findIndex(address => address.id === params.address.id);
     if (indexToRemove < 0) {
-      return Promise.reject('This address does not exist');
+      return await Promise.reject(Error('This address does not exist'));
     }
 
     addresses.splice(indexToRemove, 1);
@@ -93,7 +93,7 @@ const params: UseUserShippingFactoryParams<any, any> = {
 
     const indexToUpdate = addresses.findIndex(address => address.id === params.address.id);
     if (indexToUpdate < 0) {
-      return Promise.reject('This address does not exist');
+      return await Promise.reject(Error('This address does not exist'));
     }
 
     const isNewDefault = params.address.isDefault && addresses[0].id !== params.address.id;
@@ -113,7 +113,7 @@ const params: UseUserShippingFactoryParams<any, any> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, params?) => {
     console.log('Mocked: load');
-    return Promise.resolve(shipping);
+    return await Promise.resolve(shipping);
   },
 
   setDefaultAddress: async (context: Context, params?) => {
@@ -123,14 +123,14 @@ const params: UseUserShippingFactoryParams<any, any> = {
     if (!isDefault(params.address.id)) {
       const indexToUpdate = addresses.findIndex(address => address.id === params.address.id);
       if (indexToUpdate < 0) {
-        return Promise.reject('This address does not exist');
+        return await Promise.reject(Error('This address does not exist'));
       }
       disableOldDefault();
       addresses[indexToUpdate].isDefault = true;
       addresses.sort(sortDefaultAtTop);
     }
 
-    return Promise.resolve(shipping);
+    return await Promise.resolve(shipping);
   }
 };
 

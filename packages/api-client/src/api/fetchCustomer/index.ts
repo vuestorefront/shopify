@@ -23,7 +23,7 @@ export default async function fetchCustomer(context, params, customQuery?: Custo
       );
     });
   // send user data to authenticate, return token if valid
-  return context.client.graphQLClient
+  return await context.client.graphQLClient
     .send(getCustomeInfo)
     .then(({ model, product }) => {
       if (model) {

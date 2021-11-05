@@ -9,13 +9,13 @@ const params: UseReviewFactoryParams<any, any, any> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   searchReviews: async (context: Context, params) => {
     console.log('Mocked: searchReviews');
-    return {};
+    return await {};
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addReview: async (context: Context, params) => {
     console.log('Mocked: addReview');
-    return {};
+    return await {};
   }
 };
 

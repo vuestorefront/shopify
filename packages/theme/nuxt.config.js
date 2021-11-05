@@ -1,5 +1,6 @@
-require('isomorphic-fetch');
 import webpack from 'webpack';
+// eslint-disable-next-line nuxt/no-cjs-in-config
+require('isomorphic-fetch');
 
 export default {
   server: {
@@ -169,7 +170,7 @@ export default {
     ]
   },
   router: {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    
     scrollBehavior(_to, _from, savedPosition) {
       if (savedPosition) {
         return savedPosition;

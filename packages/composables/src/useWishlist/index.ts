@@ -13,25 +13,25 @@ const params: UseWishlistFactoryParams<Wishlist, WishlistProduct, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context) => {
     console.log('Mocked: loadWishlist');
-    return {};
+    return await {};
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addItem: async (context: Context, { currentWishlist, product }) => {
     console.log('Mocked: addToWishlist');
-    return {};
+    return await {};
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeItem: async (context: Context, { currentWishlist, product }) => {
     console.log('Mocked: removeFromWishlist');
-    return {};
+    return await {};
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clear: async (context: Context, { currentWishlist }) => {
     console.log('Mocked: clearWishlist');
-    return {};
+    return await {};
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

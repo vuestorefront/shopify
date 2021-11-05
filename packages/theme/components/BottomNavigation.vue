@@ -29,8 +29,8 @@
 
 <script type="module">
 import { SfBottomNavigation, SfIcon, SfCircleIcon } from '@storefront-ui/vue';
-import useUiState from '~/composables/useUiState';
 import { useUser } from '@vue-storefront/shopify';
+import useUiState from '~/composables/useUiState';
 
 export default {
   components: {
@@ -42,7 +42,7 @@ export default {
     const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } = useUiState();
     const { isAuthenticated } = useUser();
 
-    const handleAccountClick = async () => {
+    const handleAccountClick = () => {
       if (isAuthenticated.value) {
         return root.$router.push('/my-account');
       }

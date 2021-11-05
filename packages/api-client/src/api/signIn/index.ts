@@ -9,7 +9,7 @@ export default async function signIn(context, params, customQuery?: CustomQuery)
   const data = {
     input: {
       email: username,
-      password: password
+      password
     }
   };
   // send user data to authenticate, return token if valid

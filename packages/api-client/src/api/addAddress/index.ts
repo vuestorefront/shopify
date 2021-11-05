@@ -4,7 +4,7 @@ import { customerAddressAddMutation as mutation } from './../customerMutations/b
 export default async function addAddress(context, params) {
   const { token, address } = params;
   const data = {
-    address: address,
+    address,
     customerAccessToken: token
   };
   const addedAddressId = await context.client.graphQLClient.send(mutation(context), data).then(({ model }) => {

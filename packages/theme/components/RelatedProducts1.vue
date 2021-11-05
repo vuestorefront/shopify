@@ -2,19 +2,19 @@
   <SfSection :title-heading="title" class="section pdc-sec-title pdp-upsell-section">
     <SfLoader :class="{ loading }" :loading="loading">
       <SfCarousel
+        ref="bscarousel"
         data-cy="related-products-carousel"
         :settings="pdpUpsellSettings"
         class="carousel"
-        ref="bscarousel"
       >
-        <SfCarouselItem class="carousel__item" v-for="(product, i) in products" :key="i">
+        <SfCarouselItem v-for="(product, i) in products" :key="i" class="carousel__item">
           <SfProductCard
             :title="productGetters.getName(product)"
             :image="productGetters.getPDPCoverImage(product, 'medium')"
             :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
-            :wishlistIcon="false"
-            :imageWidth="295"
-            :imageHeight="295"
+            :wishlist-icon="false"
+            :image-width="295"
+            :image-height="295"
             class="pdp-product-card"
           >
             <template #title>
@@ -32,11 +32,11 @@
               <SfPrice
                 class="sf-product-card__price"
               >
-                <template #special v-if="productGetters.getPrice(product).special">
+                <template v-if="productGetters.getPrice(product).special" #special>
                   <ins class="sf-price__special">{{ $n(productGetters.getPrice(product).special, 'currency') }}</ins>
                 </template>
                 <template #old><span/></template>
-                <template #regular v-if="productGetters.getPrice(product).regular > 0">
+                <template v-if="productGetters.getPrice(product).regular > 0" #regular>
                   <del class="sf-price__old">{{ $n(productGetters.getPrice(product).regular, 'currency') }}</del>
                 </template>
               </SfPrice>
@@ -62,10 +62,6 @@ import { productGetters } from '@vue-storefront/shopify';
 
 export default {
   name: 'RelatedProducts',
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup() {
-    return { productGetters };
-  },
   components: {
     SfCarousel,
     SfProductCard,
@@ -78,6 +74,10 @@ export default {
     title: String,
     products: Array,
     loading: Boolean
+  },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  setup() {
+    return { productGetters };
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data () {

@@ -3,3 +3,4 @@
 packages/theme/_theme
 packages/theme/.nuxt
 **/tests/*
+packages/api-client/server

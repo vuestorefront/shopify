@@ -24,7 +24,7 @@ export default async function getBlogPosts(context, params, customQuery?: Custom
     });
   });
   // Call the send method with the custom query
-  context.client.graphQLClient.send(articlesQuery).then(({ model, articles }) => {
+  await context.client.graphQLClient.send(articlesQuery).then(({ model, articles }) => {
     if (model) {
       return model.articles;
     }

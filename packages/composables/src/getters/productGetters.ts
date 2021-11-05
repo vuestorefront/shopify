@@ -102,7 +102,7 @@ export const getProductAttributes = (products: ProductVariant, filterByAttribute
 
   /* const formatAttributes = (products): AgnosticAttribute[] =>{
     return formatAttributeList(products.options);
-  };*/
+  }; */
   const formatAttributes = (product: ProductVariant): AgnosticAttribute[] =>
     formatAttributeList(product.options).filter((attribute) => filterByAttributeName ? filterByAttributeName.includes(attribute.name) : attribute);
 
@@ -189,7 +189,7 @@ export const getProductCollections = (product, field = 'all') => {
   }
   if (product.collections && Object.keys(product.collections).length > 0) {
     const collections = [];
-    Object.values(product.collections).map((collection: Record<string, unknown>) => {
+    Object.values(product.collections).forEach((collection: Record<string, unknown>) => {
       if (field === 'all') {
         collections.push({
           id: collection.id,
@@ -297,10 +297,10 @@ const productGetters: ProductGetters<ProductVariant, ProductVariantFilters> = {
   getSaleStatus: getProductSaleStatus,
   getStockStatus: getProductStockStatus,
   getStock: getProductStock,
-  getFormattedPrice: getFormattedPrice,
+  getFormattedPrice,
   getTotalReviews: getProductTotalReviews,
   getAverageRating: getProductAverageRating,
-  getBreadcrumbs: getBreadcrumbs,
+  getBreadcrumbs,
   getSelectedVariant
 };
 
