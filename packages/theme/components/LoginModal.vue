@@ -2,8 +2,8 @@
   <SfModal
     :visible="isLoginModalOpen"
     class="modal user-modal"
-    @close="toggleLoginModal"
     :persistent="true"
+    @close="toggleLoginModal"
   >
     <template #modal-bar>
       <SfBar
@@ -21,14 +21,14 @@
     <transition name="sf-fade" mode="out-in">
       <!-- USER LOGIN FORM -->
       <div v-if="isLogin">
-        <ValidationObserver tag="div" v-slot="{ handleSubmit }" key="log-in">
+        <ValidationObserver v-slot="{ handleSubmit }" key="log-in" tag="div">
           <form class="form" @submit.prevent="handleSubmit(handleLogin)">
-            <ValidationProvider tag="div" class="relative" rules="required|email" v-slot="{ errors }">
+            <ValidationProvider v-slot="{ errors }" tag="div" class="relative" rules="required|email">
               <SfInput
-                data-cy="login-input_email"
                 v-model="form.username"
+                data-cy="login-input_email"
                 :valid="!errors[0]"
-                :errorMessage="errors[0]"
+                :error-message="errors[0]"
                 name="email"
                 label="Email Address"
                 class="form__element"
@@ -39,17 +39,17 @@
                 </svg>
               </span>
             </ValidationProvider>
-            <ValidationProvider tag="div" rules="required|min:5" v-slot="{ errors }">
+            <ValidationProvider v-slot="{ errors }" tag="div" rules="required|min:5">
               <SfInput
-                data-cy="login-input_password"
                 v-model="form.password"
+                data-cy="login-input_password"
                 :valid="!errors[0]"
-                :errorMessage="errors[0]"
+                :error-message="errors[0]"
                 name="password"
                 label="Password"
                 :type="inputType"
                 class="form__element"
-                hasShowPassword
+                has-show-password
               >
                 <template #show-password={isPasswordVisible,switchVisibilityPassword}>
                   <SfButton
@@ -104,14 +104,14 @@
       </div>
       <!-- FORGOT PASSWORD FORM -->
       <div v-else-if="isForgotPassword">
-        <ValidationObserver tag="div" v-slot="{ handleSubmit }" key="forgot-password">
+        <ValidationObserver v-slot="{ handleSubmit }" key="forgot-password" tag="div">
           <form class="form" @submit.prevent="handleSubmit(handleForgotPassword)">
-            <ValidationProvider tag="div" class="relative" rules="required|email" v-slot="{ errors }">
+            <ValidationProvider v-slot="{ errors }" tag="div" class="relative" rules="required|email">
               <SfInput
-                data-cy="forgot-password-input_email"
                 v-model="form.username"
+                data-cy="forgot-password-input_email"
                 :valid="!errors[0]"
-                :errorMessage="errors[0]"
+                :error-message="errors[0]"
                 name="email"
                 label="Email Address"
                 class="form__element"
@@ -142,13 +142,13 @@
       <!-- USER SIGNUP FORM -->
       <div v-else class="form">
         <ValidationObserver v-slot="{ handleSubmit }" key="sign-up">
-          <form class="form" @submit.prevent="handleSubmit(handleRegister)" autocomplete="off">
-            <ValidationProvider tag="div" class="relative" rules="required|email" v-slot="{ errors }">
+          <form class="form" autocomplete="off" @submit.prevent="handleSubmit(handleRegister)">
+            <ValidationProvider v-slot="{ errors }" tag="div" class="relative" rules="required|email">
               <SfInput
-                data-cy="login-input_email"
                 v-model="form.email"
+                data-cy="login-input_email"
                 :valid="!errors[0]"
-                :errorMessage="errors[0]"
+                :error-message="errors[0]"
                 name="email"
                 label="Email Address"
                 class="form__element"
@@ -160,40 +160,40 @@
               </span>
             </ValidationProvider>
             <div class="row">
-              <ValidationProvider tag="div" class="col-6" rules="required" v-slot="{ errors }">
+              <ValidationProvider v-slot="{ errors }" tag="div" class="col-6" rules="required">
                 <SfInput
-                  data-cy="login-input_firstName"
                   v-model="form.firstName"
+                  data-cy="login-input_firstName"
                   :valid="!errors[0]"
-                  :errorMessage="errors[0]"
+                  :error-message="errors[0]"
                   name="first-name"
                   label="First Name"
                   class="form__element"
                 />
               </ValidationProvider>
-              <ValidationProvider tag="div" class="col-6" rules="required" v-slot="{ errors }">
+              <ValidationProvider v-slot="{ errors }" tag="div" class="col-6" rules="required">
                 <SfInput
-                  data-cy="login-input_lastName"
                   v-model="form.lastName"
+                  data-cy="login-input_lastName"
                   :valid="!errors[0]"
-                  :errorMessage="errors[0]"
+                  :error-message="errors[0]"
                   name="last-name"
                   label="Last Name"
                   class="form__element"
                 />
               </ValidationProvider>
             </div>
-            <ValidationProvider tag="div" rules="required|min:5" v-slot="{ errors }">
+            <ValidationProvider v-slot="{ errors }" tag="div" rules="required|min:5">
               <SfInput
-                data-cy="login-input_password"
                 v-model="form.userPassword"
+                data-cy="login-input_password"
                 :valid="!errors[0]"
-                :errorMessage="errors[0]"
+                :error-message="errors[0]"
                 name="userPassword"
                 label="Password"
                 type="password"
                 class="form__element"
-                hasShowPassword
+                has-show-password
               >
                 <template #show-password={isPasswordVisible,switchVisibilityPassword}>
                   <SfButton
@@ -222,19 +222,19 @@
               </SfInput>
             </ValidationProvider>
             <div class="action-wrap">
-              <ValidationProvider :rules="{ required: { allowFalse: false } }" v-slot="{ errors }">
+              <ValidationProvider v-slot="{ errors }" :rules="{ required: { allowFalse: false } }">
                 <SfCheckbox
                   v-model="createAccount"
                   :valid="!errors[0]"
-                  :errorMessage="errors[0]"
+                  :error-message="errors[0]"
                   name="create-account"
                   class="form__element"
                 >
                 <template #label>
                   <SfButton
                   class='sf-button--pure'
-                  @click="handleTermsLink"
                   type = 'button'
+                  @click="handleTermsLink"
                 >
                     &nbsp;&nbsp;Accept Terms &amp; Conditions
                   </SfButton></template>
@@ -288,13 +288,6 @@ extend('min', {
 
 export default {
   name: 'LoginModal',
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  data () {
-    return {
-      isPasswordVisible: false,
-      inputType: 'password'
-    };
-  },
   components: {
     SfModal,
     SfInput,
@@ -307,13 +300,6 @@ export default {
     SfBar,
     SfIcon,
     SfLink
-  },
-  methods: {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    switchVisibilityPassword () {
-      this.isPasswordVisible = !this.isPasswordVisible;
-      this.inputType = this.isPasswordVisible ? 'text' : 'password';
-    }
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
@@ -406,6 +392,20 @@ export default {
       isForgotPassword,
       handleForgotPassword
     };
+  },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  data () {
+    return {
+      isPasswordVisible: false,
+      inputType: 'password'
+    };
+  },
+  methods: {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    switchVisibilityPassword () {
+      this.isPasswordVisible = !this.isPasswordVisible;
+      this.inputType = this.isPasswordVisible ? 'text' : 'password';
+    }
   }
 };
 </script>

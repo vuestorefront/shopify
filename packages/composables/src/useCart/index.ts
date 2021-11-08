@@ -1,11 +1,15 @@
 /* istanbul ignore file */
-
 import {
   Context,
   useCartFactory,
   UseCartFactoryParams
 } from '@vue-storefront/core';
+import Vue from 'vue'
+import VueCompositionAPI from '@vue/composition-api'
 import { Cart, CartItem, Coupon, Product } from '../types';
+
+// We need to register it again because of Vue instance instantiation issues
+Vue.use(VueCompositionAPI);
 
 const getBasketItemByProduct = ({ currentCart, product }) => {
   if (product) {

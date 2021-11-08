@@ -73,7 +73,7 @@ const params: UseUserBillingFactoryParams<any, any> = {
       province: params.address.state,
       zip: params.address.postalCode
     };
-    const result: any = await context.$shopify.api.addAddress({ token: token, address: formatedAddress});
+    const result: any = await context.$shopify.api.addAddress({ token, address: formatedAddress});
     if (result) {
       if (result.customerUserErrors.length === 0) {
         return true;
@@ -85,7 +85,7 @@ const params: UseUserBillingFactoryParams<any, any> = {
   deleteAddress: async (context: Context, params) => {
     const appKey = context.$shopify.config.app.$config.appKey;
     const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
-    const result: any = await context.$shopify.api.deleteAddress({ token: token, AddressId: params.address.id });
+    const result: any = await context.$shopify.api.deleteAddress({ token, AddressId: params.address.id });
     if (result) {
       if (result.customerUserErrors.length === 0) {
         return true;
@@ -109,7 +109,7 @@ const params: UseUserBillingFactoryParams<any, any> = {
       province: params.address.state,
       zip: params.address.postalCode
     };
-    const result: any = await context.$shopify.api.updateAddress({ token: token, AddressId: params.address.id, address: formatedAddress});
+    const result: any = await context.$shopify.api.updateAddress({ token, AddressId: params.address.id, address: formatedAddress});
     if (result) {
       if (result.customerUserErrors.length === 0) {
         return true;
@@ -138,7 +138,7 @@ const params: UseUserBillingFactoryParams<any, any> = {
     if (!isDefault(params.address.id)) {
       const indexToUpdate = addresses.findIndex(address => address.id === params.address.id);
       if (indexToUpdate < 0) {
-        return Promise.reject('This address does not exist');
+        return Promise.reject(Error('This address does not exist'));
       }
       disableOldDefault();
       addresses[indexToUpdate].isDefault = true;

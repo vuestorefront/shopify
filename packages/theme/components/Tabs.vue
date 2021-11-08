@@ -3,8 +3,8 @@
     <ul class='tabs__header'>
       <li v-for='(tab, index) in tabs'
         :key='tab.title'
-        @click='selectTab(index)'
-        :class='{"tab__selected": (index == selectedIndex)}'>
+        :class='{"tab__selected": (index == selectedIndex)}'
+        @click='selectTab(index)'>
         {{ tab.title }}
       </li>
     </ul>

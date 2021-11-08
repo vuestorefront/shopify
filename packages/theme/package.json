@@ -7,8 +7,7 @@
     "build:analyze": "nuxt build -a -m",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "test": "jest",
-    "precommit": "lint-staged"
+    "test": "jest"
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.3.5",

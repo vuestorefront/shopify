@@ -5,7 +5,7 @@
       <p v-if="address.address2 || address.company">{{ address.address2 }}<span v-if="address.address2">,</span> {{ address.company }}</p>
       <p v-if="address.formattedArea">{{ address.formattedArea }}</p>
       <p v-if="address.zip">{{ address.zip }}</p>
-      <p class="billing-phone" v-if="address.phone"><a :href="`tel:${address.phone}`"><SfIcon size="18px" viewBox="0 0 18 18" icon='phone'/> {{ address.phone }}</a></p>
+      <p v-if="address.phone" class="billing-phone"><a :href="`tel:${address.phone}`"><SfIcon size="18px" viewBox="0 0 18 18" icon='phone'/> {{ address.phone }}</a></p>
     </section>
   </div>
 </template>
@@ -14,14 +14,14 @@
 import {SfIcon} from '@storefront-ui/vue';
 export default {
   name: 'UserBillingAddress',
-  props: {
-    address: {
-      default: {},
-      type: Object
-    }
-  },
   components: {
     SfIcon
+  },
+  props: {
+    address: {
+      default: () => {},
+      type: Object
+    }
   }
 };
 </script>
