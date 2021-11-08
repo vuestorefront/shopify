@@ -6,7 +6,7 @@
   >
     <div />
   </SfLoader>
-  <div id="product" v-else>
+  <div v-else id="product">
     <SfBreadcrumbs class="breadcrumbs" :breadcrumbs="breadcrumbs">
       <template #link="{ breadcrumb }">
         <nuxt-link
@@ -23,10 +23,10 @@
         :images="productGallery"
         :current="ActiveVariantImage + 1"
         class="product__gallery"
-        imageWidth="422"
-        imageHeight="664"
-        thumbWidth="160"
-        thumbHeight="160"
+        image-width="422"
+        image-height="664"
+        thumb-width="160"
+        thumb-height="160"
       />
       <div class="product__info">
         <div class="product__header">
@@ -78,27 +78,27 @@
               </SfBadge>
             </template>
             <SfPrice
-              :regular="
-                $n(productGetters.getPrice(product).special, 'currency')
-              "
               v-else-if="
                 productGetters.getPrice(product).special &&
                 parseFloat(productGetters.getPrice(product).special) >
                   parseFloat(productGetters.getPrice(product).regular)
               "
+              :regular="
+                $n(productGetters.getPrice(product).special, 'currency')
+              "
             />
             <SfPrice
+              v-else
               :regular="
                 $n(productGetters.getPrice(product).regular, 'currency')
               "
-              v-else
             />
           </div>
         </div>
         <div>
           <p
-            class="product__description desktop-only"
             v-if="productDescription"
+            class="product__description desktop-only"
           >
             {{ productDescription }}
           </p>
@@ -109,11 +109,11 @@
                 :key="`attrib-${o}`"
                 :data-cy="`product-select_${o.toLowerCase()}`"
                 :set="(atttLbl = o)"
-                @input="(o) => updateFilter({ [atttLbl]: o })"
                 :value="configuration[o] || options[o][0].value"
                 :label="$t(`${o}`)"
                 :class="`sf-select--underlined product__select-${o.toLowerCase()}`"
                 :required="true"
+                @input="(o) => updateFilter({ [atttLbl]: o })"
               >
                 <SfSelectOption
                   v-for="(attribs, a) in option"
@@ -124,20 +124,17 @@
                 </SfSelectOption>
               </SfSelect>
               <div
-                :key="`attrib-${o.toLowerCase()}`"
                 v-else
+                :key="`attrib-${o.toLowerCase()}`"
                 :class="`product__${o.toLowerCase()}s`"
               >
                 <p class="product__color-label">{{ $t(`${o}`) }}:</p>
                 <SfColor
-                  data-cy="product-color_update"
                   v-for="(attribs, a) in option"
                   :key="`item-${a}`"
+                  data-cy="product-color_update"
                   :color="attribs.value"
                   :class="`product__color ${attribs.value}`"
-                  @click="
-                    (atttLbl = o), updateFilter({ [atttLbl]: attribs.value })
-                  "
                   :selected="
                     configuration[o]
                       ? configuration[o] === attribs.value
@@ -147,17 +144,20 @@
                       ? true
                       : false
                   "
+                  @click="
+                    (atttLbl = o), updateFilter({ [atttLbl]: attribs.value })
+                  "
                 />
               </div>
             </template>
           </div>
           <SfAddToCart
+            v-if="productGetters.getStockStatus(product) === true"
+            v-model="qty"
             data-cy="product-cart_add"
             :stock="stock"
-            v-model="qty"
-            :canAddToCart="stock > 0"
+            :can-add-to-cart="stock > 0"
             class="product__add-to-cart"
-            v-if="productGetters.getStockStatus(product) === true"
           >
             <template #add-to-cart-btn>
               <SfButton
@@ -172,7 +172,7 @@
           <LazyHydrate when-idle>
             <SfTabs :open-tab="1" class="product__tabs">
               <SfTab data-cy="product-tab_description" title="Description">
-                <div class="product__description" v-if="productDescriptionHtml">
+                <div v-if="productDescriptionHtml" class="product__description">
                   <div v-html="productDescriptionHtml"></div>
                 </div>
                 <SfProperty
@@ -254,72 +254,48 @@ import {
   SfColor
 } from '@storefront-ui/vue';
 
-import InstagramFeed from '~/components/InstagramFeed.vue';
-import RelatedProducts from '~/components/RelatedProducts1.vue';
 import { ref, computed, watch } from '@vue/composition-api';
 import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
-import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { onSSR } from '@vue-storefront/core';
+import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
+import RelatedProducts from '~/components/RelatedProducts1.vue';
+import InstagramFeed from '~/components/InstagramFeed.vue';
 import useUiNotification from '~/composables/useUiNotification';
 
 export default {
   name: 'Product',
-  transition: 'fade',
+  components: {
+    SfAlert,
+    SfColor,
+    SfLoader,
+    SfProperty,
+    SfHeading,
+    SfPrice,
+    SfRating,
+    SfSelect,
+    SfAddToCart,
+    SfTabs,
+    SfGallery,
+    SfIcon,
+    SfImage,
+    SfBanner,
+    SfSticky,
+    SfReview,
+    SfBadge,
+    SfBreadcrumbs,
+    SfButton,
+    InstagramFeed,
+    RelatedProducts,
+    MobileStoreBanner,
+    LazyHydrate
+  },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.prevRoute = from;
     });
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  methods: {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    async addingToCart(Productdata) {
-      await this.addItem(Productdata).then(() => {
-        this.sendNotification({
-          key: 'product_added',
-          message: `${Productdata.product.name} has been successfully added to your cart.`,
-          type: 'success',
-          title: 'Product added!',
-          icon: 'check'
-        });
-        this.qty = 1;
-      });
-    },
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    updatedQuantity(value) {
-      this.qty = value;
-    },
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    setGalleryWidth() {
-      const gallary = document.getElementsByClassName('product__gallery');
-      const gallerySlider =
-        gallary.length > 0 && gallary[0].querySelectorAll('.glide__slides');
-      const galleryAllSlides =
-        gallerySlider.length > 0 &&
-        gallerySlider[0].querySelectorAll('.glide__slide');
-      typeof galleryAllSlides !== Boolean &&
-        galleryAllSlides.length > 0 &&
-        galleryAllSlides.forEach((gallerySlide) => {
-          gallerySlide.style.flexBasis = gallerySlide.style.width;
-        });
-    }
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  mounted() {
-    window.addEventListener('load', () => {
-      this.setGalleryWidth();
-    });
-    this.$nextTick(() => {
-      this.setGalleryWidth();
-      this.setBreadcrumb();
-      window.addEventListener('resize', this.setGalleryWidth);
-    });
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  updated() {
-    this.setGalleryWidth();
-  },
+  transition: 'fade',
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
     const breadcrumbs = ref([]);
@@ -475,31 +451,6 @@ export default {
       atttLbl
     };
   },
-  components: {
-    SfAlert,
-    SfColor,
-    SfLoader,
-    SfProperty,
-    SfHeading,
-    SfPrice,
-    SfRating,
-    SfSelect,
-    SfAddToCart,
-    SfTabs,
-    SfGallery,
-    SfIcon,
-    SfImage,
-    SfBanner,
-    SfSticky,
-    SfReview,
-    SfBadge,
-    SfBreadcrumbs,
-    SfButton,
-    InstagramFeed,
-    RelatedProducts,
-    MobileStoreBanner,
-    LazyHydrate
-  },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
@@ -529,6 +480,55 @@ export default {
         'Brand name is the perfect pairing of quality and design. This label creates major everyday vibes with its collection of modern brooches, silver and gold jewellery, or clips it back with hair accessories in geo styles.',
       careInstructions: 'Do not wash!'
     };
+  },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  mounted() {
+    window.addEventListener('load', () => {
+      this.setGalleryWidth();
+    });
+    this.$nextTick(() => {
+      this.setGalleryWidth();
+      this.setBreadcrumb();
+      window.addEventListener('resize', this.setGalleryWidth);
+    });
+  },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  updated() {
+    this.setGalleryWidth();
+  },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  methods: {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async addingToCart(Productdata) {
+      await this.addItem(Productdata).then(() => {
+        this.sendNotification({
+          key: 'product_added',
+          message: `${Productdata.product.name} has been successfully added to your cart.`,
+          type: 'success',
+          title: 'Product added!',
+          icon: 'check'
+        });
+        this.qty = 1;
+      });
+    },
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    updatedQuantity(value) {
+      this.qty = value;
+    },
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    setGalleryWidth() {
+      const gallary = document.getElementsByClassName('product__gallery');
+      const gallerySlider =
+        gallary.length > 0 && gallary[0].querySelectorAll('.glide__slides');
+      const galleryAllSlides =
+        gallerySlider.length > 0 &&
+        gallerySlider[0].querySelectorAll('.glide__slide');
+      typeof galleryAllSlides !== 'boolean' &&
+        galleryAllSlides.length > 0 &&
+        galleryAllSlides.forEach((gallerySlide) => {
+          gallerySlide.style.flexBasis = gallerySlide.style.width;
+        });
+    }
   }
 };
 </script>

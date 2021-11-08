@@ -23,8 +23,8 @@
           :class="{ 'is-active': page.title === activePage }"
           :label="page.title === 'Billing details' ? 'Address Book' :  page.title === 'Order history' ? 'My Orders' : page.title"
           class="sf-content-pages__menu"
-          @click="changeActivePage(page.title)"
           icon=""
+          @click="changeActivePage(page.title)"
         />
       </template>
 
@@ -48,15 +48,14 @@
 import { SfBreadcrumbs, SfContentPages, SfMenuItem, SfLink } from '@storefront-ui/vue';
 import { ref, computed } from '@vue/composition-api';
 import { useUser, userGetters, useContent } from '@vue-storefront/shopify';
+import { onSSR } from '@vue-storefront/core';
 import MyProfile from './MyAccount/MyProfile';
 import AdressBook from './MyAccount/AdressBook';
 import LoyaltyCard from './MyAccount/LoyaltyCard';
 import OrderHistory from './MyAccount/OrderHistory';
-import { onSSR } from '@vue-storefront/core';
 import useUiNotification from '~/composables/useUiNotification';
 export default {
   name: 'MyAccount',
-  middleware: 'authenticated',
   components: {
     SfBreadcrumbs,
     SfContentPages,
@@ -67,6 +66,7 @@ export default {
     OrderHistory,
     SfLink
   },
+  middleware: 'authenticated',
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
     const { $router, $route } = context.root;
@@ -115,21 +115,6 @@ export default {
     });
     return { loadUser, changeActivePage, activePage, acceptsMarketing, UpdateNewsletterPreference, email, id, NewsletterStatus, sendNotification, newsLetterLoading };
   },
-  methods: {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    async updateNewsletterPreference(status) {
-      await this.UpdateNewsletterPreference({ContentType: 'updatePreferences', Email: this.email, isSubscribed: status, customerId: this.id}).then(() => {
-        this.sendNotification({
-          key: 'preferences_updated',
-          message: this.NewsletterStatus,
-          type: 'success',
-          icon: 'check',
-          title: 'Subscribed status'
-        });
-      });
-      await this.loadUser();
-    }
-  },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
@@ -149,6 +134,21 @@ export default {
       ],
       currentPage: this.activePage
     };
+  },
+  methods: {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async updateNewsletterPreference(status) {
+      await this.UpdateNewsletterPreference({ContentType: 'updatePreferences', Email: this.email, isSubscribed: status, customerId: this.id}).then(() => {
+        this.sendNotification({
+          key: 'preferences_updated',
+          message: this.NewsletterStatus,
+          type: 'success',
+          icon: 'check',
+          title: 'Subscribed status'
+        });
+      });
+      await this.loadUser();
+    }
   }
 };
 </script>

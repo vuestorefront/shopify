@@ -2,8 +2,8 @@
   <div>
     <SfAddressPicker
       :selected="String(currentAddressId)"
-      @input="setCurrentAddress($event)"
       class="billing__addresses"
+      @input="setCurrentAddress($event)"
     >
       <SfAddress
         v-for="billingAddress in billingAddresses"
@@ -29,10 +29,10 @@
     <SfCheckbox
       data-cy="billing-details-checkbox_isDefault"
       :selected="setAsDefault"
-      @change="$emit('changeSetAsDefault', $event)"
       name="setAsDefault"
       label="Use this address as my default one."
       class="billing-address-setAsDefault"
+      @change="$emit('changeSetAsDefault', $event)"
     />
   </div>
 </template>
@@ -46,6 +46,10 @@ import { userBillingGetters } from '@vue-storefront/shopify';
 
 export default {
   name: 'UserBillingAddresses',
+  components: {
+    SfCheckbox,
+    SfAddressPicker
+  },
   props: {
     currentAddressId: {
       type: Number,
@@ -59,10 +63,6 @@ export default {
       type: Array,
       required: true
     }
-  },
-  components: {
-    SfCheckbox,
-    SfAddressPicker
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup (_, { emit }) {

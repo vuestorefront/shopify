@@ -102,7 +102,7 @@ export const getProductAttributes = (products: ProductVariant, filterByAttribute
 
   /* const formatAttributes = (products): AgnosticAttribute[] =>{
     return formatAttributeList(products.options);
-  };*/
+  }; */
   const formatAttributes = (product: ProductVariant): AgnosticAttribute[] =>
     formatAttributeList(product.options).filter((attribute) => filterByAttributeName ? filterByAttributeName.includes(attribute.name) : attribute);
 
@@ -297,10 +297,10 @@ const productGetters: ProductGetters<ProductVariant, ProductVariantFilters> = {
   getSaleStatus: getProductSaleStatus,
   getStockStatus: getProductStockStatus,
   getStock: getProductStock,
-  getFormattedPrice: getFormattedPrice,
+  getFormattedPrice,
   getTotalReviews: getProductTotalReviews,
   getAverageRating: getProductAverageRating,
-  getBreadcrumbs: getBreadcrumbs,
+  getBreadcrumbs,
   getSelectedVariant
 };
 

@@ -80,7 +80,7 @@ const customerAddressAddMutation: (context) => any = (context): any => {
   const customerAccessToken = context.client.graphQLClient.variable('customerAccessToken', 'String!');
 
   return context.client.graphQLClient.mutation('customerAddressCreate', [customerAccessToken, address], (root) => {
-    root.add('customerAddressCreate', {args: {address: address, customerAccessToken: customerAccessToken}}, (customer) => {
+    root.add('customerAddressCreate', {args: {address, customerAccessToken}}, (customer) => {
       customer.add('customerAddress', (addressInfo) => {
         addressInfo.add('id');
       });
@@ -99,7 +99,7 @@ const customerAddressUpdateMutation: (context) => any = (context): any => {
   const address = context.client.graphQLClient.variable('address', 'MailingAddressInput!');
 
   return context.client.graphQLClient.mutation('customerAddressUpdate', [customerAccessToken, id, address], (root) => {
-    root.add('customerAddressUpdate', {args: {address: address, id: id, customerAccessToken: customerAccessToken}}, (customer) => {
+    root.add('customerAddressUpdate', {args: {address, id, customerAccessToken}}, (customer) => {
       customer.add('customerAddress', (addressInfo) => {
         addressInfo.add('id');
       });

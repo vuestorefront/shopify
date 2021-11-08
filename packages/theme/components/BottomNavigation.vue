@@ -29,8 +29,8 @@
 
 <script type="module">
 import { SfBottomNavigation, SfIcon, SfCircleIcon } from '@storefront-ui/vue';
-import useUiState from '~/composables/useUiState';
 import { useUser } from '@vue-storefront/shopify';
+import useUiState from '~/composables/useUiState';
 
 export default {
   components: {

@@ -8,7 +8,7 @@ export default async function addToCart(context, params, _customQuery?: CustomQu
   // Items to be add to cart
   const lineItemsToAdd = [{
     variantId: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions.id : product.variantId,
-    quantity: quantity
+    quantity
   }];
   // Add an item to the checkout
   return await context.client.checkout.addLineItems(checkoutID, lineItemsToAdd).then((checkout) => checkout);

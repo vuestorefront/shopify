@@ -15,7 +15,7 @@ export default {
   name: 'UserShippingAddress',
   props: {
     address: {
-      default: {},
+      default: () => {},
       type: Object
     }
   }
