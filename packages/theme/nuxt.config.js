@@ -7,8 +7,16 @@ export default {
     host: '0.0.0.0'
   },
   publicRuntimeConfig: {
-    appKey: 'vsf2Connector' + Date.now()
+    appKey: 'vsf2spcon',
+    appVersion: Date.now()
   },
+  privateRuntimeConfig: {
+    storeURL: process.env.SHOPIFY_DOMAIN,
+    storeToken: process.env.SHOPIFY_STOREFRONT_TOKEN
+  },
+  serverMiddleware: [
+    { path: '/custom', handler: '~/server-middleware/custom-features.js' }
+  ],
   head: {
     title: 'Shopify | Vue Storefront Next',
     meta: [
@@ -166,7 +174,10 @@ export default {
           lastCommit: process.env.LAST_COMMIT || ''
         })
       })
-    ]
+    ],
+    extractCSS: {
+      ignoreOrder: true
+    }
   },
   router: {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -233,7 +244,7 @@ export default {
       description:
         'This is the Shopify PWA app for VSF Next - Developed by Aureate labs',
       themeColor: '#5ece7b',
-      ogHost: 'shopify-pwa-beta.aureatelabs.com'
+      ogHost: 'shopify-pwa.aureatelabs.com'
     },
     icon: {
       iconSrc: 'src/static/android-icon-512x512.png'
@@ -269,8 +280,8 @@ export default {
         }
       ],
       preCaching: [
-        '//shopify-pwa-beta.aureatelabs.com/c/**',
-        '//shopify-pwa-beta.aureatelabs.com/'
+        '//shopify-pwa.aureatelabs.com/c/**',
+        '//shopify-pwa.aureatelabs.com/'
       ]
     }
   }

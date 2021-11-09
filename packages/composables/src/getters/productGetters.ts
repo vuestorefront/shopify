@@ -75,7 +75,7 @@ export const getProductFiltered = (products, filters: ProductVariantFilters | an
     return [];
   }
   products = Array.isArray(products) ? products : [products];
-  return enhanceProduct(products);
+  return Object.keys(products).length > 0 ? enhanceProduct(products) : [];
 };
 export const getFilteredSingle = (product) => {
   if (!product) {

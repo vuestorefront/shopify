@@ -163,7 +163,7 @@
               <SfButton
                 class="sf-add-to-cart__button"
                 :disabled="loading"
-                @click="addingToCart({ product, quantity: parseInt(qty) })"
+                @click="addingToCart({ product, quantity: parseInt(qty), customQuery: [{key: 'CustomAttrKey', value: 'CustomAttrValue'}]})"
               >
                 Add to Bag
               </SfButton>

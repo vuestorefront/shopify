@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const enhanceProduct = (productResponse: Array<any>) => {
+  if (Object.keys(productResponse).length === 0) return;
   const enhancedProductResponse = productResponse.map((product) => ({
     ...product,
     name: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions.title : product.title,
