@@ -7,9 +7,9 @@ import {
   AgnosticBreadcrumb,
   AgnosticFacet
 } from '@vue-storefront/core';
+import { enhanceProduct, getSortedProducts } from '../helpers/internals';
 import { buildBreadcrumbs, buildFacets, reduceForGroupedFacets, reduceForFacets } from './../useFacet/_utils';
 import { getCategoryTree as buildCategoryTree } from './categoryGetters';
-import { enhanceProduct, getSortedProducts } from '../helpers/internals';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getAll = (searchData, criteria?: string[]): AgnosticFacet[] => buildFacets(searchData, reduceForFacets, criteria);

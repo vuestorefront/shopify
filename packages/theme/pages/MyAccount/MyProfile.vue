@@ -6,7 +6,7 @@
         :level="1"
         :title="title"
       />
-      <div class="my_accoutn_title_actions" v-if="!isEdited">
+      <div v-if="!isEdited" class="my_accoutn_title_actions">
         <SfButton
           class="edit_action"
           @click="isEdited = true; scrollToTop()"
@@ -18,45 +18,45 @@
         </SfButton>
       </div>
     </div>
-    <div class="my_account_content container-small" v-if="isEdited">
+    <div v-if="isEdited" class="my_account_content container-small">
       <tabs>
         <tab title="Personal Data">
-          <ValidationObserver tag="div" v-slot="{ handleSubmit }">
+          <ValidationObserver v-slot="{ handleSubmit }" tag="div">
             <form class="form" @submit.prevent="handleSubmit(updateProfile)">
               <div class="row">
-                <ValidationProvider tag="div" rules="required|min:2" v-slot="{ errors }" class="col-6">
+                <ValidationProvider v-slot="{ errors }" tag="div" rules="required|min:2" class="col-6">
                   <SfInput
-                    data-cy="my-profile-input_firstName"
                     v-model= "form.firstName"
+                    data-cy="my-profile-input_firstName"
                     name="firstName"
                     label="First Name"
                     :valid="!errors[0]"
                     class="form__element"
-                    :errorMessage="errors[0]"
+                    :error-message="errors[0]"
                   />
                 </ValidationProvider>
-                <ValidationProvider tag="div" rules="required|min:2" v-slot="{ errors }" class="col-6">
+                <ValidationProvider v-slot="{ errors }" tag="div" rules="required|min:2" class="col-6">
                   <SfInput
-                    data-cy="my-profile-input_lastName"
                     v-model= "form.lastName"
+                    data-cy="my-profile-input_lastName"
                     name="lastName"
                     label="Last Name"
                     :valid="!errors[0]"
                     class="form__element"
-                    :errorMessage="errors[0]"
+                    :error-message="errors[0]"
                   />
                 </ValidationProvider>
               </div>
-              <ValidationProvider tag="div" rules="required|email" v-slot="{ errors }">
+              <ValidationProvider v-slot="{ errors }" tag="div" rules="required|email">
                 <SfInput
-                  data-cy="my-profile-input_email"
                   v-model= "form.email"
+                  data-cy="my-profile-input_email"
                   type="email"
                   name="email"
                   label="Your e-mail"
                   class="form__element"
                   :valid="!errors[0]"
-                  :errorMessage="errors[0]"
+                  :error-message="errors[0]"
                   :disabled="true"
                 />
               </ValidationProvider>
@@ -72,31 +72,31 @@
           </ValidationObserver>
         </tab>
         <tab title="Password Change">
-          <ValidationObserver tag="div" v-slot="{ handleSubmit }">
+          <ValidationObserver v-slot="{ handleSubmit }" tag="div">
             <form class="form" @submit.prevent="handleSubmit(updatePassword)">
               <div class="form__horizontal">
-                <ValidationProvider tag="div" rules="required|min:5" v-slot="{ errors }" vid="password">
+                <ValidationProvider v-slot="{ errors }" tag="div" rules="required|min:5" vid="password">
                   <SfInput
-                    data-cy="my-profile-input_newPassword"
                     v-model="form.newPassword"
+                    data-cy="my-profile-input_newPassword"
                     type="password"
                     name="newPassword"
                     label="New Password"
                     class="form__element"
                     :valid="!errors[0]"
-                    :errorMessage="errors[0]"
+                    :error-message="errors[0]"
                   />
                 </ValidationProvider>
-                <ValidationProvider tag="div" rules="required|confirmed:password" v-slot="{ errors }">
+                <ValidationProvider v-slot="{ errors }" tag="div" rules="required|confirmed:password">
                   <SfInput
-                    data-cy="my-profile-input_repeatPassword"
                     v-model="form.repeatPassword"
+                    data-cy="my-profile-input_repeatPassword"
                     type="password"
                     name="repeatPassword"
                     label="Repeat Password"
                     class="form__element"
                     :valid="!errors[0]"
-                    :errorMessage="errors[0]"
+                    :error-message="errors[0]"
                   />
                 </ValidationProvider>
               </div>
@@ -113,21 +113,21 @@
         </tab>
       </tabs>
     </div>
-    <div class="user_profile_detail" v-else>
+    <div v-else class="user_profile_detail">
       <SfProperty
+      v-if="displayName"
       class="my-profile-cname"
       name="Name"
-      v-if="displayName"
       :value="displayName" />
       <SfProperty
+      v-if="email"
       class="my-profile-cemail"
       name="Email"
-      v-if="email"
       :value="email" />
       <SfProperty
+      v-if="phone"
       class="my-profile-cmobile"
       name="Mobile"
-      v-if="phone"
       :value="phone" />
     </div>
   </div>

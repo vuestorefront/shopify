@@ -97,7 +97,7 @@ const cartGetters: CartGetters<Cart, LineItem> = {
   getItemQty: getCartItemQty,
   getItemAttributes: getCartItemAttributes,
   getItemSku: getCartItemSku,
-  getFormattedPrice: getFormattedPrice,
+  getFormattedPrice,
   getTotalItems: getCartTotalItems,
   getCoupons,
   getDiscounts,

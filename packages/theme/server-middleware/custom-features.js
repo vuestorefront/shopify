@@ -18,12 +18,3 @@ app.get('/cart.js', (req, res) => {
     console.error(error);
   });
 });
-
-/**
- * Redirection for Shopify
- */
-app.post('/account/login', (req, res) => {
-  res.json({
-    success: 'test'
-  });
-});

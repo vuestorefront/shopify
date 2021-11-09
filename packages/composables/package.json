@@ -9,8 +9,7 @@
     "build": "rimraf lib && rollup -c",
     "dev": "rollup -c -w",
     "test": "jest",
-    "prepublish": "yarn build",
-    "precommit": "lint-staged"
+    "prepublish": "yarn build"
   },
   "dependencies": {
     "@vue-storefront/shopify-api": "1.0.2",

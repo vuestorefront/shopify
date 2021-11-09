@@ -8,102 +8,102 @@
       >
         <div class="row">
           <ValidationProvider
-            rules="required|min:2"
             v-slot="{ errors }"
+            rules="required|min:2"
             tag="div"
             class="col-6"
           >
             <SfInput
-              data-cy="billing-details-input_firstName"
               v-model="form.firstName"
+              data-cy="billing-details-input_firstName"
               name="firstName"
               label="First Name"
               :valid="!errors[0]"
-              :errorMessage="errors[0]"
+              :error-message="errors[0]"
               class="form__element"
             />
           </ValidationProvider>
           <ValidationProvider
-            rules="required|min:2"
             v-slot="{ errors }"
+            rules="required|min:2"
             tag="div"
             class="col-6"
           >
             <SfInput
-              data-cy="billing-details-input_lastName"
               v-model="form.lastName"
+              data-cy="billing-details-input_lastName"
               name="lastName"
               label="Last Name"
               :valid="!errors[0]"
-              :errorMessage="errors[0]"
+              :error-message="errors[0]"
               class="form__element"
             />
           </ValidationProvider>
         </div>
         <div class="row">
           <ValidationProvider
-            rules="required|min:5"
             v-slot="{ errors }"
+            rules="required|min:5"
             tag="div"
             class="col-6"
           >
             <SfInput
-              data-cy="billing-details-input_streetName"
               v-model="form.streetName"
+              data-cy="billing-details-input_streetName"
               name="streetName"
               label="Street Name"
               :valid="!errors[0]"
-              :errorMessage="errors[0]"
+              :error-message="errors[0]"
               class="form__element"
             />
           </ValidationProvider>
           <ValidationProvider
-            rules="required|min:1"
             v-slot="{ errors }"
+            rules="required|min:1"
             tag="div"
             class="col-6"
           >
             <SfInput
-              data-cy="billing-details-input_apartment"
               v-model="form.apartment"
+              data-cy="billing-details-input_apartment"
               name="apartment"
               label="House/Apartment number"
               :valid="!errors[0]"
-              :errorMessage="errors[0]"
+              :error-message="errors[0]"
               class="form__element"
             />
           </ValidationProvider>
         </div>
         <div class="row">
           <ValidationProvider
-            rules="required|min:2"
             v-slot="{ errors }"
+            rules="required|min:2"
             tag="div"
             class="col-6"
           >
             <SfInput
-              data-cy="billing-details-input_city"
               v-model="form.city"
+              data-cy="billing-details-input_city"
               name="city"
               label="City"
               :valid="!errors[0]"
-              :errorMessage="errors[0]"
+              :error-message="errors[0]"
               class="form__element"
             />
           </ValidationProvider>
           <ValidationProvider
-            :rules="`required|oneOf:${allContries.map(c => c.name).join(',')}`"
             v-slot="{ errors }"
+            :rules="`required|oneOf:${allContries.map(c => c.name).join(',')}`"
             class="col-6"
           >
             <SfSelect
+              v-model="form.country"
               data-cy="billing-details-country_state"
               class="form__select sf-select--underlined form__element"
-              v-model="form.country"
               name="country"
               label="Country"
               :valid="!errors[0]"
-              :errorMessage="errors[0]"
+              :error-message="errors[0]"
               @input="getStateFromCountry(form.country)"
             >
               <SfSelectOption
@@ -121,13 +121,13 @@
             class="col-12"
           >
             <SfSelect
+              v-model="form.state"
               data-cy="billing-details-input_state"
               class="form__select sf-select--underlined form__element"
-              v-model="form.state"
               name="state"
               label="State/Province"
               :valid="!errors[0]"
-              :errorMessage="errors[0]"
+              :error-message="errors[0]"
               :selected="form.state"
             >
               <SfSelectOption
@@ -142,18 +142,18 @@
         </div>
         <div class="row">
           <ValidationProvider
-            rules="required|min:4"
             v-slot="{ errors }"
+            rules="required|min:4"
             tag="div"
             class="col-6"
           >
             <SfInput
-              data-cy="billing-details-input_zipCode"
               v-model="form.postalCode"
+              data-cy="billing-details-input_zipCode"
               name="zipCode"
               label="Zipcode"
               :valid="!errors[0]"
-              :errorMessage="errors[0]"
+              :error-message="errors[0]"
               class="form__element"
             />
           </ValidationProvider>
@@ -162,8 +162,8 @@
             class="col-6"
           >
           <SfInput
-              data-cy="billing-details-input_company"
               v-model="form.company"
+              data-cy="billing-details-input_company"
               name="company"
               label="Company"
               tag="div"
@@ -171,18 +171,18 @@
             />
           </ValidationProvider>
           <ValidationProvider
-            rules="required|min:8|max:15|regex:^(\+?\d[0-9]+)$"
             v-slot="{ errors }"
+            rules="required|min:8|max:15|regex:^(\+?\d[0-9]+)$"
             tag="div"
             class="col-12"
           >
             <SfInput
-              data-cy="billing-details-input_phoneNumber"
               v-model="form.phone"
+              data-cy="billing-details-input_phoneNumber"
               name="phone"
               label="Phone number"
               :valid="!errors[0]"
-              :errorMessage="errors[0]"
+              :error-message="errors[0]"
               class="form__element"
             />
           </ValidationProvider>
@@ -284,22 +284,6 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      states: [],
-      defaultCountry: 'United States'
-    };
-  },
-  mounted() {
-    this.getStateFromCountry(this.address.country);
-  },
-  methods: {
-    getStateFromCountry(country) {
-      const allStates = (countryState.countries).find(item => item.country === country);
-      this.states = allStates ? allStates.states : [];
-      this.form.state = this.states[0];
-    }
-  },
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, { emit }) {
@@ -338,6 +322,22 @@ export default {
       submitForm,
       allContries
     };
+  },
+  data() {
+    return {
+      states: [],
+      defaultCountry: 'United States'
+    };
+  },
+  mounted() {
+    this.getStateFromCountry(this.address.country);
+  },
+  methods: {
+    getStateFromCountry(country) {
+      const allStates = (countryState.countries).find(item => item.country === country);
+      this.states = allStates ? allStates.states : [];
+      this.form.state = this.states[0];
+    }
   }
 };
 </script>

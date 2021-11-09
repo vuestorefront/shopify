@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { ProductVariant } from '@vue-storefront/shopify-api';
 export { UseCategory, UseProduct } from '@vue-storefront/core';
 export type Category = Record<string, unknown>;
-import { ProductVariant } from '@vue-storefront/shopify-api';
 
 export type User = {
   id?: string;

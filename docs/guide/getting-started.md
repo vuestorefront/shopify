@@ -3,7 +3,7 @@
 ## Before dive into the Shopify integration with Vue Storefront 2
 
 
-If you [generated your project from our CLI](/general/installation.html), your shop will be connected to our [demo store](https://shopify-pwa.aureatelabs.com/).
+If you [generated your project from our CLI](https://docs.vuestorefront.io/v2/general/installation.html), your shop will be connected to our [demo store](https://shopify-pwa.aureatelabs.com/).
 
 
 If you haven't yet generated your project and just to play with Vue Storefront integration with Shopify and understand its capabilities, the first thing you should do after setting it up is changing the credentials to connect to your Shopify store.

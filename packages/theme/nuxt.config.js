@@ -1,5 +1,5 @@
-require('isomorphic-fetch');
 import webpack from 'webpack';
+require('isomorphic-fetch');
 
 export default {
   server: {
@@ -7,7 +7,7 @@ export default {
     host: '0.0.0.0'
   },
   publicRuntimeConfig: {
-    appKey: 'vsf2Connector' + Date.now(),
+    appKey: 'vsf2spcon',
     appVersion: Date.now()
   },
   privateRuntimeConfig: {
