@@ -229,36 +229,6 @@ export default {
     SfLoader
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup() {
-    const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
-    const { cart, removeItem, updateItemQty, load: loadCart } = useCart();
-    const { isAuthenticated } = useUser();
-    const { send: sendNotification, notifications } = useUiNotification();
-    const products = computed(() => cartGetters.getItems(cart.value));
-    const totals = computed(() => cartGetters.getTotals(cart.value));
-    const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
-    const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
-
-    onSSR(async () => {
-      await loadCart();
-    });
-
-    return {
-      isAuthenticated,
-      products,
-      removeItem,
-      updateItemQty,
-      isCartSidebarOpen,
-      toggleCartSidebar,
-      totals,
-      totalItems,
-      cartGetters,
-      checkoutURL,
-      sendNotification,
-      notifications
-    };
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
       visible: false,
