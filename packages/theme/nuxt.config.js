@@ -1,8 +1,8 @@
 require('isomorphic-fetch');
 import webpack from 'webpack';
 
-
-export default {
+/** @type { import('@nuxt/types').NuxtConfig } */ 
+const config = {
   server: {
     port: 3001,
     host: '0.0.0.0'
@@ -176,6 +176,15 @@ export default {
         })
       })
     ],
+    extend(config) {
+      config.resolve.extensions.push('.mjs')
+
+      config.module.rules.push({
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto'
+      })
+    },
     extractCSS: {
       ignoreOrder: true
     }
@@ -287,3 +296,5 @@ export default {
     }
   }
 };
+
+export default config

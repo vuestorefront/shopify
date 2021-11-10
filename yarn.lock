@@ -3833,9 +3833,9 @@
     eslint-visitor-keys "^3.0.0"
 
 "@vue-storefront/core@~2.4.3":
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/@vue-storefront/core/-/core-2.4.3.tgz#6800769167181d29f29e4065f7b5483a282f77ad"
-  integrity sha512-dcGvfZX6sKPoCz9uKxs/pD+tfAz87a4CImMe1mYOpyRUmnH1wR3B0V1agiAJnoeOq8k/szGQclCQA7oDAFuCFA==
+  version "2.4.6"
+  resolved "https://registry.yarnpkg.com/@vue-storefront/core/-/core-2.4.6.tgz#24d6f0d41b4d00715ebd44bbb08e7d5949534038"
+  integrity sha512-Iml0/uKMZFyMk6SiEcMxRnyndncNflAvKFC9sbfoN1hHUWDv3qLUk0+uCgkvIn6+0srx29zH3RH6+LjXHlC7nQ==
   dependencies:
     "@vue/composition-api" "1.0.0-beta.21"
     axios "0.21.1"
@@ -3845,9 +3845,9 @@
     vue "^2.6.11"
 
 "@vue-storefront/middleware@~2.4.3":
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/@vue-storefront/middleware/-/middleware-2.4.3.tgz#b85f976bf83b08fedd0b3eb3e24bcf03fb82a21c"
-  integrity sha512-kCtnovYUrSw0bQn+WHLgcUVC/RBjaFJf1m1Hithrc1clcYgLNwbV/ewIWYptc7e2HBABdkW4S8OQLEUOYsyJww==
+  version "2.4.6"
+  resolved "https://registry.yarnpkg.com/@vue-storefront/middleware/-/middleware-2.4.6.tgz#79261364e529c179b5512604d7a09b510c03561a"
+  integrity sha512-okxZhX7YYkUt3JjlDMMLY5F/YM+EXX+r98fDLtnfzbgPnQ3NnTFf9vye75HHhnon+PA7AwBnA5CIu8p4RtHq4Q==
   dependencies:
     consola "2.15.3"
     cookie-parser "^1.4.5"
@@ -3855,9 +3855,9 @@
     express "^4.17.1"
 
 "@vue-storefront/nuxt-theme@~2.4.3":
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/@vue-storefront/nuxt-theme/-/nuxt-theme-2.4.3.tgz#1d60cc2d8ed1f1d507157d81e032d3f1d040f4fb"
-  integrity sha512-Xw6Y7JE8ME61hhNVNyuytznu/BmYxtOm4G2cRABPRCfio+xvBcTabMSWLt9SghfrdCAm4i/OuWJsRY3ZDt9sTA==
+  version "2.4.6"
+  resolved "https://registry.yarnpkg.com/@vue-storefront/nuxt-theme/-/nuxt-theme-2.4.6.tgz#24b6b418de2f8555466c36906e6bb4c0ae3cd67b"
+  integrity sha512-QavBrc5RddH8JlG/WrUgAxNGGC6MVQqE47UDfUXPi+reLdBQfQjaffCmQbs/l+aekq071kTZHpXHgumUXm4eRQ==
   dependencies:
     ejs "^3.0.2"
     lodash.debounce "^4.0.8"
@@ -3865,9 +3865,9 @@
     vue-lazy-hydration "^2.0.0-beta.4"
 
 "@vue-storefront/nuxt@~2.4.3":
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/@vue-storefront/nuxt/-/nuxt-2.4.3.tgz#b268262fb77b666f51ff28e6d57ebfa372a607c8"
-  integrity sha512-qnPM+XwKAm5UcBFxTCzrdWedifua5lrABf1PQtYX7rTeH064In6Ztl2nkmdLoOX7OGfVNRYZHjuih7IVy87WNA==
+  version "2.4.6"
+  resolved "https://registry.yarnpkg.com/@vue-storefront/nuxt/-/nuxt-2.4.6.tgz#ab031bce71a222db04e1e23f5b44feedb2fa5529"
+  integrity sha512-fiLRoEQZOw9ASL2WdTpFqfNJLhaQHrO6GJzIIdBSduXtSeKRMR0MbpSfs6ppR+D+qfsI4J4KSZvNS00kSMKxCw==
   dependencies:
     "@nuxt/typescript-build" "^2.0.0"
     "@nuxtjs/composition-api" "0.17.0"
@@ -15891,15 +15891,15 @@ tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.1, tslib@^2.0.3:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
-  integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==
-
-tslib@^2.3.1:
+tslib@^2.0.1, tslib@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
+
+tslib@^2.0.3:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
+  integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==
 
 tsutils@^3.21.0:
   version "3.21.0"
