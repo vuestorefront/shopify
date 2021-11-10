@@ -210,8 +210,9 @@ import {
 } from '@storefront-ui/vue';
 import { computed, onBeforeMount } from '@vue/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
-import { onSSR } from '@vue-storefront/core';
 import { useUiState, useUiNotification } from '~/composables';
+import { onSSR } from '@vue-storefront/core';
+
 
 export default {
   name: 'Cart',
@@ -227,6 +228,43 @@ export default {
     SfLink,
     SfNotification,
     SfLoader
+  },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  setup(props, {root}) {
+    const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
+    const { cart, removeItem, updateItemQty, load: loadCart } = useCart();
+    const { isAuthenticated } = useUser();
+    const { send: sendNotification, notifications } = useUiNotification();
+    const products = computed(() => cartGetters.getItems(cart.value));
+    const totals = computed(() => cartGetters.getTotals(cart.value));
+    const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
+    const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
+
+    onSSR(async () => {
+      await loadCart();
+    });
+    onBeforeMount(async () => {
+        await loadCart().then(() => {
+          if (cart && cart.value.orderStatusUrl !== null) {
+            root.$cookies.remove(`${root.$config.appKey}_cart_id`); 
+          }
+        });
+    });
+
+    return {
+      isAuthenticated,
+      products,
+      removeItem,
+      updateItemQty,
+      isCartSidebarOpen,
+      toggleCartSidebar,
+      totals,
+      totalItems,
+      cartGetters,
+      checkoutURL,
+      sendNotification,
+      notifications
+    };
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
@@ -283,43 +321,6 @@ export default {
         window.location.replace(checkoutUrl);
       }, 400);
     }
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(props, {root}) {
-    const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
-    const { cart, removeItem, updateItemQty, load: loadCart } = useCart();
-    const { isAuthenticated } = useUser();
-    const { send: sendNotification, notifications } = useUiNotification();
-    const products = computed(() => cartGetters.getItems(cart.value));
-    const totals = computed(() => cartGetters.getTotals(cart.value));
-    const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
-    const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
-
-    onSSR(async () => {
-      await loadCart();
-    });
-    onBeforeMount(async () => {
-        await loadCart().then(() => {
-          if (cart && cart.value.orderStatusUrl !== null) {
-            root.$cookies.remove(`${root.$config.appKey}_cart_id`); 
-          }
-        });
-    });
-
-    return {
-      isAuthenticated,
-      products,
-      removeItem,
-      updateItemQty,
-      isCartSidebarOpen,
-      toggleCartSidebar,
-      totals,
-      totalItems,
-      cartGetters,
-      checkoutURL,
-      sendNotification,
-      notifications
-    };
   }
 };
 </script>

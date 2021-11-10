@@ -254,13 +254,13 @@ import {
   SfColor
 } from '@storefront-ui/vue';
 
+import InstagramFeed from '~/components/InstagramFeed.vue';
+import RelatedProducts from '~/components/RelatedProducts1.vue';
 import { ref, computed, watch } from '@vue/composition-api';
 import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
+import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
 import { onSSR } from '@vue-storefront/core';
-import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
-import RelatedProducts from '~/components/RelatedProducts1.vue';
-import InstagramFeed from '~/components/InstagramFeed.vue';
 import useUiNotification from '~/composables/useUiNotification';
 
 export default {

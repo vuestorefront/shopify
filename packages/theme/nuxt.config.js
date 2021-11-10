@@ -1,5 +1,6 @@
-import webpack from 'webpack';
 require('isomorphic-fetch');
+import webpack from 'webpack';
+
 
 export default {
   server: {
