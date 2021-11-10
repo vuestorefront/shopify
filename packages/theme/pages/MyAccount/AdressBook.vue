@@ -97,11 +97,11 @@ import {
   SfLoader,
   SfNotification
 } from '@storefront-ui/vue';
+import BillingAddressForm from '~/components/MyAccount/BillingAddressForm';
+import UserBillingAddress from '~/components/UserBillingAddress';
 import { useUserBilling, userBillingGetters } from '@vue-storefront/shopify';
 import { ref, computed } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
-import BillingAddressForm from '~/components/MyAccount/BillingAddressForm';
-import UserBillingAddress from '~/components/UserBillingAddress';
 import useUiNotification from '~/composables/useUiNotification';
 
 export default {

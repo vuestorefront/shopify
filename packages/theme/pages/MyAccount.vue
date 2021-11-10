@@ -48,12 +48,14 @@
 import { SfBreadcrumbs, SfContentPages, SfMenuItem, SfLink } from '@storefront-ui/vue';
 import { ref, computed } from '@vue/composition-api';
 import { useUser, userGetters, useContent } from '@vue-storefront/shopify';
-import { onSSR } from '@vue-storefront/core';
+
 import MyProfile from './MyAccount/MyProfile';
 import AdressBook from './MyAccount/AdressBook';
 import LoyaltyCard from './MyAccount/LoyaltyCard';
 import OrderHistory from './MyAccount/OrderHistory';
+import { onSSR } from '@vue-storefront/core';
 import useUiNotification from '~/composables/useUiNotification';
+
 export default {
   name: 'MyAccount',
   components: {

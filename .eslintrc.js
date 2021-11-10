@@ -17,6 +17,8 @@ module.exports = {
     'require-await': 'warn',
     'vue/no-dupe-keys': 'warn',
     'vue/no-side-effects-in-computed-properties': 'warn',
-    'array-callback-return': 'warn'
+    'array-callback-return': 'warn',
+    'import/order': 'off',
+    'import/first': 'off'
   }
 }

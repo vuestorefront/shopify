@@ -306,8 +306,8 @@ import {
   useFacet,
   facetGetters
 } from '@vue-storefront/shopify';
-import { onSSR } from '@vue-storefront/core';
 import { useUiHelpers, useUiState, useUiNotification } from '~/composables';
+import { onSSR } from '@vue-storefront/core';
 
 export default {
   components: {
