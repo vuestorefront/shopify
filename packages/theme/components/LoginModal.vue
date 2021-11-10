@@ -231,13 +231,15 @@
                   class="form__element"
                 >
                 <template #label>
-                  <SfButton
-                  class='sf-button--pure'
+                  <SfLink
+                  class='sf-button--pure terms-link'
                   type = 'button'
-                  @click="handleTermsLink"
+                  :link="localePath({name: 'TermsAndConditions'})"
+                  @click.native="toggleLoginModal()"
                 >
-                    &nbsp;&nbsp;Accept Terms &amp; Conditions
-                  </SfButton></template>
+                    Accept Terms &amp; Conditions
+                  </SfLink>
+                  </template>
                 </SfCheckbox>
               </ValidationProvider>
             </div>
@@ -310,11 +312,6 @@ export default {
     const form = ref({});
     const createAccount = ref(false);
     const rememberMe = ref(false);
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    const handleTermsLink = () => {
-      toggleLoginModal();
-      $router.push('/terms-and-conditions');
-    };
     const { register, login, loading, user } = useUser();
     const { send: sendNotification} = useUiNotification();
     watch(isLoginModalOpen, () => {
@@ -387,7 +384,6 @@ export default {
       toggleLoginModal,
       handleLogin,
       handleRegister,
-      handleTermsLink,
       sendNotification,
       isForgotPassword,
       handleForgotPassword
@@ -501,5 +497,8 @@ export default {
       max-width: 280px;
     }
   }
+}
+.terms-link {
+  margin-left: var(--spacer-xs);
 }
 </style>
