@@ -266,7 +266,7 @@
   </SfModal>
 </template>
 <script type="module">
-import { ref, watch } from '@vue/composition-api';
+import { ref, watch } from '@nuxtjs/composition-api';
 import { SfModal, SfInput, SfButton, SfCheckbox, SfLoader, SfAlert, SfBar, SfIcon, SfLink } from '@storefront-ui/vue';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import { required, email, min } from 'vee-validate/dist/rules';

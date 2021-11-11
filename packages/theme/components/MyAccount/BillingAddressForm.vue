@@ -220,7 +220,7 @@ import {
 } from '@storefront-ui/vue';
 import { required, min, oneOf, regex, max } from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
-import { ref } from '@vue/composition-api';
+import { ref } from '@nuxtjs/composition-api';
 import countryState from '~/static/country-state';
 
 extend('required', {

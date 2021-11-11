@@ -208,7 +208,7 @@ import {
   SfNotification,
   SfLoader
 } from '@storefront-ui/vue';
-import { computed, onBeforeMount } from '@vue/composition-api';
+import { computed, onBeforeMount } from '@nuxtjs/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
 import { useUiState, useUiNotification } from '~/composables';
 import { onSSR } from '@vue-storefront/core';

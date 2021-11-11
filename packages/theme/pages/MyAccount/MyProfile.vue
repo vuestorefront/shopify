@@ -133,7 +133,7 @@
   </div>
 </template>
 <script type="module">
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed } from '@nuxtjs/composition-api';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import { email, required, min, confirmed } from 'vee-validate/dist/rules';
 import { SfTabs, SfInput, SfButton, SfAlert, SfProperty, SfHeading, SfCheckbox } from '@storefront-ui/vue';

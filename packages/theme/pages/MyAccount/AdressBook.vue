@@ -100,7 +100,7 @@ import {
 import BillingAddressForm from '~/components/MyAccount/BillingAddressForm';
 import UserBillingAddress from '~/components/UserBillingAddress';
 import { useUserBilling, userBillingGetters } from '@vue-storefront/shopify';
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import useUiNotification from '~/composables/useUiNotification';
 
