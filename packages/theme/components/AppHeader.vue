@@ -53,9 +53,10 @@
 <script type="module">
 import { SfHeader, SfImage, SfButton, SfBadge } from '@storefront-ui/vue';
 import useUiState from '~/composables/useUiState';
-import { useCart, useWishlist, useUser, cartGetters, useCategory } from '@vue-storefront/shopify';
-import { computed, ref } from '@vue/composition-api';
 import { onSSR } from '@vue-storefront/core';
+import { computed, ref } from '@nuxtjs/composition-api';
+
+import { useCart, useWishlist, useUser, cartGetters, useCategory } from '@vue-storefront/shopify';
 import useUiHelpers from '~/composables/useUiHelpers';
 import LocaleSelector from './LocaleSelector';
 

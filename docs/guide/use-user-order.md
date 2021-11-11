@@ -35,7 +35,7 @@ The list of orders associated with the customer.
 
 ```javascript
 import { onSSR } from '@vue-storefront/core';
-import { computed } from '@vue/composition-api';
+import { computed } from '@nuxtjs/composition-api';
 import { useUserOrders } from '@vue-storefront/shopify';
 
 export default {

@@ -115,7 +115,7 @@ export type Product = {
 
 Fetch a single product by handle of the product.
 ```typescript
-import { computed } from '@vue/composition-api';
+import { computed } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useProduct, productGetters } from '@vue-storefront/shopify';
 

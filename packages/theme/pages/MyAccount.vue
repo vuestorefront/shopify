@@ -46,7 +46,7 @@
 </template>
 <script type="module">
 import { SfBreadcrumbs, SfContentPages, SfMenuItem, SfLink } from '@storefront-ui/vue';
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed } from '@nuxtjs/composition-api';
 import { useUser, userGetters, useContent } from '@vue-storefront/shopify';
 
 import MyProfile from './MyAccount/MyProfile';

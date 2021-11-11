@@ -1,4 +1,4 @@
-import { getCurrentInstance } from '@vue/composition-api';
+import { getCurrentInstance } from '@nuxtjs/composition-api';
 import { Category } from '@vue-storefront/shopify-api';
 import { AgnosticFacet } from '@vue-storefront/core';
 
@@ -6,7 +6,7 @@ const nonFilters = ['page', 'sort', 'term', 'itemsPerPage'];
 
 const getContext = () => {
   const vm = getCurrentInstance();
-  return vm.$root;
+  return vm.root.proxy;
 };
 
 const reduceFilters = (query) => (prev, curr) => {

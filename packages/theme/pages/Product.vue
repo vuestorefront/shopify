@@ -256,7 +256,7 @@ import {
 
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts1.vue';
-import { ref, computed, watch } from '@vue/composition-api';
+import { ref, computed, watch } from '@nuxtjs/composition-api';
 import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
