@@ -2,8 +2,6 @@
 
 Vue Storefront 2 template for Shopify.
 
-> Please keep in mind this project is in beta phase. Please report all bugs you will spot on GitHub or help us by reolving them by yourself. It will help us to resolve them faster and make this project production-ready sooner!
-
 ## Setup
 
 1. Create a `.env` inline with `middleware.config.js` file and fill the following required variables
