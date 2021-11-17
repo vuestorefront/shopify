@@ -167,7 +167,7 @@ const config = {
     ]
   },
   build: {
-    transpile: ['vee-validate/dist/rules'],
+    transpile: ['vee-validate/dist/rules', 'storefront-ui'],
     plugins: [
       new webpack.DefinePlugin({
         'process.VERSION': JSON.stringify({
