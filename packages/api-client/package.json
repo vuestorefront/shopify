@@ -7,10 +7,11 @@
   "types": "server/index.d.ts",
   "server": "server/index.js",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rimraf lib && rimraf server && rollup -c && yarn ts-coverage",
     "dev": "rollup -c -w",
     "test": "jest",
-    "prepublish": "yarn build"
+    "prepublish": "yarn build",
+    "ts-coverage": "typescript-coverage-report"
   },
   "dependencies": {
     "@nuxtjs/composition-api": "^0.30.0",
@@ -32,5 +33,28 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "typeCoverage": {
+    "atLeast": 87.27,
+    "is": 99,
+    "cache": false,
+    "debug": false,
+    "detail": false,
+    "ignoreCatch": true,
+    "ignoreFiles": [
+      "__tests__/**",
+      "node_modules/**",
+      "lib/**"
+    ],
+    "strict": false,
+    "suppressError": false,
+    "update": true,
+    "ignoreUnread": true,
+    "ignoreNested": true,
+    "ignoreAsAssertion": true,
+    "ignoreTypeAssertion": true,
+    "ignoreNonNullAssertion": true,
+    "showRelativePath": true,
+    "historyFile": "typecoverage.json"
   }
 }

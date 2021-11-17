@@ -1,5 +1,41 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "include": ["src"],
-  "exclude": ["node_modules", "lib"]
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ],
+  "compilerOptions": {
+    "allowUnreachableCode": false,
+    "outDir": "./lib",
+    "esModuleInterop": true,
+    "target": "es5",
+    /* Module Resolution Options */
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "declaration": true,                      /* Generates corresponding '.d.ts' file. */
+    "importHelpers": true,
+    "noEmitHelpers": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    /* Strict Type-Checking Options */
+    "strict": false,                        /* Enable all strict type-checking options. */
+    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": false,                 /* Raise error on expressions and declarations with an implied 'any' type. */
+    "strictNullChecks": false,              /* Enable strict null checks. */
+    "strictFunctionTypes": false,           /* Enable strict checking of function types. */
+    "strictBindCallApply": true,           /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
+    "strictPropertyInitialization": false,  /* Enable strict checking of property initialization in classes. */
+    "noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
+    "alwaysStrict": false,                  /* Parse in strict mode and emit "use strict" for each source file. */
+
+    /* Additional Checks */
+    "noUnusedLocals": false,                /* Report errors on unused locals. */
+    "noUnusedParameters": true,            /* Report errors on unused parameters. */
+    "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
+    "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
+    "baseUrl": "./",
+    "lib": ["es6", "es7", "dom"],
+  },
 }

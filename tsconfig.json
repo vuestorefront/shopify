@@ -1,0 +1,12 @@
+{
+  "include": [
+    "packages"
+  ],
+  "exclude": [
+    "dev",
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "strict": false
+  }
+}

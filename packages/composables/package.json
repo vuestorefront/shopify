@@ -6,18 +6,22 @@
   "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "rimraf lib && rollup -c",
+    "build": "rimraf lib && rollup -c && yarn ts-coverage",
     "dev": "rollup -c -w",
     "test": "jest",
-    "prepublish": "yarn build"
+    "prepublish": "yarn build",
+    "ts-coverage": "typescript-coverage-report"
   },
   "dependencies": {
-    "@vue-storefront/shopify-api": "1.0.6",
+    "@types/js-cookie": "^2.2.6",
     "@vue-storefront/core": "~2.5.0",
-    "@types/js-cookie": "^2.2.6"
+    "@vue-storefront/shopify-api": "1.0.6"
+  },
+  "devDependencies": {
+    "@nuxtjs/composition-api": "0.30.0"
   },
   "peerDependencies": {
-    "@nuxtjs/composition-api": "1.2.4"
+    "@nuxtjs/composition-api": "0.30.0"
   },
   "files": [
     "lib/**/*",
@@ -25,5 +29,28 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "typeCoverage": {
+    "atLeast": 87.27,
+    "is": 99,
+    "cache": false,
+    "debug": false,
+    "detail": false,
+    "ignoreCatch": true,
+    "ignoreFiles": [
+      "__tests__/**",
+      "node_modules/**",
+      "lib/**"
+    ],
+    "strict": false,
+    "suppressError": false,
+    "update": true,
+    "ignoreUnread": true,
+    "ignoreNested": true,
+    "ignoreAsAssertion": true,
+    "ignoreTypeAssertion": true,
+    "ignoreNonNullAssertion": true,
+    "showRelativePath": true,
+    "historyFile": "typecoverage.json"
   }
 }
