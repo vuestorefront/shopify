@@ -35,3 +35,5 @@ coverage
 .DS_STORE
 
 !scripts/lib
+yarn.lock
+package.lock

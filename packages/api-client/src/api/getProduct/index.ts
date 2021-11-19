@@ -30,6 +30,23 @@ export default async function getProduct(
             productByHandle.add('availableForSale');
             productByHandle.add('totalInventory');
             productByHandle.add('vendor');
+            productByHandle.addField('seo', (seoData) => {
+                seoData.add('title');
+                seoData.add('description');
+            });
+            productByHandle.addConnection(
+              'metafields',
+              { args: { first: 20 } },
+              (metafields) => {
+                metafields.add('id');
+                metafields.add('createdAt');
+                metafields.add('updatedAt');
+                metafields.add('namespace');
+                metafields.add('type');
+                metafields.add('key');
+                metafields.add('value');
+              }
+            );
             productByHandle.add('variantBySelectedOptions', { args: { selectedOptions: chosenVariant } }, (selectedVariant) => {
               selectedVariant.add('id');
               selectedVariant.add('title');
@@ -227,6 +244,10 @@ export default async function getProduct(
   } else if (params.id) {
     return await context.client.product.fetch(params.id).then((product) => {
       return product;
+    });
+  } else if (params.ids){
+    return await context.client.product.fetchMultiple(params.ids).then((products) => {
+      return products;
     });
   } else {
     return await context.client.product
