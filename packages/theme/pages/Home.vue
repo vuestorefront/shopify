@@ -69,7 +69,7 @@ import {
 } from '@vue-storefront/shopify';
 import {
   computed
-} from '@vue/composition-api';
+} from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import LazyHydrate from 'vue-lazy-hydration';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
@@ -233,7 +233,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .article-meta h4 a {
   color: #111111;
   font-weight: 600;

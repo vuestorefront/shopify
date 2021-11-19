@@ -298,7 +298,7 @@ import {
   SfColor,
   SfProperty
 } from '@storefront-ui/vue';
-import { computed, onMounted } from '@vue/composition-api';
+import { computed, onMounted } from '@nuxtjs/composition-api';
 import {
   useCart,
   useWishlist,
@@ -306,8 +306,8 @@ import {
   useFacet,
   facetGetters
 } from '@vue-storefront/shopify';
-import { onSSR } from '@vue-storefront/core';
 import { useUiHelpers, useUiState, useUiNotification } from '~/composables';
+import { onSSR } from '@vue-storefront/core';
 
 export default {
   components: {

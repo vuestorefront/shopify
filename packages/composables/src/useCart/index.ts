@@ -4,32 +4,7 @@ import {
   useCartFactory,
   UseCartFactoryParams
 } from '@vue-storefront/core';
-import Vue from 'vue'
-import VueCompositionAPI from '@vue/composition-api'
 import { Cart, CartItem, Coupon, Product } from '../types';
-
-// We need to register it again because of Vue instance instantiation issues
-Vue.use(VueCompositionAPI);
-
-const getBasketItemByProduct = ({ currentCart, product }) => {
-  if (product) {
-    let variantId;
-    if (product && product.variantBySelectedOptions && product.variantBySelectedOptions !== null) {
-      variantId = product.variantBySelectedOptions.id;
-    }
-    if (product.variants) {
-      variantId = product.variants[0].id;
-    }
-    if (product.barcodes) {
-      // handle & convert plain product Id from BCapp to base64
-      const variationIDPlain = 'gid://shopify/ProductVariant/' + variantId;
-      const buff = Buffer.from(variationIDPlain);
-      variantId = buff.toString('base64');
-    }
-    return currentCart.lineItems.find((item) => item.variant.id === variantId);
-  }
-  return false;
-};
 
 const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -102,6 +77,26 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isInCart: (context: Context, { currentCart, product }) => {
+    const getBasketItemByProduct = ({ currentCart, product }) => {
+      if (product) {
+        let variantId;
+        if (product && product.variantBySelectedOptions && product.variantBySelectedOptions !== null) {
+          variantId = product.variantBySelectedOptions.id;
+        }
+        if (product.variants) {
+          variantId = product.variants[0].id;
+        }
+        if (product.barcodes) {
+          // handle & convert plain product Id from BCapp to base64
+          const variationIDPlain = 'gid://shopify/ProductVariant/' + variantId;
+          const buff = Buffer.from(variationIDPlain);
+          variantId = buff.toString('base64');
+        }
+        return currentCart.lineItems.find((item) => item.variant.id === variantId);
+      }
+      return false;
+    };
+
     return Boolean(currentCart && getBasketItemByProduct({ currentCart, product }));
   }
 };

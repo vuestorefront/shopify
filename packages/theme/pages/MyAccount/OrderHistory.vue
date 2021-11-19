@@ -238,7 +238,7 @@ import {
   SfBadge,
   SfLoader
 } from '@storefront-ui/vue';
-import { computed, ref } from '@vue/composition-api';
+import { computed, ref } from '@nuxtjs/composition-api';
 import { useUserOrders, orderGetters } from '@vue-storefront/shopify';
 import { AgnosticOrderStatus , onSSR } from '@vue-storefront/core';
 

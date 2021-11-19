@@ -1,7 +1,8 @@
-import webpack from 'webpack';
 require('isomorphic-fetch');
+import webpack from 'webpack';
 
-export default {
+/** @type { import('@nuxt/types').NuxtConfig } */ 
+const config = {
   server: {
     port: 3001,
     host: '0.0.0.0'
@@ -57,6 +58,7 @@ export default {
   ],
   buildModules: [
     // to core
+    '@nuxtjs/composition-api/module',
     '@nuxtjs/pwa',
     '@nuxt/typescript-build',
     '@nuxtjs/style-resources',
@@ -175,6 +177,15 @@ export default {
         })
       })
     ],
+    extend(config) {
+      config.resolve.extensions.push('.mjs')
+
+      config.module.rules.push({
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto'
+      })
+    },
     extractCSS: {
       ignoreOrder: true
     }
@@ -286,3 +297,5 @@ export default {
     }
   }
 };
+
+export default config

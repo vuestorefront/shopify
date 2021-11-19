@@ -31,7 +31,7 @@ handle (url key) or product id.
 
 This example fetch a single product by handle.
 ```typescript
-import { computed } from '@vue/composition-api';
+import { computed } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useProduct, productGetters } from '@vue-storefront/shopify';
 
@@ -61,7 +61,7 @@ This step shows how to add a product to the cart. To add a product to a cart, yo
 
 ```typescript
 import { useCart } from '@vue-storefront/shopify';
-import { ref } from '@vue/composition-api';
+import { ref } from '@nuxtjs/composition-api';
 
 export default {
   setup() {

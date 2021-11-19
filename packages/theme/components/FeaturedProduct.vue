@@ -125,7 +125,7 @@ import {
   SfColor
 } from '@storefront-ui/vue';
 
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed } from '@nuxtjs/composition-api';
 import {
   useCart,
   productGetters,
