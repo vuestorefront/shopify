@@ -17,7 +17,7 @@
     "@types/js-cookie": "^2.2.6"
   },
   "peerDependencies": {
-    "@nuxtjs/composition-api": "1.2.4"
+    "@nuxtjs/composition-api": "0.29.3"
   },
   "files": [
     "lib/**/*",
