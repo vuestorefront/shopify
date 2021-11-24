@@ -29,7 +29,8 @@
     "test:composables": "cd packages/composables && yarn test --passWithNoTests",
     "test:theme": "cd packages/theme && yarn test --passWithNoTests",
     "update:check": "ncu && lerna run update:check --stream",
-    "update:update": "ncu -u && lerna run update:update --stream && yarn install --force"
+    "update:update": "ncu -u && lerna run update:update --stream && yarn install --force",
+    "generate:template": "cd packages/theme && rimraf .template && npx @vue-storefront/cli@2.3.4 generate-template .template"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
