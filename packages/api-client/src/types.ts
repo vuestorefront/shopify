@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
-export type Maybe<T> = T | null;
-export type Scalars = {
+type Maybe<T> = T | null;
+type Scalars = {
   ID: string;
   String: string;
   Boolean: boolean;
@@ -53,7 +53,7 @@ export type Scalars = {
   /** Time is a scalar value that represents an ISO8601 formatted time. */
   Time: any;
 };
-export type Cart = {
+type Cart = {
   __typename?: 'Cart';
   appliedGiftCards: Maybe<Scalars['Array']>;
   completedAt: Maybe<Scalars['String']>;
@@ -90,7 +90,7 @@ export type CartItem = {
   variant?: Maybe<Scalars['Array']>;
 }
 export type Wishlist = {}
-export type ProductVariant = {
+type ProductVariant = {
   __typename?: 'ProductVariant';
   _id?: Maybe<Scalars['String']>;
   _description: Maybe<Scalars['String']>;

@@ -21,6 +21,10 @@ import addAddress from './api/addAddress';
 import updateAddress from './api/updateAddress';
 import checkOut from './api/checkOut';
 
+// Next
+import { client as graphqlClient } from './next/graphql/client'
+import { apiEndpoints } from './next/api'
+
 const CustomClient = require('shopify-buy/index.unoptimized.umd.min.js');
 const defaultSettings = {};
 const cookies = {
@@ -33,6 +37,7 @@ const onCreate = (settings) => {
       ...defaultSettings,
       ...settings
     },
+    graphqlClient: graphqlClient(settings),
     client: CustomClient.buildClient(settings.api),
     cookies: (settings.api).cookies || cookies
   });
@@ -62,7 +67,8 @@ const { createApiClient } = apiClientFactory<any, any>({
     updateAddress,
     createCart,
     checkOut,
-    cookies
+    cookies,
+    ...apiEndpoints
   }
 });
 

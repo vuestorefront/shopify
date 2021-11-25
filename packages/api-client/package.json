@@ -10,7 +10,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": "jest",
-    "prepublish": "yarn build"
+    "prepublish": "yarn build",
+    "codegen": "graphql-codegen -c ./src/next/codegen.yml"
   },
   "dependencies": {
     "@nuxtjs/composition-api": "^0.30.0",
@@ -21,6 +22,8 @@
     "shopify-buy": "^2.11.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.3.0",
+    "@graphql-codegen/typescript": "^2.4.1",
     "@types/shopify-buy": "^2.10.5",
     "graphql-tools": "^4.0.6",
     "jest-transform-graphql": "^2.1.0",
