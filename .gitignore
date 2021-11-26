@@ -5,7 +5,6 @@ middleware.config.js
 _theme
 node_modules
 .history
-yarn.lock
 package-json.lock
 sw.js
 .env

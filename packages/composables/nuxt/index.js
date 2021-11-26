@@ -40,7 +40,7 @@ export default function(moduleOptions) {
   }
 
   this.extendBuild((config) => {
-    config.resolve.alias['@vue-storefront/shopify-api$'] = require.resolve(
+    config.resolve.alias['@vue-storefront/shopify-api$'] = path.resolve(
       '@vue-storefront/shopify-api'
     );
   });

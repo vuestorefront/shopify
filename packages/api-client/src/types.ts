@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
-export type Maybe<T> = T | null;
-export type Scalars = {
+type Maybe<T> = T | null;
+type Scalars = {
   ID: string;
   String: string;
   Boolean: boolean;
