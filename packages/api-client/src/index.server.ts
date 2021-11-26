@@ -1,4 +1,6 @@
 import { apiClientFactory } from '@vue-storefront/core';
+
+// TODO: extract api's into another directory
 import getProduct from './api/getProduct';
 import getCategory from './api/getCategory';
 import editProfile from './api/editProfile';
@@ -22,7 +24,10 @@ import updateAddress from './api/updateAddress';
 import checkOut from './api/checkOut';
 
 // Next
+import { MiddlewareSettingsConfig } from './';
 import { createGraphQLClient } from './next/graphql/client'
+import { apiEndpoints } from './next/api'
+
 
 const CustomClient = require('shopify-buy/index.unoptimized.umd.min.js');
 
@@ -31,7 +36,7 @@ const cookies = {
   cartCookieName: 'vsf-cart'
 };
 
-const onCreate = (settings) => {
+const onCreate = (settings: MiddlewareSettingsConfig) => {
   const client = CustomClient.buildClient(settings.api)
 
   client.apolloClient = createGraphQLClient(settings)
@@ -70,7 +75,8 @@ const { createApiClient } = apiClientFactory<any, any>({
     updateAddress,
     createCart,
     checkOut,
-    cookies
+    cookies,
+    ...apiEndpoints
   }
 });
 

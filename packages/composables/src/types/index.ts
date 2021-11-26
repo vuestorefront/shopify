@@ -1,5 +1,14 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import { ProductVariant } from '@vue-storefront/shopify-api';
+import { ProductVariant, ShopifyIntegrationContext } from '@vue-storefront/shopify-api';
+
+// New Types
+
+export interface Context {
+  $shopify: ShopifyIntegrationContext
+  [key: string]: any
+}
+
+
+// Old Types
 export { UseCategory, UseProduct } from '@vue-storefront/core';
 export type Category = Record<string, unknown>;
 
