@@ -19,6 +19,7 @@ module.exports = {
     'vue/no-side-effects-in-computed-properties': 'warn',
     'array-callback-return': 'warn',
     'import/order': 'off',
-    'import/first': 'off'
+    'import/first': 'off',
+    'vue/multi-word-component-names': 'off'
   }
 }

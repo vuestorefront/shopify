@@ -1,10 +1,10 @@
 import { ProductsSearchParams } from '@vue-storefront/core'
+import { EndpointResult } from '../'
 import { ShopifyIntegrationContext } from '../context'
-import { ProductConnection } from '../shopify'
 
 export interface Endpoints {
   searchProduct(
     context: ShopifyIntegrationContext,
     props: ProductsSearchParams
-  ): Promise<ProductConnection>
+  ): EndpointResult
 }

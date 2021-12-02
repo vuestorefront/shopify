@@ -1,7 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const enhanceProduct = (productResponse: Array<any>) => {
+import { Product, ProductVariant } from "@vue-storefront/shopify-api";
+
+type EnhancedProduct = Product | ProductVariant
+
+const enhanceProduct = (productResponse: Product[]) => {
   if (Object.keys(productResponse).length === 0) return;
-  const enhancedProductResponse = productResponse.map((product) => ({
+
+  const enhancedProductResponse: EnhancedProduct[] = productResponse.map((product) => ({
     ...product,
     name: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions.title : product.title,
     images: product?.images,
@@ -20,7 +24,8 @@ const enhanceProduct = (productResponse: Array<any>) => {
     _slug: product.handle,
     _coverImage: product?.images[0],
     _mainPrice: product.variants[0].price
-  }));
+  }) as EnhancedProduct);
+
   return enhancedProductResponse;
 };
 

@@ -8,7 +8,8 @@
     <SfBottomNavigationItem data-cy="bottom-navigation-url_wishlist" icon="heart" size="20px" label="Wishlist" @click="toggleWishlistSidebar"/>
     <SfBottomNavigationItem data-cy="bottom-navigation-url_account" icon="profile" size="20px" label="Account" @click="handleAccountClick"/>
     <!-- TODO: add logic for label - if on Home then Basket, if on PDC then AddToCart etc. -->
-    <SfBottomNavigationItem data-cy="bottom-navigation-url_add-to-cart"
+    <SfBottomNavigationItem
+      data-cy="bottom-navigation-url_add-to-cart"
       label="Basket"
       icon="add_to_cart"
       @click="toggleCartSidebar"

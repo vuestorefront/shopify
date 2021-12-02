@@ -36,3 +36,5 @@ coverage
 !scripts/lib
 
 packages/theme/.template
+
+tests/e2e/report
