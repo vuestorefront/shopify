@@ -84,7 +84,8 @@
                 </SfButton>
               </div>
             </div>
-            <SfButton data-cy="login-btn_submit"
+            <SfButton
+              data-cy="login-btn_submit"
               type="submit"
               class="sf-button--full-width form__button"
               :disabled="loading"
@@ -122,7 +123,8 @@
                 </svg>
               </span>
             </ValidationProvider>
-            <SfButton data-cy="login-btn_submit"
+            <SfButton
+              data-cy="login-btn_submit"
               type="submit"
               class="sf-button--full-width form__button"
               :disabled="loading"

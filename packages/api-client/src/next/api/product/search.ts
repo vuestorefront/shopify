@@ -2,7 +2,7 @@ import { CustomQuery, ProductsSearchParams } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
 import { print } from 'graphql'
 import { ShopifyIntegrationContext } from '../../types/context'
-import { ShopProductsArgs } from 'packages/api-client/src'
+import { ShopProductsArgs } from '../../types/shopify'
 
 export const DEFAULT_QUERY = gql`
     query products(
@@ -10,14 +10,44 @@ export const DEFAULT_QUERY = gql`
         $query: String
     ) {
         products(first: $first, query: $query) {
-            edges {
-                node {
+          edges {
+              node {
+                  title
+                  images(first: 1) {
+                    edges {
+                      node {
+                        src
+                        originalSrc
+                        id
+                        height
+                        width
+                        altText
+                      }
+                    }
+                  }
+                  variants(first: 1) {
+                    edges {
+                      node {
+                        price
+                        available
+                        compareAtPrice
+                      }
+                    }
+                  }
+                  tags
+                  productType
+                  options {
                     id
-                    title
-                    description
-                }
-            }
-        }
+                    name
+                    values
+                  }
+                  id
+                  description
+                  descriptionHtml
+                  handle
+              }
+          }
+        } 
     }
 `
 
@@ -42,5 +72,5 @@ export async function searchProduct(context: ShopifyIntegrationContext, params: 
     variables: products.variables
   })
 
-  return response?.data ?? []
+  return response ?? null
 }
