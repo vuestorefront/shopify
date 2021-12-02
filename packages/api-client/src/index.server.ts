@@ -21,19 +21,27 @@ import addAddress from './api/addAddress';
 import updateAddress from './api/updateAddress';
 import checkOut from './api/checkOut';
 
+// Next
+import { createGraphQLClient } from './next/graphql/client'
+
 const CustomClient = require('shopify-buy/index.unoptimized.umd.min.js');
+
 const defaultSettings = {};
 const cookies = {
   cartCookieName: 'vsf-cart'
 };
 
 const onCreate = (settings) => {
+  const client = CustomClient.buildClient(settings.api)
+
+  client.apolloClient = createGraphQLClient(settings)
+
   return ({
     config: {
       ...defaultSettings,
       ...settings
     },
-    client: CustomClient.buildClient(settings.api),
+    client,
     cookies: (settings.api).cookies || cookies
   });
 };
