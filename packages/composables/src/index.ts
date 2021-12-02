@@ -5,6 +5,7 @@ import useContent from './useContent';
 import useFacet from './useFacet';
 import useProduct from './useProduct';
 import useReview from './useReview';
+import useSearch from './useSearch'
 import useUser from './useUser';
 import useStore from './useStore'
 import useUserBilling from './useUserBilling';
@@ -21,6 +22,7 @@ export {
   useContent,
   useFacet,
   useProduct,
+  useSearch,
   useReview,
   useStore,
   useUser,
