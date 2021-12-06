@@ -6,7 +6,6 @@ export const useSearchFactoryParams: UseSearchFactoryParams<EndpointResult, Prod
   async search(context: Context, params: ProductsSearchParams): Promise<EndpointResult> {
     const response = await context.$shopify.api.searchProduct(params)
 
-
     return response
   }
 }
