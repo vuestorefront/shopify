@@ -38,3 +38,5 @@ coverage
 packages/theme/.template
 
 tests/e2e/report
+
+docs/.vuepress/dist

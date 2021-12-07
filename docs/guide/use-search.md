@@ -4,11 +4,9 @@
 
 - `search` - a main querying function that is used to search products from eCommerce platform and populate the `products` object with the result. Every time you invoke this function API request is made. This method accepts a single `params` object
     - The `params` has the following options:
-        - `first` (Int) Returns up to the first `n` elements from the list.
-        - `sortKey` (String) The key to sort results by. Available values are VENDOR, CREATED_AT, ID, PRICE, PRODUCT_TYPE, RELEVANCE, TITLE, UPDATED_AT, BEST_SELLING.
-        - `reverse` (Boolean) Whether or not to reverse the sort order of the results.
-        - `query` (String) A query string.
-- `searchResults: Product[]` - a main data object that contains an array of categories fetched by `search` method
+        - `perPage` (Int) Max number `n` of elements from the list.
+        - `term` (String) A term string.
+- `result: EndpointResult` - a main data object that contains an array of products fetched by `search` method
 
 ```typescript
 export type Maybe<T> = T | null;
@@ -74,22 +72,24 @@ export type Product = {
 ## Examples
 
 ```javascript
+import { watch } from 'vue'
 import { onSSR } from '@vue-storefront/core';
-import { useSearch } from '@vue-storefront/shopify';
+import { useSearch, searchGetters } from '@vue-storefront/shopify';
 
 export default {
   setup(props, context) {
-    const { search, searchResults } = useSearch();
+    const { search, result } = useSearch();
     
     const searchQuery = ref("");
-    const productsFound = computed(() => searchResults.value?.products);
-    
-    const onSearchQueryChanged = value => {
-      searchQuery.value = value;
-      if (value.length > 2) {
+    // Take note of this line the result should be pass through 
+    // searchGetters.getItems() to extract only array of Product
+    const productsFound = computed(() => searchGetters.getItems(result.value));
+
+    watch(searchQuery, () => {
+      if (searchQuery.length > 2) {
         search({ term: searchQuery.value });
       }
-    };
+    })
 
     onSSR(async () => {
       await search({ term: "" });
@@ -97,9 +97,7 @@ export default {
 
     return {
       productsFound,
-      searchQuery,
-      searchResults,
-      onSearchQueryChanged
+      searchQuery
     };
   }
 };
