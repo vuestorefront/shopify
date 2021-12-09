@@ -1,6 +1,8 @@
 import { useSearchFactory, ProductsSearchParams } from '@vue-storefront/core'
-import { EndpointResult } from '@vue-storefront/shopify-api'
+import type { getShopifyApolloAPIs } from '@vue-storefront/shopify-apollo'
 
 import { useSearchFactoryParams } from './params'
 
-export default useSearchFactory<EndpointResult, ProductsSearchParams>(useSearchFactoryParams)
+export type ProductsSearchResult = ReturnType<ReturnType<typeof getShopifyApolloAPIs>['searchProduct']>
+
+export default useSearchFactory<ProductsSearchResult, ProductsSearchParams>(useSearchFactoryParams)

@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx lerna run --parallel precommit
+npx --no-install lerna run --parallel precommit

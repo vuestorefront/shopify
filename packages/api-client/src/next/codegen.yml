@@ -1,5 +1,0 @@
-schema: './src/next/schema.graphql'
-generates:
-  ./src/next/types/shopify.ts:
-    plugins:
-      - typescript
