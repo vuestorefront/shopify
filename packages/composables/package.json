@@ -12,9 +12,9 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@types/js-cookie": "^2.2.6",
+    "@vue-storefront/shopify-api": "1.0.8",
     "@vue-storefront/core": "~2.5.0",
-    "@vue-storefront/shopify-api": "1.0.8"
+    "@types/js-cookie": "^2.2.6"
   },
   "peerDependencies": {
     "@nuxtjs/composition-api": "0.29.3"

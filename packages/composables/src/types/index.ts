@@ -1,10 +1,9 @@
-import { ProductVariant } from '@vue-storefront/shopify-api';
-import { ShopifyApolloContext } from '@vue-storefront/shopify-apollo'
+import { ProductVariant, ShopifyIntegrationContext } from '@vue-storefront/shopify-api';
 
 // New Types
 
 export interface Context {
-  $shopify: ShopifyApolloContext
+  $shopify: ShopifyIntegrationContext
   [key: string]: any
 }
 

@@ -1,4 +1,4 @@
-import { QueryResult } from '@vue-storefront/shopify-api/lib/next'
+import { QueryResult } from '@vue-storefront/shopify-api'
 import searchGetters from '../../src/getters/searchGetters'
 import { SearchResultMock } from '../../__mocks__'
 

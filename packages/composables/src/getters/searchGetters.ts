@@ -1,5 +1,5 @@
 import { AgnosticBreadcrumb, AgnosticCategoryTree, AgnosticFilter, AgnosticMediaGalleryItem, AgnosticPagination, AgnosticPrice, AgnosticSort, UseSearchGetters } from '@vue-storefront/core'
-import { QueryResult, Product } from '@vue-storefront/shopify-api/lib/next'
+import { QueryResult, Product } from '@vue-storefront/shopify-api'
 import { enhanceProduct } from '../helpers/internals'
 
 const searchGetters: UseSearchGetters<QueryResult, Product> = {
@@ -23,7 +23,7 @@ const searchGetters: UseSearchGetters<QueryResult, Product> = {
       return product
     })
 
-    items = enhanceProduct(items) as any
+    items = enhanceProduct(items) as Product[]
 
     return items
   },

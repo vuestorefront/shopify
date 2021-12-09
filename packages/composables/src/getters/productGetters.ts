@@ -5,6 +5,7 @@ import {
   AgnosticPrice,
   ProductGetters
 } from '@vue-storefront/core';
+import { Product } from '@vue-storefront/shopify-api';
 import { ProductVariant } from '@vue-storefront/shopify-api/src/types';
 import { enhanceProduct } from '../helpers/internals';
 import { formatAttributeList, capitalize } from './_utils';
@@ -75,7 +76,7 @@ export const getProductFiltered = (products, filters: ProductVariantFilters | an
     return [];
   }
   products = Array.isArray(products) ? products : [products];
-  return (Object.keys(products).length > 0 ? enhanceProduct(products) : []) as ProductVariant[];
+  return (Object.keys(products).length > 0 ? enhanceProduct(products as Product[]) : []) as ProductVariant[];
 };
 export const getFilteredSingle = (product) => {
   if (!product) {
