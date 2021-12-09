@@ -1,8 +1,8 @@
-import { Product, ProductVariant } from "@vue-storefront/shopify-api";
+import { ProductVariant } from "@vue-storefront/shopify-api";
 
-type EnhancedProduct = Product | ProductVariant
+type EnhancedProduct = ProductVariant
 
-const enhanceProduct = (productResponse: Product[]) => {
+const enhanceProduct = (productResponse) => {
   if (Object.keys(productResponse).length === 0) return;
 
   const enhancedProductResponse: EnhancedProduct[] = productResponse.map((product) => ({

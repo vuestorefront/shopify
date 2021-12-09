@@ -75,20 +75,14 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Build api-client
-        run: yarn build:api-client
+      - name: Build
+        run: yarn build
 
       - name: Test api-client
         run: yarn test:api-client
 
-      - name: Build composables
-        run: yarn build:composables
-
       - name: Test composables
         run: yarn test:composables
-
-      - name: Build theme
-        run: yarn build:theme
 
       - name: Test theme
         run: yarn test:theme
