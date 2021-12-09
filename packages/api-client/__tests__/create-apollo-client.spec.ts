@@ -1,9 +1,9 @@
-
+import { MiddlewareSettingsConfig } from '../src/next/types'
 import { createApiClient } from '../src/index.server'
 
 (global as any).fetch = jest.fn();
 
-const mockSettings = {
+const mockSettings: Partial<MiddlewareSettingsConfig> = {
     api: {
         domain: '',
         storefrontAccessToken: ''

@@ -1,10 +1,10 @@
 import { CustomQuery, ProductsSearchParams } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
 import { print } from 'graphql'
-import { ShopifyApolloContext } from '../library'
-import { ProductConnection, ShopProductsArgs } from '../shopify'
+import { ShopifyIntegrationContext } from '../../types/context'
+import { ProductConnection, ShopProductsArgs } from '../../types/shopify'
 
-const DEFAULT_QUERY = gql`
+export const DEFAULT_QUERY = gql`
     query products(
         $first: Int,
         $query: String
@@ -51,8 +51,8 @@ const DEFAULT_QUERY = gql`
     }
 `
 
-export default async function searchProduct(context: ShopifyApolloContext, params: ProductsSearchParams, customQuery?: CustomQuery) {
-  const variables = {
+export async function searchProduct(context: ShopifyIntegrationContext, params: ProductsSearchParams, customQuery?: CustomQuery) {
+  const variables: ShopProductsArgs = {
     query: params.term,
     first: params.perPage ?? 5
   }
@@ -61,18 +61,16 @@ export default async function searchProduct(context: ShopifyApolloContext, param
     customQuery,
     {
       products: {
-        query: print(DEFAULT_QUERY as any),
+        query: print(DEFAULT_QUERY),
         variables
       }
     }
   )
 
   const response = await context.client.apolloClient.query<ProductConnection, ShopProductsArgs>({
-    query: gql(products.query) as any,
+    query: gql(products.query),
     variables: products.variables
   })
-
-  console.log(response)
 
   return response ?? null
 }

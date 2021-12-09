@@ -23,7 +23,11 @@ import addAddress from './api/addAddress';
 import updateAddress from './api/updateAddress';
 import checkOut from './api/checkOut';
 
-import { createShopifyApollo, getShopifyApolloAPIs } from '@vue-storefront/shopify-apollo'
+// Next
+import { MiddlewareSettingsConfig } from './';
+import { createGraphQLClient } from './next/graphql/client'
+import { apiEndpoints } from './next/api'
+
 
 const CustomClient = require('shopify-buy/index.unoptimized.umd.min.js');
 
@@ -32,10 +36,10 @@ const cookies = {
   cartCookieName: 'vsf-cart'
 };
 
-const onCreate = (settings) => {
+const onCreate = (settings: MiddlewareSettingsConfig) => {
   const client = CustomClient.buildClient(settings.api)
 
-  client.apolloClient = createShopifyApollo(settings)
+  client.apolloClient = createGraphQLClient(settings)
 
   return ({
     config: {
@@ -72,7 +76,7 @@ const { createApiClient } = apiClientFactory<any, any>({
     createCart,
     checkOut,
     cookies,
-    ...getShopifyApolloAPIs()
+    ...apiEndpoints
   }
 });
 

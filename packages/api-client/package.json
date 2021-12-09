@@ -10,16 +10,19 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": "jest",
-    "prepublish": "yarn build"
+    "prepublish": "yarn build",
+    "codegen": "graphql-codegen -c ./src/next/codegen.yml"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.5",
     "@nuxtjs/composition-api": "^0.30.0",
     "@vue-storefront/core": "~2.5.0",
-    "@vue-storefront/shopify-apollo": "^1.0.0",
     "graphql": "^14.5.8",
     "shopify-buy": "^2.11.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.3.0",
+    "@graphql-codegen/typescript": "^2.4.1",
     "@types/js-cookie": "^3.0.1",
     "@types/shopify-buy": "^2.10.5",
     "jest-transform-graphql": "^2.1.0",
