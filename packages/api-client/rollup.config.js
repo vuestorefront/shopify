@@ -13,8 +13,7 @@ const server = {
   ],
   external: [
     ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.peerDependencies || {}),
-    '@apollo/client/core'
+    ...Object.keys(pkg.peerDependencies || {})
   ],
   plugins: [
     typescript({
