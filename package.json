@@ -6,13 +6,14 @@
     "node": ">=10.x"
   },
   "scripts": {
-    "build": "yarn build:api-client && yarn build:composables && yarn build:theme",
+    "build": "yarn build:deps && yarn build:theme",
+    "build:deps": "lerna run build --ignore @vue-storefront/shopify-theme --include-dependencies",
     "build:api-client": "cd packages/api-client && yarn build",
     "build:composables": "cd packages/composables && yarn build",
     "build:theme": "cd packages/theme && yarn build",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
-    "dev": "concurrently \"yarn:dev:*\"",
+    "dev": "yarn build:deps && concurrently \"yarn:dev:*\"",
     "dev:api-client": "cd packages/api-client && yarn dev",
     "dev:composables": "cd packages/composables && yarn dev",
     "dev:theme": "cd packages/theme && yarn dev",
@@ -20,7 +21,6 @@
     "docs:dev": "cd docs && yarn dev",
     "docs:install": "cd docs && yarn",
     "lint": "eslint . --ext .ts,.vue",
-    "prepare": "[ -d '.husky' ] && (husky install && shx rm -rf .git/hooks && shx ln -s ../.husky .git/hooks) || true",
     "publish:api-client": "node ./scripts/publishApi.js",
     "publish:composables": "node ./scripts/publishComposable.js",
     "start": "cd packages/theme && yarn start",
@@ -30,7 +30,8 @@
     "test:theme": "cd packages/theme && yarn test --passWithNoTests",
     "update:check": "ncu && lerna run update:check --stream",
     "update:update": "ncu -u && lerna run update:update --stream && yarn install --force",
-    "generate:template": "cd packages/theme && rimraf .template && npx @vue-storefront/cli@2.3.4 generate-template .template"
+    "generate:template": "cd packages/theme && rimraf .template && npx @vue-storefront/cli@2.3.4 generate-template .template",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
@@ -46,7 +47,7 @@
     "concurrently": "^6.2.1",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
-    "husky": "^7.0.1",
+    "husky": "^7.0.0",
     "jest": "^27.4.3",
     "lerna": "^4.0.0",
     "lint-staged": "^11.1.2",
