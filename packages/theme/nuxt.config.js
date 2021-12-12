@@ -76,6 +76,7 @@ const config = {
       {
         generate: {
           replace: {
+            apollo: '@vue-storefront/shopify-apollo',
             apiClient: '@vue-storefront/shopify-api',
             composables: '@vue-storefront/shopify'
           }

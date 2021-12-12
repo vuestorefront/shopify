@@ -10,22 +10,22 @@
   "author": "Jeff Paltera <jpaltera@vuestorefront.io>",
   "homepage": "https://github.com/vuestorefront/shopify#readme",
   "license": "MIT",
-  "types": "./dist/library.d.ts",
-  "typings": "./dist/library.d.ts",
-  "main": "./dist/vsf-shopify-apollo.cjs.js",
-  "module": "./dist/vsf-shopify-apollo.es.js",
+  "types": "./lib/library.d.ts",
+  "typings": "./lib/library.d.ts",
+  "main": "./lib/vsf-shopify-apollo.cjs.js",
+  "module": "./lib/vsf-shopify-apollo.es.js",
   "exports": {
     ".": {
-      "import": "./dist/vsf-shopify-apollo.es.js",
-      "require": "./dist/vsf-shopify-apollo.cjs.js"
+      "import": "./lib/vsf-shopify-apollo.es.js",
+      "require": "./lib/vsf-shopify-apollo.cjs.js"
     }
   },
   "directories": {
-    "dist": "dist",
+    "lib": "lib",
     "test": "__tests__"
   },
   "files": [
-    "dist"
+    "lib"
   ],
   "publishConfig": {
     "access": "public"
@@ -35,10 +35,10 @@
     "url": "git+https://github.com/vuestorefront/shopify.git"
   },
   "scripts": {
-    "dev": "tsc && vite build --watch",
+    "dev": "concurrently \"tsc --watch --preserveWatchOutput\" \"vite build --watch\"",
     "build": "tsc && vite build",
     "postbuild": "yarn generate:type",
-    "generate:type": "tsc --emitDeclarationOnly --noEmit false --declaration --declarationDir dist",
+    "generate:type": "tsc --emitDeclarationOnly --declaration",
     "generate:shopify-type": "graphql-codegen -c ./codegen.yml"
   },
   "bugs": {
