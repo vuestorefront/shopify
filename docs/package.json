@@ -7,9 +7,17 @@
   "repository": "https://github.com/vuestorefront/shopify/docs",
   "scripts": {
     "dev": "vuepress dev",
-    "build": "vuepress build"
+    "build": "vuepress build",
+    "build:docs": "concurrently \"yarn:docs-gen:*\" && concurrently \"yarn:docs-md:*\"",
+    "docs-gen:api": "cd ../packages/api-client && api-extractor run --local",
+    "docs-gen:composables": "cd ../packages/composables && api-extractor run --local",
+    "docs-md:api": "api-documenter markdown --i api-client --o api-client",
+    "docs-md:composables": "api-documenter markdown --i composables --o composables"
   },
   "devDependencies": {
+    "@microsoft/api-documenter": "^7.13.75",
+    "@microsoft/api-extractor": "^7.19.1",
+    "concurrently": "^6.4.0",
     "vuepress": "^1.5.3"
   }
 }

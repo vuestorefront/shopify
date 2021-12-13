@@ -38,20 +38,22 @@ module.exports = {
         title: 'Composables',
         collapsable: false,
         children: [
+          ['/composables/shopify', 'Definitions'],
           ['/guide/use-product', 'useProduct'],
           ['/guide/use-user', 'useUser'],
           ['/guide/use-user-order', 'useUserOrder'],
           ['/guide/use-cart', 'useCart'],
           ['/guide/use-category', 'useCategory'],
           ['/guide/use-content', 'useContent'],
-          ['/guide/use-search', 'useSearch'],
+          ['/guide/use-search', 'useSearch']
         ]
       },
       {
         title: 'API Client',
         collapsable: false,
         children: [
-          ['/guide/api-client-reference', 'Methods reference']
+          ['/api-client/shopify-api', 'Definitions']
+          ['/guide/api-client-reference', 'Methods Reference']
         ]
       },
       {
