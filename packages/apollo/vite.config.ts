@@ -10,6 +10,7 @@ export default defineConfig({
       name: '@vue-storefront/shopify-apollo',
       fileName: (format) => `vsf-shopify-apollo.${format}.js`
     },
+    outDir: 'lib',
     emptyOutDir: false,
     rollupOptions: {
       external: [
