@@ -4,7 +4,7 @@ import { CustomerRecoverPayload, MutationCustomerRecoverArgs } from '../shopify'
 
 
 const DEFAULT_MUTATION = gql`
-    mutation recoverPassword($email: String!) {
+    mutation customerRecover($email: String!) {
       customerRecover(email: $email) {
         customerUserErrors {
           code
@@ -15,7 +15,7 @@ const DEFAULT_MUTATION = gql`
     }
 `
 
-export default async function recoverPassword(context: ShopifyApolloContext, params: MutationCustomerRecoverArgs) {
+export default async function customerRecover(context: ShopifyApolloContext, params: MutationCustomerRecoverArgs) {
   const variables = {
     email: params.email
   }

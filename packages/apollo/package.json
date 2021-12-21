@@ -39,7 +39,8 @@
     "build": "tsc && vite build",
     "postbuild": "yarn generate:type",
     "generate:type": "tsc --emitDeclarationOnly --declaration",
-    "generate:shopify-type": "graphql-codegen -c ./codegen.yml"
+    "generate:shopify-type": "graphql-codegen -c ./codegen.yml",
+    "test": "jest"
   },
   "bugs": {
     "url": "https://github.com/vuestorefront/shopify/issues"
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^2.3.0",
     "@graphql-codegen/typescript": "^2.4.1",
+    "mock-apollo-client": "^1.2.0",
     "typescript": "^4.5.2",
     "vite": "^2.6.14"
   },

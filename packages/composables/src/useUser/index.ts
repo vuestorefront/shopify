@@ -1,11 +1,14 @@
 /* istanbul ignore file */
 
 import {
-  Context,
+  Context as CoreContext,
   useUserFactory,
   UseUserFactoryParams
 } from '@vue-storefront/core';
-import { User } from '../types';
+import { User, Context as CustomContext } from '../types';
+
+type Context = CoreContext | CustomContext
+
 const params: UseUserFactoryParams<User, any, any> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context) => {
@@ -46,16 +49,19 @@ const params: UseUserFactoryParams<User, any, any> = {
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  register: async (context: Context, { email, userPassword, firstName, lastName }) => {
-    const result: any = await context.$shopify.api.signUp({
+  register: async (context: CustomContext, { email, password, firstName, lastName }) => {
+    const result = await context.$shopify.api.customerCreate({
       email,
       firstName,
       lastName,
-      password: userPassword
+      acceptsMarketing: false,
+      phone: '',
+      password
     });
+
     const response: User = {
       token: 'SignUpSuccess',
-      error: (result.customerCreate.customerUserErrors.length) ? result.customerCreate.customerUserErrors[0].message : ''
+      error: (result.data.customerUserErrors?.length) ? result.data.customerUserErrors[0].message : ''
     };
     return response;
   },
