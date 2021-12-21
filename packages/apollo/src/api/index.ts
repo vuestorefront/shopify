@@ -1,7 +1,9 @@
 import searchProduct from './searchProduct'
+import recoverPassword from './recoverPassword'
 
 const apis = {
-  searchProduct
+  searchProduct,
+  recoverPassword
 }
 
 export type ShopifyApolloAPIs = {

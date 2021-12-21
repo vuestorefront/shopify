@@ -72,7 +72,5 @@ export default async function searchProduct(context: ShopifyApolloContext, param
     variables: products.variables
   })
 
-  console.log(response)
-
   return response ?? null
 }
