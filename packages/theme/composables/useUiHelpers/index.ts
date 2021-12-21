@@ -1,4 +1,4 @@
-import { getCurrentInstance } from '@vue/composition-api';
+import { getCurrentInstance } from '@nuxtjs/composition-api';
 import { Category } from '@vue-storefront/shopify-api';
 import { AgnosticFacet } from '@vue-storefront/core';
 
@@ -6,7 +6,7 @@ const nonFilters = ['page', 'sort', 'term', 'itemsPerPage'];
 
 const getContext = () => {
   const vm = getCurrentInstance();
-  return vm.$root as any;
+  return vm.root.proxy;
 };
 
 const reduceFilters = (query) => (prev, curr) => {
@@ -31,16 +31,16 @@ const useUiHelpers = () => {
   const context = getContext();
 
   const getFacetsFromURL = () => {
-    const { query, params } = context.$router.history.current;
+    const { query, params } = context.$router.currentRoute;
     const categorySlug = Object.keys(params).reduce((prev, curr) => params[curr] || prev, params.slug_1);
 
     return {
       rootCatSlug: params.slug_1,
       categorySlug,
-      page: parseInt(query.page, 10) || 1,
+      page: parseInt(query.page as string, 10) || 1,
       sort: query.sort || 'latest',
       filters: getFiltersDataFromUrl(context, true),
-      itemsPerPage: parseInt(query.itemsPerPage, 12) || 20,
+      itemsPerPage: parseInt(query.itemsPerPage as string, 12) || 20,
       term: query.term
     };
   };
@@ -50,7 +50,7 @@ const useUiHelpers = () => {
   };
 
   const changeSorting = (sort: string) => {
-    const { query } = context.$router.history.current;
+    const { query } = context.$router.currentRoute
     context.$router.push({ query: { ...query, sort } });
   };
 

@@ -71,7 +71,7 @@
     <div class="main section">
       <!-- Category sidebar here -->
       <SfLoader :class="{ loading }" :loading="loading">
-        <div class="products" v-if="!loading">
+        <div v-if="!loading" class="products">
           <transition-group
             v-if="isCategoryGridView"
             appear
@@ -80,9 +80,9 @@
             class="products__grid"
           >
             <SfProductCard
-              data-cy="category-product-card"
               v-for="(product, i) in products"
               :key="productGetters.getId(product)"
+              data-cy="category-product-card"
               :style="{ '--index': i }"
               :title="productGetters.getName(product)"
               :image="productGetters.getCoverImage(product)"
@@ -96,8 +96,8 @@
               :max-rating="5"
               :score-rating="productGetters.getAverageRating(product)"
               :show-add-to-cart-button="true"
-              :isOnWishlist="false"
-              :isAddedToCart="isInCart({ product })"
+              :is-on-wishlist="false"
+              :is-added-to-cart="isInCart({ product })"
               :link="
                 localePath(
                   `/p/${productGetters.getId(product)}/${productGetters.getSlug(
@@ -118,9 +118,9 @@
             class="products__list"
           >
             <SfProductCardHorizontal
-              data-cy="category-product-cart_wishlist"
               v-for="(product, i) in products"
               :key="productGetters.getId(product)"
+              data-cy="category-product-cart_wishlist"
               :style="{ '--index': i }"
               :title="productGetters.getName(product)"
               :description="productGetters.getDescription(product)"
@@ -136,8 +136,6 @@
               :score-rating="3"
               :is-on-wishlist="false"
               class="products__product-card-horizontal"
-              @click:wishlist="addItemToWishlist({ product })"
-              @click:add-to-cart="HandleAddTocart({ product, qty:1 })"
               :link="
                 localePath(
                   `/p/${productGetters.getId(product)}/${productGetters.getSlug(
@@ -145,6 +143,8 @@
                   )}`
                 )
               "
+              @click:wishlist="addItemToWishlist({ product })"
+              @click:add-to-cart="HandleAddTocart({ product, qty:1 })"
             >
               <template #configuration>
                 <SfProperty
@@ -175,9 +175,9 @@
           </transition-group>
           <SfPagination
             v-if="!loading"
+            v-show="pagination.totalPages > 1"
             data-cy="category-pagination"
             class="products__pagination desktop-only"
-            v-show="pagination.totalPages > 1"
             :current="pagination.currentPage"
             :total="pagination.totalPages"
             :visible="5"
@@ -214,15 +214,15 @@
       <div class="filters desktop-only">
         <div v-for="(facet, i) in facets" :key="i">
           <SfHeading
+            :key="`filter-title-${facet.id}`"
             :level="4"
             :title="facet.label"
             class="filters__title sf-heading--left"
-            :key="`filter-title-${facet.id}`"
           />
           <div
             v-if="isFacetColor(facet)"
-            class="filters__colors"
             :key="`${facet.id}-colors`"
+            class="filters__colors"
           >
             <SfColor
               v-for="option in facet.options"
@@ -298,7 +298,7 @@ import {
   SfColor,
   SfProperty
 } from '@storefront-ui/vue';
-import { computed, onMounted } from '@vue/composition-api';
+import { computed, onMounted } from '@nuxtjs/composition-api';
 import {
   useCart,
   useWishlist,
@@ -310,23 +310,23 @@ import { useUiHelpers, useUiState, useUiNotification } from '~/composables';
 import { onSSR } from '@vue-storefront/core';
 
 export default {
-  transition: 'fade',
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  data() {
-    return {
-      currentCate: '',
-      breadcrumbs: [
-        {
-          text: 'Home',
-          route: { link: '/' }
-        },
-        {
-          text: this.removeSpaceFromText(this.$route.params.slug_1),
-          route: { link: '#' }
-        }
-      ]
-    };
+  components: {
+    SfButton,
+    SfSidebar,
+    SfIcon,
+    SfFilter,
+    SfProductCard,
+    SfProductCardHorizontal,
+    SfPagination,
+    SfAccordion,
+    SfSelect,
+    SfBreadcrumbs,
+    SfLoader,
+    SfColor,
+    SfHeading,
+    SfProperty
   },
+  transition: 'fade',
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props, context) {
     const th = useUiHelpers();
@@ -369,21 +369,21 @@ export default {
       toggleCategoryGridView
     };
   },
-  components: {
-    SfButton,
-    SfSidebar,
-    SfIcon,
-    SfFilter,
-    SfProductCard,
-    SfProductCardHorizontal,
-    SfPagination,
-    SfAccordion,
-    SfSelect,
-    SfBreadcrumbs,
-    SfLoader,
-    SfColor,
-    SfHeading,
-    SfProperty
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  data() {
+    return {
+      currentCate: '',
+      breadcrumbs: [
+        {
+          text: 'Home',
+          route: { link: '/' }
+        },
+        {
+          text: this.removeSpaceFromText(this.$route.params.slug_1),
+          route: { link: '#' }
+        }
+      ]
+    };
   },
   methods: {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

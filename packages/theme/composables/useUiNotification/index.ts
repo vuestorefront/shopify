@@ -1,4 +1,4 @@
-import { computed, reactive } from '@vue/composition-api';
+import { computed, reactive } from '@nuxtjs/composition-api';
 
 interface UiNotification {
   message: string;
@@ -23,7 +23,7 @@ const timeToLive = 3000;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const useUiNotification = () => {
   const send = (notification: UiNotification) => {
-    const id = Symbol();
+    const id = Symbol('notification');
 
     const dismiss = () => {
       const index = state.notifications.findIndex(notification => notification.id === id);

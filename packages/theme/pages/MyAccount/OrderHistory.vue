@@ -15,7 +15,7 @@
             <p>Date &amp; Time:&nbsp;<strong>{{ orderGetters.getDate(currentOrder) }}</strong></p>
             <p v-if="orderGetters.getStatus(currentOrder) === 'FULFILLED'">
               Order Tracking:&nbsp;<strong>{{ orderGetters.getTracking(currentOrder) }}</strong>
-              <span class="redirect-icon" v-if="orderGetters.getTracking(currentOrder) != ' - '">
+              <span v-if="orderGetters.getTracking(currentOrder) != ' - '" class="redirect-icon">
                 <SfLink target="_blank" :href="orderGetters.getTrackingUrl(currentOrder)">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M13.8333 13.8333H2.16667V2.16667H8V0.5H2.16667C1.24167 0.5 0.5 1.25 0.5 2.16667V13.8333C0.5 14.75 1.24167 15.5 2.16667 15.5H13.8333C14.75 15.5 15.5 14.75 15.5 13.8333V8H13.8333V13.8333ZM9.66667 0.5V2.16667H12.6583L4.46667 10.3583L5.64167 11.5333L13.8333 3.34167V6.33333H15.5V0.5H9.66667Z" fill="#000000"/>
@@ -139,7 +139,7 @@
             :title="title"
           />
         </div>
-        <SfLoader class="order-loader" :class="{ loading }" :loading="loading" v-if="loading">
+        <SfLoader v-if="loading" class="order-loader" :class="{ loading }" :loading="loading">
           <div />
         </SfLoader>
         <div v-if="!loading && orders && orders.data && orders.data.length === 0" class="no-orders my_account_content container-small">
@@ -169,7 +169,7 @@
                 <strong class="mobile-lable">Date and Time</strong>
                 {{ orderGetters.getDate(order) }}
               </SfTableData>
-              <SfTableData class="data-order-tracking" v-if="orderGetters.getStatus(order) === 'FULFILLED'">
+              <SfTableData v-if="orderGetters.getStatus(order) === 'FULFILLED'" class="data-order-tracking">
                 <strong class="mobile-lable">Tracking Number</strong>
                 <span class="order-track-wrap">
                   {{ orderGetters.getTracking(order) }}
@@ -182,7 +182,7 @@
                   </span>
                 </span>
               </SfTableData>
-              <SfTableData class="data-order-tracking" v-else><strong class="mobile-lable">Tracking Number</strong> - </SfTableData>
+              <SfTableData v-else class="data-order-tracking"><strong class="mobile-lable">Tracking Number</strong> - </SfTableData>
               <SfTableData class="data-order-name">
                 <strong class="mobile-lable">Name</strong>
                 {{ orderGetters.getCustomerName(order) }}
@@ -238,10 +238,9 @@ import {
   SfBadge,
   SfLoader
 } from '@storefront-ui/vue';
-import { computed, ref } from '@vue/composition-api';
+import { computed, ref } from '@nuxtjs/composition-api';
 import { useUserOrders, orderGetters } from '@vue-storefront/shopify';
-import { AgnosticOrderStatus } from '@vue-storefront/core';
-import { onSSR } from '@vue-storefront/core';
+import { AgnosticOrderStatus , onSSR } from '@vue-storefront/core';
 
 export default {
   name: 'PersonalDetails',

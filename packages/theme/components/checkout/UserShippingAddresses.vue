@@ -2,13 +2,13 @@
   <div>
     <SfAddressPicker
       :selected="String(currentAddressId)"
-      @input="setCurrentAddress($event)"
       class="shipping-addresses"
+      @input="setCurrentAddress($event)"
     >
       <SfAddress
-        class="shipping-addresses__address"
         v-for="shippingAddress in shippingAddresses"
         :key="userShippingGetters.getId(shippingAddress)"
+        class="shipping-addresses__address"
         :name="String(userShippingGetters.getId(shippingAddress))"
       >
         <span
@@ -30,10 +30,10 @@
     <SfCheckbox
       data-cy="shipping-details-checkbox_isDefault"
       :selected="setAsDefault"
-      @change="$emit('changeSetAsDefault', $event)"
       name="setAsDefault"
       label="Use this address as my default one."
       class="shipping-address-setAsDefault"
+      @change="$emit('changeSetAsDefault', $event)"
     />
   </div>
 </template>
@@ -47,6 +47,10 @@ import { userShippingGetters } from '@vue-storefront/shopify';
 
 export default {
   name: 'UserShippingAddresses',
+  components: {
+    SfCheckbox,
+    SfAddressPicker
+  },
   props: {
     currentAddressId: {
       type: Number,
@@ -60,10 +64,6 @@ export default {
       type: Array,
       required: true
     }
-  },
-  components: {
-    SfCheckbox,
-    SfAddressPicker
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup (_, { emit }) {

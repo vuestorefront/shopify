@@ -1,10 +1,10 @@
 {
   "name": "@vue-storefront/shopify-api",
-  "version": "1.0.0",
+  "version": "1.0.8",
   "sideEffects": false,
   "main": "lib/index.cjs.js",
   "module": "lib/index.es.js",
-  "types": "lib/index.d.ts",
+  "types": "server/index.d.ts",
   "server": "server/index.js",
   "scripts": {
     "build": "rollup -c",
@@ -13,15 +13,15 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@vue-storefront/core": "^2.3.3",
+    "@nuxtjs/composition-api": "^0.30.0",
+    "@vue-storefront/core": "~2.5.0",
+    "@vue-storefront/shopify-apollo": "^1.0.0",
     "graphql": "^14.5.8",
-    "graphql-tag": "^2.10.1",
-    "shopify-buy": "^2.11.0",
-    "@types/js-cookie": "^2.2.6"
+    "shopify-buy": "^2.11.0"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.1",
     "@types/shopify-buy": "^2.10.5",
-    "graphql-tools": "^4.0.6",
     "jest-transform-graphql": "^2.1.0",
     "rollup-plugin-graphql": "^0.1.0"
   },

@@ -1,4 +1,6 @@
 import { apiClientFactory } from '@vue-storefront/core';
+
+// TODO: extract api's into another directory
 import getProduct from './api/getProduct';
 import getCategory from './api/getCategory';
 import editProfile from './api/editProfile';
@@ -21,19 +23,26 @@ import addAddress from './api/addAddress';
 import updateAddress from './api/updateAddress';
 import checkOut from './api/checkOut';
 
+import { createShopifyApollo, getShopifyApolloAPIs } from '@vue-storefront/shopify-apollo'
+
 const CustomClient = require('shopify-buy/index.unoptimized.umd.min.js');
+
 const defaultSettings = {};
 const cookies = {
   cartCookieName: 'vsf-cart'
 };
 
 const onCreate = (settings) => {
+  const client = CustomClient.buildClient(settings.api)
+
+  client.apolloClient = createShopifyApollo(settings)
+
   return ({
     config: {
       ...defaultSettings,
       ...settings
     },
-    client: CustomClient.buildClient(settings.api),
+    client,
     cookies: (settings.api).cookies || cookies
   });
 };
@@ -62,7 +71,8 @@ const { createApiClient } = apiClientFactory<any, any>({
     updateAddress,
     createCart,
     checkOut,
-    cookies
+    cookies,
+    ...getShopifyApolloAPIs()
   }
 });
 

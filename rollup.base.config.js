@@ -1,7 +1,7 @@
 import typescript from 'rollup-plugin-typescript2';
 
 export function generateBaseConfig(pkg) {
-  return {
+  const mainEntrypoint = {
     input: 'src/index.ts',
     output: [
       {
@@ -16,13 +16,39 @@ export function generateBaseConfig(pkg) {
       }
     ],
     external: [
-      ...Object.keys(pkg.dependencies || {})
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {})
     ],
     plugins: [
       typescript({
-        // eslint-disable-next-line global-require
         typescript: require('typescript')
       })
     ]
   };
+
+  const serverEntrypoint = {
+    input: 'src/index.server.ts',
+    output: [
+      {
+        file: pkg.server,
+        format: 'cjs',
+        sourcemap: true
+      }
+    ],
+    external: [
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {})
+    ],
+    plugins: [
+      typescript({
+        typescript: require('typescript')
+      })
+    ]
+  };
+
+  if (pkg.server) {
+    return [mainEntrypoint, serverEntrypoint];
+  }
+
+  return mainEntrypoint;
 }

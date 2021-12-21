@@ -1,14 +1,19 @@
 require('isomorphic-fetch');
 import webpack from 'webpack';
 
-export default {
-  server: {
-    port: 3001,
-    host: '0.0.0.0'
-  },
+/** @type { import('@nuxt/types').NuxtConfig } */ 
+const config = {
   publicRuntimeConfig: {
-    appKey: 'vsf2Connector' + Date.now()
+    appKey: 'vsf2spcon',
+    appVersion: Date.now()
   },
+  privateRuntimeConfig: {
+    storeURL: process.env.SHOPIFY_DOMAIN,
+    storeToken: process.env.SHOPIFY_STOREFRONT_TOKEN
+  },
+  serverMiddleware: [
+    { path: '/custom', handler: '~/server-middleware/custom-features.js' }
+  ],
   head: {
     title: 'Shopify | Vue Storefront Next',
     meta: [
@@ -49,6 +54,7 @@ export default {
   ],
   buildModules: [
     // to core
+    '@nuxtjs/composition-api/module',
     '@nuxtjs/pwa',
     '@nuxt/typescript-build',
     '@nuxtjs/style-resources',
@@ -70,6 +76,7 @@ export default {
       {
         generate: {
           replace: {
+            apollo: '@vue-storefront/shopify-apollo',
             apiClient: '@vue-storefront/shopify-api',
             composables: '@vue-storefront/shopify'
           }
@@ -157,7 +164,7 @@ export default {
     ]
   },
   build: {
-    transpile: ['vee-validate/dist/rules'],
+    transpile: ['vee-validate/dist/rules', 'storefront-ui'],
     plugins: [
       new webpack.DefinePlugin({
         'process.VERSION': JSON.stringify({
@@ -166,7 +173,19 @@ export default {
           lastCommit: process.env.LAST_COMMIT || ''
         })
       })
-    ]
+    ],
+    extend(config) {
+      config.resolve.extensions.push('.mjs')
+
+      config.module.rules.push({
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto'
+      })
+    },
+    extractCSS: {
+      ignoreOrder: true
+    }
   },
   router: {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -233,7 +252,7 @@ export default {
       description:
         'This is the Shopify PWA app for VSF Next - Developed by Aureate labs',
       themeColor: '#5ece7b',
-      ogHost: 'shopify-pwa-beta.aureatelabs.com'
+      ogHost: 'shopify-pwa.aureatelabs.com'
     },
     icon: {
       iconSrc: 'src/static/android-icon-512x512.png'
@@ -269,9 +288,11 @@ export default {
         }
       ],
       preCaching: [
-        '//shopify-pwa-beta.aureatelabs.com/c/**',
-        '//shopify-pwa-beta.aureatelabs.com/'
+        '//shopify-pwa.aureatelabs.com/c/**',
+        '//shopify-pwa.aureatelabs.com/'
       ]
     }
   }
 };
+
+export default config

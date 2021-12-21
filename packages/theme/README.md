@@ -2,28 +2,13 @@
 
 Vue Storefront 2 template for Shopify.
 
-> Please keep in mind this project is in beta phase. Please report all bugs you will spot on GitHub or help us by reolving them by yourself. It will help us to resolve them faster and make this project production-ready sooner!
-
 ## Setup
 
-1. Fill in the project credentials in `middleware.config.js` (env. variables suggested)
+1. Create a `.env` inline with `middleware.config.js` file and fill the following required variables
 
-```js
-module.exports = {
-  integrations: {
-    shopify: {
-      location: '@vue-storefront/shopify-api/server',
-      configuration: {
-        api: {
-          domain: '<SHOPIFY_DOMAIN>',
-          storefrontAccessToken: '<SHOPIFY_ACCESS_TOKEN>'
-        },
-        currency: 'USD',
-        country: 'US'
-      }
-    }
-  }
-};
+```bash
+SHOPIFY_STOREFRONT_TOKEN=<SHOPIFY_ACCESS_TOKEN>
+SHOPIFY_DOMAIN=<SHOPIFY_DOMAIN> # example: vsf-next-pwa.myshopify.com
 ```
 
 2. Run the project

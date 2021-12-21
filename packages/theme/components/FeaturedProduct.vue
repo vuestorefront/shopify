@@ -61,19 +61,19 @@
           </div>
           <div>
             <p
-              class="product__description desktop-only"
               v-if="productDescription"
+              class="product__description desktop-only"
             >
               {{ productDescription }}
             </p>
             <SfSelect
-              data-cy="product-select_size"
               v-if="options.Size"
+              data-cy="product-select_size"
               :value="configuration.size"
-              @input="(size) => updateFilter({ size })"
               label="Size"
               class="sf-select--underlined product__select-size"
               :required="true"
+              @input="(size) => updateFilter({ size })"
             >
               <SfSelectOption
                 v-for="size in options.Size"
@@ -89,20 +89,20 @@
             >
               <p class="product__color-label">{{ $t("Color") }}:</p>
               <SfColor
-                data-cy="product-color_update"
                 v-for="(color, i) in options.Color"
                 :key="i"
+                data-cy="product-color_update"
                 :color="color.value"
                 class="product__color"
                 @click="updateFilter({ color })"
               />
             </div>
             <SfAddToCart
+              v-model="qty"
               data-cy="product-cart_add"
               :stock="stock"
-              v-model="qty"
               :disabled="loading"
-              :canAddToCart="stock > 0"
+              :can-add-to-cart="stock > 0"
               class="product__add-to-cart"
               @click="addItem({ product, quantity: parseInt(qty) })"
             />
@@ -125,18 +125,31 @@ import {
   SfColor
 } from '@storefront-ui/vue';
 
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed } from '@nuxtjs/composition-api';
 import {
   useCart,
   productGetters,
   useReview,
   reviewGetters
 } from '@vue-storefront/shopify';
-import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
+import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 
 export default {
   name: 'Product',
+  components: {
+    SfColor,
+    SfHeading,
+    SfPrice,
+    SfRating,
+    SfSelect,
+    SfAddToCart,
+    SfGallery,
+    SfIcon,
+    SfBadge,
+    MobileStoreBanner,
+    LazyHydrate
+  },
   transition: 'fade',
   props: {
     productModel: {
@@ -220,19 +233,6 @@ export default {
       productGetters,
       productGallery
     };
-  },
-  components: {
-    SfColor,
-    SfHeading,
-    SfPrice,
-    SfRating,
-    SfSelect,
-    SfAddToCart,
-    SfGallery,
-    SfIcon,
-    SfBadge,
-    MobileStoreBanner,
-    LazyHydrate
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {

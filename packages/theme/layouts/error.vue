@@ -28,9 +28,9 @@ import { SfButton, SfImage, SfHeading } from '@storefront-ui/vue';
 export default {
   name: 'ErrorLayout',
 
-  props: ['error'],
+  components: { SfButton, SfImage, SfHeading },
 
-  components: { SfButton, SfImage, SfHeading }
+  props: ['error']
 };
 </script>
 <style lang="scss" scoped>

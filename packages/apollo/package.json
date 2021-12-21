@@ -1,0 +1,58 @@
+{
+  "name": "@vue-storefront/shopify-apollo",
+  "version": "1.0.0",
+  "description": "Vue Storefront Shopify Apollo Client",
+  "keywords": [
+    "apollo",
+    "vuestorefront",
+    "shopify"
+  ],
+  "author": "Jeff Paltera <jpaltera@vuestorefront.io>",
+  "homepage": "https://github.com/vuestorefront/shopify#readme",
+  "license": "MIT",
+  "types": "./lib/library.d.ts",
+  "typings": "./lib/library.d.ts",
+  "main": "./lib/vsf-shopify-apollo.cjs.js",
+  "module": "./lib/vsf-shopify-apollo.es.js",
+  "exports": {
+    ".": {
+      "import": "./lib/vsf-shopify-apollo.es.js",
+      "require": "./lib/vsf-shopify-apollo.cjs.js"
+    }
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuestorefront/shopify.git"
+  },
+  "scripts": {
+    "dev": "concurrently \"tsc --watch --preserveWatchOutput\" \"vite build --watch\"",
+    "build": "tsc && vite build",
+    "postbuild": "yarn generate:type",
+    "generate:type": "tsc --emitDeclarationOnly --declaration",
+    "generate:shopify-type": "graphql-codegen -c ./codegen.yml"
+  },
+  "bugs": {
+    "url": "https://github.com/vuestorefront/shopify/issues"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.3.0",
+    "@graphql-codegen/typescript": "^2.4.1",
+    "typescript": "^4.5.2",
+    "vite": "^2.6.14"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.5.5",
+    "@vue-storefront/core": "~2.5.0",
+    "graphql": "^16.0.1"
+  }
+}

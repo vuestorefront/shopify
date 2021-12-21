@@ -6,7 +6,7 @@
         :settings="{ peek: 16, breakpoints: { 1023: { peek: 0, perView: 2 } } }"
         class="carousel"
       >
-        <SfCarouselItem class="carousel__item" v-for="(product, i) in products" :key="i">
+        <SfCarouselItem v-for="(product, i) in products" :key="i" class="carousel__item">
           <SfProductCard
             :title="productGetters.getName(product)"
             :image="productGetters.getCoverImage(product)"
@@ -33,9 +33,6 @@ import { productGetters } from '@vue-storefront/shopify';
 
 export default {
   name: 'RelatedProducts',
-  setup() {
-    return { productGetters };
-  },
   components: {
     SfCarousel,
     SfProductCard,
@@ -46,11 +43,14 @@ export default {
     title: String,
     products: Array,
     loading: Boolean
+  },
+  setup() {
+    return { productGetters };
   }
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .section {
   margin-top: var(--spacer-base);
 }

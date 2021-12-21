@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQueryFn } from '../../index';
-import { basicProfile, fullProfile } from './defaultQuery';
 import { getCustomQuery } from '../../helpers/queries';
+import { basicProfile, fullProfile } from './defaultQuery';
 
 export interface GetMeParams {
   customer?: boolean;

@@ -6,6 +6,7 @@ import facetGetters from './facetGetters';
 import productGetters from './productGetters';
 import reviewGetters from './reviewGetters';
 import userGetters from './userGetters';
+import searchGetters from './searchGetters'
 import userShippingGetters from './userShippingGetters';
 import userBillingGetters from './userBillingGetters';
 import orderGetters from './orderGetters';
@@ -17,6 +18,7 @@ export {
   checkoutGetters,
   facetGetters,
   productGetters,
+  searchGetters,
   reviewGetters,
   userGetters,
   userShippingGetters,

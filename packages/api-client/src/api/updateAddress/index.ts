@@ -5,7 +5,7 @@ export default async function updateAddress(context, params) {
   const { token, AddressId, address } = params;
   const data = {
     id: AddressId,
-    address: address,
+    address,
     customerAccessToken: token
   };
   const updatedAddressId = await context.client.graphQLClient.send(mutation(context), data).then(({ model }) => {

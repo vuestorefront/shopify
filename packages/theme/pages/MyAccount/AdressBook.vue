@@ -15,7 +15,7 @@
         data-cy="billing-details-tab_change">
         <BillingAddressForm
           :address="activeAddress"
-          :isNew="isNewAddress"
+          :is-new="isNewAddress"
           @submit="saveAddress" />
       </div>
     </div>
@@ -25,11 +25,11 @@
       <transition name="sf-collapse-top" mode="out-in">
         <div class="notifications">
           <SfNotification
+            v-if="!loading"
             :visible="visible"
             title="Are you sure?"
             message="Are you sure you would like to remove this address from your account?"
             type="secondary"
-            v-if="!loading"
           >
           <template #action>
             <div class="button-wrap">
@@ -43,10 +43,10 @@
         </SfNotification>
         </div>
       </transition>
-      <SfLoader class="address-loader" :class="{ loading }" :loading="loading" v-if="loading">
+      <SfLoader v-if="loading" class="address-loader" :class="{ loading }" :loading="loading">
         <div />
       </SfLoader>
-      <div data-cy="billing-details-tab_details" v-if="!loading">
+      <div v-if="!loading" data-cy="billing-details-tab_details">
         <div class="billing-list">
           <div
             v-for="address in addresses"
@@ -97,10 +97,10 @@ import {
   SfLoader,
   SfNotification
 } from '@storefront-ui/vue';
-import UserBillingAddress from '~/components/UserBillingAddress';
 import BillingAddressForm from '~/components/MyAccount/BillingAddressForm';
+import UserBillingAddress from '~/components/UserBillingAddress';
 import { useUserBilling, userBillingGetters } from '@vue-storefront/shopify';
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import useUiNotification from '~/composables/useUiNotification';
 
@@ -119,27 +119,6 @@ export default {
     title: {
       type: String,
       default: 'Address Book'
-    }
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  data () {
-    return {
-      visible: false,
-      addressToRemove: {}
-    };
-  },
-  methods: {
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    ConfirmRemove(address) {
-      this.visible = true;
-      this.addressToRemove = address;
-    },
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    async handleRemove(address) {
-      this.isLoadervisible = true;
-      await this.removeAddress(address).then(()=>{
-        this.visible = false;
-      });
     }
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -226,6 +205,27 @@ export default {
       isNewAddress,
       loading
     };
+  },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  data () {
+    return {
+      visible: false,
+      addressToRemove: {}
+    };
+  },
+  methods: {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    ConfirmRemove(address) {
+      this.visible = true;
+      this.addressToRemove = address;
+    },
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async handleRemove(address) {
+      this.isLoadervisible = true;
+      await this.removeAddress(address).then(()=>{
+        this.visible = false;
+      });
+    }
   }
 };
 </script>

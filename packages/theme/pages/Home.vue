@@ -14,7 +14,7 @@
     </SfHero>
     <LazyHydrate when-visible>
       <SfBannerGrid :banner-grid="1" class="banner-grid">
-        <template v-for="item in banners" v-slot:[item.slot]>
+        <template v-for="item in banners" #[item.slot]>
           <SfBanner
             :key="item.slot"
             :title="item.title"
@@ -62,7 +62,6 @@ import {
   SfArrow,
   SfButton
 } from '@storefront-ui/vue';
-import RelatedProducts from '~/components/RelatedProducts.vue';
 import {
   useProduct,
   useCart,
@@ -70,13 +69,29 @@ import {
 } from '@vue-storefront/shopify';
 import {
   computed
-} from '@vue/composition-api';
+} from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
-import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
+import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
+import RelatedProducts from '~/components/RelatedProducts.vue';
 
 export default {
   name: 'Home',
+  components: {
+    SfHero,
+    RelatedProducts,
+    SfBanner,
+    SfCallToAction,
+    SfSection,
+    SfCarousel,
+    SfImage,
+    SfBannerGrid,
+    SfHeading,
+    SfArrow,
+    SfButton,
+    MobileStoreBanner,
+    LazyHydrate
+  },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
     const {
@@ -100,21 +115,6 @@ export default {
       addToCart,
       isInCart
     };
-  },
-  components: {
-    SfHero,
-    RelatedProducts,
-    SfBanner,
-    SfCallToAction,
-    SfSection,
-    SfCarousel,
-    SfImage,
-    SfBannerGrid,
-    SfHeading,
-    SfArrow,
-    SfButton,
-    MobileStoreBanner,
-    LazyHydrate
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
@@ -233,7 +233,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .article-meta h4 a {
   color: #111111;
   font-weight: 600;

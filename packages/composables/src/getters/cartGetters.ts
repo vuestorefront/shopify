@@ -71,7 +71,7 @@ export const getcheckoutURL = (cart: Cart): string => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartTotalItems = (cart: Cart): number => {
-  if (cart) {
+  if (cart && cart.lineItems && cart.lineItems.length > 0) {
     return cart.lineItems.reduce((n, { quantity }) => n + quantity, 0);
   }
   return 0;
@@ -97,7 +97,7 @@ const cartGetters: CartGetters<Cart, LineItem> = {
   getItemQty: getCartItemQty,
   getItemAttributes: getCartItemAttributes,
   getItemSku: getCartItemSku,
-  getFormattedPrice: getFormattedPrice,
+  getFormattedPrice,
   getTotalItems: getCartTotalItems,
   getCoupons,
   getDiscounts,

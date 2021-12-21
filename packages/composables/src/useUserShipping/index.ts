@@ -81,7 +81,7 @@ const params: UseUserShippingFactoryParams<any, any> = {
 
     const indexToRemove = addresses.findIndex(address => address.id === params.address.id);
     if (indexToRemove < 0) {
-      return Promise.reject('This address does not exist');
+      return Promise.reject(Error('This address does not exist'));
     }
 
     addresses.splice(indexToRemove, 1);
@@ -93,7 +93,7 @@ const params: UseUserShippingFactoryParams<any, any> = {
 
     const indexToUpdate = addresses.findIndex(address => address.id === params.address.id);
     if (indexToUpdate < 0) {
-      return Promise.reject('This address does not exist');
+      return Promise.reject(Error('This address does not exist'));
     }
 
     const isNewDefault = params.address.isDefault && addresses[0].id !== params.address.id;
@@ -123,7 +123,7 @@ const params: UseUserShippingFactoryParams<any, any> = {
     if (!isDefault(params.address.id)) {
       const indexToUpdate = addresses.findIndex(address => address.id === params.address.id);
       if (indexToUpdate < 0) {
-        return Promise.reject('This address does not exist');
+        return Promise.reject(Error('This address does not exist'));
       }
       disableOldDefault();
       addresses[indexToUpdate].isDefault = true;

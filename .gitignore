@@ -5,8 +5,38 @@ middleware.config.js
 _theme
 node_modules
 .history
-yarn.lock
 package-json.lock
 sw.js
 .env
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# NPM config
+.npmrc
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Rollup generate output
+lib
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Editor directories and files
 .idea
+.vscode
+
+# OS generated files
+.DS_STORE
+
+!scripts/lib
+
+packages/theme/.template
+
+tests/e2e/report
+
+docs/.vuepress/dist

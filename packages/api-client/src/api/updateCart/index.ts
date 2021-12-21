@@ -8,5 +8,5 @@ export default async function updateCart(context, params, _customQuery?: CustomQ
   const itemID = product.id;
 
   // Add an item to the checkout
-  return await context.client.checkout.updateLineItems(checkoutID, {id: product.id, quantity: quantity}).then((checkout) => checkout);
+  return await context.client.checkout.updateLineItems(checkoutID, {id: product.id, quantity}).then((checkout) => checkout);
 }
