@@ -25,6 +25,14 @@ export default async function fetchOrders(context, params, customQuery?: CustomQ
                 curTotPrice.add('amount');
                 curTotPrice.add('currencyCode');
               });
+              order.addField('originalTotalPrice', {}, (originalTotalPrice) => {
+                originalTotalPrice.add('amount');
+                originalTotalPrice.add('currencyCode');
+              });
+              order.addField('originalTotalDuties', {}, (originalTotalDuties) => {
+                originalTotalDuties.add('amount');
+                originalTotalDuties.add('currencyCode');
+              });
               order.addField('currentTotalTax', {}, (curTotTax) => {
                 curTotTax.add('amount');
                 curTotTax.add('currencyCode');
