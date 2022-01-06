@@ -1,6 +1,6 @@
 {
   "name": "@vue-storefront/shopify",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "sideEffects": false,
   "main": "lib/index.cjs.js",
   "module": "lib/index.es.js",
@@ -14,7 +14,7 @@
   "dependencies": {
     "@types/js-cookie": "^2.2.6",
     "@vue-storefront/core": "~2.5.0",
-    "@vue-storefront/shopify-api": "1.0.8"
+    "@vue-storefront/shopify-api": "1.0.9"
   },
   "peerDependencies": {
     "@nuxtjs/composition-api": "0.29.3"
