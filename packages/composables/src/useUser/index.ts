@@ -62,14 +62,16 @@ const params: UseUserFactoryParams<User, any, any> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   logIn: async (context: Context, { username, password }) => {
+
     if (username && !password) {
       const result = await context.$shopify.api.forgotPassword({ username });
       const response: User = {
         token: 'forgotPassword',
-        error: result?.customerRecover?.customerUserErrors[0]?.message || ''
+        error: result?.data?.customerRecover?.customerUserErrors[0]?.message || result?.errors?.[0]?.message || ''
       };
       return response;
     }
+
     const result: any = await context.$shopify.api.signIn({ username, password });
     const response: User = {
       token: (result.customerAccessTokenCreate.customerAccessToken) ? result.customerAccessTokenCreate.customerAccessToken.accessToken : null,
