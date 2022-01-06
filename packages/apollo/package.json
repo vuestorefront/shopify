@@ -1,6 +1,6 @@
 {
   "name": "@vue-storefront/shopify-apollo",
-  "version": "1.0.0",
+  "version": "1.0.9",
   "description": "Vue Storefront Shopify Apollo Client",
   "keywords": [
     "apollo",
