@@ -9,11 +9,19 @@ import { Cart, CartItem, Coupon, Product } from '../types';
 const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, { customQuery }) => {
+    const APP = context.$shopify.config.app;
+
     // check if cart is already initiated
-    const appKey = context.$shopify.config.app.$config.appKey;
-    let existngCartId = context.$shopify.config.app.$cookies.get(appKey + '_cart_id');
-    if (existngCartId === undefined || existngCartId === '') {
-      existngCartId = await context.$shopify.api.createCart().then((checkout) => {
+    const appKey = APP.$config.appKey;
+    let existngCartId = APP.$cookies.get(appKey + '_cart_id');
+    const curLocaleCode = APP.$cookies.get('CurLocaleLang');
+    console.log('APP.store.lineItems::', APP.store.state.cartItems);
+    if (existngCartId === undefined ||
+      // eslint-disable-next-line eqeqeq
+      existngCartId == '' ||
+      (APP.i18n && APP.$cookies.get('CurLocaleLang') !== (APP.i18n.localeProperties.alias).toUpperCase()))
+    {
+      existngCartId = await context.$shopify.api.createCart({ customQuery: curLocaleCode, lineItems: APP.store.state.cartItems ? APP.store.state.cartItems : [] }).then((checkout) => {
         return checkout;
       });
     }

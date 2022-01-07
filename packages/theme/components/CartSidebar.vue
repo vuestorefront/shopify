@@ -86,7 +86,7 @@
                           'color',
                           'size',
                         ])"
-                        :key="key"
+                        :key="`${key}-${attribute}`"
                         :name="key"
                         :value="attribute"
                       />
@@ -237,9 +237,17 @@ export default {
     const { send: sendNotification, notifications } = useUiNotification();
     const products = computed(() => cartGetters.getItems(cart.value));
     const totals = computed(() => cartGetters.getTotals(cart.value));
-    const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
     const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
-
+    const isOrderCompleted = computed(() => {
+      return !(cart.value && cart.value.orderStatusUrl === null);
+    });
+    const totalItems = computed(() =>
+      isOrderCompleted.value ? 0 : cartGetters.getTotalItems(cart.value)
+    );
+    root.$store.commit(
+      "SET_CARTTOTAL", totalItems.value
+    );
+    
     onSSR(async () => {
       await loadCart();
     });
@@ -286,6 +294,15 @@ export default {
     totals: {
       // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
       handler(n) {
+        // Update cart total
+        this.$store.commit(
+          "SET_CARTTOTAL",
+          !this.isOrderCompleted ? this.totalItems : 0
+        );
+        this.$store.commit(
+          "SET_CART_ITEMS",
+          !this.isOrderCompleted && this.cart ? this.cart.lineItems : []
+        );
         this.dataAmount = n.subtotal;
       },
       deep: true

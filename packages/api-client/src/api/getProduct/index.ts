@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
-
+import { gql } from '@apollo/client/core'
+import { print } from 'graphql'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function getProduct(
@@ -14,6 +15,7 @@ export default async function getProduct(
     if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {
       chosenVariant = Object.entries(params.selectedOptions).map(k => ({ name: k[0], value: k[1] }));
     }
+
     const getProductByHandleQuery = context.client.graphQLClient.query(
       (root) => {
         root.add(
@@ -250,10 +252,80 @@ export default async function getProduct(
       return products;
     });
   } else {
-    return await context.client.product
-      .fetchQuery({ first: (params.limit ? params.limit : 20), sortKey: (params.sortBy ? params.sortBy : 'CREATED_AT'), reverse: false })
-      .then((products) => {
-        return products;
-      });
+    let chosenVariant = {};
+    if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {
+      chosenVariant = Object.entries(params.selectedOptions).map(k => ({ name: k[0], value: k[1] }));
+    }
+    const DEFAULT_QUERY = gql`
+    query products @inContext(country: ES) {
+      products(first:20, sortKey:CREATED_AT, reverse: false){
+        edges{
+          node {
+            title
+            images(first: 1) {
+              edges {
+                node {
+                  src
+                  originalSrc
+                  id
+                  height
+                  width
+                  altText
+                }
+              }
+            }
+            variants(first: 1) {
+              edges {
+                node {
+                  price
+                  available
+                  compareAtPrice
+                }
+              }
+            }
+            tags
+            productType
+            options {
+              id
+              name
+              values
+            }
+            id
+            description
+            descriptionHtml
+            handle
+          }
+        }
+      } 
+    }`
+    const payload = {
+      first: (params.limit ? params.limit : 20),
+      sortKey: (params.sortBy ? params.sortBy : 'CREATED_AT'),
+      reverse: false
+    }
+
+    const { products } = context.extendQuery(
+      customQuery,
+      {
+        products: {
+          query: print(DEFAULT_QUERY as any),
+          payload
+        }
+      }
+    )
+
+
+    return await context.client.apolloClient.query({
+      query: gql(products.query) as any,
+      variables: products.payload
+    });
+    
+    // console.log('products123::', productsRes);
+    // return await context.client.product
+    //   .fetchQuery({ first: (params.limit ? params.limit : 20), sortKey: (params.sortBy ? params.sortBy : 'CREATED_AT'), reverse: false })
+    //   .then((products) => {
+    //     console.log('products234::', products);
+    //     return products;
+    //   });
   }
 }

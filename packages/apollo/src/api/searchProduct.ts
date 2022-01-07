@@ -72,7 +72,7 @@ export default async function searchProduct(context: ShopifyApolloContext, param
     variables: products.variables
   })
 
-  console.log(response)
+  console.log('search result:', response)
 
   return response ?? null
 }

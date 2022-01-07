@@ -118,12 +118,14 @@ const config = {
     locales: [
       {
         code: 'en',
+        alias: 'us',
         label: 'English',
         file: 'en.js',
         iso: 'en'
       },
       {
         code: 'de',
+        alias: 'es',
         label: 'German',
         file: 'de.js',
         iso: 'de'
@@ -286,10 +288,6 @@ const config = {
             }
           }
         }
-      ],
-      preCaching: [
-        '//shopify-pwa.aureatelabs.com/c/**',
-        '//shopify-pwa.aureatelabs.com/'
       ]
     }
   }

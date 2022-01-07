@@ -8,6 +8,7 @@ export default async function getCategory(context, params, customQuery?: CustomQ
   if (params.slug !== '') {
     return context.client.collection.fetchByHandle(params.slug).then((collection) => {
       // Collection with all default fields
+      console.log('collection::', collection);
       return collection;
     });
   } else {
