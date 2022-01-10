@@ -14,9 +14,11 @@ import useUserShipping from './useUserShipping';
 import useWishlist from './useWishlist';
 import useCart from './useCart';
 import useForgotPassword from './useForgotPassword';
+import useAvailableFilters from './useAvailableFilters';
 
 
 export {
+  useAvailableFilters,
   useCart,
   useCategory,
   useCheckout,

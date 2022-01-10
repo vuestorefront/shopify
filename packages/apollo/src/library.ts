@@ -1,6 +1,6 @@
 import { ApolloClient, ApolloQueryResult, InMemoryCache } from "@apollo/client/core"
 import { IntegrationContext } from '@vue-storefront/core'
-import { ProductConnection } from "./shopify"
+import { QueryRoot } from "./shopify"
 
 interface ShopifyApolloSettings {
   api: {
@@ -14,7 +14,7 @@ interface ShopifyApolloSettings {
 
 export function createShopifyApollo(settings: ShopifyApolloSettings) {
   const client = new ApolloClient({
-    uri: `https://${settings.api.domain}/api/2021-10/graphql.json`,
+    uri: `https://${settings.api.domain}/api/2022-01/graphql.json`,
     ssrMode: true,
     cache: new InMemoryCache(),
     headers: {
@@ -34,9 +34,5 @@ import type { ShopifyApolloAPIs } from './api'
 
 export type ShopifyApolloContext = IntegrationContext<ShopifyApolloClient, ShopifyApolloSettings, ShopifyApolloAPIs>
 
-interface Results {
-  products: ProductConnection
-}
-
-export type QueryResult = ApolloQueryResult<Results>
+export type QueryResult = ApolloQueryResult<QueryRoot>
 
