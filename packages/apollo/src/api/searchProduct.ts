@@ -1,7 +1,7 @@
 import { CustomQuery, ProductsSearchParams } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
-import { QueryRoot, ShopProductsArgs } from '../shopify'
+import { QueryRoot, QueryRootProductsArgs } from '../shopify'
 
 export const DEFAULT_QUERY = `
     query products(
@@ -11,7 +11,6 @@ export const DEFAULT_QUERY = `
         products(first: $first, query: $query) {
           edges {
               node {
-                  title
                   images(first: 1) {
                     edges {
                       node {
@@ -28,18 +27,24 @@ export const DEFAULT_QUERY = `
                     edges {
                       node {
                         price
-                        available
+                        availableForSale
                         compareAtPrice
                       }
                     }
                   }
-                  tags
-                  productType
                   options {
                     id
                     name
                     values
                   }
+                  tags
+                  productType
+                  title
+                  vendor
+                  publishedAt
+                  createdAt
+                  updatedAt
+                  publishedAt
                   id
                   description
                   descriptionHtml
@@ -49,7 +54,6 @@ export const DEFAULT_QUERY = `
         } 
     }
 `
-
 
 export default async function searchProduct(context: ShopifyApolloContext, params: ProductsSearchParams, customQuery?: CustomQuery) {
   const variables = {
@@ -67,7 +71,7 @@ export default async function searchProduct(context: ShopifyApolloContext, param
     }
   )
 
-  const response = await context.client.apolloClient.query<QueryRoot, ShopProductsArgs>({
+  const response = await context.client.apolloClient.query<QueryRoot, QueryRootProductsArgs>({
     query: gql(products.query) as any,
     variables: products.variables
   })
