@@ -29,7 +29,7 @@ const DEFAULT_QUERY = gql`
                     edges {
                       node {
                         price
-                        available
+                        availableForSale
                         compareAtPrice
                       }
                     }

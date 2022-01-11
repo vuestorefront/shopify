@@ -97,7 +97,7 @@ export default async function getProduct(
                 variants.add('title');
                 variants.add('price');
                 variants.add('weight');
-                variants.add('available');
+                variants.add('availableForSale');
                 variants.add('sku');
                 variants.add('compareAtPrice');
 
@@ -189,7 +189,7 @@ export default async function getProduct(
                 variants.add('title');
                 variants.add('price');
                 variants.add('weight');
-                variants.add('available');
+                variants.add('availableForSale');
                 variants.add('sku');
                 variants.add('compareAtPrice');
 

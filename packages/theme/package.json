@@ -19,7 +19,7 @@
     "@vue-storefront/middleware": "~2.5.0",
     "@vue-storefront/nuxt": "~2.5.0",
     "@vue-storefront/nuxt-theme": "~2.5.0",
-    "@vue-storefront/shopify": "1.0.9",
+    "@vue-storefront/shopify": "~1.0.10",
     "cookie-universal-nuxt": "^2.1.3",
     "core-js": "^3.19.1",
     "isomorphic-fetch": "^2.2.1",

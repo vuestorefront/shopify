@@ -4,10 +4,10 @@ const enhanceProductVariation = (productResponse) => {
     name: variant.product.title,
     images: variant.product.images,
     price: {
-      original: variant.compareAtPrice,
-      current: variant.price
+      original: variant.compareAtPriceV2?.amount,
+      current: variant.priceV2?.amount
     },
-    available: variant.available,
+    available: variant.availableForSale,
     productType: variant.product.productType,
     options: variant.product.options,
     variantId: variant.id,
@@ -17,7 +17,7 @@ const enhanceProductVariation = (productResponse) => {
     _categoriesRef: [],
     _slug: variant.product.handle,
     _coverImage: variant.image,
-    _mainPrice: variant.price
+    _mainPrice: variant.priceV2?.amount
   }));
   return enhancedProductResponse;
 };
