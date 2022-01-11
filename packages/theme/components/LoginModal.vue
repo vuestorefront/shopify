@@ -199,7 +199,7 @@ import { ref, watch, reactive, computed } from '@nuxtjs/composition-api';
 import { SfModal, SfInput, SfButton, SfCheckbox, SfLoader, SfAlert, SfBar } from '@storefront-ui/vue';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import { required, email } from 'vee-validate/dist/rules';
-import { useUser } from '@vue-storefront/shopify';
+import { useUser, useForgotPassword } from '@vue-storefront/shopify';
 import { useUiState } from '~/composables';
 
 extend('email', {
@@ -237,6 +237,7 @@ export default {
     const { register, login, loading, error: userError } = useUser();
     const forgotPasswordError = ref(false)
     const forgotPasswordLoading = ref(false)
+    const { request } = useForgotPassword()
     // const { request } = useForgotPassword()
     // const { request, error: forgotPasswordError, loading: forgotPasswordLoading } = useForgotPassword();
 
@@ -296,9 +297,9 @@ export default {
       toggleLoginModal();
     };
 
-    const handleRegister = async () => handleForm(register)();
+    const handleRegister = () => handleForm(register)();
 
-    const handleLogin = async () => handleForm(login)();
+    const handleLogin = () => handleForm(login)();
 
     const handleForgotten = async () => {
       userEmail.value = form.value.username;

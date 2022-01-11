@@ -1,7 +1,11 @@
 import searchProduct from './searchProduct'
+import customerRecover from './customerRecover'
+import customerCreate from './customerCreate';
 
 const apis = {
-  searchProduct
+  searchProduct,
+  customerRecover,
+  customerCreate
 }
 
 export type ShopifyApolloAPIs = {

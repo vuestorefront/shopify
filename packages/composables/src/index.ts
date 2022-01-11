@@ -13,12 +13,14 @@ import useUserOrders from './useUserOrders';
 import useUserShipping from './useUserShipping';
 import useWishlist from './useWishlist';
 import useCart from './useCart';
+import useForgotPassword from './useForgotPassword';
 
 
 export {
   useCart,
   useCategory,
   useCheckout,
+  useForgotPassword,
   useContent,
   useFacet,
   useProduct,

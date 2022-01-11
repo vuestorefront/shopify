@@ -3,6 +3,9 @@ import webpack from 'webpack';
 
 /** @type { import('@nuxt/types').NuxtConfig } */ 
 const config = {
+  server: {
+    port: 3001
+  },
   publicRuntimeConfig: {
     appKey: 'vsf2spcon',
     appVersion: Date.now()
