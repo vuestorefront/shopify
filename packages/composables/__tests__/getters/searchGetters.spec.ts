@@ -1,4 +1,3 @@
-import { QueryResult } from '@vue-storefront/shopify-api/server/next'
 import searchGetters from '../../src/getters/searchGetters'
 import { SearchResultMock } from '../../__mocks__'
 
@@ -6,7 +5,7 @@ describe('[shopify-composables] search getters', () => {
   it('getItems should return search items', () => {
     expect(
       searchGetters
-        .getItems(SearchResultMock as QueryResult)
+        .getItems(SearchResultMock as any)
         .map(item => item.id)
     )
       .toEqual(
