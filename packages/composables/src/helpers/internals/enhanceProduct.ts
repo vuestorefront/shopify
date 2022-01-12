@@ -8,11 +8,11 @@ const enhanceProduct = (productResponse) => {
     ...product,
     name: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions.title : product.title,
     images: product?.images,
-    // price: {
-    //   original: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions?.compareAtPriceV2?.amount : product.variants[0].compareAtPriceV2?.amount,
-    //   current: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions?.priceV2?.amount : product.variants[0].priceV2?.amount
-    // },
-    // available: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions?.quantityAvailable : product.variants[0].availableForSale,
+    price: {
+      original: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions?.compareAtPriceV2?.amount : product.variants?.[0].compareAtPriceV2?.amount,
+      current: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions?.priceV2?.amount : product.variants?.[0].priceV2?.amount
+    },
+    available: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions?.quantityAvailable : product.variants?.[0].availableForSale,
     productType: product.productType,
     options: product.options,
     _id: product.id,
@@ -22,10 +22,8 @@ const enhanceProduct = (productResponse) => {
     _categoriesRef: [],
     _slug: product.handle,
     _coverImage: product?.images[0],
-    // _mainPrice: product.variants[0].priceV2?.amount
+    _mainPrice: product.variants[0].priceV2?.amount
   }) as EnhancedProduct);
-  console.log('enhancedProductResponse::', enhancedProductResponse);
-  return false;
   return enhancedProductResponse;
 };
 
