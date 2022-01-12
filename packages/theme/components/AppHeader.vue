@@ -172,15 +172,17 @@ export default {
       products: computed(() => searchGetters.getItems(result.value)),
     };
     // #endregion Search Section
-    console.log('result::', result.value);
     onSSR(async () => {
       await search({ slug: '' });
     });
-    onBeforeMount(async () => {
-      if (root.$i18n && root.$cookies.get('CurLocaleLang') !== (root.$i18n.localeProperties.alias).toUpperCase()){
-        root.$cookies.set('CurLocaleLang', (root.$i18n.localeProperties.alias).toUpperCase(), {maxAge: 60 * 60 * 24 * 24000, path: '/'});
-      }
-    })
+    // onBeforeMount(async () => {
+    //   if(root.$i18n && !root.$cookies.get('CurLocaleLang')){
+    //     root.$cookies.set('CurLocaleLang', (root.$i18n.localeProperties.alias).toUpperCase(), {maxAge: 60 * 60 * 24 * 24000, path: '/'});
+    //   }
+    //   else if (root.$i18n && root.$cookies.get('CurLocaleLang') !== (root.$i18n.localeProperties.alias).toUpperCase()){
+    //     root.$cookies.set('CurLocaleLang', (root.$i18n.localeProperties.alias).toUpperCase(), {maxAge: 60 * 60 * 24 * 24000, path: '/'});
+    //   }
+    // })
 
     return {
       accountIcon,

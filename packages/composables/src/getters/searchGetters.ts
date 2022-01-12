@@ -24,7 +24,6 @@ const searchGetters: UseSearchGetters<QueryResult, Product> = {
     })
 
     items = enhanceProduct(items) as any
-    console.log('items::', items);
     return items
   },
   getCategoryTree(result: QueryResult): AgnosticCategoryTree {

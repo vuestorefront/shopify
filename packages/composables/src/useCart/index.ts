@@ -14,12 +14,13 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
     // check if cart is already initiated
     const appKey = APP.$config.appKey;
     let existngCartId = APP.$cookies.get(appKey + '_cart_id');
-    const curLocaleCode = APP.$cookies.get('CurLocaleLang');
-    console.log('APP.store.lineItems::', APP.store.state.cartItems);
-    if (existngCartId === undefined ||
-      // eslint-disable-next-line eqeqeq
-      existngCartId == '' ||
-      (APP.i18n && APP.$cookies.get('CurLocaleLang') !== (APP.i18n.localeProperties.alias).toUpperCase()))
+    let curLocaleCode = APP.$cookies.get('CurLocaleLang');
+    // eslint-disable-next-line eqeqeq
+    if (curLocaleCode === undefined || curLocaleCode == '' ) {
+      curLocaleCode = APP.$cookies.set('CurLocaleLang', (APP.i18n.localeProperties.alias).toUpperCase(), {maxAge: 60 * 60 * 24 * 24000, path: '/'});
+    }
+    // eslint-disable-next-line eqeqeq
+    if (existngCartId === undefined || existngCartId == '' || (APP.i18n && APP.$cookies.get('CurLocaleLang') !== (APP.i18n.localeProperties.alias).toUpperCase()))
     {
       existngCartId = await context.$shopify.api.createCart({ customQuery: curLocaleCode, lineItems: APP.store.state.cartItems ? APP.store.state.cartItems : [] }).then((checkout) => {
         return checkout;

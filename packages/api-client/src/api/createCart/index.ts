@@ -16,7 +16,6 @@ export default async function createCart(context, _params, _customQuery?: Custom
   // initiate the cart
   return await context.client.graphQLClient.send(mutation(context), data).then(({ data }) => {
     if (data) {
-      console.log('data.checkoutCreate.checkout.id::', data.checkoutCreate.checkout.id);
       return data.checkoutCreate.checkout.id;
     }
   });
