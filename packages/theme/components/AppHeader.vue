@@ -104,9 +104,8 @@ import SearchResults from './SearchResults.vue';
 import debounce from 'lodash/debounce';
 import useUiState from '~/composables/useUiState';
 import { onSSR } from '@vue-storefront/core';
-import { computed, ref, onBeforeMount } from '@nuxtjs/composition-api';
-import useUiHelpers from '~/composables/useUiHelpers';
-import LocaleSelector from './LocaleSelector';
+import { computed, ref, useRouter } from '@nuxtjs/composition-api';
+
 import {
   searchGetters,
   useCategory,
@@ -130,19 +129,23 @@ export default {
     isUserAuthenticated: Boolean,
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(props, { root }) {
-    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } = useUiState();
+  setup() {
+    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } =
+      useUiState();
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
+    const { load: loadWishlist } = useWishlist();
+    const router = useRouter()
+
     const curCatSlug = ref(getFacetsFromURL().categorySlug);
     const accountIcon = computed(() => props.isUserAuthenticated ? 'profile_fill' : 'profile');
 
 
      // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
     const handleAccountClick = () => {
-      if (props.isUserAuthenticated) {
-        return root.$router.push('/my-account');
+      if (isAuthenticated.value) {
+        return router.push('/my-account');
       }
       toggleLoginModal();
     };

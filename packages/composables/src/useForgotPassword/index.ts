@@ -1,22 +1,24 @@
 
 import {
-  Context,
   useForgotPasswordFactory,
   UseForgotPasswordFactoryParams
 } from '@vue-storefront/core';
+import { Context } from '../types'
 
 const factoryParams: UseForgotPasswordFactoryParams<any> = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  resetPassword: async (context: Context, { email, customQuery }) => {
-    console.log('Mocked: resetPassword');
-    return {};
-  },
+  resetPassword: async (context: Context, { email }) => {
+    const response = await context.$shopify.api.customerRecover({
+      email
+    })
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    console.log(response)
+
+    return response
+  },
   setNewPassword: async (context: Context, { tokenValue, newPassword, customQuery }) => {
     console.log('Mocked: setNewPassword');
     return {};
   }
 };
 
-export const useForgotPassword = useForgotPasswordFactory<any>(factoryParams);
+export default useForgotPasswordFactory<any>(factoryParams);

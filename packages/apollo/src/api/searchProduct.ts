@@ -1,10 +1,9 @@
 import { CustomQuery, ProductsSearchParams } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
-import { print } from 'graphql'
 import { ShopifyApolloContext } from '../library'
-import { ProductConnection, ShopProductsArgs } from '../shopify'
+import { QueryRoot, QueryRootProductsArgs } from '../shopify'
 
-const DEFAULT_QUERY = gql`
+export const DEFAULT_QUERY = `
     query products(
         $first: Int,
         $query: String
@@ -12,7 +11,6 @@ const DEFAULT_QUERY = gql`
         products(first: $first, query: $query) {
           edges {
               node {
-                  title
                   images(first: 1) {
                     edges {
                       node {
@@ -34,13 +32,19 @@ const DEFAULT_QUERY = gql`
                       }
                     }
                   }
-                  tags
-                  productType
                   options {
                     id
                     name
                     values
                   }
+                  tags
+                  productType
+                  title
+                  vendor
+                  publishedAt
+                  createdAt
+                  updatedAt
+                  publishedAt
                   id
                   description
                   descriptionHtml
@@ -61,18 +65,16 @@ export default async function searchProduct(context: ShopifyApolloContext, param
     customQuery,
     {
       products: {
-        query: print(DEFAULT_QUERY as any),
+        query: DEFAULT_QUERY,
         variables
       }
     }
   )
 
-  const response = await context.client.apolloClient.query<ProductConnection, ShopProductsArgs>({
+  const response = await context.client.apolloClient.query<QueryRoot, QueryRootProductsArgs>({
     query: gql(products.query) as any,
     variables: products.variables
   })
-
-  // console.log('search result:', response)
 
   return response ?? null
 }
