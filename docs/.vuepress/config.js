@@ -38,7 +38,6 @@ module.exports = {
         title: 'Composables',
         collapsable: false,
         children: [
-          ['/composables/shopify', 'Definitions'],
           ['/guide/use-product', 'useProduct'],
           ['/guide/use-user', 'useUser'],
           ['/guide/use-user-order', 'useUserOrder'],
@@ -52,7 +51,6 @@ module.exports = {
         title: 'API Client',
         collapsable: false,
         children: [
-          ['/api-client/shopify-api', 'Definitions']
           ['/guide/api-client-reference', 'Methods Reference']
         ]
       },
