@@ -2,7 +2,7 @@
 
 The Shopify integration is developed and maintained by the core partner **[Aureate Labs](https://aureatelabs.com/)** and **Vue Storefront core team**.
 
-<img src="https://user-images.githubusercontent.com/65275444/127497312-89dd3405-2c7b-49e9-a2ef-a8df5fad9ba2.png" style="margin-top: 20px;margin-right: 20px;" height="50px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://miro.medium.com/max/9286/1*QU9F6hQlFyHsJIbsdmt6FA.png" style="margin-top: 20px;" height="50px"/>
+<img src="https://user-images.githubusercontent.com/65275444/127497312-89dd3405-2c7b-49e9-a2ef-a8df5fad9ba2.png" style="margin-top: 20px;margin-right: 20px;" height="50px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/1626923/137092657-fb398d20-b592-4661-a1f9-4135db0b61d5.png" style="margin-top: 20px;" height="50px"/>
 
 ## Support
 
