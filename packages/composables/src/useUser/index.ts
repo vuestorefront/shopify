@@ -55,7 +55,6 @@ const params: UseUserFactoryParams<User, any, any> = {
       firstName,
       lastName,
       acceptsMarketing: false,
-      phone: '',
       password
     });
 

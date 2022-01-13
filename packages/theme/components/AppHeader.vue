@@ -105,7 +105,7 @@ import SearchResults from './SearchResults.vue';
 import debounce from 'lodash/debounce';
 import useUiState from '~/composables/useUiState';
 import { onSSR } from '@vue-storefront/core';
-import { computed, ref } from '@nuxtjs/composition-api';
+import { computed, ref, useRouter } from '@nuxtjs/composition-api';
 
 import {
   useCart,
@@ -132,7 +132,7 @@ export default {
     SfSearchBar,
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(_, { $router }) {
+  setup() {
     const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } =
       useUiState();
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
@@ -141,6 +141,7 @@ export default {
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
     const { load: loadWishlist } = useWishlist();
+    const router = useRouter()
 
     const curCatSlug = ref(getFacetsFromURL().categorySlug);
     const cartTotalItems = computed(() => {
@@ -155,7 +156,7 @@ export default {
     // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
     const handleAccountClick = () => {
       if (isAuthenticated.value) {
-        return $router.push('/my-account');
+        return router.push('/my-account');
       }
 
       toggleLoginModal();
