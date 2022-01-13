@@ -4,9 +4,9 @@ import {
   useCartFactory,
   UseCartFactoryParams
 } from '@vue-storefront/core';
-import { Cart, CartItem, Coupon, Product } from '../types';
+import { Cart, CartItem, Product } from '../types';
 
-const params: UseCartFactoryParams<Cart, CartItem, Product> = {
+const params: UseCartFactoryParams<Cart, CartItem, Product | Product[]> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, { customQuery }) => {
     // check if cart is already initiated
@@ -27,18 +27,34 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addItem: async (context: Context, { currentCart, product, quantity, customQuery }) => {
-    const appKey = context.$shopify.config.app.$config.appKey;
-    return await context.$shopify.api.addToCart({ currentCart, product, quantity, customQuery }).then((checkout) => {
-      // store cart id
-      context.$shopify.config.app.$cookies.set(appKey + '_cart_id', currentCart.id, {maxAge: 60 * 60 * 24 * 365, path: '/'});
-      return JSON.parse(JSON.stringify(checkout));
-    });
+    if (Array.isArray(product) && Array.isArray(quantity)) {
+      const appKey = context.$shopify.config.app.$config.appKey;
+      const promises = []
+      for (let i = 0; i < product.length; i++) {
+        const currentProduct = product[i];
+        const currentQuantity = quantity[i];
+        promises.push(context.$shopify.api.addToCart({ currentCart, currentProduct, currentQuantity, customQuery }).then((checkout) => {
+          // store cart id
+          context.$shopify.config.app.$cookies.set(appKey + '_cart_id', currentCart.id, { maxAge: 60 * 60 * 24 * 365, path: '/' });
+          return JSON.parse(JSON.stringify(checkout));
+        }));
+      }
+
+      return await Promise.all(promises)
+    } else {
+      const appKey = context.$shopify.config.app.$config.appKey;
+      return await context.$shopify.api.addToCart({ currentCart, product, quantity, customQuery }).then((checkout) => {
+        // store cart id
+        context.$shopify.config.app.$cookies.set(appKey + '_cart_id', currentCart.id, { maxAge: 60 * 60 * 24 * 365, path: '/' });
+        return JSON.parse(JSON.stringify(checkout));
+      });
+    }
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeItem: async (context: Context, { currentCart, product, customQuery }) => {
     // Remove an item from the checkout
-    return await context.$shopify.api.removeFromCart({currentCart, product}).then((checkout) => {
+    return await context.$shopify.api.removeFromCart({ currentCart, product }).then((checkout) => {
       // return updated cart data
       return JSON.parse(JSON.stringify(checkout));
     });
@@ -47,7 +63,7 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateItemQty: async (context: Context, { currentCart, product, quantity, customQuery }) => {
     // Update an item Quantity
-    return await context.$shopify.api.updateCart({currentCart, product, quantity}).then((checkout) => {
+    return await context.$shopify.api.updateCart({ currentCart, product, quantity }).then((checkout) => {
       // return updated cart data
       return JSON.parse(JSON.stringify(checkout));
     });
