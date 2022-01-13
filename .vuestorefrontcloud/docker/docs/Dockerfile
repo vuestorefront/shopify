@@ -8,7 +8,6 @@ RUN cd docs \
   && npm install \
   && sed -i "s/base: '\/',/base: '\/shopify\/',/g" ./.vuepress/config.js \
   && cat ./.vuepress/config.js \
-  && npm run build:docs \
   && npm run build
 
 FROM nginx
