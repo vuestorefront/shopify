@@ -18,7 +18,7 @@ export default async function getProduct(
 
     const DEFAULT_QUERY = gql`
     query @inContext(country: DE ) {
-      productByHandle(handle:"blouse"){
+      productByHandle(handle: "blouse"){
         id
         title
         description
@@ -146,17 +146,19 @@ export default async function getProduct(
       query: gql(productByHandle.query) as any,
       variables: productByHandle.payload
     }).then((result) => {
-      const items = result.data.productByHandle.map(item => {
-        const product = {
-        ...item,
-        collections: item.collections.edges.map(collection => collection) as any,
-        images: item.images.edges.map(image => image) as any,
-        variants: item.variants.edges.map(variant => variant) as any
-        }
-        console.log('product::', product);
-        return product
-      })
-      return items;
+      const collections = result.data.productByHandle.collections.edges.map((collection => collection.node));
+      const images = result.data.productByHandle.images.edges.map((image => image.node));
+      const variants = result.data.productByHandle.variants.edges.map((variant => variant.node));
+      delete(result.data.productByHandle.collections);
+      delete(result.data.productByHandle.images);
+      delete(result.data.productByHandle.variants);
+      result.data.productByHandle = {
+        ...result.data.productByHandle,
+        collections,
+        images,
+        variants
+      };
+      return result.data.productByHandle;
     });
 
 
@@ -285,10 +287,132 @@ export default async function getProduct(
     //   .send(getProductByHandleQuery)
     //   .then(({ model, product }) => {
     //     if (model) {
+    //       console.log('model.productByHandle::', typeof model.productByHandle, model.productByHandle);
     //       return model.productByHandle;
     //     }
     //   });
   } else if (params.related) {
+
+    // let chosenVariant = [];
+    // if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {
+    //   chosenVariant = Object.entries(params.selectedOptions).map(k => ({ name: k[0], value: k[1] }));
+    // }
+
+    // const DEFAULT_QUERY = gql`
+    // query @inContext(country: DE){
+    //   productRecommendations(productId:"Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0LzUzMjc1NTA2MTE2MTY="){
+    //     id
+    //     title
+    //     handle
+    //     options{
+    //       name
+    //       values
+    //     }
+    //     collections(first:250){
+    //       edges{
+    //         node{
+    //           title
+    //           handle
+    //         }
+    //       }
+    //     }
+    //     images(first:20){
+    //       edges{
+    //         node{
+    //           id
+    //           altText
+    //           originalSrc
+    //           transformedSrc
+    //         }
+    //       }
+    //     }
+    //     variants(first:20){
+    //       edges{
+    //         node{
+    //           title
+    //           weight
+    //           availableForSale
+    //           sku
+    //           priceV2{
+    //             amount
+    //             currencyCode
+    //           }
+    //           compareAtPriceV2{
+    //             amount
+    //             currencyCode
+    //           }
+    //           image{
+    //             id
+    //             altText
+    //             originalSrc
+    //             transformedSrc
+    //           }
+    //           selectedOptions{
+    //             name
+    //             value
+    //           }
+    //           product{
+    //             id
+    //             title
+    //             availableForSale
+    //             handle
+    //             description
+    //             descriptionHtml
+    //             images(first:20){
+    //               edges{
+    //                 node{
+    //                   id
+    //                   altText
+    //                   originalSrc
+    //                   transformedSrc
+    //                 }
+    //               }
+    //             }
+    //             productType
+    //             options{
+    //               name
+    //               values
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }`
+    // const payload = {
+    //   productId: params.id
+    // }
+
+    // const { productRecommendations } = context.extendQuery(
+    //   customQuery,
+    //   {
+    //     productRecommendations: {
+    //       query: print(DEFAULT_QUERY as any),
+    //       payload
+    //     }
+    //   }
+    // )
+
+
+    // return await context.client.apolloClient.query({
+    //   query: gql(productRecommendations.query) as any,
+    //   variables: productRecommendations.payload
+    // }).then((result) => {
+    //   const collections = result.data.productRecommendations.collections.edges.map((collection => collection.node));
+    //   const images = result.data.productRecommendations.images.edges.map((image => image.node));
+    //   const variants = result.data.productRecommendations.variants.edges.map((variant => variant.node));
+    //   delete(result.data.productRecommendations.collections);
+    //   delete(result.data.productRecommendations.images);
+    //   delete(result.data.productRecommendations.variants);
+    //   result.data.productRecommendations = {
+    //     ...result.data.productRecommendations,
+    //     collections,
+    //     images,
+    //     variants
+    //   };
+    //   return result.data.productRecommendations;
+    // });
+
     const getrelatedProductsByIdQuery = context.client.graphQLClient.query(
       (root) => {
         root.add(
@@ -326,11 +450,11 @@ export default async function getProduct(
               { args: { first: 20 } },
               (variants) => {
                 variants.add('title');
-                variants.add('price');
+                // variants.add('price');
                 variants.add('weight');
                 variants.add('availableForSale');
                 variants.add('sku');
-                variants.add('compareAtPrice');
+                // variants.add('compareAtPrice');
 
                 variants.addField('image', { args: {} }, (image) => {
                   image.add('id');
@@ -342,6 +466,16 @@ export default async function getProduct(
                 variants.addField('selectedOptions', {}, (selectedOptions) => {
                   selectedOptions.add('name');
                   selectedOptions.add('value');
+                });
+
+                variants.addField('priceV2', {}, (priceV2) => {
+                  priceV2.add('currencyCode');
+                  priceV2.add('amount');
+                });
+
+                variants.addField('compareAtPriceV2', {}, (compareAtPriceV2) => {
+                  compareAtPriceV2.add('currencyCode');
+                  compareAtPriceV2.add('amount');
                 });
 
                 variants.addField('product', {}, (product) => {
@@ -489,7 +623,6 @@ export default async function getProduct(
       query: gql(products.query) as any,
       variables: products.payload
     }).then((result) => {
-      console.log('result.data.products::', result.data.products);
       const items = result.data.products.edges.map(item => {
       const product = {
         ...item.node,
