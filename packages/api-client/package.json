@@ -1,6 +1,6 @@
 {
   "name": "@vue-storefront/shopify-api",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "sideEffects": false,
   "main": "lib/index.cjs.js",
   "module": "lib/index.es.js",
