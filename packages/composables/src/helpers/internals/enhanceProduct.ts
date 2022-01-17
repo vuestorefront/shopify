@@ -5,7 +5,12 @@ type EnhancedProduct = ProductVariant
 const enhanceProduct = (productResponse) => {
   if (Object.keys(productResponse).length === 0) return;
 
-  const enhancedProductResponse: EnhancedProduct[] = productResponse.map((product) => ({
+  let products = []
+  if (Array.isArray(productResponse)) {
+    products = productResponse.filter(item => Object.keys(item).length !== 0)
+  }
+
+  const enhancedProductResponse: EnhancedProduct[] = products.map((product) => ({
     ...product,
     name: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions.title : product.title,
     images: product?.images,
