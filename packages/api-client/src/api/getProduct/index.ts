@@ -17,8 +17,8 @@ export default async function getProduct(
     }
 
     const DEFAULT_QUERY = gql`
-    query @inContext(country: DE ) {
-      productByHandle(handle: "blouse"){
+    query product($handle: String!, $country: CountryCode!, $selectedOptions: [SelectedOptionInput!]! ) @inContext(country: $country ) {
+      productByHandle(handle: $handle){
         id
         title
         description
@@ -32,7 +32,7 @@ export default async function getProduct(
           title
           description
         }
-        variantBySelectedOptions(selectedOptions:[]){
+        variantBySelectedOptions(selectedOptions:$selectedOptions){
           id
           title
           sku
@@ -128,7 +128,9 @@ export default async function getProduct(
       }
     }`
     const payload = {
-      handle: params.slug
+      handle: params.slug,
+      country: "DE",
+      selectedOptions: chosenVariant
     }
 
     const { productByHandle } = context.extendQuery(
@@ -160,138 +162,7 @@ export default async function getProduct(
       };
       return result.data.productByHandle;
     });
-
-
-    // const getProductByHandleQuery = context.client.graphQLClient.query(
-    //   (root) => {
-    //     root.add(
-    //       'productByHandle',
-    //       { args: { handle: params.slug } },
-    //       (productByHandle) => {
-    //         // get product basic information
-    //         productByHandle.add('id');
-    //         productByHandle.add('title');
-    //         productByHandle.add('description');
-    //         productByHandle.add('descriptionHtml');
-    //         productByHandle.add('handle');
-    //         productByHandle.add('tags');
-    //         productByHandle.add('availableForSale');
-    //         productByHandle.add('totalInventory');
-    //         productByHandle.add('vendor');
-    //         productByHandle.addField('seo', (seoData) => {
-    //             seoData.add('title');
-    //             seoData.add('description');
-    //         });
-    //         productByHandle.add('variantBySelectedOptions', { args: { selectedOptions: chosenVariant } }, (selectedVariant) => {
-    //           selectedVariant.add('id');
-    //           selectedVariant.add('title');
-    //           selectedVariant.add('sku');
-    //           selectedVariant.add('availableForSale');
-    //           selectedVariant.add('quantityAvailable');
-    //           selectedVariant.addField('image', { args: {} }, (image) => {
-    //             image.add('altText');
-    //             image.add('originalSrc');
-    //             image.add('transformedSrc');
-    //           });
-    //           selectedVariant.addField('priceV2', (price) => {
-    //             price.add('amount');
-    //             price.add('currencyCode');
-    //           });
-    //           selectedVariant.addField('compareAtPriceV2', (price) => {
-    //             price.add('amount');
-    //             price.add('currencyCode');
-    //           });
-    //         });
-    //         productByHandle.add('options', {}, (options) => {
-    //           options.add('name');
-    //           options.add('values');
-    //         });
-    //         productByHandle.addConnection(
-    //           'collections',
-    //           { args: { first: 20 } },
-    //           (collection) => {
-    //             collection.add('title');
-    //             collection.add('handle');
-    //           }
-    //         );
-    //         productByHandle.addConnection(
-    //           'images',
-    //           { args: { first: 20 } },
-    //           (image) => {
-    //             image.add('id');
-    //             image.add('altText');
-    //             image.add('originalSrc');
-    //             image.add('transformedSrc');
-    //           }
-    //         );
-
-    //         productByHandle.addConnection(
-    //           'variants',
-    //           { args: { first: 1 } },
-    //           (variants) => {
-    //             variants.add('title');
-    //             variants.add('weight');
-    //             variants.add('availableForSale');
-    //             variants.add('sku');
-    //             variants.addField('priceV2', (price) => {
-    //               price.add('amount');
-    //               price.add('currencyCode');
-    //             });
-    //             variants.addField('compareAtPriceV2', (price) => {
-    //               price.add('amount');
-    //               price.add('currencyCode');
-    //             });
-
-    //             variants.addField('image', { args: {} }, (image) => {
-    //               image.add('id');
-    //               image.add('altText');
-    //               image.add('originalSrc');
-    //               image.add('transformedSrc');
-    //             });
-
-    //             variants.addField('selectedOptions', {}, (selectedOptions) => {
-    //               selectedOptions.add('name');
-    //               selectedOptions.add('value');
-    //             });
-
-    //             variants.addField('product', {}, (product) => {
-    //               product.add('id');
-    //               product.add('title');
-    //               product.add('availableForSale');
-    //               product.add('handle');
-    //               product.add('description');
-    //               product.add('descriptionHtml');
-    //               product.addConnection(
-    //                 'images',
-    //                 { args: { first: 20 } },
-    //                 (images) => {
-    //                   images.add('id');
-    //                   images.add('altText');
-    //                   images.add('originalSrc');
-    //                   images.add('transformedSrc');
-    //                 }
-    //               );
-    //               product.add('productType');
-    //               product.addField('options', {}, (options) => {
-    //                 options.add('name');
-    //                 options.add('values');
-    //               });
-    //             });
-    //           }
-    //         );
-    //       }
-    //     );
-    //   }
-    // );
-    // return context.client.graphQLClient
-    //   .send(getProductByHandleQuery)
-    //   .then(({ model, product }) => {
-    //     if (model) {
-    //       console.log('model.productByHandle::', typeof model.productByHandle, model.productByHandle);
-    //       return model.productByHandle;
-    //     }
-    //   });
-  } else if (params.related) {
+} else if (params.related) {
 
     // let chosenVariant = [];
     // if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {

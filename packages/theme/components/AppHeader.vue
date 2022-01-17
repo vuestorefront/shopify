@@ -105,6 +105,8 @@ import debounce from 'lodash/debounce';
 import useUiState from '~/composables/useUiState';
 import { onSSR } from '@vue-storefront/core';
 import { computed, ref, useRouter } from '@nuxtjs/composition-api';
+import useUiHelpers from '~/composables/useUiHelpers';
+import LocaleSelector from './LocaleSelector';
 
 import {
   searchGetters,
@@ -129,13 +131,12 @@ export default {
     isUserAuthenticated: Boolean,
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup() {
+  setup(props) {
     const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } =
       useUiState();
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
-    const { load: loadWishlist } = useWishlist();
     const router = useRouter()
 
     const curCatSlug = ref(getFacetsFromURL().categorySlug);

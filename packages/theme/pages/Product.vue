@@ -102,6 +102,7 @@
           >
             {{ productDescription }}
           </p>
+          options{{options}}
           <div v-if="options && Object.keys(options).length > 0">
             <template v-for="(option, o) in options">
               <SfSelect
