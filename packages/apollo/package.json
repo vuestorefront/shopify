@@ -1,6 +1,6 @@
 {
   "name": "@vue-storefront/shopify-apollo",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Vue Storefront Shopify Apollo Client",
   "keywords": [
     "apollo",
@@ -22,10 +22,12 @@
   },
   "directories": {
     "lib": "lib",
+    "src": "src",
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "publishConfig": {
     "access": "public"
