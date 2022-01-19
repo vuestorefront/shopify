@@ -1,5 +1,5 @@
 import { Context, useFacetFactory, FacetSearchResult } from '@vue-storefront/core';
-import { Collection, ProductConnection } from '@vue-storefront/shopify-api/server/next';
+import { Collection, ProductConnection } from '@vue-storefront/shopify-apollo/src/shopify';
 import { convertProductsGqlToLocal, LocalProduct } from '../helpers/internals/convertProductsGqlToLocal';
 import { Context as NewContext } from '../types';
 import { enhanceProduct } from './../helpers/internals';

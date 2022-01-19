@@ -1,4 +1,4 @@
-import { Product, ProductConnection, ProductVariant, ProductVariantConnection, Image, ImageConnection } from "@vue-storefront/shopify-api/server/next";
+import { Product, ProductConnection, ProductVariant, ProductVariantConnection, Image, ImageConnection } from "@vue-storefront/shopify-apollo/src/shopify";
 
 export type LocalProduct = Omit<Product, 'variants' | 'images'> & {
     variants: ProductVariant[] | ProductVariantConnection,
