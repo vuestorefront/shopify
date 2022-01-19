@@ -4,12 +4,12 @@ import { checkoutMutation as mutation } from './../checkoutMutations/buildMutati
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function createCart(context, _params, _customQuery?: CustomQuery) {
+  console.log('context.res.req.cookies::', context.res.req.cookies);
   const data = {
     "input": {
       buyerIdentity: {
-        countryCode: (_params.customQuery)
-      },
-      lineItems: (_params.lineItems)
+        countryCode: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
+      }
     }
   }
   

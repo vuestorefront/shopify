@@ -3,6 +3,7 @@
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
 import { print } from 'graphql'
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function getProduct(
@@ -15,7 +16,6 @@ export default async function getProduct(
     if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {
       chosenVariant = Object.entries(params.selectedOptions).map(k => ({ name: k[0], value: k[1] }));
     }
-
     const DEFAULT_QUERY = gql`
     query product($handle: String!, $country: CountryCode!, $selectedOptions: [SelectedOptionInput!]! ) @inContext(country: $country ) {
       productByHandle(handle: $handle){
@@ -53,6 +53,7 @@ export default async function getProduct(
           }
         }
         options{
+          id
           name
           values
         }
@@ -118,6 +119,7 @@ export default async function getProduct(
                 }
                 productType
                 options{
+                  id
                   name
                   values
                 }
@@ -129,7 +131,7 @@ export default async function getProduct(
     }`
     const payload = {
       handle: params.slug,
-      country: "DE",
+      country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase(),
       selectedOptions: chosenVariant
     }
 
@@ -148,12 +150,22 @@ export default async function getProduct(
       query: gql(productByHandle.query) as any,
       variables: productByHandle.payload
     }).then((result) => {
+      const convertArrayToObject = (array, key) => {
+        const initialValue = {};
+        return array.reduce((obj, item) => {
+          return {
+            ...obj,
+            [item[key]]: item,
+          };
+        }, initialValue);
+      };
       const collections = result.data.productByHandle.collections.edges.map((collection => collection.node));
       const images = result.data.productByHandle.images.edges.map((image => image.node));
       const variants = result.data.productByHandle.variants.edges.map((variant => variant.node));
-      delete(result.data.productByHandle.collections);
+      
+      delete (result.data.productByHandle.collections);
       delete(result.data.productByHandle.images);
-      delete(result.data.productByHandle.variants);
+      delete (result.data.productByHandle.variants);
       result.data.productByHandle = {
         ...result.data.productByHandle,
         collections,
@@ -321,12 +333,10 @@ export default async function getProduct(
               { args: { first: 20 } },
               (variants) => {
                 variants.add('title');
-                // variants.add('price');
                 variants.add('weight');
                 variants.add('availableForSale');
                 variants.add('sku');
-                // variants.add('compareAtPrice');
-
+                
                 variants.addField('image', { args: {} }, (image) => {
                   image.add('id');
                   image.add('altText');
@@ -394,11 +404,9 @@ export default async function getProduct(
       return products;
     });
   } else {
-    const curLocaleCode = params.curLocaleCode;
-    // console.log('context::', context.client, context.client.res.cookies);
     const DEFAULT_QUERY = gql`
-    query products @inContext(country: DE ) {
-      products(first:20, sortKey:CREATED_AT, reverse: false){
+    query GET_PRODUCTS($country: CountryCode!, $first: Int!, $sortKey:  ProductSortKeys!, $reverse: Boolean!) @inContext(country: $country){
+      products(first:$first, sortKey: $sortKey, reverse: $reverse) {
         edges{
           node{
             id
@@ -414,6 +422,7 @@ export default async function getProduct(
             publishedAt
             onlineStoreUrl
             options{
+              id
               name
               values
             }
@@ -476,7 +485,8 @@ export default async function getProduct(
     const payload = {
       first: (params.limit ? params.limit : 20),
       sortKey: (params.sortBy ? params.sortBy : 'CREATED_AT'),
-      reverse: false
+      reverse: false,
+      country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
     }
 
     const { products } = context.extendQuery(

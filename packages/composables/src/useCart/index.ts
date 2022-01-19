@@ -9,20 +9,11 @@ import { Cart, CartItem, Coupon, Product } from '../types';
 const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, { customQuery }) => {
-    const APP = context.$shopify.config.app;
-
     // check if cart is already initiated
-    const appKey = APP.$config.appKey;
-    let existngCartId = APP.$cookies.get(appKey + '_cart_id');
-    let curLocaleCode = APP.$cookies.get('CurLocaleLang');
-    // eslint-disable-next-line eqeqeq
-    if (curLocaleCode === undefined || curLocaleCode == '' ) {
-      curLocaleCode = APP.$cookies.set('CurLocaleLang', (APP.i18n.localeProperties.alias).toUpperCase(), {maxAge: 60 * 60 * 24 * 24000, path: '/'});
-    }
-    // eslint-disable-next-line eqeqeq
-    if (existngCartId === undefined || existngCartId == '' || (APP.i18n && APP.$cookies.get('CurLocaleLang') !== (APP.i18n.localeProperties.alias).toUpperCase()))
-    {
-      existngCartId = await context.$shopify.api.createCart({ customQuery: curLocaleCode, lineItems: APP.store.state.cartItems ? APP.store.state.cartItems : [] }).then((checkout) => {
+    const appKey = context.$shopify.config.app.$config.appKey;
+    let existngCartId = context.$shopify.config.app.$cookies.get(appKey + '_cart_id');
+    if (existngCartId === undefined || existngCartId === '') {
+      existngCartId = await context.$shopify.api.createCart().then((checkout) => {
         return checkout;
       });
     }

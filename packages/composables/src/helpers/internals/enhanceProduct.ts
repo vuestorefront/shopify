@@ -25,7 +25,6 @@ const enhanceProduct = (productResponse) => {
     _coverImage: product?.images[0],
     _mainPrice: product.variants ? product.variants[0].priceV2?.amount : 0
   }) as EnhancedProduct);
-  // console.log('enhancedProductResponse::', enhancedProductResponse);
   return enhancedProductResponse;
 };
 

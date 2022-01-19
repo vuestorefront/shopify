@@ -5,7 +5,8 @@ module.exports = {
       configuration: {
         api: {
           domain: process.env.SHOPIFY_DOMAIN,
-          storefrontAccessToken: process.env.SHOPIFY_STOREFRONT_TOKEN
+          storefrontAccessToken: process.env.SHOPIFY_STOREFRONT_TOKEN,
+          apiVersion: "2022-01"
         },
         currency: 'USD',
         country: 'US'
