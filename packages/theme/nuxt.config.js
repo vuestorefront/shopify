@@ -4,7 +4,8 @@ import webpack from 'webpack';
 /** @type { import('@nuxt/types').NuxtConfig } */ 
 const config = {
   server: {
-    port: process.env.APP_PORT || 3001
+    port: process.env.APP_PORT || 3001,
+    host: '0.0.0.0'
   },
   publicRuntimeConfig: {
     appKey: 'vsf2spcon',
