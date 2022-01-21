@@ -21,15 +21,15 @@
             <transition-group name="sf-fade" tag="div">
               <SfCollectedProduct
                 v-for="product in products"
-                v-e2e="'collected-product'"
                 :key="cartGetters.getItemSku(product)"
+                v-e2e="'collected-product'"
                 :image="cartGetters.getItemImage(product)"
                 :title="cartGetters.getItemName(product)"
                 :regular-price="$n(cartGetters.getItemPrice(product).regular, 'currency')"
                 :special-price="cartGetters.getItemPrice(product).special && $n(cartGetters.getItemPrice(product).special, 'currency')"
                 :stock="99999"
-                @click:remove="removeItem({ product })"
                 class="collected-product"
+                @click:remove="removeItem({ product })"
               >
                 <template #configuration>
                   <div class="collected-product__properties">
@@ -76,24 +76,23 @@
         <transition name="sf-fade">
           <div v-if="totalItems">
             <SfProperty
-              name="Subtotal price"
+              name="Estimated Total"
               class="sf-property--full-width sf-property--large my-cart__total-price"
             >
               <template #value>
                 <SfPrice
                   :regular="$n(totals.subtotal, 'currency')"
-                  :special="(totals.special !== totals.subtotal) ? $n(totals.special, 'currency') : 0"
                 />
               </template>
             </SfProperty>
-            <nuxt-link :to="localePath({ name: 'shipping' })">
+            <SfLink link="javascript:void(0);" @click="handleCheckout(checkoutURL, parseFloat(totals.subtotal))">
               <SfButton
-                class="sf-button--full-width color-secondary"
+                class="sf-button--full-width color-secondary sf-proceed_to_checkout"
                 @click="toggleCartSidebar"
               >
                 {{ $t('Go to checkout') }}
               </SfButton>
-            </nuxt-link>
+            </SfLink>
           </div>
           <div v-else>
             <SfButton
@@ -117,12 +116,13 @@ import {
   SfPrice,
   SfCollectedProduct,
   SfImage,
+  SfLink,
   SfQuantitySelector
 } from '@storefront-ui/vue';
-import { computed } from '@nuxtjs/composition-api';
+import { computed, onBeforeMount } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
-import { useUiState } from '~/composables';
+import { useUiState, useUiNotification } from '~/composables';
 import debounce from 'lodash.debounce';
 
 export default {
@@ -132,6 +132,7 @@ export default {
     SfButton,
     SfHeading,
     SfIcon,
+    SfLink,
     SfProperty,
     SfPrice,
     SfCollectedProduct,
@@ -142,12 +143,29 @@ export default {
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
     const { cart, removeItem, updateItemQty, load: loadCart, loading } = useCart();
     const { isAuthenticated } = useUser();
+    const { send: sendNotification, notifications } = useUiNotification();
     const products = computed(() => cartGetters.getItems(cart.value));
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
+    const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
 
+
+    const handleCheckout = (checkoutUrl) => {
+      setTimeout(() => {
+        window.location.replace(checkoutUrl)
+      }, 400)
+    }
+ 
     onSSR(async () => {
       await loadCart();
+    });
+
+     onBeforeMount(async () => {
+        await loadCart().then(() => {
+          if (cart && cart.value.orderStatusUrl !== null) {
+            root.$cookies.remove(`${root.$config.appKey}_cart_id`); 
+          }
+        });
     });
 
     const updateQuantity = debounce(async ({ product, quantity }) => {
@@ -160,11 +178,15 @@ export default {
       isAuthenticated,
       products,
       removeItem,
+      handleCheckout,
+      checkoutURL,
       isCartSidebarOpen,
       toggleCartSidebar,
       totals,
       totalItems,
-      cartGetters
+      cartGetters,
+      sendNotification,
+      notifications
     };
   }
 };
