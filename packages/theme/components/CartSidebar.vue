@@ -139,7 +139,7 @@ export default {
     SfImage,
     SfQuantitySelector
   },
-  setup() {
+  setup(_, { root }) {
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
     const { cart, removeItem, updateItemQty, load: loadCart, loading } = useCart();
     const { isAuthenticated } = useUser();
