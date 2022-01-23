@@ -3,13 +3,16 @@ import customerRecover from './customerRecover'
 import customerCreate from './customerCreate'
 import availableFilters from './availableFilters';
 import getCollection from './getCollection';
+import getProductV2 from './getProductV2';
+
 
 const apis = {
   searchProduct,
   customerRecover,
   customerCreate,
   availableFilters,
-  getCollection
+  getCollection,
+  getProductV2
 }
 
 export type ShopifyApolloAPIs = {
