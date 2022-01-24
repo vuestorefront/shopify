@@ -3,8 +3,8 @@
     <SfHeader
       data-cy="app-header"
       :search-value="term"
-      :cart-items-qty="cartTotalItems"
-      :account-icon="accountIcon"
+      :cartItemsQty="cartTotalItems"
+      :accountIcon="accountIcon"
       class="sf-header--has-mobile-search"
       :class="{ 'header-on-top': isSearchOpen }"
       @click:cart="toggleCartSidebar"
@@ -42,7 +42,6 @@
       <template #header-icons>
         <div class="sf-header__icons">
           <SfButton
-            v-e2e="'app-header-account'"
             class="sf-button--pure sf-header__action"
             @click="handleAccountClick"
           >
@@ -106,18 +105,14 @@ import debounce from 'lodash/debounce';
 import useUiState from '~/composables/useUiState';
 import { onSSR } from '@vue-storefront/core';
 import { computed, ref, useRouter } from '@nuxtjs/composition-api';
+import useUiHelpers from '~/composables/useUiHelpers';
+import LocaleSelector from './LocaleSelector';
 
 import {
-  useCart,
-  useWishlist,
-  useUser,
-  cartGetters,
   searchGetters,
   useCategory,
   useSearch,
 } from '@vue-storefront/shopify';
-import useUiHelpers from '~/composables/useUiHelpers';
-import LocaleSelector from './LocaleSelector';
 
 export default {
   components: {
@@ -131,34 +126,28 @@ export default {
     SfBadge,
     SfSearchBar,
   },
+  props: {
+    cartTotalItems: Number,
+    isUserAuthenticated: Boolean,
+  },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup() {
+  setup(props) {
     const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } =
       useUiState();
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
-    const { isAuthenticated, load: loadUser } = useUser();
-    const { cart, load: loadCart } = useCart();
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
-    const { load: loadWishlist } = useWishlist();
     const router = useRouter()
 
     const curCatSlug = ref(getFacetsFromURL().categorySlug);
-    const cartTotalItems = computed(() => {
-      const count = cartGetters.getTotalItems(cart.value);
-      return count ? count.toString() : null;
-    });
+    const accountIcon = computed(() => props.isUserAuthenticated ? 'profile_fill' : 'profile');
 
-    const accountIcon = computed(() =>
-      isAuthenticated.value ? 'profile_fill' : 'profile'
-    );
 
-    // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
+     // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
     const handleAccountClick = () => {
       if (isAuthenticated.value) {
         return router.push('/my-account');
       }
-
       toggleLoginModal();
     };
 
@@ -187,17 +176,20 @@ export default {
       products: computed(() => searchGetters.getItems(result.value)),
     };
     // #endregion Search Section
-
     onSSR(async () => {
-      await loadUser();
-      await loadCart();
-      await loadWishlist();
       await search({ slug: '' });
     });
+    // onBeforeMount(async () => {
+    //   if(root.$i18n && !root.$cookies.get('CurLocaleLang')){
+    //     root.$cookies.set('CurLocaleLang', (root.$i18n.localeProperties.alias).toUpperCase(), {maxAge: 60 * 60 * 24 * 24000, path: '/'});
+    //   }
+    //   else if (root.$i18n && root.$cookies.get('CurLocaleLang') !== (root.$i18n.localeProperties.alias).toUpperCase()){
+    //     root.$cookies.set('CurLocaleLang', (root.$i18n.localeProperties.alias).toUpperCase(), {maxAge: 60 * 60 * 24 * 24000, path: '/'});
+    //   }
+    // })
 
     return {
       accountIcon,
-      cartTotalItems,
       closeSearch,
       handleAccountClick,
       toggleCartSidebar,

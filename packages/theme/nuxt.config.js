@@ -111,9 +111,7 @@ const config = {
     country: 'US',
     countries: [
       { name: 'US', label: 'United States' },
-      { name: 'AT', label: 'Austria' },
-      { name: 'DE', label: 'Germany' },
-      { name: 'NL', label: 'Netherlands' }
+      { name: 'DE', label: 'Germany' }
     ],
     currencies: [
       { name: 'EUR', label: 'Euro' },
@@ -122,12 +120,14 @@ const config = {
     locales: [
       {
         code: 'en',
+        alias: 'us',
         label: 'English',
         file: 'en.js',
         iso: 'en'
       },
       {
         code: 'de',
+        alias: 'de',
         label: 'German',
         file: 'de.js',
         iso: 'de'
@@ -150,7 +150,7 @@ const config = {
         de: {
           currency: {
             style: 'currency',
-            currency: 'EUR',
+            currency: 'GBP',
             currencyDisplay: 'symbol'
           }
         }
@@ -290,10 +290,6 @@ const config = {
             }
           }
         }
-      ],
-      preCaching: [
-        '//shopify-pwa.aureatelabs.com/c/**',
-        '//shopify-pwa.aureatelabs.com/'
       ]
     }
   }

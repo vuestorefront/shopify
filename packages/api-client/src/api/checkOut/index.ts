@@ -1,8 +1,176 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
+import { gql } from '@apollo/client/core'
+import { print } from 'graphql'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function checkOut(context, checkoutId, customQuery?: CustomQuery) {
-  return context.client.checkout.fetch(checkoutId);
+  const DEFAULT_QUERY = gql`
+  query FETCH_CHECKOUT($country: CountryCode!, $id: ID!) @inContext(country: $country ){
+    node(id: $id) {
+      id
+      ... on Checkout {
+        appliedGiftCards{
+          id
+          amountUsedV2{
+            currencyCode
+            amount
+          }
+          balanceV2{
+            currencyCode
+            amount
+          }
+          
+        }
+        completedAt
+        createdAt
+        currencyCode
+        customAttributes{
+          key
+          value
+        }
+        discountApplications(first:250){
+          edges{
+            node{
+              allocationMethod
+              targetSelection
+              targetType
+              value{
+                __typename
+              }
+            }
+          }
+        }
+        email
+        id
+        lineItems(first:250){
+          edges{
+            node{
+              customAttributes{
+                key
+                value
+              }
+              id
+              quantity
+              title
+              variant{
+                availableForSale
+                compareAtPriceV2{
+                  currencyCode
+                  amount
+                }
+                id
+                image{
+                  altText
+                  id
+                  height
+                  width
+                  src
+                }
+                priceV2{
+                  currencyCode
+                  amount
+                }
+                compareAtPriceV2{
+                  currencyCode
+                  amount
+                }
+                product{
+                  handle
+                  id
+                }
+                selectedOptions{
+                  name
+                  value
+                }
+                sku
+                title
+                unitPrice{
+                  currencyCode
+                  amount
+                }
+              }
+            }
+          }
+        }
+        lineItemsSubtotalPrice{
+          currencyCode
+          amount
+        }
+        note
+        order {
+          id
+        }
+        orderStatusUrl
+        paymentDueV2{
+          currencyCode
+          amount
+        }
+        ready
+        requiresShipping
+        shippingAddress {
+          id
+        }
+        shippingLine{
+          handle
+          priceV2{
+            currencyCode
+            amount
+          }
+          title
+        }
+        subtotalPriceV2{
+          currencyCode
+          amount
+        }
+        taxExempt
+        taxesIncluded
+        totalPriceV2{
+          currencyCode
+          amount
+        }
+        totalTaxV2{
+          currencyCode
+          amount
+        }
+        updatedAt
+        webUrl
+      }
+      }
+    }`
+    const payload = {
+      id: checkoutId,
+      country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
+    }
+
+    const { fetchCheckOut } = context.extendQuery(
+      customQuery,
+      {
+        fetchCheckOut: {
+          query: print(DEFAULT_QUERY as any),
+          payload
+        }
+      }
+    )
+
+
+    return await context.client.apolloClient.query({
+      query: gql(fetchCheckOut.query) as any,
+      variables: fetchCheckOut.payload
+    }).then((result) => {
+      const discountApplications = result.data.node.discountApplications.edges.map((discountApplications => discountApplications.node));
+      const lineItems = result.data.node.lineItems.edges.map((lineItem => lineItem.node));
+      delete (result.data.node.lineItems);
+      delete (result.data.node.discountApplications);
+      result.data.node = {
+          ...result.data.node,
+          discountApplications,
+          lineItems
+      };
+      return result.data.node;
+    });
+
+
+  // return context.client.checkout.fetch(checkoutId);
 }

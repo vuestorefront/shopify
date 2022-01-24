@@ -100,12 +100,10 @@ export const getProductAttributes = (products: ProductVariant, filterByAttribute
     return {} as any;
   }
 
-  /* const formatAttributes = (products): AgnosticAttribute[] =>{
-    return formatAttributeList(products.options);
-  }; */
-  const formatAttributes = (product: ProductVariant): AgnosticAttribute[] =>
-    formatAttributeList(product.options).filter((attribute) => filterByAttributeName ? filterByAttributeName.includes(attribute.name) : attribute);
-
+  const formatAttributes = (product: ProductVariant): AgnosticAttribute[] => {
+    return formatAttributeList(product.options).filter((attribute) => filterByAttributeName ? filterByAttributeName.includes(attribute.name) : attribute);
+  }
+    
   const reduceToUniques = (prev, curr) => {
     const isAttributeExist = prev.some((el) => el.name === curr.name && el.value === curr.value);
 

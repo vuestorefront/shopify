@@ -41,10 +41,14 @@ const params: UseUserFactoryParams<User, any, any> = {
     const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
     await context.$shopify.api.editProfile({
       token,
-      profile: { email: updatedUserData.email,
-        firstName: updatedUserData.firstName,
-        lastName: updatedUserData.lastName
-      }});
+      profile: {
+        email: updatedUserData.email ? updatedUserData.email : '',
+        firstName: updatedUserData.firstName ? updatedUserData.firstName : '',
+        lastName: updatedUserData.lastName ? updatedUserData.lastName : '',
+        acceptsMarketing: updatedUserData.acceptsMarketing ? updatedUserData.acceptsMarketing : false,
+        phone: updatedUserData.phone ? updatedUserData.phone : null
+      }
+    });
     return {};
   },
 

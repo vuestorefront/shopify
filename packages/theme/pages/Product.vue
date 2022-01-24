@@ -109,7 +109,7 @@
                 :key="`attrib-${o}`"
                 :data-cy="`product-select_${o.toLowerCase()}`"
                 :set="(atttLbl = o)"
-                :value="configuration[o] || options[o][0].value"
+                :value="configuration[o] || options[o][0]"
                 :label="$t(`${o}`)"
                 :class="`sf-select--underlined product__select-${o.toLowerCase()}`"
                 :required="true"
@@ -118,9 +118,9 @@
                 <SfSelectOption
                   v-for="(attribs, a) in option"
                   :key="`item-${a}`"
-                  :value="attribs.value"
+                  :value="attribs"
                 >
-                  {{ attribs.value }}
+                  {{ attribs }}
                 </SfSelectOption>
               </SfSelect>
               <div
@@ -133,11 +133,11 @@
                   v-for="(attribs, a) in option"
                   :key="`item-${a}`"
                   data-cy="product-color_update"
-                  :color="attribs.value"
-                  :class="`product__color ${attribs.value}`"
+                  :color="attribs"
+                  :class="`product__color ${attribs}`"
                   :selected="
                     configuration[o]
-                      ? configuration[o] === attribs.value
+                      ? configuration[o] === attribs
                         ? true
                         : false
                       : a === 0
@@ -145,7 +145,7 @@
                       : false
                   "
                   @click="
-                    (atttLbl = o), updateFilter({ [atttLbl]: attribs.value })
+                    (atttLbl = o), updateFilter({ [atttLbl]: attribs })
                   "
                 />
               </div>

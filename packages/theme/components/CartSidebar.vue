@@ -120,7 +120,6 @@ import {
   SfQuantitySelector
 } from '@storefront-ui/vue';
 import { computed, onBeforeMount } from '@nuxtjs/composition-api';
-import { onSSR } from '@vue-storefront/core';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
 import { useUiState, useUiNotification } from '~/composables';
 import debounce from 'lodash.debounce';
@@ -148,19 +147,13 @@ export default {
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
     const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
-
-
     const handleCheckout = (checkoutUrl) => {
       setTimeout(() => {
         window.location.replace(checkoutUrl)
       }, 400)
     }
- 
-    onSSR(async () => {
-      await loadCart();
-    });
-
-     onBeforeMount(async () => {
+   onBeforeMount(async () => {
+        // await loadCart({customQuery: {country: 'de'}});
         await loadCart().then(() => {
           if (cart && cart.value.orderStatusUrl !== null) {
             root.$cookies.remove(`${root.$config.appKey}_cart_id`); 
