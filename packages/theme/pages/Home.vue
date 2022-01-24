@@ -68,9 +68,9 @@ import {
   productGetters
 } from '@vue-storefront/shopify';
 import {
-  computed
+  computed,
+  onBeforeMount
 } from '@nuxtjs/composition-api';
-import { onSSR } from '@vue-storefront/core';
 import LazyHydrate from 'vue-lazy-hydration';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
@@ -93,17 +93,16 @@ export default {
     LazyHydrate
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup() {
+  setup(contect) {
     const {
       products: relatedProducts,
       search: productsSearch,
       loading: productsLoading
     } = useProduct('relatedProducts');
-    const { cart, load: loadCart, addItem: addToCart, isInCart } = useCart();
+    const { cart, addItem: addToCart, isInCart } = useCart();
 
-    onSSR(async () => {
+    onBeforeMount(async () => {
       await productsSearch({ limit: 8 });
-      await loadCart();
     });
     return {
       products: computed(() =>
