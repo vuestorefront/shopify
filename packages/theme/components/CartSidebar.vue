@@ -119,8 +119,7 @@ import {
   SfImage,
   SfQuantitySelector
 } from '@storefront-ui/vue';
-import { computed } from '@nuxtjs/composition-api';
-import { onSSR } from '@vue-storefront/core';
+import { computed, onBeforeMount } from '@nuxtjs/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
 import { useUiState } from '~/composables';
 import debounce from 'lodash.debounce';
@@ -131,7 +130,6 @@ export default {
     SfSidebar,
     SfButton,
     SfHeading,
-    SfIcon,
     SfProperty,
     SfPrice,
     SfCollectedProduct,
@@ -146,8 +144,7 @@ export default {
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
 
-    onSSR(async () => {
-      console.log('LoadCart called');
+    onBeforeMount(async () => {
       await loadCart();
     });
 

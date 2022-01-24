@@ -78,6 +78,7 @@ export default async function getProduct(
         variants(first:20){
           edges{
             node{
+              id
               title
               weight
               availableForSale
@@ -162,9 +163,8 @@ export default async function getProduct(
       const collections = result.data.productByHandle.collections.edges.map((collection => collection.node));
       const images = result.data.productByHandle.images.edges.map((image => image.node));
       const variants = result.data.productByHandle.variants.edges.map((variant => variant.node));
-      
       delete (result.data.productByHandle.collections);
-      delete(result.data.productByHandle.images);
+      delete (result.data.productByHandle.images);
       delete (result.data.productByHandle.variants);
       result.data.productByHandle = {
         ...result.data.productByHandle,
@@ -174,7 +174,8 @@ export default async function getProduct(
       };
       return result.data.productByHandle;
     });
-} else if (params.related) {
+  }
+   else if (params.related) {
 
     // let chosenVariant = [];
     // if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {

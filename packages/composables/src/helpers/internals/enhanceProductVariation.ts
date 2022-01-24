@@ -1,6 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const enhanceProductVariation = (productResponse) => {
-  const enhancedProductResponse = productResponse.map((variant) => ({
+  let products = []
+  if (Array.isArray(productResponse)) {
+    products = productResponse.filter(item => Object.keys(item).length !== 0)
+  }
+
+  const enhancedProductResponse = products.map((variant) => ({
     name: variant.product.title,
     images: variant.product.images,
     price: {

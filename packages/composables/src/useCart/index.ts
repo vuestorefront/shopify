@@ -9,6 +9,7 @@ import { Cart, CartItem, Coupon, Product } from '../types';
 const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, { customQuery }) => {
+    console.log('loadCart::', customQuery);
     // check if cart is already initiated
     const appKey = context.$shopify.config.app.$config.appKey;
     let existngCartId = context.$shopify.config.app.$cookies.get(appKey + '_cart_id');

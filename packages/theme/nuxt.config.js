@@ -4,7 +4,8 @@ import webpack from 'webpack';
 /** @type { import('@nuxt/types').NuxtConfig } */ 
 const config = {
   server: {
-    port: 3001
+    port: process.env.APP_PORT || 3001,
+    host: '0.0.0.0'
   },
   publicRuntimeConfig: {
     appKey: 'vsf2spcon',
@@ -110,9 +111,7 @@ const config = {
     country: 'US',
     countries: [
       { name: 'US', label: 'United States' },
-      { name: 'AT', label: 'Austria' },
-      { name: 'DE', label: 'Germany' },
-      { name: 'NL', label: 'Netherlands' }
+      { name: 'DE', label: 'Germany' }
     ],
     currencies: [
       { name: 'EUR', label: 'Euro' },
@@ -128,7 +127,7 @@ const config = {
       },
       {
         code: 'de',
-        alias: 'es',
+        alias: 'de',
         label: 'German',
         file: 'de.js',
         iso: 'de'
@@ -151,7 +150,7 @@ const config = {
         de: {
           currency: {
             style: 'currency',
-            currency: 'EUR',
+            currency: 'GBP',
             currencyDisplay: 'symbol'
           }
         }

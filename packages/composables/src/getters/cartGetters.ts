@@ -28,8 +28,8 @@ export const getCartItemImage = (product: any): string => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItemPrice = (product: any): AgnosticPrice => {
   return {
-    regular: product?.variant.compareAtPrice || null,
-    special: product?.variant.price || null
+    regular: product?.variant.compareAtPriceV2.amount|| null,
+    special: product?.variant.priceV2.amount|| null
   };
 };
 
@@ -53,11 +53,12 @@ export const getCartItemAttributes = (product: LineItem, filterByAttributeName?:
 export const getCartItemSku = (product: any): string => product?.variant.sku || '-';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getCartTotals = (cart: Cart): AgnosticTotals => {
+export const getCartTotals = (cart): AgnosticTotals => {
   if (cart && cart !== null) {
     return {
-      total: parseFloat(cart.totalPrice),
-      subtotal: parseFloat(cart.subtotalPrice)
+      total: parseFloat(cart.totalPriceV2.amount),
+      subtotal: parseFloat(cart.subtotalPriceV2.amount),
+      special: parseFloat(cart.subtotalPriceV2.amount),
     };
   }
 };

@@ -4,7 +4,6 @@ import { checkoutMutation as mutation } from './../checkoutMutations/buildMutati
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function createCart(context, _params, _customQuery?: CustomQuery) {
-  console.log('context.res.req.cookies::', context.res.req.cookies);
   const data = {
     "input": {
       buyerIdentity: {
@@ -12,7 +11,6 @@ export default async function createCart(context, _params, _customQuery?: Custom
       }
     }
   }
-  
   // initiate the cart
   return await context.client.graphQLClient.send(mutation(context), data).then(({ data }) => {
     if (data) {
