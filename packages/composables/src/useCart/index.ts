@@ -11,6 +11,7 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   load: async (context: Context, { customQuery }) => {
     // check if cart is already initiated
     const appKey = context.$shopify.config.app.$config.appKey;
+    console.log('customQuery:', customQuery);
     let existngCartId = context.$shopify.config.app.$cookies.get(appKey + '_cart_id');
     if (existngCartId === undefined || existngCartId === '') {
       existngCartId = await context.$shopify.api.createCart().then((checkout) => {
