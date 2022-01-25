@@ -3,8 +3,8 @@
     <SfHeader
       data-cy="app-header"
       :search-value="term"
-      :cartItemsQty="cartTotalItems"
-      :accountIcon="accountIcon"
+      :cart-items-qty="cartTotalItems"
+      :account-icon="accountIcon"
       class="sf-header--has-mobile-search"
       :class="{ 'header-on-top': isSearchOpen }"
       @click:cart="toggleCartSidebar"
@@ -127,7 +127,10 @@ export default {
     SfSearchBar,
   },
   props: {
-    cartTotalItems: Number,
+    cartTotalItems: {
+      type: Number,
+      default: 0
+    },
     isUserAuthenticated: Boolean,
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

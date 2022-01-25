@@ -6,8 +6,8 @@ import { print } from 'graphql'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function checkOut(context, checkoutId, customQuery?: CustomQuery) {
-  const DEFAULT_QUERY = gql`
-  query FETCH_CHECKOUT($country: CountryCode!, $id: ID!) @inContext(country: $country ){
+  const DEFAULT_QUERY = `
+  query FETCH_CHECKOUT($country: CountryCode!, $id: ID!) @inContext(country: $country ) {
     node(id: $id) {
       id
       ... on Checkout {
@@ -139,38 +139,40 @@ export default async function checkOut(context, checkoutId, customQuery?: Custom
       }
       }
     }`
-    const payload = {
-      id: checkoutId,
-      country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
-    }
 
-    const { fetchCheckOut } = context.extendQuery(
-      customQuery,
-      {
-        fetchCheckOut: {
-          query: print(DEFAULT_QUERY as any),
-          payload
-        }
+  const payload = {
+    id: checkoutId,
+    country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
+  }
+
+  const { node } = context.extendQuery(
+    customQuery,
+    {
+      node: {
+        query: DEFAULT_QUERY as any,
+        variables: payload
       }
-    )
+    }
+  )
 
-
-    return await context.client.apolloClient.query({
-      query: gql(fetchCheckOut.query) as any,
-      variables: fetchCheckOut.payload
-    }).then((result) => {
-      const discountApplications = result.data.node.discountApplications.edges.map((discountApplications => discountApplications.node));
-      const lineItems = result.data.node.lineItems.edges.map((lineItem => lineItem.node));
-      delete (result.data.node.lineItems);
-      delete (result.data.node.discountApplications);
-      result.data.node = {
+  return await context.client.apolloClient.query({
+    query: gql(node.query) as any,
+    variables: node.variables
+  }).then((result) => {
+    const discountApplications = result.data.node.discountApplications.edges.map((discountApplications => discountApplications.node));
+    const lineItems = result.data.node.lineItems.edges.map((lineItem => lineItem.node));
+    const newResult = {
+      ...result,
+      data: {
+        ...result.data,
+        node: {
           ...result.data.node,
           discountApplications,
           lineItems
-      };
-      return result.data.node;
-    });
+        }
+      }
+    }
+    return newResult.data.node
+  })
 
-
-  // return context.client.checkout.fetch(checkoutId);
 }

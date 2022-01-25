@@ -140,7 +140,7 @@ export default {
   },
   setup(_, { root }) {
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
-    const { cart, removeItem, updateItemQty, load: loadCart, loading } = useCart();
+    const { cart, removeItem, updateItemQty, loading } = useCart();
     const { isAuthenticated } = useUser();
     const { send: sendNotification, notifications } = useUiNotification();
     const products = computed(() => cartGetters.getItems(cart.value));
@@ -152,14 +152,6 @@ export default {
         window.location.replace(checkoutUrl)
       }, 400)
     }
-   onBeforeMount(async () => {
-        // await loadCart({customQuery: {country: 'de'}});
-        await loadCart().then(() => {
-          if (cart && cart.value.orderStatusUrl !== null) {
-            root.$cookies.remove(`${root.$config.appKey}_cart_id`); 
-          }
-        });
-    });
 
     const updateQuantity = debounce(async ({ product, quantity }) => {
       await updateItemQty({ product, quantity });

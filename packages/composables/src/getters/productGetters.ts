@@ -101,7 +101,7 @@ export const getProductAttributes = (products: ProductVariant, filterByAttribute
   }
 
   const formatAttributes = (product: ProductVariant): AgnosticAttribute[] => {
-    return formatAttributeList(product.options).filter((attribute) => filterByAttributeName ? filterByAttributeName.includes(attribute.name) : attribute);
+    return product.options && formatAttributeList(product.options).filter((attribute) => filterByAttributeName ? filterByAttributeName.includes(attribute.name) : attribute);
   }
     
   const reduceToUniques = (prev, curr) => {
