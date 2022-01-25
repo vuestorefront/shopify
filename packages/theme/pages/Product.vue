@@ -411,7 +411,7 @@ export default {
           filter[attr] =
             Object.keys(configuration.value).length > 0
               ? configuration.value[attr]
-              : options.value[attr][0].value;
+              : options.value[attr][0];
         });
       }
       context.root.$router.push({

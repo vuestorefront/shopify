@@ -456,6 +456,10 @@ export default async function getProduct(
                     originalSrc
                     src
                   }
+                  selectedOptions{
+                    name
+                    value
+                  }
                 }
               }
             }
@@ -478,7 +482,6 @@ export default async function getProduct(
                 }
               }
             }
-            
           }
         }
       } 
@@ -500,7 +503,6 @@ export default async function getProduct(
       }
     )
 
-
     return await context.client.apolloClient.query({
       query: gql(products.query) as any,
       variables: products.payload
@@ -515,13 +517,5 @@ export default async function getProduct(
       })
       return items;
     });
-    
-    // console.log('products123::', productsRes);
-    // return await context.client.product
-    //   .fetchQuery({ first: (params.limit ? params.limit : 20), sortKey: (params.sortBy ? params.sortBy : 'CREATED_AT'), reverse: false })
-    //   .then((products) => {
-    //     console.log('products234::', products);
-    //     return products;
-    //   });
   }
 }
