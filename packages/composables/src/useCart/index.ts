@@ -108,7 +108,7 @@ const params: UseCartFactoryParams<Cart, CartItem, Product | Product[]> = {
           const buff = Buffer.from(variationIDPlain);
           variantId = buff.toString('base64');
         }
-        return currentCart.lineItems.find((item) => item.variant.id === variantId);
+        return currentCart?.lineItems?.find((item) => item.variant.id === variantId);
       }
       return false;
     };
