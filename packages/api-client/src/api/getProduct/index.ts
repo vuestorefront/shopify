@@ -440,6 +440,7 @@ export default async function getProduct(
             variants(first:250){
               edges{
                 node{
+                  sku
                   availableForSale
                   priceV2{
                     currencyCode
