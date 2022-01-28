@@ -97,7 +97,7 @@
               :score-rating="productGetters.getAverageRating(product)"
               :show-add-to-cart-button="true"
               :is-on-wishlist="false"
-              :is-added-to-cart="isInCart({ product })"
+              :is-added-to-cart="isInCart({ product, currentCart })"
               :link="
                 localePath(
                   `/p/${productGetters.getId(product)}/${productGetters.getSlug(
@@ -107,7 +107,7 @@
               "
               class="products__product-card"
               @click:wishlist="addItemToWishlist({ product })"
-              @click:add-to-cart="HandleAddTocart({ product, quantity:1 })"
+              @click:add-to-cart="HandleAddTocart({ product, quantity: 1, currentCart })"
             />
           </transition-group>
           <transition-group
@@ -144,7 +144,7 @@
                 )
               "
               @click:wishlist="addItemToWishlist({ product })"
-              @click:add-to-cart="HandleAddTocart({ product, qty:1 })"
+              @click:add-to-cart="HandleAddTocart({ product, qty:1, currentCart })"
             >
               <template #configuration>
                 <SfProperty
@@ -331,7 +331,7 @@ export default {
   setup(props, context) {
     const th = useUiHelpers();
     const uiState = useUiState();
-    const { addItem: addItemToCart, isInCart } = useCart();
+    const { addItem: addItemToCart, isInCart, cart: currentCart } = useCart();
     const { send: sendNotification } = useUiNotification();
     const { addItem: addItemToWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
@@ -361,6 +361,7 @@ export default {
       pagination,
       sortBy,
       facets,
+      currentCart,
       sendNotification,
       addItemToWishlist,
       addItemToCart,
@@ -372,7 +373,6 @@ export default {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
-      currentCate: '',
       breadcrumbs: [
         {
           text: 'Home',
