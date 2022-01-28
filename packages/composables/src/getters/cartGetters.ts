@@ -28,7 +28,7 @@ export const getCartItemImage = (product: any): string => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItemPrice = (product: any): AgnosticPrice => {
   return {
-    regular: product?.variant?.compareAtPriceV2?.amount|| null,
+    regular: product?.variant?.compareAtPriceV2?.amount || null,
     special: product?.variant?.priceV2?.amount || null
   };
 };
@@ -56,9 +56,9 @@ export const getCartItemSku = (product: any): string => product?.variant.sku || 
 export const getCartTotals = (cart): AgnosticTotals => {
   if (cart && cart !== null) {
     return {
-      total: parseFloat(cart.totalPriceV2.amount),
-      subtotal: parseFloat(cart.subtotalPriceV2.amount),
-      special: parseFloat(cart.subtotalPriceV2.amount),
+      total: parseFloat(cart.totalPriceV2?.amount),
+      subtotal: parseFloat(cart.subtotalPriceV2?.amount),
+      special: parseFloat(cart.subtotalPriceV2?.amount),
     };
   }
 };
