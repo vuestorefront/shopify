@@ -54,10 +54,8 @@ export default {
     const { load: loadCart, cart } = useCart();
     const firstName = computed(() => userGetters.getFirstName(userInfo.value));
     const getUserStatus = computed(() => !!firstName.value);
-    const getCartTotalItems = computed(() =>
-      cartGetters.getTotalItems(cart.value)
-    );
-
+    const getCartTotalItems = computed(() => cartGetters.getTotalItems(cart.value));
+    
     provide('currentCart', cart);
 
     onBeforeMount(async () => {
