@@ -104,7 +104,8 @@ const config = {
     'nuxt-i18n',
     'cookie-universal-nuxt',
     'vue-scrollto/nuxt',
-    '@vue-storefront/middleware/nuxt'
+    '@vue-storefront/middleware/nuxt',
+    '@nuxtjs/sitemap'
   ],
   i18n: {
     currency: 'USD',
