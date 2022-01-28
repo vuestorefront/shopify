@@ -66,6 +66,10 @@
                   :regular-price="
                     $n(productGetters.getPrice(product).regular, 'currency')
                   "
+                  :special-price="
+                    productGetters.getPrice(product).special &&
+                    $n(productGetters.getPrice(product).special, 'currency')
+                  "
                   :score-rating="productGetters.getAverageRating(product)"
                   :reviews-count="7"
                   :image="productGetters.getCoverImage(product)"
@@ -95,6 +99,10 @@
                 class="result-card"
                 :regular-price="
                   $n(productGetters.getPrice(product).regular, 'currency')
+                "
+                :special-price="
+                  productGetters.getPrice(product).special &&
+                  $n(productGetters.getPrice(product).special, 'currency')
                 "
                 :score-rating="productGetters.getAverageRating(product)"
                 :reviews-count="7"
@@ -172,17 +180,17 @@ export default {
     SfScrollable,
     SfMenuItem,
     SfButton,
-    SfImage
+    SfImage,
   },
   props: {
     visible: {
       type: Boolean,
-      default: false
+      default: false,
     },
     result: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   setup(props, { emit }) {
     const { getCatLink } = useUiHelpers();
