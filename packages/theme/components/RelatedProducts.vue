@@ -1,19 +1,47 @@
 <template>
-  <SfSection :title-heading="title" class="section">
+  <SfSection :title-heading="title" class="section pdc-sec-title pdp-upsell-section">
     <SfLoader :class="{ loading }" :loading="loading">
       <SfCarousel
+        ref="bscarousel"
         data-cy="related-products-carousel"
-        :settings="{ peek: 16, breakpoints: { 1023: { peek: 0, perView: 2 } } }"
+        :settings="pdpUpsellSettings"
         class="carousel"
       >
         <SfCarouselItem v-for="(product, i) in products" :key="i" class="carousel__item">
           <SfProductCard
             :title="productGetters.getName(product)"
-            :image="productGetters.getCoverImage(product)"
-            :regular-price="$n(productGetters.getPrice(product).regular, 'currency')"
-            :special-price="productGetters.getPrice(product).special && $n(productGetters.getPrice(product).special, 'currency')"
+            :image="productGetters.getPDPCoverImage(product)"
             :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
-          />
+            :wishlist-icon="false"
+            :image-width="295"
+            :image-height="295"
+            class="pdp-product-card"
+          >
+            <template #title>
+              <!-- RYVIU APP :: COLLECTION-WIDGET-TOTAL -->
+              <SfLink
+                class="sf-product-card__link"
+                :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
+              >
+                  <h3 class="sf-product-card__title">
+                  {{ productGetters.getName(product) }}
+                </h3>
+              </SfLink>
+            </template>
+            <template #price>
+              <SfPrice
+                class="sf-product-card__price"
+              >
+                <template v-if="productGetters.getPrice(product).special" #special>
+                  <ins class="sf-price__special">{{ $n(productGetters.getPrice(product).special, 'currency') }}</ins>
+                </template>
+                <template #old><span/></template>
+                <template v-if="productGetters.getPrice(product).regular > 0" #regular>
+                  <del class="sf-price__old">{{ $n(productGetters.getPrice(product).regular, 'currency') }}</del>
+                </template>
+              </SfPrice>
+            </template>
+          </SfProductCard>
         </SfCarouselItem>
       </SfCarousel>
     </SfLoader>
@@ -26,9 +54,10 @@ import {
   SfCarousel,
   SfProductCard,
   SfSection,
-  SfLoader
+  SfLoader,
+  SfLink,
+  SfPrice
 } from '@storefront-ui/vue';
-
 import { productGetters } from '@vue-storefront/shopify';
 
 export default {
@@ -37,32 +66,88 @@ export default {
     SfCarousel,
     SfProductCard,
     SfSection,
-    SfLoader
+    SfLoader,
+    SfLink,
+    SfPrice
   },
   props: {
     title: String,
     products: Array,
     loading: Boolean
   },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
     return { productGetters };
+  },
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  data () {
+    return {
+      pdpUpsellSettings: {
+        type: 'slider',
+        perView: 4,
+        peek: 0,
+        autoplay: false,
+        animationDuration: 600,
+        gap: 20,
+        breakpoints: {
+          1023: {
+            perView: 3,
+            peek: {
+              before: 0,
+              after: 72
+            }
+          },
+          767: {
+            perView: 2,
+            peek: {
+              before: 0,
+              after: 72
+            }
+          },
+          510: {
+            perView: 1,
+            peek: {
+              before: 0,
+              after: 72
+            }
+          }
+        }
+      }
+    };
   }
 };
 </script>
 
-<style lang="postcss" scoped>
-.section {
-  margin-top: var(--spacer-base);
-}
-
-.carousel {
-    margin: 0 calc(var(--spacer-sm) * -1) 0 0;
-  @include for-desktop {
+<style lang="scss">
+.pdp-upsell-section {
+  margin: 0;
+  padding-bottom: 164px;
+  @include for-mobile {
+    padding-bottom: 40px;
+  }
+  .sf-section__content {
     margin: 0;
   }
-  &__item {
-    margin: 1.9375rem 0 2.4375rem 0;
+  .sf-carousel {
+    @include for-desktop {
+      margin: 0 -10px;
+    }
+  }
+  .sf-carousel__controls {
+    display: none;
+  }
+  .sf-product-card__link {
+    overflow: hidden;
+  }
+  .sf-carousel__wrapper {
+    max-width: 100%;
+    margin: 0;
+    @include for-desktop {
+      padding: 10px;
+    }
+  }
+  .glide__slide {
+    height: auto;
   }
 }
-
 </style>

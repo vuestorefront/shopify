@@ -30,8 +30,13 @@
 <script>
 import AppHeader from '~/components/AppHeader.vue';
 import TopBar from '~/components/TopBar.vue';
-import { useUser, userGetters, cartGetters, useCart } from '@vue-storefront/shopify';
-import { computed, onBeforeMount } from '@nuxtjs/composition-api';
+import {
+  useUser,
+  userGetters,
+  cartGetters,
+  useCart,
+} from '@vue-storefront/shopify';
+import { computed, onBeforeMount, provide } from '@nuxtjs/composition-api';
 export default {
   name: 'DefaultLayout',
   components: {
@@ -49,7 +54,11 @@ export default {
     const { load: loadCart, cart } = useCart();
     const firstName = computed(() => userGetters.getFirstName(userInfo.value));
     const getUserStatus = computed(() => !!firstName.value);
-    const getCartTotalItems = computed(() => cartGetters.getTotalItems(cart.value));
+    const getCartTotalItems = computed(() =>
+      cartGetters.getTotalItems(cart.value)
+    );
+
+    provide('currentCart', cart);
 
     onBeforeMount(async () => {
       await loadUser();

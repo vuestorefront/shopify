@@ -16,11 +16,9 @@
             :title="$t('Categories')"
             class="sf-mega-menu-column--pined-content-on-mobile search__categories"
           >
-            <template #title="{title}">
+            <template #title="{ title }">
               <SfMenuItem :label="title" @click="megaMenu.changeActive(title)">
-                <template #mobile-nav-icon>
-                  &#8203;
-                </template>
+                <template #mobile-nav-icon> &#8203; </template>
               </SfMenuItem>
             </template>
             <SfList>
@@ -32,9 +30,7 @@
                   :label="category.label"
                   :link="localePath(getCatLink(category))"
                 >
-                  <template #mobile-nav-icon>
-                    &#8203;
-                  </template>
+                  <template #mobile-nav-icon> &#8203; </template>
                 </SfMenuItem>
               </SfListItem>
             </SfList>
@@ -43,14 +39,12 @@
             :title="$t('Product suggestions')"
             class="sf-mega-menu-column--pined-content-on-mobile search__results"
           >
-            <template #title="{title}">
+            <template #title="{ title }">
               <SfMenuItem
                 :label="title"
                 class="sf-mega-menu-column__header search__header"
               >
-                <template #mobile-nav-icon>
-                  &#8203;
-                </template>
+                <template #mobile-nav-icon> &#8203; </template>
               </SfMenuItem>
             </template>
             <SfScrollable
@@ -71,11 +65,13 @@
                     $n(productGetters.getPrice(product).special, 'currency')
                   "
                   :score-rating="productGetters.getAverageRating(product)"
-                  :reviews-count="7"
                   :image="productGetters.getCoverImage(product)"
                   :alt="productGetters.getName(product)"
                   :title="productGetters.getName(product)"
                   :link="productGetters.getSlug(product)"
+                  @click:add-to-cart="
+                    handleAddToCart({ product, quantity: 1, currentCart })
+                  "
                 >
                   <template slot="title">
                     <SfButton
@@ -105,11 +101,13 @@
                   $n(productGetters.getPrice(product).special, 'currency')
                 "
                 :score-rating="productGetters.getAverageRating(product)"
-                :reviews-count="7"
                 :image="productGetters.getCoverImage(product)"
                 :alt="productGetters.getName(product)"
                 :title="productGetters.getName(product)"
                 :link="productGetters.getSlug(product)"
+                @click:add-to-cart="
+                  handleAddToCart({ product, quantity: 1, currentCart })
+                "
               >
                 <template slot="title">
                   <SfButton
@@ -142,10 +140,10 @@
             loading="lazy"
           />
           <p class="before-results__paragraph">
-            {{ $t('You haven\'t searched for items yet') }}
+            {{ $t("You haven't searched for items yet") }}
           </p>
           <p class="before-results__paragraph">
-            {{ $t('Let\'s start now - we\'ll help you') }}
+            {{ $t("Let's start now - we'll help you") }}
           </p>
           <SfButton
             class="before-results__button color-secondary smartphone-only"
@@ -166,10 +164,11 @@ import {
   SfScrollable,
   SfMenuItem,
   SfButton,
-  SfImage
+  SfImage,
 } from '@storefront-ui/vue';
-import { ref, watch, computed } from '@vue/composition-api';
-import { productGetters } from '@vue-storefront/shopify';
+import { ref, watch, computed, inject } from '@vue/composition-api';
+import { productGetters, useCart } from '@vue-storefront/shopify';
+import { useUiNotification } from '~/composables';
 import useUiHelpers from '../composables/useUiHelpers';
 export default {
   name: 'SearchResults',
@@ -195,8 +194,11 @@ export default {
   setup(props, { emit }) {
     const { getCatLink } = useUiHelpers();
     const isSearchOpen = ref(props.visible);
+    const { addItem: addItemToCart, cart: currentCart } = useCart();
+    const { send: sendNotification } = useUiNotification();
     const products = computed(() => props.result?.products);
     const categories = computed(() => props.result?.categories);
+
     watch(
       () => props.visible,
       (newVal) => {
@@ -209,14 +211,29 @@ export default {
         }
       }
     );
+
+    const handleAddToCart = (productObj) => {
+      addItemToCart(productObj).then(() => {
+        sendNotification({
+          key: 'added_to_cart',
+          message: 'Product has been successfully added to cart !',
+          type: 'success',
+          title: 'Product added!',
+          icon: 'check',
+        });
+      });
+    };
+
     return {
       getCatLink,
       isSearchOpen,
       productGetters,
       products,
-      categories
+      categories,
+      currentCart,
+      handleAddToCart,
     };
-  }
+  },
 };
 </script>
 
