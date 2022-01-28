@@ -165,7 +165,7 @@
                 :disabled="loading"
                 @click="addingToCart({ product, quantity: parseInt(qty), customQuery: [{key: 'CustomAttrKey', value: 'CustomAttrValue'}]})"
               >
-                Add to Bag
+                Add to Cart
               </SfButton>
             </template>
           </SfAddToCart>
@@ -255,7 +255,7 @@ import {
 } from '@storefront-ui/vue';
 
 import InstagramFeed from '~/components/InstagramFeed.vue';
-import RelatedProducts from '~/components/RelatedProducts1.vue';
+import RelatedProducts from '~/components/RelatedProducts.vue';
 import { ref, computed, watch } from '@nuxtjs/composition-api';
 import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
