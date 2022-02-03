@@ -32,32 +32,16 @@
         <div class="product__header">
           <SfHeading
             :title="productGetters.getName(product)"
-            :level="1"
+            :level="3"
             class="sf-heading--no-underline sf-heading--left"
           />
-          <div class="product_stock_wrap">
-            <SfBadge
-              class="sf-badge--number"
-              :class="
-                productGetters.getStockStatus(product)
-                  ? 'color-success'
-                  : 'color-danger'
-              "
-            >
-              {{
-                productGetters.getStockStatus(product)
-                  ? "In stock"
-                  : "Out of Stock"
-              }}
-            </SfBadge>
-            <SfIcon
-              icon="drag"
-              size="xxl"
-              color="var(--c-text-disabled)"
-              class="product__drag-icon smartphone-only"
-            />
-          </div>
-          <div class="product__price-and-rating">
+          <SfIcon
+            icon="drag"
+            size="xxl"
+            color="var(--c-text-disabled)"
+            class="product__drag-icon smartphone-only"
+          />
+          <div v-if="false" class="product__price-and-rating">
             <template
               v-if="
                 productGetters.getPrice(product).special &&
