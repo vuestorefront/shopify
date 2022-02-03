@@ -32,77 +32,32 @@
         <div class="product__header">
           <SfHeading
             :title="productGetters.getName(product)"
-            :level="1"
+            :level="3"
             class="sf-heading--no-underline sf-heading--left"
           />
-          <div class="product_stock_wrap">
-            <SfBadge
-              class="sf-badge--number"
-              :class="
-                productGetters.getStockStatus(product)
-                  ? 'color-success'
-                  : 'color-danger'
-              "
-            >
-              {{
-                productGetters.getStockStatus(product)
-                  ? "In stock"
-                  : "Out of Stock"
-              }}
-            </SfBadge>
-            <SfIcon
-              icon="drag"
-              size="xxl"
-              color="var(--c-text-disabled)"
-              class="product__drag-icon smartphone-only"
-            />
-          </div>
-          <div class="product__price-and-rating">
-            <template
-              v-if="
-                productGetters.getPrice(product).special &&
-                parseFloat(productGetters.getPrice(product).special) <
-                  parseFloat(productGetters.getPrice(product).regular)
-              "
-            >
-              <SfPrice
-                :regular="
-                  $n(productGetters.getPrice(product).regular, 'currency')
-                "
-                :special="
-                  $n(productGetters.getPrice(product).special, 'currency')
-                "
-              />
-              <SfBadge class="sf-badge--number">
-                {{ productGetters.getDiscountPercentage(product) }}% off
-              </SfBadge>
-            </template>
-            <SfPrice
-              v-else-if="
-                productGetters.getPrice(product).special &&
-                parseFloat(productGetters.getPrice(product).special) >
-                  parseFloat(productGetters.getPrice(product).regular)
-              "
-              :regular="
-                $n(productGetters.getPrice(product).special, 'currency')
-              "
-            />
-            <SfPrice
-              v-else
-              :regular="
-                $n(productGetters.getPrice(product).regular, 'currency')
-              "
-            />
-          </div>
+          <SfIcon
+            icon="drag"
+            size="xxl"
+            color="var(--c-text-disabled)"
+            class="product__drag-icon smartphone-only"
+          />
         </div>
-        <div>
-          <p
-            v-if="productDescription"
-            class="product__description desktop-only"
-          >
+        <div class="product__price-and-rating">
+          <SfPrice
+            :regular="$n(productGetters.getPrice(product).regular, 'currency')"
+            :special="$n(productGetters.getPrice(product).special, 'currency')"
+          />
+          <!-- Reviews Here -->
+        </div>
+        <div class="product__details">
+          <div class="product__description">
             {{ productDescription }}
-          </p>
-          <div v-if="options && Object.keys(options).length > 0">
+          </div>
+
+          <div
+            v-if="options && Object.keys(options).length > 0"
+            class="product__variants"
+          >
             <template v-for="(option, o) in options">
               <SfSelect
                 v-if="o.toLowerCase() !== 'color'"
@@ -124,14 +79,16 @@
                 </SfSelectOption>
               </SfSelect>
               <div
-                v-else
+                v-else-if="o.toLowerCase() === 'color'"
                 :key="`attrib-${o.toLowerCase()}`"
-                :class="`product__${o.toLowerCase()}s`"
+                class="product__colors"
               >
-                <p class="product__color-label">{{ $t(`${o}`) }}:</p>
+                <label class="product__color-label">{{ $t(o) }}</label>
+                <div class="product__flex-break"></div>
                 <SfColor
                   v-for="(attribs, a) in option"
                   :key="`item-${a}`"
+                  label="Color"
                   data-cy="product-color_update"
                   :color="attribs"
                   :class="`product__color ${attribs}`"
@@ -144,16 +101,30 @@
                       ? true
                       : false
                   "
-                  @click="
-                    (atttLbl = o), updateFilter({ [atttLbl]: attribs })
-                  "
+                  @click="(atttLbl = o), updateFilter({ [atttLbl]: attribs })"
                 />
               </div>
             </template>
           </div>
+
+          <SfAlert
+            v-if="!productGetters.getStockStatus(product)"
+            message="Out of Stock"
+            type="warning"
+            class="product__stock-information"
+          >
+            <template #icon>
+              <SfIcon
+                color="yellow-primary"
+                icon="info_shield"
+                size="lg"
+                view-box="0 0 24 24"
+              />
+            </template>
+          </SfAlert>
           <SfAddToCart
-            v-if="productGetters.getStockStatus(product) === true"
             v-model="qty"
+            :disabled="!productGetters.getStockStatus(product)"
             data-cy="product-cart_add"
             :stock="stock"
             :can-add-to-cart="stock > 0"
@@ -162,58 +133,66 @@
             <template #add-to-cart-btn>
               <SfButton
                 class="sf-add-to-cart__button"
-                :disabled="loading"
-                @click="addingToCart({ product, quantity: parseInt(qty), customQuery: [{key: 'CustomAttrKey', value: 'CustomAttrValue'}]})"
+                :disabled="loading || !productGetters.getStockStatus(product)"
+                @click="
+                  addingToCart({
+                    product,
+                    quantity: parseInt(qty),
+                    customQuery: [
+                      { key: 'CustomAttrKey', value: 'CustomAttrValue' }
+                    ]
+                  })
+                "
               >
                 Add to Cart
               </SfButton>
             </template>
           </SfAddToCart>
-          <LazyHydrate when-idle>
-            <SfTabs :open-tab="1" class="product__tabs">
-              <SfTab data-cy="product-tab_description" title="Description">
-                <div v-if="productDescriptionHtml" class="product__description">
-                  <div v-html="productDescriptionHtml"></div>
-                </div>
-                <SfProperty
-                  v-for="(property, i) in properties"
-                  :key="i"
-                  :name="property.name"
-                  :value="property.value"
-                  class="product__property"
-                >
-                  <template v-if="property.name === 'Category'" #value>
-                    <SfButton class="product__property__button sf-button--text">
-                      {{ property.value }}
-                    </SfButton>
-                  </template>
-                </SfProperty>
-              </SfTab>
-              <SfTab
-                title="Additional Information"
-                data-cy="product-tab_additional"
-                class="product__additional-info"
-              >
-                <div class="product__additional-info">
-                  <p class="product__additional-info__title">
-                    {{ $t("Brand") }}
-                  </p>
-                  <p>{{ brand }}</p>
-                  <p class="product__additional-info__title">
-                    {{ $t("Instruction1") }}
-                  </p>
-                  <p class="product__additional-info__paragraph">
-                    {{ $t("Instruction2") }}
-                  </p>
-                  <p class="product__additional-info__paragraph">
-                    {{ $t("Instruction3") }}
-                  </p>
-                  <p>{{ careInstructions }}</p>
-                </div>
-              </SfTab>
-            </SfTabs>
-          </LazyHydrate>
         </div>
+        <LazyHydrate when-idle>
+          <SfTabs :open-tab="1" class="product__tabs">
+            <SfTab data-cy="product-tab_description" title="Description">
+              <div v-if="productDescriptionHtml" class="product__description">
+                <div v-html="productDescriptionHtml"></div>
+              </div>
+              <SfProperty
+                v-for="(property, i) in properties"
+                :key="i"
+                :name="property.name"
+                :value="property.value"
+                class="product__property"
+              >
+                <template v-if="property.name === 'Category'" #value>
+                  <SfButton class="product__property__button sf-button--text">
+                    {{ property.value }}
+                  </SfButton>
+                </template>
+              </SfProperty>
+            </SfTab>
+            <SfTab
+              title="Additional Information"
+              data-cy="product-tab_additional"
+              class="product__additional-info"
+            >
+              <div class="product__additional-info">
+                <p class="product__additional-info__title">
+                  {{ $t('Brand') }}
+                </p>
+                <p>{{ brand }}</p>
+                <p class="product__additional-info__title">
+                  {{ $t('Instruction1') }}
+                </p>
+                <p class="product__additional-info__paragraph">
+                  {{ $t('Instruction2') }}
+                </p>
+                <p class="product__additional-info__paragraph">
+                  {{ $t('Instruction3') }}
+                </p>
+                <p>{{ careInstructions }}</p>
+              </div>
+            </SfTab>
+          </SfTabs>
+        </LazyHydrate>
       </div>
     </div>
     <LazyHydrate when-visible>
@@ -238,6 +217,7 @@ import {
   SfPrice,
   SfRating,
   SfSelect,
+  SfColorPicker,
   SfAddToCart,
   SfTabs,
   SfGallery,
@@ -395,8 +375,11 @@ export default {
 
     onSSR(async () => {
       await search({ slug, selectedOptions: configuration.value }).then(() => {
-        if (productTitle.value === 'Product\'s name') {
-          return context.root.error({ statusCode: 404, message: 'This product could not be found' });
+        if (productTitle.value === "Product's name") {
+          return context.root.error({
+            statusCode: 404,
+            message: 'This product could not be found'
+          });
         }
       });
       await searchRelatedProducts({ productId: id.value, related: true });
@@ -454,7 +437,6 @@ export default {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
-      stock: 5,
       properties: [
         {
           name: 'Product Code',
@@ -599,6 +581,13 @@ export default {
     text-decoration: none;
     margin: 0 0 0 var(--spacer-xs);
   }
+  &__details {
+    margin: 0 var(--spacer-sm) var(--spacer-base);
+
+    @include for-desktop {
+      margin: var(--spacer-lg) 0;
+    }
+  }
   &__description {
     @include font(
       --product-description-font,
@@ -608,35 +597,27 @@ export default {
       var(--font-family--primary)
     );
   }
-  &__select-size {
-    margin: 0 var(--spacer-sm);
-    @include for-desktop {
-      margin: 0;
-    }
-  }
   &__colors {
     @include font(
       --product-color-font,
       var(--font-weight--normal),
-      var(--font-size--lg),
+      var(--font-size--xs),
       1.6,
       var(--font-family--secondary)
     );
     display: flex;
-    align-items: center;
-    margin-top: var(--spacer-xl);
+    flex-wrap: wrap;
   }
   &__color-label {
-    margin: 0 var(--spacer-lg) 0 0;
+    margin: 0 var(--spacer-lg) var(--spacer-xs) 0;
+    padding: 0 0 0 4px;
   }
   &__color {
     margin: 0 var(--spacer-2xs);
   }
-  &__add-to-cart {
-    margin: var(--spacer-base) var(--spacer-sm) 0;
-    @include for-desktop {
-      margin-top: var(--spacer-2xl);
-    }
+  &__add-to-cart,
+  &__stock-information {
+    margin-top: var(--spacer-xl);
   }
   &__guide,
   &__compare,
@@ -688,6 +669,10 @@ export default {
   }
   &__gallery {
     flex: 1;
+  }
+  &__flex-break {
+    flex-basis: 100%;
+    height: 0;
   }
 }
 .breadcrumbs {
