@@ -11,8 +11,7 @@ import { formatAttributeList, capitalize } from './_utils';
 
 type ProductVariantFilters = any
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getProductName = (product: ProductVariant): string => product?.name || 'Product\'s name';
+export const getProductName = (product: ProductVariant): string => product?.name || undefined;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductSlug = (product: ProductVariant): string => {
