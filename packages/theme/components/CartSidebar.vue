@@ -111,7 +111,6 @@ import {
   SfSidebar,
   SfHeading,
   SfButton,
-  SfIcon,
   SfProperty,
   SfPrice,
   SfCollectedProduct,
@@ -119,7 +118,7 @@ import {
   SfLink,
   SfQuantitySelector
 } from '@storefront-ui/vue';
-import { computed, onBeforeMount } from '@nuxtjs/composition-api';
+import { computed } from '@nuxtjs/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
 import { useUiState, useUiNotification } from '~/composables';
 import debounce from 'lodash.debounce';
@@ -130,7 +129,6 @@ export default {
     SfSidebar,
     SfButton,
     SfHeading,
-    SfIcon,
     SfLink,
     SfProperty,
     SfPrice,
@@ -138,7 +136,7 @@ export default {
     SfImage,
     SfQuantitySelector
   },
-  setup(_, { root }) {
+  setup() {
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
     const { cart, removeItem, updateItemQty, loading } = useCart();
     const { isAuthenticated } = useUser();

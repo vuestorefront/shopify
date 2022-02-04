@@ -49,7 +49,7 @@ export default {
     LoginModal: () => import('~/components/LoginModal.vue'),
     Notification: () => import('~/components/Notification'),
   },
-  setup(props, { root }) {
+  setup(_, { root }) {
     const { user: userInfo, load: loadUser } = useUser();
     const { load: loadCart, cart } = useCart();
     const firstName = computed(() => userGetters.getFirstName(userInfo.value));
