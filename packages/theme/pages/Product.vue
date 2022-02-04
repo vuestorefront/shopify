@@ -41,7 +41,7 @@
             color="var(--c-text-disabled)"
             class="product__drag-icon smartphone-only"
           />
-          <div v-if="false" class="product__price-and-rating">
+          <div class="product__price-and-rating">
             <template
               v-if="
                 productGetters.getPrice(product).special &&
