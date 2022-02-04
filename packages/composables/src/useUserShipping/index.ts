@@ -59,8 +59,6 @@ const sortDefaultAtTop = (a, b) => {
 
 const params: UseUserShippingFactoryParams<any, any> = {
   addAddress: async (context: Context, params?) => {
-    console.log('Mocked: addAddress', params.address);
-
     const newAddress = {
       ...params.address,
       id: findBiggestId() + 1
@@ -77,8 +75,6 @@ const params: UseUserShippingFactoryParams<any, any> = {
   },
 
   deleteAddress: async (context: Context, params?) => {
-    console.log('Mocked: deleteAddress', params);
-
     const indexToRemove = addresses.findIndex(address => address.id === params.address.id);
     if (indexToRemove < 0) {
       return Promise.reject(Error('This address does not exist'));
@@ -89,8 +85,6 @@ const params: UseUserShippingFactoryParams<any, any> = {
   },
 
   updateAddress: async (context: Context, params?) => {
-    console.log('Mocked: updateAddress', params);
-
     const indexToUpdate = addresses.findIndex(address => address.id === params.address.id);
     if (indexToUpdate < 0) {
       return Promise.reject(Error('This address does not exist'));

@@ -16,7 +16,7 @@ export default async function getProduct(
     if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {
       chosenVariant = Object.entries(params.selectedOptions).map(k => ({ name: k[0], value: k[1] }));
     }
-    const DEFAULT_QUERY = gql`
+    const DEFAULT_QUERY = `
     query product($handle: String!, $country: CountryCode!, $selectedOptions: [SelectedOptionInput!]! ) @inContext(country: $country ) {
       productByHandle(handle: $handle){
         id
@@ -130,7 +130,7 @@ export default async function getProduct(
         }
       }
     }`
-    const payload = {
+    const variables = {
       handle: params.slug,
       country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase(),
       selectedOptions: chosenVariant
@@ -140,8 +140,8 @@ export default async function getProduct(
       customQuery,
       {
         productByHandle: {
-          query: print(DEFAULT_QUERY as any),
-          payload
+          query: DEFAULT_QUERY as any,
+          variables
         }
       }
     )
@@ -149,7 +149,7 @@ export default async function getProduct(
 
     return await context.client.apolloClient.query({
       query: gql(productByHandle.query) as any,
-      variables: productByHandle.payload
+      variables: productByHandle.variables
     }).then((result) => {
       const convertArrayToObject = (array, key) => {
         const initialValue = {};
@@ -163,19 +163,23 @@ export default async function getProduct(
       const collections = result.data.productByHandle.collections.edges.map((collection => collection.node));
       const images = result.data.productByHandle.images.edges.map((image => image.node));
       const variants = result.data.productByHandle.variants.edges.map((variant => variant.node));
-      delete (result.data.productByHandle.collections);
-      delete (result.data.productByHandle.images);
-      delete (result.data.productByHandle.variants);
-      result.data.productByHandle = {
-        ...result.data.productByHandle,
-        collections,
-        images,
-        variants
-      };
-      return result.data.productByHandle;
-    });
+
+      const newResult = {
+        ...result,
+        data: {
+          ...result.data,
+          productByHandle: {
+            ...result.data.productByHandle,
+            collections,
+            images,
+            variants
+          }
+        }
+      }
+      return newResult.data.productByHandle;
+    }).catch(console.log);
   }
-   else if (params.related) {
+  else if (params.related) {
 
     // let chosenVariant = [];
     // if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {
@@ -337,7 +341,7 @@ export default async function getProduct(
                 variants.add('weight');
                 variants.add('availableForSale');
                 variants.add('sku');
-                
+
                 variants.addField('image', { args: {} }, (image) => {
                   image.add('id');
                   image.add('altText');
@@ -400,7 +404,7 @@ export default async function getProduct(
     return await context.client.product.fetch(params.id).then((product) => {
       return product;
     });
-  } else if (params.ids){
+  } else if (params.ids) {
     return await context.client.product.fetchMultiple(params.ids).then((products) => {
       return products;
     });
@@ -509,11 +513,11 @@ export default async function getProduct(
       variables: products.payload
     }).then((result) => {
       const items = result.data.products.edges.map(item => {
-      const product = {
-        ...item.node,
-        images: item.node.images.edges.map(image => image.node) as any,
-        variants: item.node.variants.edges.map(variant => variant.node) as any
-      }
+        const product = {
+          ...item.node,
+          images: item.node.images.edges.map(image => image.node) as any,
+          variants: item.node.variants.edges.map(variant => variant.node) as any
+        }
         return product
       })
       return items;

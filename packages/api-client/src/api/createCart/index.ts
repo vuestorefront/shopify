@@ -17,9 +17,4 @@ export default async function createCart(context, _params, _customQuery?: Custom
       return data.checkoutCreate.checkout.id;
     }
   });
-  
-  // return await context.client.checkout.create().then((checkout) => {
-  //   // return checkOut ID
-  //   return checkout.id;
-  // });
 }

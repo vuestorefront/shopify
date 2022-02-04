@@ -2,8 +2,8 @@
   <div>
     <TopBar class="desktop-only" />
     <AppHeader
-      :cartTotalItems="getCartTotalItems"
-      :isUserAuthenticated="getUserStatus"
+      :cart-total-items="getCartTotalItems"
+      :is-user-authenticated="getUserStatus"
     />
     <div id="layout">
       <nuxt :key="$route.fullPath" />
@@ -28,42 +28,55 @@
 </template>
 
 <script>
-import AppHeader from "~/components/AppHeader.vue";
-import TopBar from "~/components/TopBar.vue";
-import { useUser, userGetters } from "@vue-storefront/shopify";
-import { computed, onBeforeMount} from "@nuxtjs/composition-api";
+import AppHeader from '~/components/AppHeader.vue';
+import TopBar from '~/components/TopBar.vue';
+import {
+  useUser,
+  userGetters,
+  cartGetters,
+  useCart,
+} from '@vue-storefront/shopify';
+import { computed, onBeforeMount, provide } from '@nuxtjs/composition-api';
 export default {
-  name: "DefaultLayout",
+  name: 'DefaultLayout',
   components: {
     TopBar,
     AppHeader,
-    BottomNavigation: () => import("~/components/BottomNavigation.vue"),
-    AppFooter: () => import("~/components/AppFooter.vue"),
-    CartSidebar: () => import("~/components/CartSidebar.vue"),
-    WishlistSidebar: () => import("~/components/WishlistSidebar.vue"),
-    LoginModal: () => import("~/components/LoginModal.vue"),
-    Notification: () => import("~/components/Notification"),
+    BottomNavigation: () => import('~/components/BottomNavigation.vue'),
+    AppFooter: () => import('~/components/AppFooter.vue'),
+    CartSidebar: () => import('~/components/CartSidebar.vue'),
+    WishlistSidebar: () => import('~/components/WishlistSidebar.vue'),
+    LoginModal: () => import('~/components/LoginModal.vue'),
+    Notification: () => import('~/components/Notification'),
   },
-  setup(props, {root}){
+  setup(_, { root }) {
     const { user: userInfo, load: loadUser } = useUser();
+    const { load: loadCart, cart } = useCart();
     const firstName = computed(() => userGetters.getFirstName(userInfo.value));
-    const getUserStatus = computed(() => (!!firstName.value));
-    const getCartTotalItems = computed(
-         () => root.$store.state.cartTotal
-    );
+    const getUserStatus = computed(() => !!firstName.value);
+    const getCartTotalItems = computed(() => cartGetters.getTotalItems(cart.value));
+    
+    provide('currentCart', cart);
+
     onBeforeMount(async () => {
       await loadUser();
+      await loadCart().then(() => {
+        if (cart && cart.value && cart.value.orderStatusUrl !== null) {
+          root.$cookies.remove(`${root.$config.appKey}_cart_id`);
+        }
+      });
     });
-    return{
+
+    return {
       getUserStatus,
-      getCartTotalItems
-    }
-  }
+      getCartTotalItems,
+    };
+  },
 };
 </script>
 
 <style lang="scss">
-@import "~@storefront-ui/vue/styles";
+@import '~@storefront-ui/vue/styles';
 
 #layout {
   box-sizing: border-box;

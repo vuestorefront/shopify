@@ -23,12 +23,56 @@ export const DEFAULT_QUERY = `
                       }
                     }
                   }
-                  variants(first: 1) {
-                    edges {
-                      node {
-                        price
+                  variants(first:20){
+                    edges{
+                      node{
+                        id
+                        title
+                        weight
                         availableForSale
-                        compareAtPrice
+                        sku
+                        priceV2{
+                          amount
+                          currencyCode
+                        }
+                        compareAtPriceV2{
+                          amount
+                          currencyCode
+                        }
+                        image{
+                          id
+                          altText
+                          originalSrc
+                          transformedSrc
+                        }
+                        selectedOptions{
+                          name
+                          value
+                        }
+                        product{
+                          id
+                          title
+                          availableForSale
+                          handle
+                          description
+                          descriptionHtml
+                          images(first:20){
+                            edges{
+                              node{
+                                id
+                                altText
+                                originalSrc
+                                transformedSrc
+                              }
+                            }
+                          }
+                          productType
+                          options{
+                            id
+                            name
+                            values
+                          }
+                        }
                       }
                     }
                   }

@@ -111,7 +111,6 @@ import {
   SfSidebar,
   SfHeading,
   SfButton,
-  SfIcon,
   SfProperty,
   SfPrice,
   SfCollectedProduct,
@@ -119,7 +118,7 @@ import {
   SfLink,
   SfQuantitySelector
 } from '@storefront-ui/vue';
-import { computed, onBeforeMount } from '@nuxtjs/composition-api';
+import { computed } from '@nuxtjs/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
 import { useUiState, useUiNotification } from '~/composables';
 import debounce from 'lodash.debounce';
@@ -130,7 +129,6 @@ export default {
     SfSidebar,
     SfButton,
     SfHeading,
-    SfIcon,
     SfLink,
     SfProperty,
     SfPrice,
@@ -138,9 +136,9 @@ export default {
     SfImage,
     SfQuantitySelector
   },
-  setup(_, { root }) {
+  setup() {
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
-    const { cart, removeItem, updateItemQty, load: loadCart, loading } = useCart();
+    const { cart, removeItem, updateItemQty, loading } = useCart();
     const { isAuthenticated } = useUser();
     const { send: sendNotification, notifications } = useUiNotification();
     const products = computed(() => cartGetters.getItems(cart.value));
@@ -152,14 +150,6 @@ export default {
         window.location.replace(checkoutUrl)
       }, 400)
     }
-   onBeforeMount(async () => {
-        // await loadCart({customQuery: {country: 'de'}});
-        await loadCart().then(() => {
-          if (cart && cart.value.orderStatusUrl !== null) {
-            root.$cookies.remove(`${root.$config.appKey}_cart_id`); 
-          }
-        });
-    });
 
     const updateQuantity = debounce(async ({ product, quantity }) => {
       await updateItemQty({ product, quantity });

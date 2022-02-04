@@ -124,6 +124,7 @@ export const getProductAttributes = (products: ProductVariant, filterByAttribute
       }
     ]
   });
+
   return productList
     .map((product) => formatAttributes(product))
     .reduce((prev, curr) => [...prev, ...curr], [])

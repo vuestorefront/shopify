@@ -28,8 +28,8 @@ export const getCartItemImage = (product: any): string => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItemPrice = (product: any): AgnosticPrice => {
   return {
-    regular: product && product?.variant.compareAtPriceV2 != null ? product?.variant.compareAtPriceV2?.amount : null || null,
-    special: product && product?.variant.priceV2 != null ? product?.variant.priceV2.amount : 0 || null
+    regular: product?.variant?.compareAtPriceV2?.amount || null,
+    special: product?.variant?.priceV2?.amount || null
   };
 };
 
