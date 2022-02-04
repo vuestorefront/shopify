@@ -58,17 +58,17 @@
             v-if="options && Object.keys(options).length > 0"
             class="product__variants"
           >
-            <template v-for="(option, o) in options">
+            <template v-for="(option, key) in options">
               <SfSelect
-                v-if="o.toLowerCase() !== 'color'"
-                :key="`attrib-${o}`"
-                :data-cy="`product-select_${o.toLowerCase()}`"
-                :set="(atttLbl = o)"
-                :value="configuration[o] || options[o][0]"
-                :label="$t(`${o}`)"
-                :class="`sf-select--underlined product__select-${o.toLowerCase()}`"
+                v-if="key.toLowerCase() !== 'color'"
+                :key="`attrib-${key}`"
+                :data-cy="`product-select_${key.toLowerCase()}`"
+                :set="(atttLbl = key)"
+                :value="configuration[key] || options[key][0]"
+                :label="$t(`${key}`)"
+                :class="`sf-select--underlined product__select-${key.toLowerCase()}`"
                 :required="true"
-                @input="(o) => updateFilter({ [atttLbl]: o })"
+                @input="(key) => updateFilter({ [atttLbl]: key })"
               >
                 <SfSelectOption
                   v-for="(attribs, a) in option"
@@ -79,11 +79,11 @@
                 </SfSelectOption>
               </SfSelect>
               <div
-                v-else-if="o.toLowerCase() === 'color'"
-                :key="`attrib-${o.toLowerCase()}`"
+                v-else-if="key.toLowerCase() === 'color'"
+                :key="`attrib-${key.toLowerCase()}`"
                 class="product__colors"
               >
-                <label class="product__color-label">{{ $t(o) }}</label>
+                <label class="product__color-label">{{ $t(key) }}</label>
                 <div class="product__flex-break"></div>
                 <SfColor
                   v-for="(attribs, a) in option"
@@ -93,15 +93,15 @@
                   :color="attribs"
                   :class="`product__color ${attribs}`"
                   :selected="
-                    configuration[o]
-                      ? configuration[o] === attribs
+                    configuration[key]
+                      ? configuration[key] === attribs
                         ? true
                         : false
                       : a === 0
                       ? true
                       : false
                   "
-                  @click="(atttLbl = o), updateFilter({ [atttLbl]: attribs })"
+                  @click="(atttLbl = key), updateFilter({ [atttLbl]: attribs })"
                 />
               </div>
             </template>
@@ -109,7 +109,7 @@
 
           <SfAlert
             v-if="!productGetters.getStockStatus(product)"
-            message="Out of Stock"
+            :message="$t('Out of Stock')"
             type="warning"
             class="product__stock-information"
           >
@@ -170,7 +170,7 @@
               </SfProperty>
             </SfTab>
             <SfTab
-              title="Additional Information"
+              :title="$t('Additional Information')"
               data-cy="product-tab_additional"
               class="product__additional-info"
             >
@@ -375,7 +375,8 @@ export default {
 
     onSSR(async () => {
       await search({ slug, selectedOptions: configuration.value }).then(() => {
-        if (productTitle.value === "Product's name") {
+        // "Product Title" serve as the flag if the product is existing or not
+        if (!productTitle.value) {
           return context.root.error({
             statusCode: 404,
             message: 'This product could not be found'
