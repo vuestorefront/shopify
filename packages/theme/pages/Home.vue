@@ -232,7 +232,7 @@ export default {
 };
 </script>
 
-<style lang="postcss" scoped>
+<style lang="scss" scoped>
 .article-meta h4 a {
   color: #111111;
   font-weight: 600;
