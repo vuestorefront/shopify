@@ -224,7 +224,13 @@ export default {
 }
 .navigation-wrapper {
   display: flex;
-  white-space: nowrap;
+  width: min-content;
+}
+.sf-search-bar {
+  @include for-desktop {
+    max-width: 20rem;
+    width: 100%;
+  }
 }
 .nav-item {
   .sf-header-navigation-item__item--mobile {
@@ -240,6 +246,7 @@ export default {
   left: 40%;
 }
 .sf-header-navigation-item {
+  flex: 0;
   ::v-deep &__item--mobile {
     display: block;
   }
