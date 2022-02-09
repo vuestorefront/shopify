@@ -98,7 +98,7 @@ import {
   SfBadge,
   SfSearchBar,
   SfIcon,
-  SfOverlay,
+  SfOverlay
 } from '@storefront-ui/vue';
 import SearchResults from './SearchResults.vue';
 import debounce from 'lodash/debounce';
@@ -108,11 +108,7 @@ import { computed, ref, useRouter } from '@nuxtjs/composition-api';
 import useUiHelpers from '~/composables/useUiHelpers';
 import LocaleSelector from './LocaleSelector';
 
-import {
-  searchGetters,
-  useCategory,
-  useSearch,
-} from '@vue-storefront/shopify';
+import { searchGetters, useCategory, useSearch } from '@vue-storefront/shopify';
 
 export default {
   components: {
@@ -124,14 +120,14 @@ export default {
     SfButton,
     SfOverlay,
     SfBadge,
-    SfSearchBar,
+    SfSearchBar
   },
   props: {
     cartTotalItems: {
       type: Number,
       default: 0
     },
-    isUserAuthenticated: Boolean,
+    isUserAuthenticated: Boolean
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props) {
@@ -140,13 +136,14 @@ export default {
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
-    const router = useRouter()
+    const router = useRouter();
 
     const curCatSlug = ref(getFacetsFromURL().categorySlug);
-    const accountIcon = computed(() => props.isUserAuthenticated ? 'profile_fill' : 'profile');
+    const accountIcon = computed(() =>
+      props.isUserAuthenticated ? 'profile_fill' : 'profile'
+    );
 
-
-     // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
+    // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
     const handleAccountClick = () => {
       if (isAuthenticated.value) {
         return router.push('/my-account');
@@ -166,7 +163,7 @@ export default {
       }
 
       await headerSearch({
-        term: term.value,
+        term: term.value
       });
     }, 1000);
     const closeSearch = () => {
@@ -176,7 +173,7 @@ export default {
     };
 
     searchResults.value = {
-      products: computed(() => searchGetters.getItems(result.value)),
+      products: computed(() => searchGetters.getItems(result.value))
     };
     // #endregion Search Section
     onSSR(async () => {
@@ -203,9 +200,9 @@ export default {
       curCatSlug,
       searchResults,
       categories,
-      isSearchOpen,
+      isSearchOpen
     };
-  },
+  }
 };
 </script>
 
