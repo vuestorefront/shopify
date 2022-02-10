@@ -232,25 +232,7 @@ export default {
 };
 </script>
 
-<style lang="postcss" scoped>
-.article-meta h4 a {
-  color: #111111;
-  font-weight: 600;
-  font-size: 20px;
-}
-.article-meta {
-  margin-top: 10px;
-}
-.article-item__meta-item:not(:last-child)::after {
-  display: inline-block;
-  content: "";
-  width: 5px;
-  height: 5px;
-  margin: -1px 10px 0 10px;
-  border-radius: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  vertical-align: middle;
-}
+<style lang="scss" scoped>
 #home {
   box-sizing: border-box;
   padding: 0 var(--spacer-sm);
@@ -260,13 +242,9 @@ export default {
     margin: 0 auto;
   }
 }
-
 .hero {
   margin: var(--spacer-xl) auto var(--spacer-lg);
   --hero-item-background-position: center;
-  ::v-deep .sf-link:hover {
-    color: var(--c-white);
-  }
   @include for-desktop {
     margin: var(--spacer-xl) auto var(--spacer-2xl);
   }
@@ -275,20 +253,22 @@ export default {
       --hero-item-background-position: left;
       @include for-mobile {
         --hero-item-background-position: 30%;
-        --hero-item-wrapper-text-align: right;
-        --hero-item-subtitle-width: 100%;
-        --hero-item-title-width: 100%;
-        --hero-item-wrapper-padding: var(--spacer-sm) var(--spacer-sm)
-          var(--spacer-sm) var(--spacer-2xl);
+        ::v-deep .sf-hero-item__subtitle,
+        ::v-deep .sf-hero-item__title {
+          text-align: right;
+          width: 100%;
+          padding-left: var(--spacer-sm);
+        }
       }
     }
   }
+  ::v-deep .sf-hero__control {
+    &--right,
+    &--left {
+      display: none;
+    }
+  }
 }
-
-::v-deep .sf-hero__controls {
-  --hero-controls-display: none;
-}
-
 .banner-grid {
   --banner-container-width: 50%;
   margin: var(--spacer-xl) 0;
@@ -299,10 +279,10 @@ export default {
     margin: var(--spacer-2xl) 0;
     ::v-deep .sf-link {
       --button-width: auto;
+      text-decoration: none;
     }
   }
 }
-
 .banner {
   &__tshirt {
     background-position: left;
@@ -313,7 +293,6 @@ export default {
     }
   }
 }
-
 .similar-products {
   display: flex;
   justify-content: space-between;
@@ -327,7 +306,6 @@ export default {
     padding-bottom: 0;
   }
 }
-
 .call-to-action {
   background-position: right;
   margin: var(--spacer-xs) 0;
@@ -335,9 +313,8 @@ export default {
     margin: var(--spacer-xl) 0 var(--spacer-2xl) 0;
   }
 }
-
 .carousel {
-  margin: 0 calc(var(--spacer-sm) * -1) 0 0;
+  margin: 0 calc(0 - var(--spacer-sm)) 0 0;
   @include for-desktop {
     margin: 0;
   }
@@ -349,6 +326,11 @@ export default {
     &__product {
       --product-card-add-button-transform: translate3d(0, 30%, 0);
     }
+  }
+  ::v-deep .sf-arrow--long .sf-arrow--right {
+    --arrow-icon-transform: rotate(180deg);
+    -webkit-transform-origin: center;
+    transform-origin: center;
   }
 }
 </style>
