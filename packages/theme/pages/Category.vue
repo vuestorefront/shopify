@@ -1,7 +1,10 @@
 <template>
   <div id="category">
-    <SfBreadcrumbs class="breadcrumbs breadcrumbs-center" :breadcrumbs="breadcrumbs">
-      <template #link="{breadcrumb}">
+    <SfBreadcrumbs
+      class="breadcrumbs breadcrumbs-center"
+      :breadcrumbs="breadcrumbs"
+    >
+      <template #link="{ breadcrumb }">
         <nuxt-link
           :data-testid="breadcrumb.text"
           :to="breadcrumb.route.link"
@@ -15,7 +18,7 @@
     <div class="navbar section">
       <div class="navbar__main">
         <div class="navbar__sort desktop-only">
-          <span class="navbar__label">{{ $t("Sort by") }}:</span>
+          <span class="navbar__label">{{ $t('Sort by') }}:</span>
           <SfSelect
             :value="sortBy.selected"
             placeholder="Select sorting"
@@ -34,7 +37,7 @@
         </div>
         <div class="navbar__counter">
           <span class="navbar__label desktop-only"
-            >{{ $t("Products found") }}:
+            >{{ $t('Products found') }}:
           </span>
           <span class="desktop-only">{{ pagination.totalItems }}</span>
           <span class="navbar__label smartphone-only"
@@ -42,7 +45,7 @@
           >
         </div>
         <div class="navbar__view">
-          <span class="navbar__view-label desktop-only">{{ $t("View") }}</span>
+          <span class="navbar__view-label desktop-only">{{ $t('View') }}</span>
           <SfIcon
             data-cy="category-icon_grid-view"
             class="navbar__view-icon"
@@ -105,9 +108,11 @@
                   )}`
                 )
               "
+              :wishlist-icon="false"
               class="products__product-card"
-              @click:wishlist="addItemToWishlist({ product })"
-              @click:add-to-cart="HandleAddTocart({ product, quantity: 1, currentCart })"
+              @click:add-to-cart="
+                HandleAddTocart({ product, quantity: 1, currentCart })
+              "
             />
           </transition-group>
           <transition-group
@@ -143,8 +148,9 @@
                   )}`
                 )
               "
-              @click:wishlist="addItemToWishlist({ product })"
-              @click:add-to-cart="HandleAddTocart({ product, qty:1, currentCart })"
+              @click:add-to-cart="
+                HandleAddTocart({ product, quantity: 1, currentCart })
+              "
             >
               <template #configuration>
                 <SfProperty
@@ -154,22 +160,6 @@
                   style="margin: 0 0 1rem 0"
                 />
                 <SfProperty class="desktop-only" name="Color" value="white" />
-              </template>
-              <template #actions>
-                <SfButton
-                  class="sf-button--text desktop-only"
-                  style="margin: 0 0 1rem auto; display: block"
-                  @click="() => {}"
-                >
-                  Save for later
-                </SfButton>
-                <SfButton
-                  class="sf-button--text desktop-only"
-                  style="margin: 0 0 0 auto; display: block"
-                  @click="() => {}"
-                >
-                  Add to compare
-                </SfButton>
               </template>
             </SfProductCardHorizontal>
           </transition-group>
@@ -327,13 +317,11 @@ export default {
     SfProperty
   },
   transition: 'fade',
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(props, context) {
+  setup(_, context) {
     const th = useUiHelpers();
     const uiState = useUiState();
     const { addItem: addItemToCart, isInCart, cart: currentCart } = useCart();
     const { send: sendNotification } = useUiNotification();
-    const { addItem: addItemToWishlist } = useWishlist();
     const { result, search, loading } = useFacet();
     const products = computed(() => facetGetters.getProducts(result.value));
     const sortBy = computed(() => facetGetters.getSortOptions(result.value));
@@ -363,7 +351,6 @@ export default {
       facets,
       currentCart,
       sendNotification,
-      addItemToWishlist,
       addItemToCart,
       isInCart,
       isFacetColor,
