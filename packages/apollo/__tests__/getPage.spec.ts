@@ -1,4 +1,4 @@
-import getPage from '../src/api/getPage'
+import { getPage } from '../src/api/getPage'
 
 const queryMock = jest.fn()
 
