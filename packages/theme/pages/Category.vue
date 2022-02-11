@@ -291,7 +291,6 @@ import {
 import { computed, onMounted } from '@nuxtjs/composition-api';
 import {
   useCart,
-  useWishlist,
   productGetters,
   useFacet,
   facetGetters
