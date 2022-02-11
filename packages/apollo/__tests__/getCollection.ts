@@ -3,37 +3,45 @@ import { gql } from '@apollo/client/core'
 import searchProduct from '../src/api/searchProduct'
 
 const DEFAULT_QUERY = `
-  query products(
-    $first: Int,
-    $query: String
-  ) {
-    products(first: $first, query: $query) {
-      edges {
+query collection($handle: String, $first: Int, $filters: [ProductFilter!]) {
+    collection(handle: $handle) {
+      id
+      handle
+      title
+      products(filters: $filters, first: $first) {
+        edges {
           node {
-              title
-              id
+            title
+            id
           }
+        }
       }
-    } 
+    }
   }
 `
 
 const expectedResponse = {
   data: {
-    products: {
-      edges: [{
-        node: {
-          title: 'Blouse',
-          id: '<ID HERE>'
-        }
-      },
-      {
-        node: {
-          title: 'Jacket',
-          id: '<ID HERE>'
-        }
-      }]
-    }
+    collection: {
+      id: '<ID HERE>',
+      handle: 'clothes',
+      title: 'Clothes',
+      products: {
+        edges: [{
+          node: {
+            title: 'Blouse',
+            id: '<ID HERE>'
+          }
+        },
+        {
+          node: {
+            title: 'Jacket',
+            id: '<ID HERE>'
+          }
+        }]
+      }
+    },
+
   }
 }
 
@@ -54,7 +62,7 @@ const mockContext: any = {
 
 const QUERY = gql(DEFAULT_QUERY) as any
 
-describe('[shopify-apollo] search product', () => {
+describe('[shopify-apollo] get collection', () => {
   it('request success', async () => {
     mockClient.setRequestHandler(
       QUERY,

@@ -1,5 +1,5 @@
-import { ApolloClient, ApolloQueryResult, InMemoryCache, gql } from "@apollo/client/core"
-import { CustomQuery, IntegrationContext } from '@vue-storefront/core'
+import { ApolloClient, ApolloQueryResult, InMemoryCache } from "@apollo/client/core"
+import { IntegrationContext } from '@vue-storefront/core'
 import { QueryRoot } from "./shopify"
 import type { ShopifyApolloAPIs } from './api'
 import type { ShopifyApolloSettings, ShopifyApolloClient, ExtendQueryContext } from "./types"
