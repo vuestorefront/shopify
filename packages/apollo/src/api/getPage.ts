@@ -1,12 +1,9 @@
 import { CustomQuery } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
+import { print } from 'graphql'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootPageArgs } from '../shopify'
-
-interface GetPageParams {
-  id?: string
-  handle?: string
-}
+import GetPageParams from '../types/getPage/GetPageParams'
 
 const defaultQuery = gql`
     query page(
@@ -15,6 +12,7 @@ const defaultQuery = gql`
     ) {
         page(handle: $handle, id: $id) {
           id
+          handle
           title
           onlineStoreUrl
           bodySummary
@@ -25,12 +23,9 @@ const defaultQuery = gql`
 `
 
 export default async function getPage(context: ShopifyApolloContext, params: GetPageParams, customQuery?: CustomQuery) {
-  const variables: QueryRootPageArgs = {}
-
-  if (params.handle) {
-    variables.handle = params.handle
-  } else if (params.id) {
-    variables.id = params.id
+  const variables: QueryRootPageArgs = {
+    ...(params.handle && { handle: params.handle }),
+    ...(params.id && { id: params.id })
   }
 
   const { page } = context.extendQuery(

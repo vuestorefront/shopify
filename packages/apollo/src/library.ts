@@ -1,16 +1,10 @@
-import { ApolloClient, ApolloQueryResult, InMemoryCache, gql } from "@apollo/client/core"
-import { CustomQuery, IntegrationContext } from '@vue-storefront/core'
+import { ApolloClient, ApolloQueryResult, InMemoryCache } from "@apollo/client/core"
+import { IntegrationContext } from '@vue-storefront/core'
 import { QueryRoot } from "./shopify"
-
-interface ShopifyApolloSettings {
-  api: {
-    domain: string
-    storefrontAccessToken: string
-    cookies?: string
-  },
-  currency: string
-  country: string
-}
+import type { ShopifyApolloAPIs } from './api'
+import ShopifyApolloSettings from "./types/ShopifyApolloSettings"
+import ShopifyApolloClient from "./types/ShopifyApolloClient"
+import ExtendQueryContext from "./types/ExtendQueryContext"
 
 export function createShopifyApollo(settings: ShopifyApolloSettings) {
   const client = new ApolloClient({
@@ -25,20 +19,7 @@ export function createShopifyApollo(settings: ShopifyApolloSettings) {
   return client
 }
 
-export type ShopifyApolloClient = { apolloClient: ReturnType<typeof createShopifyApollo> }
-
 export * from './api'
-
-import type { ShopifyApolloAPIs } from './api'
-
-type ExtendQueryResult = { query: any; variables: any }
-
-type ExtendQueryContext = {
-  extendQuery: (
-    customQuery: CustomQuery,
-    query: Record<string, ExtendQueryResult>
-  ) => Record<string, ExtendQueryResult>
-}
 
 export type ShopifyApolloContext = IntegrationContext<ShopifyApolloClient, ShopifyApolloSettings, ShopifyApolloAPIs> & ExtendQueryContext
 
