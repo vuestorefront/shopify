@@ -14,7 +14,6 @@ const mockContext: any = {
 }
 
 describe('[shopify-apollo] mapping of params into the qraphql client', () => {
-
   it('should map params the the collection query', async () => {
     // Given (BDD) or Arrange (TDD)
     const params = {
@@ -33,7 +32,7 @@ describe('[shopify-apollo] mapping of params into the qraphql client', () => {
       first: 10,
       filters: {}
     }
-    mockExtendQuery.mockImplementationOnce(() => ({ collection: { query: 'test-quert', variables: expectedVariables} }));
+    mockExtendQuery.mockImplementationOnce(() => ({ collection: { query: 'test-quert', variables: expectedVariables } }));
 
 
     // When (BDD) or Act (TDD)
