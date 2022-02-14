@@ -3,7 +3,7 @@ import getPage from '../src/api/getPage'
 
 contextMock.client.apolloClient.query.mockImplementation((payload) => Promise.resolve(payload))
 
-describe('[shopify-apollo] get collection', () => {
+describe('[shopify-apollo] get page', () => {
   it('id, handle props correctly mapped', async () => {
     const params = { handle: 'who-we-are', id: 'id' }
 

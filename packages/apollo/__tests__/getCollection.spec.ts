@@ -1,57 +1,10 @@
-import { createMockClient } from 'mock-apollo-client'
-import { gql } from '@apollo/client/core'
-import searchProduct from '../src/api/searchProduct'
+import getCollection from '../src/api/getCollection'
 
-const DEFAULT_QUERY = `
-query collection($handle: String, $first: Int, $filters: [ProductFilter!]) {
-    collection(handle: $handle) {
-      id
-      handle
-      title
-      products(filters: $filters, first: $first) {
-        edges {
-          node {
-            title
-            id
-          }
-        }
-      }
-    }
-  }
-`
+const queryMock = jest.fn()
 
-const expectedResponse = {
-  data: {
-    collection: {
-      id: '<ID HERE>',
-      handle: 'clothes',
-      title: 'Clothes',
-      products: {
-        edges: [{
-          node: {
-            title: 'Blouse',
-            id: '<ID HERE>'
-          }
-        },
-        {
-          node: {
-            title: 'Jacket',
-            id: '<ID HERE>'
-          }
-        }]
-      }
-    },
+const mockClient = { query: queryMock}
 
-  }
-}
-
-const mockClient = createMockClient()
-
-const mockExtendQuery = jest.fn(() => ({
-  products: {
-    query: DEFAULT_QUERY
-  }
-}))
+const mockExtendQuery = jest.fn();
 
 const mockContext: any = {
   extendQuery: mockExtendQuery,
@@ -60,19 +13,65 @@ const mockContext: any = {
   }
 }
 
-const QUERY = gql(DEFAULT_QUERY) as any
+describe('[shopify-apollo] mapping of params into the qraphql client', () => {
 
-describe('[shopify-apollo] get collection', () => {
-  it('request success', async () => {
-    mockClient.setRequestHandler(
-      QUERY,
-      () => Promise.resolve(expectedResponse)
-    )
+  it('should map params the the collection query', async () => {
+    // Given (BDD) or Arrange (TDD)
+    const params = {
+      categorySlug: 'test',
+      perPage: 10, 
+      filters: {
+        filterOne: ['filter-one']
+      }
+    }
+    const customQuery = {
+      customQuery: 'customQuery-test'
+    }
 
-    const response = await searchProduct(mockContext, {
-      term: 'blouse'
+    const expectedVariables = {
+      handle: 'test',
+      first: 10,
+      filters: {}
+    }
+    mockExtendQuery.mockImplementationOnce(() => ({ collection: { query: 'test-quert', variables: expectedVariables} }));
+
+
+    // When (BDD) or Act (TDD)
+    await getCollection(mockContext, params, customQuery)
+
+    // Then (BDD) or Assert (TDD)
+    expect(mockExtendQuery).toHaveBeenCalledWith(customQuery, {
+      collection: {
+        query: expect.any(Object),
+        variables: expectedVariables
+      }
     })
-
-    expect(response.data).toEqual(expectedResponse.data)
   })
+
+  it('should execute the query with mapped params', async () => {
+    const mappedVariables = {
+      handle: 'test',
+      first: 10,
+      filters: {}
+    }
+    mockExtendQuery.mockImplementationOnce(() => ({ collection: { query: 'test-quert', variables: mappedVariables} }));
+    const params = {
+      categorySlug: 'test',
+      perPage: 10, 
+      filters: {
+        filterOne: ['filter-one']
+      }
+    }
+
+    const expectedQueryOptions = {
+      query: 'test-quert',
+      variables: mappedVariables
+    }
+
+    await getCollection(mockContext, params)
+
+    expect(queryMock).toHaveBeenCalledWith(expectedQueryOptions)
+
+  })
+  
 })
