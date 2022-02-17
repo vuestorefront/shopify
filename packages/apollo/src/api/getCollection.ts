@@ -31,6 +31,7 @@ const DEFAULT_QUERY = gql`
                 }
               }
             }
+            totalInventory
             variants(first: 1) {
               edges {
                 node {

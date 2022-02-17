@@ -101,6 +101,7 @@
               :show-add-to-cart-button="true"
               :is-on-wishlist="false"
               :is-added-to-cart="isInCart({ product, currentCart })"
+              :add-to-cart-disabled="!productGetters.getStockStatus(product)"
               :link="
                 localePath(
                   `/p/${productGetters.getId(product)}/${productGetters.getSlug(
