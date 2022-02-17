@@ -49,13 +49,6 @@
           </SfButton>
 
           <SfButton
-            class="sf-button--pure sf-header__action"
-            @click="toggleWishlistSidebar"
-          >
-            <SfIcon class="sf-header__icon" icon="heart" size="1.25rem" />
-          </SfButton>
-
-          <SfButton
             v-e2e="'app-header-cart'"
             class="sf-button--pure sf-header__action"
             @click="toggleCartSidebar"
@@ -98,7 +91,7 @@ import {
   SfBadge,
   SfSearchBar,
   SfIcon,
-  SfOverlay,
+  SfOverlay
 } from '@storefront-ui/vue';
 import SearchResults from './SearchResults.vue';
 import debounce from 'lodash/debounce';
@@ -108,11 +101,7 @@ import { computed, ref, useRouter } from '@nuxtjs/composition-api';
 import useUiHelpers from '~/composables/useUiHelpers';
 import LocaleSelector from './LocaleSelector';
 
-import {
-  searchGetters,
-  useCategory,
-  useSearch,
-} from '@vue-storefront/shopify';
+import { searchGetters, useCategory, useSearch } from '@vue-storefront/shopify';
 
 export default {
   components: {
@@ -124,14 +113,14 @@ export default {
     SfButton,
     SfOverlay,
     SfBadge,
-    SfSearchBar,
+    SfSearchBar
   },
   props: {
     cartTotalItems: {
       type: Number,
       default: 0
     },
-    isUserAuthenticated: Boolean,
+    isUserAuthenticated: Boolean
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props) {
@@ -139,13 +128,14 @@ export default {
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
-    const router = useRouter()
+    const router = useRouter();
 
     const curCatSlug = ref(getFacetsFromURL().categorySlug);
-    const accountIcon = computed(() => props.isUserAuthenticated ? 'profile_fill' : 'profile');
+    const accountIcon = computed(() =>
+      props.isUserAuthenticated ? 'profile_fill' : 'profile'
+    );
 
-
-     // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
+    // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
     const handleAccountClick = () => {
       if (props.isUserAuthenticated) {
         return router.push('/my-account');
@@ -165,7 +155,7 @@ export default {
       }
 
       await headerSearch({
-        term: term.value,
+        term: term.value
       });
     }, 500);
     const closeSearch = () => {
@@ -175,7 +165,7 @@ export default {
     };
 
     searchResults.value = {
-      products: computed(() => searchGetters.getItems(result.value)),
+      products: computed(() => searchGetters.getItems(result.value))
     };
     // #endregion Search Section
     onSSR(async () => {
@@ -193,9 +183,9 @@ export default {
       curCatSlug,
       searchResults,
       categories,
-      isSearchOpen,
+      isSearchOpen
     };
-  },
+  }
 };
 </script>
 
@@ -214,7 +204,13 @@ export default {
 }
 .navigation-wrapper {
   display: flex;
-  white-space: nowrap;
+  width: min-content;
+}
+.sf-search-bar {
+  @include for-desktop {
+    max-width: 20rem;
+    width: 100%;
+  }
 }
 .nav-item {
   .sf-header-navigation-item__item--mobile {
@@ -230,6 +226,7 @@ export default {
   left: 40%;
 }
 .sf-header-navigation-item {
+  flex: 0;
   ::v-deep &__item--mobile {
     display: block;
   }

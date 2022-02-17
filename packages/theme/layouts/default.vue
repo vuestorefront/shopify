@@ -7,7 +7,6 @@
     />
     <div id="layout">
       <nuxt :key="$route.fullPath" />
-      <AppFooter />
       <client-only>
         <BottomNavigation />
       </client-only>
@@ -24,6 +23,9 @@
         <Notification />
       </client-only>
     </div>
+    <LazyHydrate when-visible>
+      <AppFooter />
+    </LazyHydrate>
   </div>
 </template>
 
