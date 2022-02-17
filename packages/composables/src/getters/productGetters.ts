@@ -9,9 +9,17 @@ import { ProductVariant } from '@vue-storefront/shopify-api/src/types';
 import { enhanceProduct } from '../helpers/internals';
 import { formatAttributeList, capitalize } from './_utils';
 
-type ProductVariantFilters = any
+export type ProductVariantFilters = any
 
 export const getProductName = (product: ProductVariant): string => product?.name || undefined;
+
+export const getFullProductName = (product: ProductVariant): string => {
+  if (product?.variantBySelectedOptions) {
+    return `${product.name} - ${product.variantBySelectedOptions.title}`
+  } else {
+    return `${product.name} - ${product.variants?.[0]?.title ?? ''}`
+  }
+}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductSlug = (product: ProductVariant): string => {
@@ -275,6 +283,7 @@ export const getProductAverageRating = (product: ProductVariant): number => 0;
 
 const productGetters: ProductGetters<ProductVariant, ProductVariantFilters> = {
   getName: getProductName,
+  getFullName: getFullProductName,
   getSlug: getProductSlug,
   getPrice: getProductPrice,
   getGallery: getProductGallery,
