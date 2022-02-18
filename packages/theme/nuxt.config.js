@@ -146,6 +146,15 @@ const config = {
             style: 'currency',
             currency: 'USD',
             currencyDisplay: 'symbol'
+          },
+          decimal: {
+            style: 'decimal',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          },
+          percent: {
+            style: 'percent',
+            useGrouping: false
           }
         },
         de: {
@@ -153,6 +162,15 @@ const config = {
             style: 'currency',
             currency: 'GBP',
             currencyDisplay: 'symbol'
+          },
+          decimal: {
+            style: 'decimal',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          },
+          percent: {
+            style: 'percent',
+            useGrouping: false
           }
         }
       }

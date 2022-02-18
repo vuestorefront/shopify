@@ -30,14 +30,17 @@ export default async function checkOut(context, checkoutId, customQuery?: Custom
           key
           value
         }
-        discountApplications(first:250){
+        discountApplications(first:20){
           edges{
             node{
-              allocationMethod
-              targetSelection
-              targetType
               value{
-                __typename
+                ... on MoneyV2{
+                  amount
+                  currencyCode
+                }
+                ... on PricingPercentageValue{
+                  percentage
+                }
               }
             }
           }

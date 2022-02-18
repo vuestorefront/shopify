@@ -3,7 +3,7 @@
     <TopBar class="desktop-only" />
     <AppHeader
       :cart-total-items="getCartTotalItems"
-      :is-user-authenticated="getUserStatus"
+      :is-user-authenticated="isAuthenticated"
     />
     <div id="layout">
       <nuxt :key="$route.fullPath" />
@@ -32,9 +32,9 @@
 <script>
 import AppHeader from '~/components/AppHeader.vue';
 import TopBar from '~/components/TopBar.vue';
+import LazyHydrate from 'vue-lazy-hydration';
 import {
   useUser,
-  userGetters,
   cartGetters,
   useCart,
 } from '@vue-storefront/shopify';
@@ -44,6 +44,7 @@ export default {
   components: {
     TopBar,
     AppHeader,
+    LazyHydrate,
     BottomNavigation: () => import('~/components/BottomNavigation.vue'),
     AppFooter: () => import('~/components/AppFooter.vue'),
     CartSidebar: () => import('~/components/CartSidebar.vue'),
@@ -52,10 +53,8 @@ export default {
     Notification: () => import('~/components/Notification'),
   },
   setup(_, { root }) {
-    const { user: userInfo, load: loadUser } = useUser();
+    const { load: loadUser, isAuthenticated } = useUser();
     const { load: loadCart, cart } = useCart();
-    const firstName = computed(() => userGetters.getFirstName(userInfo.value));
-    const getUserStatus = computed(() => !!firstName.value);
     const getCartTotalItems = computed(() => cartGetters.getTotalItems(cart.value));
     
     provide('currentCart', cart);
@@ -70,8 +69,8 @@ export default {
     });
 
     return {
-      getUserStatus,
       getCartTotalItems,
+      isAuthenticated
     };
   },
 };
