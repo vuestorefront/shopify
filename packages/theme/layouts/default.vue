@@ -32,9 +32,9 @@
 <script>
 import AppHeader from '~/components/AppHeader.vue';
 import TopBar from '~/components/TopBar.vue';
+import LazyHydrate from 'vue-lazy-hydration';
 import {
   useUser,
-  userGetters,
   cartGetters,
   useCart,
 } from '@vue-storefront/shopify';
@@ -44,6 +44,7 @@ export default {
   components: {
     TopBar,
     AppHeader,
+    LazyHydrate,
     BottomNavigation: () => import('~/components/BottomNavigation.vue'),
     AppFooter: () => import('~/components/AppFooter.vue'),
     CartSidebar: () => import('~/components/CartSidebar.vue'),

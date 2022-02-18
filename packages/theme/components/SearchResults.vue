@@ -68,14 +68,22 @@
                   :image="productGetters.getCoverImage(product)"
                   :alt="productGetters.getName(product)"
                   :title="productGetters.getName(product)"
-                  :link="productGetters.getSlug(product)"
+                  :link="localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )"
                   @click:add-to-cart="
                     handleAddToCart({ product, quantity: 1, currentCart })
                   "
                 >
                   <template slot="title">
                     <SfButton
-                      :link="localePath(productGetters.getSlug(product))"
+                      :link="localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )"
                       class="sf-button--pure sf-product-card__link"
                       data-testid="product-link"
                     >
@@ -104,14 +112,22 @@
                 :image="productGetters.getCoverImage(product)"
                 :alt="productGetters.getName(product)"
                 :title="productGetters.getName(product)"
-                :link="productGetters.getSlug(product)"
+                :link="localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )"
                 @click:add-to-cart="
                   handleAddToCart({ product, quantity: 1, currentCart })
                 "
               >
                 <template slot="title">
                   <SfButton
-                    :link="localePath(productGetters.getSlug(product))"
+                    :link="localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )"
                     class="sf-button--pure sf-product-card__link"
                     data-testid="product-link"
                   >
