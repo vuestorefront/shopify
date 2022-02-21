@@ -145,7 +145,7 @@ export default async function updateCart(context, params, _customQuery?: CustomQ
   }`
   const payload = {
     lineItems: lineItemsToUpdate,
-    country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase(),
+    country: context.res.req.cookies['vsf-locale'] ? context.res.req.cookies['vsf-locale'] === "en" ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase() : "US",
     checkoutId: currentCart.id
   }
 

@@ -145,7 +145,7 @@ export default async function checkOut(context, checkoutId, customQuery?: Custom
 
   const payload = {
     id: checkoutId,
-    country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
+    country: context.res.req.cookies['vsf-locale'] ? context.res.req.cookies['vsf-locale'] === "en" ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase() : "US",
   }
 
   const { node } = context.extendQuery(

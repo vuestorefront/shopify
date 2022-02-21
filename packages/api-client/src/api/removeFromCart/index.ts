@@ -143,7 +143,7 @@ export default async function removeFromCart(context, params, _customQuery?: Cus
   }`
   const payload = {
     lineItemIds: lineItemIdsToRemove,
-    country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase(),
+    country: context.res.req.cookies['vsf-locale'] ? context.res.req.cookies['vsf-locale'] === "en" ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase() : "US",
     checkoutId: currentCart.id
   }
 

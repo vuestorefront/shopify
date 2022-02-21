@@ -132,7 +132,7 @@ export default async function getProduct(
     }`
     const variables = {
       handle: params.slug,
-      country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase(),
+      country: context.res.req.cookies['vsf-locale'] ? context.res.req.cookies['vsf-locale'] === "en" ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase() : "US",
       selectedOptions: chosenVariant
     }
 
@@ -495,7 +495,7 @@ export default async function getProduct(
       first: (params.limit ? params.limit : 20),
       sortKey: (params.sortBy ? params.sortBy : 'CREATED_AT'),
       reverse: false,
-      country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
+      country: context.res.req.cookies['vsf-locale'] ? context.res.req.cookies['vsf-locale'] === "en" ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase() : "US",
     }
 
     const { products } = context.extendQuery(
