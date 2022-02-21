@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
-import { print } from 'graphql'
+import { getCountry } from '../../helpers/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -145,7 +145,7 @@ export default async function checkOut(context, checkoutId, customQuery?: Custom
 
   const payload = {
     id: checkoutId,
-    country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
+    country: getCountry(context),
   }
 
   const { node } = context.extendQuery(

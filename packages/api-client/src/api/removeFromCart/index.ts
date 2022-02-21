@@ -2,6 +2,7 @@
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core';
 import { print } from 'graphql';
+import { getCountry } from '../../helpers/utils';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function removeFromCart(context, params, _customQuery?: CustomQuery) {
   const { currentCart, product } = params;
@@ -143,7 +144,7 @@ export default async function removeFromCart(context, params, _customQuery?: Cus
   }`
   const payload = {
     lineItemIds: lineItemIdsToRemove,
-    country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase(),
+    country: getCountry(context),
     checkoutId: currentCart.id
   }
 

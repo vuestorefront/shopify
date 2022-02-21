@@ -3,6 +3,7 @@
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
 import { print } from 'graphql'
+import { getCountry } from '../../helpers/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -132,7 +133,7 @@ export default async function getProduct(
     }`
     const variables = {
       handle: params.slug,
-      country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase(),
+      country: getCountry(context),
       selectedOptions: chosenVariant
     }
 
@@ -495,7 +496,7 @@ export default async function getProduct(
       first: (params.limit ? params.limit : 20),
       sortKey: (params.sortBy ? params.sortBy : 'CREATED_AT'),
       reverse: false,
-      country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
+      country: getCountry(context),
     }
 
     const { products } = context.extendQuery(
