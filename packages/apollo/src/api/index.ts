@@ -4,6 +4,8 @@ import customerCreate from './customerCreate'
 import availableFilters from './availableFilters';
 import getCollection from './getCollection';
 import getPage from './getPage';
+import getBlogs from './getBlogs';
+import getBlog from './getBlog';
 
 const apis = {
   searchProduct,
@@ -11,7 +13,9 @@ const apis = {
   customerCreate,
   availableFilters,
   getCollection,
-  getPage
+  getPage,
+  getBlogs,
+  getBlog
 }
 
 export type ShopifyApolloAPIs = {
