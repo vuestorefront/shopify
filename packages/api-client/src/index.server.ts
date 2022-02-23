@@ -5,7 +5,7 @@ import getProduct from './api/getProduct';
 import getCategory from './api/getCategory';
 import editProfile from './api/editProfile';
 import getBlogPosts from './api/getBlogPosts';
-import getPages from './api/getPages';
+import { getPages } from './api/getPages';
 import updateCart from './api/updateCart';
 import createCart from './api/createCart';
 import addToCart from './api/addToCart';

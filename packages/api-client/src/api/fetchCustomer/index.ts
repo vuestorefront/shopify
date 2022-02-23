@@ -1,10 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { CustomQuery } from '@vue-storefront/core';
-import { customerQuery as query } from './../customerMutations/buildQueries';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function fetchCustomer(context, params, customQuery?: CustomQuery) {
+export default function fetchCustomer(context, params) {
   const getCustomeInfo = context.client.graphQLClient.query(
     (root) => {
       root.add(
@@ -25,7 +19,7 @@ export default async function fetchCustomer(context, params, customQuery?: Custo
   // send user data to authenticate, return token if valid
   return context.client.graphQLClient
     .send(getCustomeInfo)
-    .then(({ model, product }) => {
+    .then(({ model }) => {
       if (model) {
         return model;
       }

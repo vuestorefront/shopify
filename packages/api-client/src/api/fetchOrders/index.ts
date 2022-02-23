@@ -1,10 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { CustomQuery } from '@vue-storefront/core';
-import { ordersQuery as query } from './../customerMutations/buildQueries';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function fetchOrders(context, params, customQuery?: CustomQuery) {
+export default function fetchOrders(context, params) {
   const getCustomerOrders = context.client.graphQLClient.query(
     (root) => {
       root.add(
@@ -83,7 +77,7 @@ export default async function fetchOrders(context, params, customQuery?: CustomQ
   );
   return context.client.graphQLClient
     .send(getCustomerOrders)
-    .then(({ model, product }) => {
+    .then(({ model }) => {
       if (model) {
         return model;
       }

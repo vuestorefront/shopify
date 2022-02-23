@@ -1,7 +1,7 @@
 <template>
 <div>
   <h1>Contact Us</h1>
-  <div v-html="content.body"/>
+  <div v-html="content.body" />
 </div>
 </template>
 
@@ -18,9 +18,11 @@ export default {
       content,
       search
     } = useContent('pageContents');
+
     onSSR(async () => {
-      await search({ slug: 'who-we-are', ContentType: 'page' });
+      await search({ handle: 'contact', ContentType: 'page' });
     });
+
     return {
       content,
       contextsLoading

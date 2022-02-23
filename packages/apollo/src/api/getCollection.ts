@@ -3,7 +3,7 @@ import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootCollectionArgs, ProductFilter } from '../shopify'
 
-export const DEFAULT_QUERY = `
+const DEFAULT_QUERY = gql`
 query collection($handle: String, $first: Int, $filters: [ProductFilter!]) {
   collection(handle: $handle) {
     id
@@ -105,7 +105,7 @@ export default async function getCollection(context: ShopifyApolloContext, param
   )
 
   const response = await context.client.apolloClient.query<QueryRoot, GetCollectionQueryArgs>({
-    query: gql(collection.query) as any,
+    query: collection.query,
     variables: collection.variables
   })
 
