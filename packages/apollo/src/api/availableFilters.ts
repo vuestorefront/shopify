@@ -3,7 +3,7 @@ import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootCollectionByHandleArgs } from '../shopify'
 
-export const DEFAULT_QUERY = `
+const DEFAULT_QUERY = gql`
 query filters($handle: String!) {
     collectionByHandle(handle: $handle) {
       handle
@@ -30,7 +30,7 @@ export default async function availableFilters(context: ShopifyApolloContext, pa
     handle: params.handle
   }
 
-  const filters = context.extendQuery(
+  const { filters } = context.extendQuery(
     customQuery,
     {
       filters: {
@@ -41,7 +41,7 @@ export default async function availableFilters(context: ShopifyApolloContext, pa
   )
 
   const response = await context.client.apolloClient.query<QueryRoot, QueryRootCollectionByHandleArgs>({
-    query: gql(filters.query) as any,
+    query: filters.query,
     variables: filters.variables
   })
 
