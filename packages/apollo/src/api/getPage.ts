@@ -1,9 +1,8 @@
 import { CustomQuery } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
-import { print } from 'graphql'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootPageArgs } from '../shopify'
-import GetPageParams from '../types/getPage/GetPageParams'
+import { GetPageParams } from '../types'
 
 const defaultQuery = gql`
     query page(
@@ -38,10 +37,8 @@ export default async function getPage(context: ShopifyApolloContext, params: Get
     }
   )
 
-  const response = await context.client.apolloClient.query<QueryRoot, QueryRootPageArgs>({
+  return await context.client.apolloClient.query<QueryRoot, QueryRootPageArgs>({
     query: page.query,
     variables: page.variables
-  })
-
-  return response ?? null
+  }) ?? null
 }

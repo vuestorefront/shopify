@@ -1,3 +1,3 @@
 import type { createShopifyApollo } from "../library";
 
-export default interface ShopifyApolloClient { apolloClient: ReturnType<typeof createShopifyApollo> }
+export interface ShopifyApolloClient { apolloClient: ReturnType<typeof createShopifyApollo> }

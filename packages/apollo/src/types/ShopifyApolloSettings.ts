@@ -1,4 +1,4 @@
-export default interface ShopifyApolloSettings {
+export interface ShopifyApolloSettings {
   api: {
     domain: string
     storefrontAccessToken: string

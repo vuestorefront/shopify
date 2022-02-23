@@ -12,7 +12,7 @@ export interface OrdersData {
   me: any;
 }
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const getMe = async ({ config, client }, params: GetMeParams = {}, customQueryFn?: CustomQueryFn) => {
+const getMe = async ({ config }, params: GetMeParams = {}, customQueryFn?: CustomQueryFn) => {
   const { locale, acceptLanguage } = config;
 
   const { customer }: GetMeParams = params;

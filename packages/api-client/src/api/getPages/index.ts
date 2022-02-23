@@ -1,6 +1,4 @@
-import { CustomQuery } from '@vue-storefront/core';
-
-export default async function getPages(context, params, customQuery?: CustomQuery) {
+export function getPages(context, params) {
   // Use the built-in function
   if (params.slug) {
     const pageByHandleQuery = context.client.graphQLClient.query((root) => {
@@ -15,7 +13,7 @@ export default async function getPages(context, params, customQuery?: CustomQuer
       });
     });
     // Call the send method with the custom query
-    return context.client.graphQLClient.send(pageByHandleQuery).then(({ model, content }) => {
+    return context.client.graphQLClient.send(pageByHandleQuery).then(({ model }) => {
       return model.pageByHandle;
     });
   } else {
@@ -31,7 +29,7 @@ export default async function getPages(context, params, customQuery?: CustomQuer
       });
     });
     // Call the send method with the custom query
-    return context.client.graphQLClient.send(pagesQuery).then(({ model, content }) => {
+    return context.client.graphQLClient.send(pagesQuery).then(({ model }) => {
       if (model) {
         return model;
       }

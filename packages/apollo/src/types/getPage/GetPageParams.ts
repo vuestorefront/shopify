@@ -1,4 +1,4 @@
-export default interface GetPageParams {
+export interface GetPageParams {
   id?: string
   handle?: string
 }
