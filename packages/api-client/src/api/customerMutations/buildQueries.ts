@@ -69,8 +69,7 @@ const ordersQuery: (pages: number, token: string, context) => any = (pages, toke
   });
 };
 
-const addressesQuery: (pages: number, token: string, context) => any = (pages, token, context): any => {
-
+const addressesQuery: (pages: number, token: string, context) => any = (_pages, token, context): any => {
   return context.client.graphQLClient.query((root) => {
     root.add('customer', {
       args: {

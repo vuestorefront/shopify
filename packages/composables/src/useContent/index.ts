@@ -12,7 +12,8 @@ const params: UseContentFactoryParams<ContentType, ContentPosition> = {
       if (params.ContentType === 'updatePreferences') {
         return await context.$shopify.api.updateNewsLetterPreferences(searchParams);
       } else if (params.ContentType === 'page') {
-        return await context.$shopify.api.getPages(searchParams);
+        const response = await context.$shopify.api.getPage(params)
+        return response?.data?.page;
       }
     }
     return await context.$shopify.api.getBlogPosts(searchParams);
