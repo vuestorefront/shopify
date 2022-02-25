@@ -14,9 +14,7 @@ export function mapFacetToProductFilter(filters: Record<string, any>): ProductFi
     }
   }
 
-  const result: ProductFilter = {
+ return  {
     ...getPriceFilters()
   }
-
-  return result
 }
