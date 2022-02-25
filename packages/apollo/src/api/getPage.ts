@@ -3,7 +3,7 @@ import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootPageArgs } from '../shopify'
 
-const defaultQuery = gql`
+const pageQuery = gql`
     query page(
       $handle: String
       $id: ID
@@ -20,7 +20,7 @@ const defaultQuery = gql`
     }
 `
 
-export default async function getPage(context: ShopifyApolloContext, params: QueryRootPageArgs, customQuery?: CustomQuery) {
+export async function getPage(context: ShopifyApolloContext, params: QueryRootPageArgs, customQuery?: CustomQuery) {
   const variables: QueryRootPageArgs = {
     ...(params.handle && { handle: params.handle }),
     ...(params.id && { id: params.id })
@@ -30,7 +30,7 @@ export default async function getPage(context: ShopifyApolloContext, params: Que
     customQuery,
     {
       page: {
-        query: defaultQuery,
+        query: pageQuery,
         variables
       }
     }

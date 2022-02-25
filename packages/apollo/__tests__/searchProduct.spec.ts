@@ -2,10 +2,11 @@
 import { searchProduct } from '../src/api/searchProduct'
 import { createMockContext } from '../__mocks__/mockContext'
 
-const mockContext = createMockContext()
 
 describe('[shopify-apollo] search product', () => {
   it('shhould map params to the product query', async () => {
+    const { extendQuery, context } = createMockContext()
+
     const params = {
       term: 'test',
       perPage: 5
@@ -20,11 +21,11 @@ describe('[shopify-apollo] search product', () => {
       query: 'test'
     }
 
-    mockContext.extendQuery.mockImplementationOnce(() => ({ products: { query: 'test-products-query', variables: expectedVariables }}))
+    extendQuery.mockImplementationOnce(() => ({ products: { query: 'test-products-query', variables: expectedVariables }}))
 
-    await searchProduct(mockContext.context, params, customQuery)
+    await searchProduct(context, params, customQuery)
 
-    expect(mockContext.extendQuery).toHaveBeenCalledWith(customQuery, {
+    expect(extendQuery).toHaveBeenCalledWith(customQuery, {
       products: {
         query: expect.any(Object),
         variables: expectedVariables

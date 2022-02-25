@@ -4,7 +4,7 @@ import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootCollectionArgs, ProductFilter } from '../shopify'
 import { mapFacetToProductFilter } from '../helpers/mapFacetToProductFilter'
 
-const defaultQuery = gql`
+const collectionQuery = gql`
   query collection($handle: String, $first: Int, $filters: [ProductFilter!]) {
     collection(handle: $handle) {
       id
@@ -76,18 +76,18 @@ const defaultQuery = gql`
 
 type GetCollectionQueryArgs = QueryRootCollectionArgs & ProductFilter
 
-export default async function getCollection(context: ShopifyApolloContext, params: AgnosticFacetSearchParams, customQuery?: CustomQuery) {
+export default async function getCollection(context: ShopifyApolloContext, { categorySlug, itemsPerPage, filters }: AgnosticFacetSearchParams, customQuery?: CustomQuery) {
   const variables = {
-    handle: params.categorySlug,
-    first: params.perPage ?? 5,
-    filters: mapFacetToProductFilter(params.filters)
+    handle: categorySlug,
+    first: itemsPerPage ?? 5,
+    filters: mapFacetToProductFilter(filters)
   }
 
   const { collection } = context.extendQuery(
     customQuery,
     {
       collection: {
-        query: defaultQuery,
+        query: collectionQuery,
         variables
       }
     }
