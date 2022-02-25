@@ -1,4 +1,4 @@
-import searchProduct from './searchProduct'
+import { searchProduct } from './searchProduct'
 import customerRecover from './customerRecover'
 import customerCreate from './customerCreate'
 import availableFilters from './availableFilters';
