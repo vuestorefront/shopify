@@ -2,6 +2,7 @@ import { CustomQuery } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootArticlesArgs } from '../shopify'
+import { GetArticlesParams } from '../types/GetArticlesParams'
 
 const articlesQuery = gql`
   query getArticles(
@@ -11,7 +12,8 @@ const articlesQuery = gql`
   $last: Int,
   $query: String,
   $reverse: Boolean,
-  $sortKey: BlogSortKeys
+  $sortKey: ArticleSortKeys,
+  $truncateContent: Int
   ) {
     articles(after: $after, before: $before, first: $first, last: $last, query: $query, reverse: $reverse, sortKey: $sortKey) {
       edges {
@@ -22,7 +24,7 @@ const articlesQuery = gql`
           publishedAt
           tags
           title
-          content(truncateAt: 100)
+          content(truncateAt: $truncateContent)
           image {
             transformedSrc
             altText
@@ -37,21 +39,33 @@ const articlesQuery = gql`
   }
 `
 
-export async function getArticles(context: ShopifyApolloContext, params: QueryRootArticlesArgs, customQuery?: CustomQuery) {
-  const { blog } = context.extendQuery(
+export async function getArticles(context: ShopifyApolloContext, params: GetArticlesParams, customQuery?: CustomQuery) {
+  const variables = {
+    first: 5,
+    ...params
+  }
+
+
+  const { articles } = context.extendQuery(
     customQuery,
     {
-      blog: {
+      articles: {
         query: articlesQuery,
-        variables: params
+        variables
       }
     }
   )
 
-  const response = await context.client.apolloClient.query<QueryRoot, QueryRootArticlesArgs>({
-    query: blog.query,
-    variables: blog.variables
+  const response = await context.client.apolloClient.query<QueryRoot, GetArticlesParams>({
+    query: articles.query,
+    variables: articles.variables
   })
 
-  return response ?? null
+  return {
+    ...response,
+    data: {
+      ...response?.data,
+      articles: response?.data?.articles?.edges?.map(edge => edge?.node),
+    }
+  }
 }

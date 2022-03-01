@@ -3,7 +3,8 @@ import {
   useContentFactory,
   UseContentFactoryParams
 } from '@vue-storefront/core';
-import { QueryRootBlogArgs, QueryRootBlogsArgs, QueryRootPageArgs, QueryRootArticlesArgs } from '@vue-storefront/shopify-apollo/src/shopify';
+import { QueryRootBlogArgs, QueryRootBlogsArgs, QueryRootPageArgs } from '@vue-storefront/shopify-apollo/src/shopify';
+import { GetArticlesParams } from '@vue-storefront/shopify-apollo/src/types/GetArticlesParams';
 import { Context } from '../types'
 import { ContentType } from '../types/ContentType';
 import { UseContentParams } from '../types/UseContentParams';
@@ -33,7 +34,7 @@ const params: UseContentFactoryParams<unknown, UseContentParams> = {
         }
       }
       case ContentType.Article: {
-        const response = await context.$shopify.api.getArticles(params as QueryRootArticlesArgs)
+        const response = await context.$shopify.api.getArticles(params as GetArticlesParams)
 
         if (response.error) throw response.error
 

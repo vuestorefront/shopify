@@ -36,10 +36,10 @@
           </SfComponentSelect>
         </div>
         <div class="navbar__counter">
-          <span class="navbar__label desktop-only">Posts found: </span>
-          <span class="desktop-only">{{ totalPosts }}</span>
+          <span class="navbar__label desktop-only">Shown Items: </span>
+          <span class="desktop-only">{{ articles.length }}</span>
           <span class="navbar__label smartphone-only"
-            >{{ totalPosts }} Items</span
+            >{{ articles.length }} Items</span
           >
         </div>
         <div class="navbar__view">
@@ -100,26 +100,26 @@
           class="products__grid"
         >
           <SfProductCard
-            v-for="(product, i) in articles"
-            :key="product.id"
+            v-for="(article, i) in articles"
+            :key="article.id"
             :style="{ '--index': i }"
-            :title="product.title"
-            :image="product.image"
+            :title="article.title"
+            :image="article.image.transformedSrc"
             :image-height="326"
             :image-width="216"
-            :regular-price="product.price.regular"
-            :special-price="product.price.special"
-            :max-rating="product.rating.max"
-            :score-rating="product.rating.score"
-            :is-in-wishlist="product.isInWishlist"
-            :show-add-to-cart-button="true"
+            :wishlist-icon="false"
+            :show-add-to-cart-button="false"
             image-tag="nuxt-img"
             :nuxt-img-config="{
               format: 'webp',
               fit: 'cover'
             }"
             class="products__product-card"
-          />
+          >
+          <template #add-to-cart>
+            <div></div>
+          </template>
+          </SfProductCard>
         </transition-group>
         <transition-group
           v-else
@@ -128,55 +128,27 @@
           tag="div"
           class="products__list"
         >
-          <!-- <SfProductCardHorizontal
-            v-for="(product, i) in products"
-            :key="product.id"
+          <SfProductCardHorizontal
+            v-for="(article, i) in articles"
+            :key="article.id"
             :style="{ '--index': i }"
-            :title="product.title"
-            :description="product.description"
-            :image="product.image"
-            :regular-price="product.price.regular"
-            :special-price="product.price.special"
-            :max-rating="product.rating.max"
-            :reviews-count="product.reviewsCount"
-            :score-rating="product.rating.score"
-            :is-in-wishlist="product.isInWishlist"
+            :title="article.title"
+            :description="article.content"
+            :image="article.image.transformedSrc"
             :image-height="200"
             :image-width="140"
             image-tag="nuxt-img"
+            link="#"
             :nuxt-img-config="{
               format: 'webp',
               fit: 'cover'
             }"
             class="products__product-card-horizontal"
-            @click:wishlist="toggleWishlist(i)"
           >
-            <template #configuration>
-              <SfProperty
-                class="desktop-only"
-                name="Size"
-                value="XS"
-                style="margin: 0 0 1rem 0"
-              />
-              <SfProperty class="desktop-only" name="Color" value="white" />
+            <template #add-to-cart>
+              <div></div>
             </template>
-            <template #actions>
-              <SfButton
-                class="sf-button--text desktop-only"
-                style="margin: 0 0 1rem auto; display: block"
-                @click="$emit('click:add-to-wishlist')"
-              >
-                Save for later
-              </SfButton>
-              <SfButton
-                class="sf-button--text desktop-only"
-                style="margin: 0 0 0 auto; display: block"
-                @click="$emit('click:add-to-compare')"
-              >
-                Add to compare
-              </SfButton>
-            </template>
-          </SfProductCardHorizontal> -->
+          </SfProductCardHorizontal>
         </transition-group>
         <SfPagination
           class="products__pagination"
@@ -218,6 +190,7 @@ import {
   SfAccordion,
   SfComponentSelect,
   SfBreadcrumbs,
+  SfProductCardHorizontal,
   SfSelect
 } from '@storefront-ui/vue';
 import { useRoute } from '@nuxtjs/composition-api';
@@ -237,253 +210,56 @@ export default {
     SfAccordion,
     SfComponentSelect,
     SfBreadcrumbs,
-    SfSelect
+    SfSelect,
+    SfProductCardHorizontal
   },
   setup() {
     const route = useRoute();
-    const { search: getBlogs, content: blogs, error } = useContent('blogs');
-    const { search: searchBlog, content: blog } = useContent('blog');
-
-    function clearAllFilters() {
-      const filters = Object.keys(this.filters);
-      filters.forEach((name) => {
-        const prop = this.filters[name];
-        prop.forEach((value) => {
-          value.selected = false;
-        });
-      });
-    }
-
-    function toggleWishlist(index) {
-      this.products[index].isInWishlist = !this.products[index].isInWishlist;
-    }
+    const { search: getBlogs, content: blogs } = useContent('blogs');
+    const { search: searchBlog } = useContent('blog');
+    const { search: searchArticles, content: articles } = useContent('articles')
 
     onSSR(async () => {
       await getBlogs({ contentType: ContentType.Blog });
+      let handle = route?.value?.params?.handle
 
       if (route.value.params.handle) {
         await searchBlog({
           contentType: ContentType.Blog,
-          handle: route.value.params.handle
+          handle
         });
       } else if (blogs) {
+        handle = blogs?.value?.[0]?.handle
         await searchBlog({
           contentType: ContentType.Blog,
           id: blogs?.value?.[0]?.id
         });
       }
+
+      await searchArticles({ contentType: ContentType.Article, query: `blog_title:${handle}` })
     });
 
 
     return {
-      // Methods
-      clearAllFilters,
-      toggleWishlist,
-      // Data
       blogs,
-
+      articles,
       totalPosts: 0,
       currentPage: 1,
       sortBy: 'Latest',
-      isFilterSidebarOpen: false,
       isGridView: true,
       category: 'Blogs',
-      displayOnPage: '5',
       sortByOptions: [
         {
           value: 'Latest',
           label: 'Latest'
-        },
-        {
-          value: 'Price-up',
-          label: 'Price from low to high'
-        },
-        {
-          value: 'Price-down',
-          label: 'Price from high to low'
         }
       ],
       sidebarAccordion: [
         {
-          header: 'Blogs',
-          items: [
-            { label: 'All', count: '280' },
-            { label: 'Skirts', count: '23' },
-            { label: 'Sweaters', count: '54' },
-            { label: 'Dresses', count: '34' },
-            { label: 'T-shirts', count: '56' },
-            { label: 'Pants', count: '7' },
-            { label: 'Underwear', count: '12' }
-          ]
+          header: 'Blogs'
         }
       ],
       showOnPage: ['20', '40', '60'],
-      products: [
-        {
-          title: 'Cream Beach Bag',
-          id: 1,
-          description:
-            'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
-          image: 'assets/storybook/Home/productA.jpg',
-          price: { regular: '$50.00' },
-          rating: { max: 5, score: 5 },
-          reviewsCount: 8,
-          isInWishlist: true
-        },
-        {
-          title: 'Cream Beach Bag',
-          id: 2,
-          description:
-            'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
-          image: 'assets/storybook/Home/productB.jpg',
-          price: { regular: '$50.00' },
-          rating: { max: 5, score: 4 },
-          reviewsCount: 8,
-          isInWishlist: false
-        },
-        {
-          title: 'Cream Beach Bag',
-          id: 3,
-          description:
-            'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
-          image: 'assets/storybook/Home/productC.jpg',
-          price: { regular: '$50.00' },
-          rating: { max: 5, score: 4 },
-          reviewsCount: 8,
-          isInWishlist: false
-        },
-        {
-          title: 'Cream Beach Bag',
-          id: 4,
-          description:
-            'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
-          image: 'assets/storybook/Home/productA.jpg',
-          price: { regular: '$50.00' },
-          rating: { max: 5, score: 4 },
-          reviewsCount: 8,
-          isInWishlist: false
-        },
-        {
-          title: 'Cream Beach Bag',
-          id: 5,
-          description:
-            'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
-          image: 'assets/storybook/Home/productB.jpg',
-          price: { regular: '$50.00' },
-          rating: { max: 5, score: 4 },
-          reviewsCount: 8,
-          isInWishlist: false
-        },
-        {
-          title: 'Cream Beach Bag',
-          id: 6,
-          description:
-            'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
-          image: 'assets/storybook/Home/productC.jpg',
-          price: { regular: '$50.00' },
-          rating: { max: 5, score: 4 },
-          reviewsCount: 8,
-          isInWishlist: false
-        },
-        {
-          title: 'Cream Beach Bag',
-          id: 7,
-          description:
-            'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
-          image: 'assets/storybook/Home/productA.jpg',
-          price: { regular: '$50.00' },
-          rating: { max: 5, score: 4 },
-          reviewsCount: 6,
-          isInWishlist: false
-        },
-        {
-          title: 'Cream Beach Bag',
-          id: 8,
-          description:
-            'Find stunning women cocktail and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.',
-          image: 'assets/storybook/Home/productB.jpg',
-          price: { regular: '$50.00' },
-          rating: { max: 5, score: 4 },
-          reviewsCount: 8,
-          isInWishlist: false
-        }
-      ],
-      filters: {
-        collection: [
-          {
-            label: 'Summer fly',
-            value: 'summer-fly',
-            count: '10',
-            selected: false
-          },
-          {
-            label: 'Best 2018',
-            value: 'best-2018',
-            count: '23',
-            selected: false
-          },
-          {
-            label: 'Your choice',
-            value: 'your-choice',
-            count: '54',
-            selected: false
-          }
-        ],
-        color: [
-          { label: 'Red', value: 'red', color: '#990611', selected: false },
-          { label: 'Black', value: 'black', color: '#000000', selected: false },
-          {
-            label: 'Yellow',
-            value: 'yellow',
-            color: '#DCA742',
-            selected: false
-          },
-          { label: 'Blue', value: 'blue', color: '#004F97', selected: false },
-          { label: 'Navy', value: 'navy', color: '#656466', selected: false }
-        ],
-        size: [
-          { label: 'Size 2 (XXS)', value: 'xxs', count: '10', selected: false },
-          { label: 'Size 4-6 (XS)', value: 'xs', count: '23', selected: false },
-          { label: 'Size 8-10 (S)', value: 's', count: '54', selected: false },
-          {
-            label: 'Size 12-14 (M)',
-            value: 'm',
-            count: '109',
-            selected: false
-          },
-          { label: 'Size 16-18 (L)', value: 'l', count: '23', selected: false },
-          {
-            label: 'Size 20-22(XL)',
-            value: 'xl',
-            count: '12',
-            selected: false
-          },
-          {
-            label: 'Size 24-26 (XXL)',
-            value: 'xxl',
-            count: '2',
-            selected: false
-          }
-        ],
-        price: [
-          {
-            label: 'Under $200',
-            value: 'under-200',
-            count: '23',
-            selected: false
-          },
-          {
-            label: 'Under $300',
-            value: 'under-300',
-            count: '54',
-            selected: false
-          }
-        ],
-        material: [
-          { label: 'Cotton', value: 'coton', count: '33', selected: false },
-          { label: 'Silk', value: 'silk', count: '73', selected: false }
-        ]
-      },
       breadcrumbs: [
         {
           text: 'Home',
@@ -499,7 +275,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '~@storefront-ui/vue/styles';
 #category {
   box-sizing: border-box;
   @include for-desktop {
