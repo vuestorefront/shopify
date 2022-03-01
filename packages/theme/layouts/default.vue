@@ -38,12 +38,14 @@ import {
   cartGetters,
   useCart,
 } from '@vue-storefront/shopify';
+import LazyHydrate from 'vue-lazy-hydration';
 import { computed, onBeforeMount, provide } from '@nuxtjs/composition-api';
 export default {
   name: 'DefaultLayout',
   components: {
     TopBar,
     AppHeader,
+    LazyHydrate,
     BottomNavigation: () => import('~/components/BottomNavigation.vue'),
     AppFooter: () => import('~/components/AppFooter.vue'),
     CartSidebar: () => import('~/components/CartSidebar.vue'),
