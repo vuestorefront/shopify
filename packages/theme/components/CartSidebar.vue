@@ -75,7 +75,7 @@
       <template #content-bottom>
         <transition name="sf-fade">
           <div v-if="totalItems">
-            <div class="coupon-form-wrapper">
+            <div v-if="couponcode && couponcode !==''" class="coupon-form-wrapper" >
               <SfInput
                 v-model="couponcode"
                 :value="couponcode"
@@ -101,7 +101,7 @@
               class="sf-property--full-width sf-property--large my-cart__total-price"
             >
             <template #name>
-              <span class="sf-property__name">{{appliedCoupon ? `Discount [${appliedCoupon}]`: 'Discount'}}<SfIcon class="remove-coupon" @click="handleRemoveCoupon(couponcode)" icon="cross" size="xxs" color="green-primary"/></span>
+              <span class="sf-property__name">{{appliedCoupon ? `Discount [${appliedCoupon}]`: 'Discount'}}<SfIcon v-if="couponcode && couponcode !==''" class="remove-coupon" @click="handleRemoveCoupon(couponcode)" icon="cross" size="xxs" color="green-primary"/></span>
             </template>
               <template #value>
                 <SfPrice
