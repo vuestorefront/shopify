@@ -57,6 +57,8 @@ export type Cart = {
   __typename?: 'Cart';
   appliedGiftCards: Maybe<Scalars['Array']>;
   completedAt: Maybe<Scalars['String']>;
+  couponCode?: Maybe<Scalars['String']>;
+  checkoutUserErrors?: Maybe<Scalars['Array']>;
   createdAt: Maybe<Scalars['String']>;
   currencyCode: Maybe<Scalars['String']>;
   customAttributes: Maybe<Scalars['Array']>;

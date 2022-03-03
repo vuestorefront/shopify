@@ -87,6 +87,13 @@ export const getCartTotalDiscount = (cart: Cart): number => {
   return 0;
 };
 
+export const getAppliedCoupon = (cart: Cart): string => {
+  if (cart && cart.checkoutUserErrors && cart.checkoutUserErrors.length <= 0) {
+    return cart.couponCode;
+  }
+  return '';
+};
+
 export const getFormattedPrice = (price: number) => String(price);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -113,7 +120,8 @@ const cartGetters: CartGetters<Cart, LineItem> = {
   getCoupons,
   getDiscounts,
   getcheckoutURL,
-  getSubTotal: getCartSubTotal
+  getSubTotal: getCartSubTotal,
+  getCoupon: getAppliedCoupon
 };
 
 export default cartGetters;

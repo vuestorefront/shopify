@@ -1,20 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
-import { gql } from '@apollo/client/core';
-import { print } from 'graphql';
-import { getCountry } from '../../helpers/utils';
+import { gql } from '@apollo/client/core'
+import { print } from 'graphql'
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function removeFromCart(context, params, _customQuery?: CustomQuery) {
-  const { currentCart, product } = params;
-  // products to be remove
-  const lineItemIdsToRemove = [
-    product.id
-  ];
-
-  const DEFAULT_MUTATION = gql`mutation checkoutLineItemsRemove($country:CountryCode, $checkoutId: ID!, $lineItemIds: [ID!]!) @inContext(country:$country){
-  checkoutLineItemsRemove(checkoutId: $checkoutId, lineItemIds: $lineItemIds){
-    checkout{
-      appliedGiftCards{
+export default async function removeCoupon(context, params, _customQuery?: CustomQuery) {
+  const { currentCart, couponCode, customQuery } = params;
+  const DEFAULT_MUTATION = gql`mutation REMOVE_COUPON($checkoutId: ID!){ 
+    checkoutDiscountCodeRemove(checkoutId: $checkoutId) {
+        checkout {
+      		appliedGiftCards{
           id
           amountUsedV2{
             currencyCode
@@ -33,14 +27,17 @@ export default async function removeFromCart(context, params, _customQuery?: Cus
           key
           value
         }
-        discountApplications(first:250){
+        discountApplications(first:20){
           edges{
             node{
-              allocationMethod
-              targetSelection
-              targetType
               value{
-                __typename
+                ... on MoneyV2{
+                  amount
+                  currencyCode
+                }
+                ... on PricingPercentageValue{
+                  percentage
+                }
               }
             }
           }
@@ -140,18 +137,21 @@ export default async function removeFromCart(context, params, _customQuery?: Cus
         updatedAt
         webUrl
       }
+      checkoutUserErrors {
+          code
+          field
+          message
+      }
     }
   }`
   const payload = {
-    lineItemIds: lineItemIdsToRemove,
-    country: getCountry(context),
     checkoutId: currentCart.id
   }
 
-    const { checkoutLineItemsRemove } = context.extendQuery(
+    const { checkoutDiscountCodeRemove } = context.extendQuery(
       _customQuery,
       {
-        checkoutLineItemsRemove: {
+        checkoutDiscountCodeRemove: {
           mutation: print(DEFAULT_MUTATION as any),
           payload
         }
@@ -160,18 +160,22 @@ export default async function removeFromCart(context, params, _customQuery?: Cus
 
 
   return await context.client.apolloClient.mutate({
-    mutation: gql(checkoutLineItemsRemove.mutation) as any,
-    variables: checkoutLineItemsRemove.payload
+    mutation: gql(checkoutDiscountCodeRemove.mutation) as any,
+    variables: checkoutDiscountCodeRemove.payload
   }).then((result) => {
-    const discountApplications = result.data.checkoutLineItemsRemove.checkout.discountApplications.edges.map((discountApplications => discountApplications.node));
-      const lineItems = result.data.checkoutLineItemsRemove.checkout.lineItems.edges.map((lineItem => lineItem.node));
-      delete (result.data.checkoutLineItemsRemove.checkout.lineItems);
-      delete (result.data.checkoutLineItemsRemove.checkout.discountApplications);
-      result.data.checkoutLineItemsRemove.checkout = {
-          ...result.data.checkoutLineItemsRemove.checkout,
-          discountApplications,
-          lineItems
-      };
-    return result.data.checkoutLineItemsRemove.checkout;
+    const discountApplications = result.data.checkoutDiscountCodeRemove.checkout.discountApplications.edges.map((discountApplications => discountApplications.node));
+    const lineItems = result.data.checkoutDiscountCodeRemove.checkout.lineItems.edges.map((lineItem => lineItem.node));
+    const checkoutUserErrors = result.data.checkoutDiscountCodeRemove.checkoutUserErrors ? result.data.checkoutDiscountCodeRemove.checkoutUserErrors.map((UserErrors => UserErrors.message)) : [];
+    delete (result.data.checkoutDiscountCodeRemove.checkout.lineItems);
+    delete (result.data.checkoutDiscountCodeRemove.checkout.discountApplications);
+    delete (result.data.checkoutDiscountCodeRemove.checkoutUserErrors);
+    result.data.checkoutDiscountCodeRemove.checkout = {
+        ...result.data.checkoutDiscountCodeRemove.checkout,
+        discountApplications,
+        lineItems,
+        checkoutUserErrors,
+        couponCode
+    };
+    return result.data.checkoutDiscountCodeRemove;
   });
 }
