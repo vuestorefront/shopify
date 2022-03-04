@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
-import { print } from 'graphql'
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function applyCoupon(context, params, _customQuery?: CustomQuery) {
   const { currentCart, couponCode, customQuery } = params;
@@ -153,7 +152,7 @@ export default async function applyCoupon(context, params, _customQuery?: Custom
       _customQuery,
       {
         checkoutDiscountCodeApplyV2: {
-          mutation: print(DEFAULT_MUTATION as any),
+          mutation: DEFAULT_MUTATION,
           payload
         }
       }
@@ -161,7 +160,7 @@ export default async function applyCoupon(context, params, _customQuery?: Custom
 
 
   return await context.client.apolloClient.mutate({
-    mutation: gql(checkoutDiscountCodeApplyV2.mutation) as any,
+    mutation: checkoutDiscountCodeApplyV2.mutation,
     variables: checkoutDiscountCodeApplyV2.payload
   }).then((result) => {
     const discountApplications = result.data.checkoutDiscountCodeApplyV2.checkout.discountApplications.edges.map((discountApplications => discountApplications.node));

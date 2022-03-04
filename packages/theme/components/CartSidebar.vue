@@ -75,7 +75,7 @@
       <template #content-bottom>
         <transition name="sf-fade">
           <div v-if="totalItems">
-            <div v-if="couponcode && couponcode !==''" class="coupon-form-wrapper" >
+            <div v-if="!appliedCoupon" class="coupon-form-wrapper">
               <SfInput
                 v-model="couponcode"
                 :value="couponcode"
@@ -98,10 +98,10 @@
             </div>
             <SfProperty
             v-if="totalDiscount"
-              class="sf-property--full-width sf-property--large my-cart__total-price"
+              class="sf-property--full-width sf-property--large my-cart__discount"
             >
             <template #name>
-              <span class="sf-property__name">{{appliedCoupon ? `Discount [${appliedCoupon}]`: 'Discount'}}<SfIcon v-if="couponcode && couponcode !==''" class="remove-coupon" @click="handleRemoveCoupon(couponcode)" icon="cross" size="xxs" color="green-primary"/></span>
+              <span class="sf-property__name applied-discount">{{appliedCoupon ? `Discount [${appliedCoupon}]`: 'Discount'}}<SfIcon v-if="couponcode && couponcode !==''" class="remove-coupon" @click="handleRemoveCoupon(couponcode)" icon="cross" size="xxs" color="green-primary"/></span>
             </template>
               <template #value>
                 <SfPrice
@@ -214,12 +214,10 @@ export default {
       return calculatedTotalSavings;
     });
     const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
-    const appliedCoupon = computed(() => cartGetters.getCoupon(cart.value));
-    const handleCheckout = (checkoutUrl) => {
-      setTimeout(() => {
-        window.location.replace(checkoutUrl)
-      }, 400)
-    }
+    const appliedCoupon = computed(() => { 
+      return cartGetters.getCoupon(cart.value)
+    });
+    
     const handleApplyCoupon = async (couponCode) => {
       if(couponCode && couponCode !== ""){
         await applyCoupon({couponCode}).then(() =>{
@@ -227,7 +225,6 @@ export default {
             errorMsg.value = cart.value.checkoutUserErrors[0];
             isValidCoupon.value = false;
           }else{
-            errorMsg.value = "Coupon applied";
             isValidCoupon.value = true;
           }
         });
@@ -239,6 +236,11 @@ export default {
           errorMsg.value = "Coupon removed";
         });
       }
+    }
+    const handleCheckout = (checkoutUrl) => {
+      setTimeout(() => {
+        window.location.replace(checkoutUrl)
+      }, 300)
     }
     const updateQuantity = debounce(async ({ product, quantity }) => {
       await updateItemQty({ product, quantity });
@@ -299,6 +301,15 @@ export default {
     --price-font-weight: var(--font-weight--medium);
     margin: 0 0 var(--spacer-base) 0;
   }
+  &__discount {margin-bottom: 30px;}
+}
+.applied-discount {
+  display: flex;
+  align-items: center;
+}
+.remove-coupon {
+  margin: 0 5px;
+  cursor: pointer;
 }
 .empty-cart {
   --heading-description-margin: 0 0 var(--spacer-xl) 0;

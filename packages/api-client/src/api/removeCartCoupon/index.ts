@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
-import { print } from 'graphql'
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function removeCoupon(context, params, _customQuery?: CustomQuery) {
   const { currentCart, couponCode, customQuery } = params;
@@ -152,7 +151,7 @@ export default async function removeCoupon(context, params, _customQuery?: Custo
       _customQuery,
       {
         checkoutDiscountCodeRemove: {
-          mutation: print(DEFAULT_MUTATION as any),
+          mutation: DEFAULT_MUTATION,
           payload
         }
       }
@@ -160,7 +159,7 @@ export default async function removeCoupon(context, params, _customQuery?: Custo
 
 
   return await context.client.apolloClient.mutate({
-    mutation: gql(checkoutDiscountCodeRemove.mutation) as any,
+    mutation: checkoutDiscountCodeRemove.mutation,
     variables: checkoutDiscountCodeRemove.payload
   }).then((result) => {
     const discountApplications = result.data.checkoutDiscountCodeRemove.checkout.discountApplications.edges.map((discountApplications => discountApplications.node));
@@ -173,8 +172,7 @@ export default async function removeCoupon(context, params, _customQuery?: Custo
         ...result.data.checkoutDiscountCodeRemove.checkout,
         discountApplications,
         lineItems,
-        checkoutUserErrors,
-        couponCode
+        checkoutUserErrors
     };
     return result.data.checkoutDiscountCodeRemove;
   });
