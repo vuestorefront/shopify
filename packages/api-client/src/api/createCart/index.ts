@@ -1,20 +1,44 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
-import { checkoutMutation as mutation } from './../checkoutMutations/buildMutations';
+import { gql } from '@apollo/client/core'
+import { getCountry } from '../../helpers/utils'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function createCart(context, _params, _customQuery?: CustomQuery) {
-  const data = {
-    "input": {
+
+  const DEFAULT_MUTATION = gql`mutation checkoutCreate($input: CheckoutCreateInput!) {
+    checkoutCreate(input:$input){
+      checkout{
+        id
+        webUrl
+      }
+      checkoutUserErrors {
+          code
+          field
+          message
+      }
+    }
+  }`
+
+  const payload = {
+    input: {
       buyerIdentity: {
-        countryCode: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
+        countryCode: getCountry(context)
       }
     }
   }
-  // initiate the cart
-  return await context.client.graphQLClient.send(mutation(context), data).then(({ data }) => {
-    if (data) {
-      return data.checkoutCreate.checkout.id;
-    }
+
+  const { checkoutCreate } = context.extendQuery(
+      _customQuery,
+      {
+        checkoutCreate: {
+          mutation: DEFAULT_MUTATION,
+          payload
+        }
+      }
+  )
+  return await context.client.apolloClient.mutate({
+    mutation: checkoutCreate.mutation,
+    variables: checkoutCreate.payload
+  }).then((result) => {
+    return result.data.checkoutCreate.checkout;
   });
 }
