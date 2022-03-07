@@ -1,10 +1,49 @@
+import { createMockClient } from 'mock-apollo-client'
+import { gql } from '@apollo/client/core'
 import searchProduct from '../src/api/searchProduct'
 
-const queryMock = jest.fn()
+const DEFAULT_QUERY = `
+  query products(
+    $first: Int,
+    $query: String
+  ) {
+    products(first: $first, query: $query) {
+      edges {
+          node {
+              title
+              id
+          }
+      }
+    } 
+  }
+`
 
-const mockClient = { query: queryMock }
+const expectedResponse = {
+  data: {
+    products: {
+      edges: [{
+        node: {
+          title: 'Blouse',
+          id: '<ID HERE>'
+        }
+      },
+      {
+        node: {
+          title: 'Jacket',
+          id: '<ID HERE>'
+        }
+      }]
+    }
+  }
+}
 
-const mockExtendQuery = jest.fn();
+const mockClient = createMockClient()
+
+const mockExtendQuery = jest.fn(() => ({
+  products: {
+    query: DEFAULT_QUERY
+  }
+}))
 
 const mockContext: any = {
   extendQuery: mockExtendQuery,
@@ -13,54 +52,19 @@ const mockContext: any = {
   }
 }
 
-describe('[shopify-apollo] mapping of params into graphql client', () => {
-  it('should map params to the search product query', async () => {
-    const params = {
-      term: 'test',
-      perPage: 10
-    }
+const QUERY = gql(DEFAULT_QUERY) as any
 
-    const customQuery = {
-      customQuery: 'customQuery-test'
-    }
+describe('[shopify-apollo] search product', () => {
+  it('request success', async () => {
+    mockClient.setRequestHandler(
+      QUERY,
+      () => Promise.resolve(expectedResponse)
+    )
 
-    const expectedVariables = {
-      query: 'test',
-      first: 10
-    }
-
-    mockExtendQuery.mockImplementationOnce(() => ({ products: { query: 'test-search-query', variables: expectedVariables } }))
-
-    await searchProduct(mockContext, params, customQuery)
-
-    expect(mockExtendQuery).toHaveBeenCalledWith(customQuery, {
-      products: {
-        query: expect.any(Object),
-        variables: expectedVariables
-      }
+    const response = await searchProduct(mockContext, {
+      term: 'blouse'
     })
-  })
 
-  it('should execute the query with mapped params', async () => {
-    const mappedVariables = {
-      query: 'test',
-      first: 10
-    }
-
-    mockExtendQuery.mockImplementationOnce(() => ({ products: { query: 'test-query', variables: mappedVariables } }));
-
-    const params = {
-      term: 'test',
-      perPage: 10
-    }
-
-    const expectedQueryOptions = {
-      query: 'test-query',
-      variables: mappedVariables
-    }
-
-    await searchProduct(mockContext, params)
-
-    expect(queryMock).toHaveBeenCalledWith(expectedQueryOptions)
+    expect(response.data).toEqual(expectedResponse.data)
   })
 })
