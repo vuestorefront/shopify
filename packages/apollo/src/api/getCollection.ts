@@ -4,64 +4,73 @@ import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootCollectionArgs, ProductFilter } from '../shopify'
 
 const DEFAULT_QUERY = gql`
-query collection($handle: String, $first: Int, $filters: [ProductFilter!]) {
-  collection(handle: $handle) {
-    id
-    handle
-    title
-    description
-    descriptionHtml
-    updatedAt
-    image {
-      src
-      url
-    }
-    products(filters: $filters, first: $first) {
-      edges {
-        node {
-          images(first: 1) {
-            edges {
-              node {
-                src
-                originalSrc
-                id
-                height
-                width
-                altText
+  query collection($handle: String, $first: Int, $filters: [ProductFilter!]) {
+    collection(handle: $handle) {
+      id
+      handle
+      title
+      description
+      descriptionHtml
+      updatedAt
+      image {
+        src
+        url
+      }
+      products(filters: $filters, first: $first) {
+        edges {
+          node {
+            images(first: 1) {
+              edges {
+                node {
+                  src
+                  originalSrc
+                  id
+                  height
+                  width
+                  altText
+                }
               }
             }
-          }
-          variants(first: 1) {
-            edges {
-              node {
-                price
-                availableForSale
-                compareAtPrice
+            totalInventory
+            variants(first: 1) {
+              edges {
+                node {
+                  price
+                  availableForSale
+                  compareAtPrice
+                  priceV2{
+                    amount
+                    currencyCode
+                  }
+                  compareAtPriceV2{
+                    amount
+                    currencyCode
+                  }
+                }
               }
             }
-          }
-          options {
+            options {
+              id
+              name
+              values
+            }
+            tags
+            productType
+            title
+            vendor
+            publishedAt
+            createdAt
+            updatedAt
+            publishedAt
             id
-            name
-            values
+            description
+            descriptionHtml
+            handle
           }
-          tags
-          productType
-          title
-          vendor
-          publishedAt
-          createdAt
-          updatedAt
-          publishedAt
-          id
-          description
-          descriptionHtml
-          handle
         }
       }
     }
   }
-}
 `
 
 type GetCollectionQueryArgs = QueryRootCollectionArgs & ProductFilter
@@ -83,8 +92,9 @@ function convertFacetFiltersLocalToShopify(filters?: Record<string, any>): Produ
                 { [key]: parseFloat(filters[key]) }
         }
     }
+  }
 
-    return result
+  return result
 }
 
 export default async function getCollection(context: ShopifyApolloContext, params: AgnosticFacetSearchParams, customQuery?: CustomQuery) {
