@@ -1,7 +1,7 @@
 import { CustomQuery } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
-import { QueryRoot, QueryRootArticlesArgs } from '../shopify'
+import { QueryRoot } from '../shopify'
 import { GetArticlesParams } from '../types/GetArticlesParams'
 
 const articlesQuery = gql`
@@ -31,6 +31,10 @@ const articlesQuery = gql`
           }
           seo {
             description
+            title
+          }
+          blog {
+            handle
             title
           }
         }
@@ -65,7 +69,10 @@ export async function getArticles(context: ShopifyApolloContext, params: GetArti
     ...response,
     data: {
       ...response?.data,
-      articles: response?.data?.articles?.edges?.map(edge => edge?.node),
+      articles: response?.data?.articles?.edges?.map(edge => ({
+        ...edge?.node,
+        link: `/blogs/${edge?.node?.blog?.handle}/${edge?.node?.handle}` 
+      })),
     }
   }
 }
