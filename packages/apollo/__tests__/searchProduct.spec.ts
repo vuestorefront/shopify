@@ -1,23 +1,15 @@
-import searchProduct from '../src/api/searchProduct'
 
-const queryMock = jest.fn()
+import { searchProduct } from '../src/api/searchProduct'
+import { createMockContext } from '../__mocks__/mockContext'
 
-const mockClient = { query: queryMock }
 
-const mockExtendQuery = jest.fn();
+describe('[shopify-apollo] search product', () => {
+  it('shhould map params to the product query', async () => {
+    const { extendQuery, context } = createMockContext()
 
-const mockContext: any = {
-  extendQuery: mockExtendQuery,
-  client: {
-    apolloClient: mockClient
-  }
-}
-
-describe('[shopify-apollo] mapping of params into graphql client', () => {
-  it('should map params to the search product query', async () => {
     const params = {
       term: 'test',
-      perPage: 10
+      perPage: 5
     }
 
     const customQuery = {
@@ -25,42 +17,19 @@ describe('[shopify-apollo] mapping of params into graphql client', () => {
     }
 
     const expectedVariables = {
-      query: 'test',
-      first: 10
+      first: 5,
+      query: 'test'
     }
 
-    mockExtendQuery.mockImplementationOnce(() => ({ products: { query: 'test-search-query', variables: expectedVariables } }))
+    extendQuery.mockImplementationOnce(() => ({ products: { query: 'test-products-query', variables: expectedVariables }}))
 
-    await searchProduct(mockContext, params, customQuery)
+    await searchProduct(context, params, customQuery)
 
-    expect(mockExtendQuery).toHaveBeenCalledWith(customQuery, {
+    expect(extendQuery).toHaveBeenCalledWith(customQuery, {
       products: {
         query: expect.any(Object),
         variables: expectedVariables
       }
     })
-  })
-
-  it('should execute the query with mapped params', async () => {
-    const mappedVariables = {
-      query: 'test',
-      first: 10
-    }
-
-    mockExtendQuery.mockImplementationOnce(() => ({ products: { query: 'test-query', variables: mappedVariables } }));
-
-    const params = {
-      term: 'test',
-      perPage: 10
-    }
-
-    const expectedQueryOptions = {
-      query: 'test-query',
-      variables: mappedVariables
-    }
-
-    await searchProduct(mockContext, params)
-
-    expect(queryMock).toHaveBeenCalledWith(expectedQueryOptions)
   })
 })

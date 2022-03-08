@@ -2,99 +2,92 @@ import { AgnosticFacetSearchParams, CustomQuery } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootCollectionArgs, ProductFilter } from '../shopify'
+import { mapFacetToProductFilter } from '../helpers/mapFacetToProductFilter'
 
-const DEFAULT_QUERY = gql`
-query collection($handle: String, $first: Int, $filters: [ProductFilter!]) {
-  collection(handle: $handle) {
-    id
-    handle
-    title
-    description
-    descriptionHtml
-    updatedAt
-    image {
-      src
-      url
-    }
-    products(filters: $filters, first: $first) {
-      edges {
-        node {
-          images(first: 1) {
-            edges {
-              node {
-                src
-                originalSrc
-                id
-                height
-                width
-                altText
+const collectionQuery = gql`
+  query collection($handle: String, $first: Int, $filters: [ProductFilter!]) {
+    collection(handle: $handle) {
+      id
+      handle
+      title
+      description
+      descriptionHtml
+      updatedAt
+      image {
+        src
+        url
+      }
+      products(filters: $filters, first: $first) {
+        edges {
+          node {
+            images(first: 1) {
+              edges {
+                node {
+                  src
+                  originalSrc
+                  id
+                  height
+                  width
+                  altText
+                }
               }
             }
-          }
-          variants(first: 1) {
-            edges {
-              node {
-                price
-                availableForSale
-                compareAtPrice
+            totalInventory
+            variants(first: 1) {
+              edges {
+                node {
+                  price
+                  availableForSale
+                  compareAtPrice
+                  priceV2{
+                    amount
+                    currencyCode
+                  }
+                  compareAtPriceV2{
+                    amount
+                    currencyCode
+                  }
+                }
               }
             }
-          }
-          options {
+            options {
+              id
+              name
+              values
+            }
+            tags
+            productType
+            title
+            vendor
+            publishedAt
+            createdAt
+            updatedAt
+            publishedAt
             id
-            name
-            values
+            description
+            descriptionHtml
+            handle
           }
-          tags
-          productType
-          title
-          vendor
-          publishedAt
-          createdAt
-          updatedAt
-          publishedAt
-          id
-          description
-          descriptionHtml
-          handle
         }
       }
     }
   }
-}
 `
 
 type GetCollectionQueryArgs = QueryRootCollectionArgs & ProductFilter
 
-const PRICE_FILTER_RANGE = ['min', 'max']
-
-function convertFacetFiltersLocalToShopify(filters: Record<string, any>): ProductFilter {
-    const result: ProductFilter = {}
-
-    for (const key of Object.keys(filters)) {
-        // This condition will set the price range filter
-        if (PRICE_FILTER_RANGE.includes(key)) {
-            result.price = result.price ?
-                { ...result.price, [key]: parseFloat(filters[key]) } :
-                { [key]: parseFloat(filters[key]) }
-        }
-    }
-
-    return result
-}
-
-export default async function getCollection(context: ShopifyApolloContext, params: AgnosticFacetSearchParams, customQuery?: CustomQuery) {
+export default async function getCollection(context: ShopifyApolloContext, { categorySlug, itemsPerPage, filters }: AgnosticFacetSearchParams, customQuery?: CustomQuery) {
   const variables = {
-    handle: params.categorySlug,
-    first: params.perPage ?? 5,
-    filters: convertFacetFiltersLocalToShopify(params.filters)
+    handle: categorySlug,
+    first: itemsPerPage ?? 5,
+    filters: mapFacetToProductFilter(filters)
   }
 
   const { collection } = context.extendQuery(
     customQuery,
     {
       collection: {
-        query: DEFAULT_QUERY,
+        query: collectionQuery,
         variables
       }
     }
