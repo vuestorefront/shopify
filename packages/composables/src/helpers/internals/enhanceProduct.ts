@@ -12,7 +12,7 @@ const enhanceProduct = (productResponse) => {
 
   const enhancedProductResponse: EnhancedProduct[] = products.map((product) => ({
     ...product,
-    name: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? `${product.title} - ${product.variantBySelectedOptions.title}` : product.title,
+    name: product.title,
     images: product?.images,
     price: {
       original: product.variantBySelectedOptions && product.variantBySelectedOptions !== null ? product.variantBySelectedOptions?.compareAtPriceV2?.amount : product.variants ? product.variants[0].compareAtPriceV2?.amount : 0,
