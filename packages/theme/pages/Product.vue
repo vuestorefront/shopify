@@ -217,7 +217,6 @@ import {
   SfPrice,
   SfRating,
   SfSelect,
-  SfColorPicker,
   SfAddToCart,
   SfTabs,
   SfGallery,
@@ -236,7 +235,7 @@ import {
 
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
-import { ref, computed, watch } from '@nuxtjs/composition-api';
+import { ref, computed, watch, onBeforeMount } from '@nuxtjs/composition-api';
 import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
@@ -320,10 +319,7 @@ export default {
       productGetters.getAttributes(products.value)
     );
     const configuration = computed(() => {
-      return productGetters.getSelectedVariant(
-        products.value,
-        context.root.$route.query
-      );
+      return productGetters.getSelectedVariant(context.root.$route.query);
     });
 
     const setBreadcrumb = () => {
@@ -385,7 +381,6 @@ export default {
       });
       await searchRelatedProducts({ productId: id.value, related: true });
     });
-
     const updateFilter = (filter) => {
       if (options.value) {
         Object.keys(options.value).forEach((attr) => {

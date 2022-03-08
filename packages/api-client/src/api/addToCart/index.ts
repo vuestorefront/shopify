@@ -35,14 +35,17 @@ export default async function addToCart(context, params, _customQuery?: CustomQu
           key
           value
         }
-        discountApplications(first:250){
+        discountApplications(first:20){
           edges{
             node{
-              allocationMethod
-              targetSelection
-              targetType
               value{
-                __typename
+                ... on MoneyV2{
+                  amount
+                  currencyCode
+                }
+                ... on PricingPercentageValue{
+                  percentage
+                }
               }
             }
           }

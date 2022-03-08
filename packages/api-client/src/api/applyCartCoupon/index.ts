@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function applyCoupon(context, params, _customQuery?: CustomQuery) {
-  const { currentCart, couponCode, customQuery } = params;
+export async function applyCoupon(context, params, _customQuery?: CustomQuery) {
+  const { currentCart, couponCode } = params;
   const DEFAULT_MUTATION = gql`mutation APPLY_COUPON($checkoutId: ID!, $discountCode: String!){ 
     checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
         checkout {

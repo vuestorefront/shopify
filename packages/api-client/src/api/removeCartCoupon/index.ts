@@ -2,7 +2,7 @@
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function removeCoupon(context, params, _customQuery?: CustomQuery) {
+export async function removeCoupon(context, params, _customQuery?: CustomQuery) {
   const { currentCart, couponCode, customQuery } = params;
   const DEFAULT_MUTATION = gql`mutation REMOVE_COUPON($checkoutId: ID!){ 
     checkoutDiscountCodeRemove(checkoutId: $checkoutId) {
