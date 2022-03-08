@@ -64,7 +64,10 @@
     <div class="main section">
       <div class="sidebar desktop-only">
         <LazyHydrate when-idle>
-          <SfLoader :loading="isPageLoading" :class="{ 'loading--categories': isPageLoading }">
+          <SfLoader
+            :loading="isPageLoading"
+            :class="{ 'loading--categories': isPageLoading }"
+          >
             <SfAccordion
               :open="sidebarAccordion[0].header"
               :show-chevron="true"
@@ -77,7 +80,10 @@
                       :key="j"
                       class="list__item"
                     >
-                      <SfMenuItem :label="item.title" :link="localePath(item.link)" />
+                      <SfMenuItem
+                        :label="item.title"
+                        :link="localePath(item.link)"
+                      />
                     </SfListItem>
                   </SfList>
                 </template>
@@ -86,10 +92,7 @@
           </SfLoader>
         </LazyHydrate>
       </div>
-      <SfLoader
-        :loading="isPageLoading"
-        :class="{ loading: isPageLoading }"
-      >
+      <SfLoader :loading="isPageLoading" :class="{ loading: isPageLoading }">
         <div v-if="!isPageLoading" class="products">
           <transition-group
             v-if="isGridView"
@@ -103,7 +106,7 @@
               :key="article.id"
               :style="{ '--index': i }"
               :title="article.title"
-              :image="article.image.transformedSrc"
+              :image="artio"
               :image-height="326"
               :image-width="216"
               :wishlist-icon="false"
@@ -162,7 +165,11 @@
           />
           <div class="products__show-on-page desktop-only">
             <span class="products__show-on-page__label">Show on page:</span>
-            <SfSelect class="products__items-per-page">
+            <SfSelect
+              :value="selectedShowOnPage"
+              class="products__items-per-page"
+              @input="(perPage) => selectShowOnPage(perPage)"
+            >
               <SfSelectOption
                 v-for="option in showOnPage"
                 :key="option"
@@ -195,7 +202,7 @@ import {
   SfLoader
 } from '@storefront-ui/vue';
 import LazyHydrate from 'vue-lazy-hydration';
-import { useRoute, computed } from '@nuxtjs/composition-api';
+import { useRoute, computed, ref } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useContent } from '@vue-storefront/shopify';
 import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
@@ -225,26 +232,52 @@ export default {
       loading: isBlogsLoading
     } = useContent('blogs');
     const { search: getBlog } = useContent('blog');
-    const { search: getArticles, content: articles, loading: isArticlesLoading } = useContent('articles');
+    const {
+      search: getArticles,
+      content: articles,
+      loading: isArticlesLoading
+    } = useContent('articles');
+
+    const currentHandle = ref(route?.value?.params?.handle)
+    
+    const showOnPage = ['5', '10', '20', '40', '60'];
+    const selectedShowOnPage = ref('5')
+
+    // const 
 
     onSSR(async () => {
       await getBlogs({ contentType: ContentType.Blog });
-      const handle = route?.value?.params?.handle ?? blogs?.value?.[0]?.handle;
-      
+      currentHandle.value = route?.value?.params?.handle ?? blogs?.value?.[0]?.handle;
+
       getBlog({
         contentType: ContentType.Blog,
-        handle
+        handle: currentHandle.value
       });
 
       await getArticles({
         contentType: ContentType.Article,
-        query: `blog_title:${handle}`
+        query: `blog_title:${currentHandle.value}`
       });
     });
 
-    const isPageLoading = computed(() => isBlogsLoading.value || isArticlesLoading.value)
+    const isPageLoading = computed(
+      () => isBlogsLoading.value || isArticlesLoading.value
+    );
+
+    const selectShowOnPage = (perPage) => {
+      selectedShowOnPage.value = perPage
+      getArticles({
+        contentType: ContentType.Article,
+        query: `blog_title:${currentHandle.value}`,
+        first: parseInt(selectedShowOnPage.value)
+      });
+    };
 
     return {
+      selectShowOnPage,
+      selectedShowOnPage,
+      showOnPage,
+
       blogs,
       articles,
       totalPosts: 0,
@@ -264,7 +297,6 @@ export default {
           header: 'Categories'
         }
       ],
-      showOnPage: ['20', '40', '60'],
       breadcrumbs: [
         {
           text: 'Home',
