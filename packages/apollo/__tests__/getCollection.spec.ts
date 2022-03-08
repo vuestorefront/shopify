@@ -1,8 +1,6 @@
 import getCollection from '../src/api/getCollection'
 import { createMockContext } from '../__mocks__/mockContext'
 
-
-
 describe('[shopify-apollo] mapping of params into the qraphql client', () => {
   it('should map params the collection query', async () => {
     const { extendQuery, context } = createMockContext()
