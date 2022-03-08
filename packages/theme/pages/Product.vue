@@ -31,7 +31,7 @@
       <div class="product__info">
         <div class="product__header">
           <SfHeading
-            :title="productGetters.getName(product)"
+            :title="productGetters.getFullName(product)"
             :level="3"
             class="sf-heading--no-underline sf-heading--left"
           />
@@ -276,8 +276,7 @@ export default {
     });
   },
   transition: 'fade',
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(props, context) {
+  setup(_, context) {
     const breadcrumbs = ref([]);
     const atttLbl = '';
     const qty = ref(1);
@@ -302,6 +301,7 @@ export default {
           attributes: context.root.$route.query
         })[0]
     );
+
     const id = computed(() => productGetters.getId(product.value));
     const originalId = computed(() =>
       productGetters.getProductOriginalId(product.value)
