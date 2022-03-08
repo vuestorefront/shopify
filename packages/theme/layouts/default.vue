@@ -42,9 +42,9 @@ import { computed, onBeforeMount, provide } from '@nuxtjs/composition-api';
 export default {
   name: 'DefaultLayout',
   components: {
+    LazyHydrate,
     TopBar,
     AppHeader,
-    LazyHydrate,
     BottomNavigation: () => import('~/components/BottomNavigation.vue'),
     AppFooter: () => import('~/components/AppFooter.vue'),
     CartSidebar: () => import('~/components/CartSidebar.vue'),
