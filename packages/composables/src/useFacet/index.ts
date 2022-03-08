@@ -18,7 +18,7 @@ const factoryParams = {
 
     const collection = await newContext.$shopify.api.getCollection(params.input)
 
-    const result: LocalCollection = collection.data.collection
+    const result: LocalCollection = collection?.data?.collection
 
     result.products = convertProductsGqlToLocal(result.products as ProductConnection)
 

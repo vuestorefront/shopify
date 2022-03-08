@@ -1,20 +1,11 @@
-import getPage from '../src/api/getPage'
+import { getPage } from '../src/api/getPage'
+import { createMockContext } from '../__mocks__/mockContext';
 
-const queryMock = jest.fn()
 
-const mockClient = { query: queryMock }
-
-const mockExtendQuery = jest.fn();
-
-const mockContext: any = {
-  extendQuery: mockExtendQuery,
-  client: {
-    apolloClient: mockClient
-  }
-}
 
 describe('[shopify-apollo] mapping of params into graphql client', () => {
   it('should map params to the page query', async () => {
+    const { extendQuery, context } = createMockContext()
     const params = {
       handle: 'test-handle',
       id: 'test-id'
@@ -24,11 +15,11 @@ describe('[shopify-apollo] mapping of params into graphql client', () => {
       customQuery: 'customQuery-test'
     }
 
-    mockExtendQuery.mockImplementationOnce(() => ({ page: { query: 'test-page-query', variables: params } }))
+    extendQuery.mockImplementationOnce(() => ({ page: { query: 'test-page-query', variables: params } }))
 
-    await getPage(mockContext, params, customQuery)
+    await getPage(context, params, customQuery)
 
-    expect(mockExtendQuery).toHaveBeenCalledWith(customQuery, {
+    expect(extendQuery).toHaveBeenCalledWith(customQuery, {
       page: {
         query: expect.any(Object),
         variables: params
@@ -37,6 +28,7 @@ describe('[shopify-apollo] mapping of params into graphql client', () => {
   })
 
   it('should execute the query with mapped params', async () => {
+    const { extendQuery, context, query } = createMockContext()
     const params = {
       handle: 'test-handle',
       id: 'test-id'
@@ -44,10 +36,10 @@ describe('[shopify-apollo] mapping of params into graphql client', () => {
 
     const expectedQueryOptions = { query: 'test-page-query', variables: params }
 
-    mockExtendQuery.mockImplementationOnce(() => ({ page: expectedQueryOptions }));
+    extendQuery.mockImplementationOnce(() => ({ page: expectedQueryOptions }));
 
-    await getPage(mockContext, params)
+    await getPage(context, params)
 
-    expect(queryMock).toHaveBeenCalledWith(expectedQueryOptions)
+    expect(query).toHaveBeenCalledWith(expectedQueryOptions)
   })
 })

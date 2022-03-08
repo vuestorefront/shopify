@@ -3,7 +3,7 @@ import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootProductsArgs } from '../shopify'
 
-const SEARCH_PRODUCT_QUERY = gql`
+const productsQuery = gql`
     query products(
         $first: Int,
         $query: String
@@ -99,7 +99,7 @@ const SEARCH_PRODUCT_QUERY = gql`
     }
 `
 
-export default async function searchProduct(context: ShopifyApolloContext, params: ProductsSearchParams, customQuery?: CustomQuery) {
+export async function searchProduct(context: ShopifyApolloContext, params: ProductsSearchParams, customQuery?: CustomQuery) {
   const variables = {
     query: params.term,
     first: params.perPage ?? 5
@@ -109,7 +109,7 @@ export default async function searchProduct(context: ShopifyApolloContext, param
     customQuery,
     {
       products: {
-        query: SEARCH_PRODUCT_QUERY,
+        query: productsQuery,
         variables
       }
     }
