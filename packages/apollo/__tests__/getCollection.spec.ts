@@ -1,20 +1,11 @@
 import getCollection from '../src/api/getCollection'
+import { createMockContext } from '../__mocks__/mockContext'
 
-const queryMock = jest.fn()
 
-const mockClient = { query: queryMock}
-
-const mockExtendQuery = jest.fn();
-
-const mockContext: any = {
-  extendQuery: mockExtendQuery,
-  client: {
-    apolloClient: mockClient
-  }
-}
 
 describe('[shopify-apollo] mapping of params into the qraphql client', () => {
-  it('should map params the the collection query', async () => {
+  it('should map params the collection query', async () => {
+    const { extendQuery, context } = createMockContext()
     // Given (BDD) or Arrange (TDD)
     const params = {
       categorySlug: 'test',
@@ -32,14 +23,14 @@ describe('[shopify-apollo] mapping of params into the qraphql client', () => {
       first: 10,
       filters: {}
     }
-    mockExtendQuery.mockImplementationOnce(() => ({ collection: { query: 'test-quert', variables: expectedVariables } }));
+    extendQuery.mockImplementationOnce(() => ({ collection: { query: 'test-quert', variables: expectedVariables } }));
 
 
     // When (BDD) or Act (TDD)
-    await getCollection(mockContext, params, customQuery)
+    await getCollection(context, params, customQuery)
 
     // Then (BDD) or Assert (TDD)
-    expect(mockExtendQuery).toHaveBeenCalledWith(customQuery, {
+    expect(extendQuery).toHaveBeenCalledWith(customQuery, {
       collection: {
         query: expect.any(Object),
         variables: expectedVariables
@@ -48,12 +39,13 @@ describe('[shopify-apollo] mapping of params into the qraphql client', () => {
   })
 
   it('should execute the query with mapped params', async () => {
+    const { extendQuery, context, query } = createMockContext()
     const mappedVariables = {
       handle: 'test',
       first: 10,
       filters: {}
     }
-    mockExtendQuery.mockImplementationOnce(() => ({ collection: { query: 'test-quert', variables: mappedVariables} }));
+    extendQuery.mockImplementationOnce(() => ({ collection: { query: 'test-quert', variables: mappedVariables } }));
     const params = {
       categorySlug: 'test',
       perPage: 10, 
@@ -67,9 +59,9 @@ describe('[shopify-apollo] mapping of params into the qraphql client', () => {
       variables: mappedVariables
     }
 
-    await getCollection(mockContext, params)
+    await getCollection(context, params)
 
-    expect(queryMock).toHaveBeenCalledWith(expectedQueryOptions)
+    expect(query).toHaveBeenCalledWith(expectedQueryOptions)
 
   })
   
