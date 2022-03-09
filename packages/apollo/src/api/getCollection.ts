@@ -68,8 +68,12 @@ type GetCollectionQueryArgs = QueryRootCollectionArgs & ProductFilter
 
 const PRICE_FILTER_RANGE = ['min', 'max']
 
-function convertFacetFiltersLocalToShopify(filters: Record<string, any>): ProductFilter {
+function convertFacetFiltersLocalToShopify(filters?: Record<string, any>): ProductFilter {
     const result: ProductFilter = {}
+
+    if (!filters) {
+      return result;
+    }
 
     for (const key of Object.keys(filters)) {
         // This condition will set the price range filter
