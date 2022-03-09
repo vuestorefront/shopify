@@ -1,7 +1,7 @@
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
 import { getCountry } from '../../helpers/utils'
-export default async function addToCart(context, params, _customQuery?: CustomQuery) {
+export async function addToCart(context, params, _customQuery?: CustomQuery) {
   const { currentCart, product, quantity, customQuery } = params;
   // Items to be add to cart
   const lineItemsToAdd = [{

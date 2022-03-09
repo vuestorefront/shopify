@@ -8,7 +8,7 @@ import getBlogPosts from './api/getBlogPosts';
 import { getPages } from './api/getPages';
 import updateCart from './api/updateCart';
 import createCart from './api/createCart';
-import addToCart from './api/addToCart';
+import { addToCart } from './api/addToCart';
 import {removeFromCart} from './api/removeFromCart';
 import { applyCoupon } from './api/applyCartCoupon';
 import { removeCoupon } from './api/removeCartCoupon';
