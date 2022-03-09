@@ -1,5 +1,6 @@
 export enum ContentType {
   UpdatePreference = 'updatePreferences',
   Page = 'page',
-  Blog = 'blog'
+  Blog = 'blog',
+  Article = 'article'
 }

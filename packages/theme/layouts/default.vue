@@ -46,6 +46,7 @@ export default {
     LazyHydrate,
     TopBar,
     AppHeader,
+    LazyHydrate,
     BottomNavigation: () => import('~/components/BottomNavigation.vue'),
     AppFooter: () => import('~/components/AppFooter.vue'),
     CartSidebar: () => import('~/components/CartSidebar.vue'),
