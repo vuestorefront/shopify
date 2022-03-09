@@ -17,6 +17,7 @@ const defaultQuery = gql`
           edges {
             node {
               id
+              handle
               title
               authors {
                 bio
@@ -37,12 +38,18 @@ const defaultQuery = gql`
 `
 
 export default async function getBlogs(context: ShopifyApolloContext, params: QueryRootBlogsArgs, customQuery?: CustomQuery) {
+
+  const variables = {
+    first: 5,
+    ...params,
+  }
+
   const { blogs } = context.extendQuery(
     customQuery,
     {
       blogs: {
         query: defaultQuery,
-        variables: params
+        variables
       }
     }
   )
@@ -52,5 +59,11 @@ export default async function getBlogs(context: ShopifyApolloContext, params: Qu
     variables: blogs.variables
   })
 
-  return response ?? null
+  return {
+    ...response,
+    data: {
+      ...response?.data,
+      blogs: response?.data?.blogs?.edges?.map(edge => edge?.node),
+    }
+  }
 }

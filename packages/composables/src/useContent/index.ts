@@ -4,6 +4,7 @@ import {
   UseContentFactoryParams
 } from '@vue-storefront/core';
 import { QueryRootBlogArgs, QueryRootBlogsArgs, QueryRootPageArgs } from '@vue-storefront/shopify-apollo/src/shopify';
+import { GetArticlesParams } from '@vue-storefront/shopify-apollo/src/types/GetArticlesParams';
 import { Context } from '../types'
 import { ContentType } from '../types/ContentType';
 import { UseContentParams } from '../types/UseContentParams';
@@ -22,15 +23,26 @@ const params: UseContentFactoryParams<unknown, UseContentParams> = {
       case ContentType.Blog: {
         if (Object.prototype.hasOwnProperty.call(params, 'id') || Object.prototype.hasOwnProperty.call(params, 'handle')) {
           const response = await context.$shopify.api.getBlog(params as QueryRootBlogArgs)
+          if (response.error) throw response.error
+          
           return response?.data?.blog
         } else {
           const response = await context.$shopify.api.getBlogs(params as QueryRootBlogsArgs)
+          if (response.error) throw response.error
+
           return response?.data?.blogs
         }
       }
+      case ContentType.Article: {
+        const response = await context.$shopify.api.getArticles(params as GetArticlesParams)
+
+        if (response.error) throw response.error
+
+        return response?.data?.articles
+      }
       default:
         return deprecatedApi.getBlogPosts(params);
-    }    
+    }
   }
 };
 
