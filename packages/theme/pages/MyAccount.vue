@@ -45,13 +45,12 @@
   </div>
 </template>
 <script type="module">
-import { SfBreadcrumbs, SfContentPages, SfMenuItem, SfLink } from '@storefront-ui/vue';
+import { SfBreadcrumbs, SfContentPages, SfMenuItem} from '@storefront-ui/vue';
 import { ref, computed } from '@nuxtjs/composition-api';
 import { useUser, userGetters, useContent } from '@vue-storefront/shopify';
 
 import MyProfile from './MyAccount/MyProfile';
 import AdressBook from './MyAccount/AdressBook';
-import LoyaltyCard from './MyAccount/LoyaltyCard';
 import OrderHistory from './MyAccount/OrderHistory';
 import { onSSR } from '@vue-storefront/core';
 import useUiNotification from '~/composables/useUiNotification';
@@ -64,13 +63,10 @@ export default {
     SfMenuItem,
     MyProfile,
     AdressBook,
-    LoyaltyCard,
-    OrderHistory,
-    SfLink
+    OrderHistory
   },
   middleware: 'authenticated',
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(props, context) {
+  setup(__, context) {
     const { $router, $route } = context.root;
     const { logout, load: loadUser, user: userInfo} = useUser();
     const { loading: newsLetterLoading, content: NewsletterStatus, search: UpdateNewsletterPreference } = useContent('UpdateNewsletterPreference');
@@ -117,7 +113,6 @@ export default {
     });
     return { loadUser, changeActivePage, activePage, acceptsMarketing, UpdateNewsletterPreference, email, id, NewsletterStatus, sendNotification, newsLetterLoading };
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
       breadcrumbs: [
@@ -138,7 +133,6 @@ export default {
     };
   },
   methods: {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async updateNewsletterPreference(status) {
       await this.UpdateNewsletterPreference({ContentType: 'updatePreferences', Email: this.email, isSubscribed: status, customerId: this.id}).then(() => {
         this.sendNotification({

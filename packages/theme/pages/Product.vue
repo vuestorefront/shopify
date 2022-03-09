@@ -215,18 +215,12 @@ import {
   SfProperty,
   SfHeading,
   SfPrice,
-  SfRating,
   SfSelect,
   SfAddToCart,
   SfTabs,
   SfGallery,
   SfIcon,
-  SfImage,
-  SfBadge,
-  SfBanner,
   SfAlert,
-  SfSticky,
-  SfReview,
   SfBreadcrumbs,
   SfLoader,
   SfButton,
@@ -235,7 +229,7 @@ import {
 
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
-import { ref, computed, watch, onBeforeMount } from '@nuxtjs/composition-api';
+import { ref, computed, watch } from '@nuxtjs/composition-api';
 import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
@@ -251,17 +245,11 @@ export default {
     SfProperty,
     SfHeading,
     SfPrice,
-    SfRating,
     SfSelect,
     SfAddToCart,
     SfTabs,
     SfGallery,
     SfIcon,
-    SfImage,
-    SfBanner,
-    SfSticky,
-    SfReview,
-    SfBadge,
     SfBreadcrumbs,
     SfButton,
     InstagramFeed,
@@ -269,7 +257,7 @@ export default {
     MobileStoreBanner,
     LazyHydrate
   },
-  beforeRouteEnter(to, from, next) {
+  beforeRouteEnter(__, from, next) {
     next((vm) => {
       vm.prevRoute = from;
     });
