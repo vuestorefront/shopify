@@ -34,7 +34,7 @@ describe('[shopify-composables] mapping of useContent', () => {
   it('should fetch blogs', () => {
     const params = {
       contentType: ContentType.Blog,
-      query: 'title:test'
+      query: 'blog_title:test'
     }
 
     const { search } = useContent('test') as { search: any }
