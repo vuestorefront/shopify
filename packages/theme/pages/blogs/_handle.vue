@@ -6,23 +6,11 @@
     />
     <div class="navbar section">
       <div class="navbar__aside desktop-only">
-        <SfHeading :level="1" title="Blogs" class="navbar__title" />
+        <LazyHydrate never>
+          <SfHeading :level="1" title="Blogs" class="navbar__title" />
+        </LazyHydrate>
       </div>
       <div class="navbar__main">
-        <!-- TODO implement filter of blogs -->
-        <!-- <SfButton
-          class="sf-button--text navbar__filters-button"
-          aria-label="Filters"
-          @click="isFilterSidebarOpen = true"
-        >
-          <SfIcon
-            size="24px"
-            color="#43464E"
-            icon="filter2"
-            class="navbar__filters-icon"
-          />
-          Filters
-        </SfButton> -->
         <div class="navbar__sort desktop-only">
           <span class="navbar__label">Sort by:</span>
           <SfComponentSelect v-model="sortBy" class="navbar__select">
@@ -36,7 +24,7 @@
           </SfComponentSelect>
         </div>
         <div class="navbar__counter">
-          <span class="navbar__label desktop-only">Shown Items: </span>
+          <span class="navbar__label desktop-only">Showing: </span>
           <span class="desktop-only">{{ articles.length }}</span>
           <span class="navbar__label smartphone-only"
             >{{ articles.length }} Items</span
@@ -75,106 +63,118 @@
     </div>
     <div class="main section">
       <div class="sidebar desktop-only">
-        <SfAccordion :open="sidebarAccordion[0].header" :show-chevron="true">
-          <SfAccordionItem header="Categories">
-            <template #default>
-              <SfList class="list">
-                <SfListItem
-                  v-for="(item, j) in blogs"
-                  :key="j"
-                  class="list__item"
-                >
-                  <SfMenuItem :label="item.title" />
-                </SfListItem>
-              </SfList>
-            </template>
-          </SfAccordionItem>
-        </SfAccordion>
-      </div>
-      <div class="products">
-        <transition-group
-          v-if="isGridView"
-          appear
-          name="products__slide"
-          tag="div"
-          class="products__grid"
-        >
-          <SfProductCard
-            v-for="(article, i) in articles"
-            :key="article.id"
-            :style="{ '--index': i }"
-            :title="article.title"
-            :image="article.image.transformedSrc"
-            :image-height="326"
-            :image-width="216"
-            :wishlist-icon="false"
-            :show-add-to-cart-button="false"
-            image-tag="nuxt-img"
-            :nuxt-img-config="{
-              format: 'webp',
-              fit: 'cover'
-            }"
-            class="products__product-card"
-          >
-          <template #add-to-cart>
-            <div></div>
-          </template>
-          </SfProductCard>
-        </transition-group>
-        <transition-group
-          v-else
-          appear
-          name="products__slide"
-          tag="div"
-          class="products__list"
-        >
-          <SfProductCardHorizontal
-            v-for="(article, i) in articles"
-            :key="article.id"
-            :style="{ '--index': i }"
-            :title="article.title"
-            :description="article.content"
-            :image="article.image.transformedSrc"
-            :image-height="200"
-            :image-width="140"
-            image-tag="nuxt-img"
-            link="#"
-            :nuxt-img-config="{
-              format: 'webp',
-              fit: 'cover'
-            }"
-            class="products__product-card-horizontal"
-          >
-            <template #add-to-cart>
-              <div></div>
-            </template>
-          </SfProductCardHorizontal>
-        </transition-group>
-        <SfPagination
-          class="products__pagination"
-          :current="currentPage"
-          :total="4"
-          :visible="5"
-          @click="
-            (page) => {
-              currentPage = page;
-            }
-          "
-        />
-        <div class="products__show-on-page desktop-only">
-          <span class="products__show-on-page__label">Show on page:</span>
-          <SfSelect class="products__items-per-page">
-            <SfSelectOption
-              v-for="option in showOnPage"
-              :key="option"
-              :value="option"
-              class="products__items-per-page__option"
+        <LazyHydrate when-idle>
+          <SfLoader :loading="isPageLoading" :class="{ 'loading--categories': isPageLoading }">
+            <SfAccordion
+              :open="sidebarAccordion[0].header"
+              :show-chevron="true"
             >
-              {{ option }}
-            </SfSelectOption>
-          </SfSelect>
-        </div>
+              <SfAccordionItem header="Categories">
+                <template #default>
+                  <SfList class="list">
+                    <SfListItem
+                      v-for="(item, j) in blogs"
+                      :key="j"
+                      class="list__item"
+                    >
+                      <SfMenuItem :label="item.title" :link="localePath(item.link)" />
+                    </SfListItem>
+                  </SfList>
+                </template>
+              </SfAccordionItem>
+            </SfAccordion>
+          </SfLoader>
+        </LazyHydrate>
       </div>
+      <SfLoader
+        :loading="isPageLoading"
+        :class="{ loading: isPageLoading }"
+      >
+        <div v-if="!isPageLoading" class="products">
+          <transition-group
+            v-if="isGridView"
+            appear
+            name="products__slide"
+            tag="div"
+            class="products__grid"
+          >
+            <SfProductCard
+              v-for="(article, i) in articles"
+              :key="article.id"
+              :style="{ '--index': i }"
+              :title="article.title"
+              :image="article.image.transformedSrc"
+              :image-height="326"
+              :image-width="216"
+              :wishlist-icon="false"
+              :show-add-to-cart-button="false"
+              image-tag="nuxt-img"
+              :nuxt-img-config="{
+                format: 'webp',
+                fit: 'cover'
+              }"
+              class="products__product-card"
+            >
+              <template #add-to-cart>
+                <div></div>
+              </template>
+            </SfProductCard>
+          </transition-group>
+          <transition-group
+            v-else
+            appear
+            name="products__slide"
+            tag="div"
+            class="products__list"
+          >
+            <SfProductCardHorizontal
+              v-for="(article, i) in articles"
+              :key="article.id"
+              :style="{ '--index': i }"
+              :title="article.title"
+              :description="article.content"
+              :image="article.image.transformedSrc"
+              :image-height="200"
+              :image-width="140"
+              image-tag="nuxt-img"
+              link="#"
+              :nuxt-img-config="{
+                format: 'webp',
+                fit: 'cover'
+              }"
+              class="products__product-card-horizontal"
+            >
+              <template #add-to-cart>
+                <div></div>
+              </template>
+            </SfProductCardHorizontal>
+          </transition-group>
+          <SfPagination
+            class="products__pagination"
+            :current="currentPage"
+            :total="4"
+            :visible="5"
+            @click="
+              (page) => {
+                currentPage = page;
+              }
+            "
+          />
+          <div class="products__show-on-page desktop-only">
+            <span class="products__show-on-page__label">Show on page:</span>
+            <SfSelect class="products__items-per-page">
+              <SfSelectOption
+                v-for="option in showOnPage"
+                :key="option"
+                :value="option"
+                class="products__items-per-page__option"
+              >
+                {{ option }}
+              </SfSelectOption>
+            </SfSelect>
+          </div>
+        </div>
+      </SfLoader>
     </div>
   </div>
 </template>
@@ -191,9 +191,11 @@ import {
   SfComponentSelect,
   SfBreadcrumbs,
   SfProductCardHorizontal,
-  SfSelect
+  SfSelect,
+  SfLoader
 } from '@storefront-ui/vue';
-import { useRoute } from '@nuxtjs/composition-api';
+import LazyHydrate from 'vue-lazy-hydration';
+import { useRoute, computed } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useContent } from '@vue-storefront/shopify';
 import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
@@ -211,34 +213,36 @@ export default {
     SfComponentSelect,
     SfBreadcrumbs,
     SfSelect,
-    SfProductCardHorizontal
+    SfProductCardHorizontal,
+    LazyHydrate,
+    SfLoader
   },
   setup() {
     const route = useRoute();
-    const { search: getBlogs, content: blogs } = useContent('blogs');
-    const { search: searchBlog } = useContent('blog');
-    const { search: searchArticles, content: articles } = useContent('articles')
+    const {
+      search: getBlogs,
+      content: blogs,
+      loading: isBlogsLoading
+    } = useContent('blogs');
+    const { search: getBlog } = useContent('blog');
+    const { search: getArticles, content: articles, loading: isArticlesLoading } = useContent('articles');
 
     onSSR(async () => {
       await getBlogs({ contentType: ContentType.Blog });
-      let handle = route?.value?.params?.handle
+      const handle = route?.value?.params?.handle ?? blogs?.value?.[0]?.handle;
+      
+      getBlog({
+        contentType: ContentType.Blog,
+        handle
+      });
 
-      if (route.value.params.handle) {
-        await searchBlog({
-          contentType: ContentType.Blog,
-          handle
-        });
-      } else if (blogs) {
-        handle = blogs?.value?.[0]?.handle
-        await searchBlog({
-          contentType: ContentType.Blog,
-          id: blogs?.value?.[0]?.id
-        });
-      }
-
-      await searchArticles({ contentType: ContentType.Article, query: `blog_title:${handle}` })
+      await getArticles({
+        contentType: ContentType.Article,
+        query: `blog_title:${handle}`
+      });
     });
 
+    const isPageLoading = computed(() => isBlogsLoading.value || isArticlesLoading.value)
 
     return {
       blogs,
@@ -248,6 +252,7 @@ export default {
       sortBy: 'Latest',
       isGridView: true,
       category: 'Blogs',
+      isPageLoading,
       sortByOptions: [
         {
           value: 'Latest',
@@ -256,7 +261,7 @@ export default {
       ],
       sidebarAccordion: [
         {
-          header: 'Blogs'
+          header: 'Categories'
         }
       ],
       showOnPage: ['20', '40', '60'],
@@ -591,6 +596,17 @@ export default {
     --button-background: var(--c-light);
     --button-color: var(--c-dark-variant);
     margin: var(--spacer-xs) 0 0 0;
+  }
+}
+.loading {
+  margin: var(--spacer-3xl) auto;
+  @include for-desktop {
+    margin-top: 6.25rem;
+  }
+  &--categories {
+    @include for-desktop {
+      margin-top: 3.75rem;
+    }
   }
 }
 </style>
