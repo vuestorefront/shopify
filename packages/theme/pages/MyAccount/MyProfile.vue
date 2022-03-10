@@ -136,7 +136,7 @@
 import { ref, computed } from '@nuxtjs/composition-api';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import { email, required, min, confirmed } from 'vee-validate/dist/rules';
-import { SfTabs, SfInput, SfButton, SfAlert, SfProperty, SfHeading, SfCheckbox } from '@storefront-ui/vue';
+import { SfInput, SfButton, SfProperty, SfHeading } from '@storefront-ui/vue';
 import { useUser, userGetters } from '@vue-storefront/shopify';
 import { onSSR } from '@vue-storefront/core';
 import { useUiNotification} from '~/composables';
@@ -171,13 +171,10 @@ extend('confirmed', {
 export default {
   name: 'PersonalDetails',
   components: {
-    SfTabs,
     SfInput,
     SfButton,
-    SfAlert,
     SfProperty,
     SfHeading,
-    SfCheckbox,
     ValidationProvider,
     ValidationObserver,
     Tab,
@@ -264,8 +261,8 @@ export default {
       }
     };
 
-    const updatePassword = async () => handleForm(changePassword, true)();
-    const updateProfile = async () => handleForm(updateUser, false)();
+    const updatePassword = async () => await handleForm(changePassword, true)();
+    const updateProfile = async () => await handleForm(updateUser, false)();
     onSSR(async () => {
       await loadUser().then(()=> {
         form.value.email = user.value.email;

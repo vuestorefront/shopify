@@ -4,8 +4,7 @@ import {
   useCartFactory,
   UseCartFactoryParams
 } from '@vue-storefront/core';
-import { Cart, CartItem, Coupon, Product } from '../types';
-
+import { Cart, CartItem, Product } from '../types';
 const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context) => {

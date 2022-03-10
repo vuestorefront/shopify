@@ -38,7 +38,6 @@ import {
   cartGetters,
   useCart,
 } from '@vue-storefront/shopify';
-import LazyHydrate from 'vue-lazy-hydration';
 import { computed, onBeforeMount, provide } from '@nuxtjs/composition-api';
 export default {
   name: 'DefaultLayout',

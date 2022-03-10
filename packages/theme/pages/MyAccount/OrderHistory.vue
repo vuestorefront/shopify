@@ -2,7 +2,6 @@
   <div class="my_account_content_wrap">
     <div data-cy="order-history-tab_my-orders no-title" :class="currentOrder == null ? '' : 'no-title'">
       <div v-if="currentOrder">
-        <template>
           <div class='order-head-wrapper'>
             <div class="order-number">
               <SfButton data-cy="order-history-btn_orders" class="sf-button--text all-orders" @click="currentOrder = null, scrollToTop()">
@@ -24,7 +23,6 @@
               </span>
             </p>
           </div>
-      </template>
       <div class="table-responsive">
         <SfTable class="ordered-products-table">
           <SfTableHeading>
@@ -226,7 +224,6 @@
 
 <script type="module">
 import {
-  SfTabs,
   SfTable,
   SfButton,
   SfProperty,
@@ -234,7 +231,6 @@ import {
   SfIcon,
   SfImage,
   SfHeading,
-  SfAlert,
   SfBadge,
   SfLoader
 } from '@storefront-ui/vue';
@@ -245,7 +241,6 @@ import { AgnosticOrderStatus , onSSR } from '@vue-storefront/core';
 export default {
   name: 'PersonalDetails',
   components: {
-    SfTabs,
     SfTable,
     SfButton,
     SfProperty,
@@ -253,7 +248,6 @@ export default {
     SfIcon,
     SfImage,
     SfHeading,
-    SfAlert,
     SfBadge,
     SfLoader
   },
@@ -306,11 +300,11 @@ export default {
     };
 
     const downloadOrders = async () => {
-      downloadFile(new Blob([JSON.stringify(orders.value)], {type: 'application/json'}), 'orders.json');
+      await downloadFile(new Blob([JSON.stringify(orders.value)], {type: 'application/json'}), 'orders.json');
     };
 
     const downloadOrder = async (order) => {
-      downloadFile(new Blob([JSON.stringify(order)], {type: 'application/json'}), 'order ' + orderGetters.getId(order) + '.json');
+      await downloadFile(new Blob([JSON.stringify(order)], {type: 'application/json'}), 'order ' + orderGetters.getId(order) + '.json');
     };
 
     return {
@@ -322,20 +316,6 @@ export default {
       downloadOrders,
       currentOrder,
       loading
-    };
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  head() {
-    return {
-      title: 'My Orders - Pure Daily Care',
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        {
-          hid: 'My Orders - Pure Daily Care',
-          name: 'My Orders - Pure Daily Care',
-          content: 'Pure Daily Care promotes natural beauty by combining the most modern technologies into easy-to-use, at-home products. Pure Daily Care technologies harness the healing power of naturally occurring phenomenon like steam, electricity and light to drastically improve your skin profile without the use of cosmetics.'
-        }
-      ]
     };
   }
 };
