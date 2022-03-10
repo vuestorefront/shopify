@@ -21,8 +21,8 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
     if ((existngCartId === undefined || existngCartId === '' || isLocaleSwitched)) {
       // Initiate new cart
       existngCartId = await context.$shopify.api.createCart().then((checkout) => {
-        context.$shopify.config.app.$cookies.set(appKey + '_cart_id', checkout, {maxAge: 60 * 60 * 24 * 365, path: '/'});
-        return checkout;
+        context.$shopify.config.app.$cookies.set(appKey + '_cart_id', checkout.id, {maxAge: 60 * 60 * 24 * 365, path: '/'});
+        return checkout.id;
       });
     }
     const checkoutId = existngCartId;
