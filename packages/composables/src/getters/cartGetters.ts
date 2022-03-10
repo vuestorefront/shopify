@@ -74,17 +74,24 @@ export const getcheckoutURL = (cart: Cart): string => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartTotalItems = (cart: Cart): number => {
-  if (cart && cart.lineItems && cart.lineItems.length > 0) {
+  if (cart?.lineItems?.length > 0) {
     return cart.lineItems.reduce((n, { quantity }) => n + quantity, 0);
   }
   return 0;
 };
 
 export const getCartTotalDiscount = (cart: Cart): number => {
-  if (cart && cart.discountApplications && cart.discountApplications.length > 0) {
+  if ((cart?.discountApplications ?? []).length > 0) {
     return cart.discountApplications[0].value;
   }
   return 0;
+};
+
+export const getAppliedCoupon = (cart: Cart): string => {
+  if (cart?.checkoutUserErrors?.length <= 0) {
+    return cart.couponCode;
+  }
+  return '';
 };
 
 export const getFormattedPrice = (price: number) => String(price);
@@ -113,7 +120,8 @@ const cartGetters: CartGetters<Cart, LineItem> = {
   getCoupons,
   getDiscounts,
   getcheckoutURL,
-  getSubTotal: getCartSubTotal
+  getSubTotal: getCartSubTotal,
+  getCoupon: getAppliedCoupon
 };
 
 export default cartGetters;

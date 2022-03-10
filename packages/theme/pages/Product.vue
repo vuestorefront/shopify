@@ -215,19 +215,12 @@ import {
   SfProperty,
   SfHeading,
   SfPrice,
-  SfRating,
   SfSelect,
-  SfColorPicker,
   SfAddToCart,
   SfTabs,
   SfGallery,
   SfIcon,
-  SfImage,
-  SfBadge,
-  SfBanner,
   SfAlert,
-  SfSticky,
-  SfReview,
   SfBreadcrumbs,
   SfLoader,
   SfButton,
@@ -252,17 +245,11 @@ export default {
     SfProperty,
     SfHeading,
     SfPrice,
-    SfRating,
     SfSelect,
     SfAddToCart,
     SfTabs,
     SfGallery,
     SfIcon,
-    SfImage,
-    SfBanner,
-    SfSticky,
-    SfReview,
-    SfBadge,
     SfBreadcrumbs,
     SfButton,
     InstagramFeed,
@@ -270,7 +257,7 @@ export default {
     MobileStoreBanner,
     LazyHydrate
   },
-  beforeRouteEnter(to, from, next) {
+  beforeRouteEnter(__, from, next) {
     next((vm) => {
       vm.prevRoute = from;
     });
@@ -320,10 +307,7 @@ export default {
       productGetters.getAttributes(products.value)
     );
     const configuration = computed(() => {
-      return productGetters.getSelectedVariant(
-        products.value,
-        context.root.$route.query
-      );
+      return productGetters.getSelectedVariant(context.root.$route.query);
     });
 
     const setBreadcrumb = () => {
@@ -385,7 +369,6 @@ export default {
       });
       await searchRelatedProducts({ productId: id.value, related: true });
     });
-
     const updateFilter = (filter) => {
       if (options.value) {
         Object.keys(options.value).forEach((attr) => {

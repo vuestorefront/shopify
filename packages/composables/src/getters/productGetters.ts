@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
   AgnosticMediaGalleryItem,
   AgnosticAttribute,
@@ -28,7 +27,6 @@ export const getProductSlug = (product: ProductVariant): string => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductPrice = (product: ProductVariant): AgnosticPrice => {
   return {
     regular: product?.price?.original || 0,
@@ -36,7 +34,6 @@ export const getProductPrice = (product: ProductVariant): AgnosticPrice => {
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductDiscountPercentage = (product): number => {
   const regular = parseFloat(product?.price?.original) || 0;
   const special = parseFloat(product?.price?.current) || 0;
@@ -47,7 +44,7 @@ export const getProductDiscountPercentage = (product): number => {
   }
   return 0;
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export const getProductGallery = (product: ProductVariant): AgnosticMediaGalleryItem[] =>
   (product ? product.images : [])
     .map((image) => {
@@ -76,7 +73,6 @@ export const getActiveVariantImage = (product) => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductFiltered = (products, filters: ProductVariantFilters | any = {}) => {
   if (!products) {
     return [];
@@ -92,7 +88,7 @@ export const getFilteredSingle = (product) => {
   return enhanceProduct(product) as ProductVariant[];
 };
 
-export const getSelectedVariant = (product: ProductVariant, attribs) => {
+export const getSelectedVariant = (attribs) => {
   return attribs;
 };
 export const getProductOptions = (product: ProductVariant): Record<string, AgnosticAttribute | string> => {

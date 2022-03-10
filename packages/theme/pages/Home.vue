@@ -54,13 +54,7 @@ import {
   SfHero,
   SfBanner,
   SfCallToAction,
-  SfSection,
-  SfCarousel,
-  SfImage,
-  SfBannerGrid,
-  SfHeading,
-  SfArrow,
-  SfButton
+  SfBannerGrid
 } from '@storefront-ui/vue';
 import {
   useProduct,
@@ -82,18 +76,11 @@ export default {
     RelatedProducts,
     SfBanner,
     SfCallToAction,
-    SfSection,
-    SfCarousel,
-    SfImage,
     SfBannerGrid,
-    SfHeading,
-    SfArrow,
-    SfButton,
     MobileStoreBanner,
     LazyHydrate
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(contect) {
+  setup() {
     const {
       products: relatedProducts,
       search: productsSearch,
@@ -115,7 +102,6 @@ export default {
       isInCart
     };
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
       heroes: [
@@ -224,7 +210,6 @@ export default {
     };
   },
   methods: {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     toggleWishlist(index) {
       this.products[index].isInWishlist = !this.products[index].isInWishlist;
     }

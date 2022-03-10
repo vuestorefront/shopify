@@ -6,8 +6,7 @@ import { getCountry } from '../../helpers/utils';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function checkOut(context, checkoutId, customQuery?: CustomQuery) {
-  const DEFAULT_QUERY = `
-  query FETCH_CHECKOUT($country: CountryCode!, $id: ID!) @inContext(country: $country ) {
+  const DEFAULT_QUERY = `query FETCH_CHECKOUT($country: CountryCode!, $id: ID!) @inContext(country: $country ) {
     node(id: $id) {
       id
       ... on Checkout {

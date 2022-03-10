@@ -75,6 +75,40 @@
       <template #content-bottom>
         <transition name="sf-fade">
           <div v-if="totalItems">
+            <div v-if="!appliedCoupon" class="coupon-form-wrapper">
+              <SfInput
+                v-model="couponcode"
+                :value="couponcode"
+                label="Apply coupon"
+                type="text"
+                :icon='{"icon":"","color":"","size":""}'
+                :valid="isValidCoupon"
+                :error-message="errorMsg"
+                :required="true"
+                :disabled="false"
+                :has-show-password="false"
+                class="coupon-code-input"
+              />
+              <SfButton
+                  class="sf-button--full-width color-secondary sf-apply-coupon"
+                  @click="handleApplyCoupon(couponcode)"
+                >
+                  {{ $t('Apply') }}
+              </SfButton>
+            </div>
+            <SfProperty
+            v-if="totalDiscount"
+              class="sf-property--full-width sf-property--large my-cart__discount"
+            >
+            <template #name>
+              <span class="sf-property__name applied-discount">{{appliedCoupon ? `Discount [${appliedCoupon}]`: 'Discount'}}<SfIcon v-if="couponcode && couponcode !==''" class="remove-coupon" @click="handleRemoveCoupon(couponcode)" icon="cross" size="xxs" color="green-primary"/></span>
+            </template>
+              <template #value>
+                <SfPrice
+                  :regular="$n(totalDiscount.percentage ? totalDiscount.percentage/100 : totalDiscount.amount, totalDiscount.percentage ? 'percent':'currency')"
+                />
+              </template>
+            </SfProperty>
             <SfProperty
             v-if="totalDiscount"
               name="Discount"
@@ -138,9 +172,11 @@ import {
   SfCollectedProduct,
   SfImage,
   SfLink,
-  SfQuantitySelector
+  SfInput,
+  SfQuantitySelector,
+  SfIcon
 } from '@storefront-ui/vue';
-import { computed } from '@nuxtjs/composition-api';
+import { computed, ref } from '@nuxtjs/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
 import { useUiState, useUiNotification } from '~/composables';
 import debounce from 'lodash.debounce';
@@ -154,15 +190,20 @@ export default {
     SfLink,
     SfProperty,
     SfPrice,
+    SfInput,
     SfCollectedProduct,
     SfImage,
-    SfQuantitySelector
+    SfQuantitySelector,
+    SfIcon
   },
   setup() {
+    const isValidCoupon = ref(true);
+    const errorMsg = ref("Invalid coupon code");
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
-    const { cart, removeItem, updateItemQty, loading } = useCart();
+    const { cart, removeItem, updateItemQty, loading, applyCoupon, removeCoupon } = useCart();
     const { isAuthenticated } = useUser();
     const { send: sendNotification, notifications } = useUiNotification();
+    const couponcode= '';
     const products = computed(() => cartGetters.getItems(cart.value));
     const totals = computed(() => cartGetters.getTotals(cart.value));
     const lineItemsSubtotalPrice = computed(() => cartGetters.getSubTotal(cart.value));
@@ -184,12 +225,34 @@ export default {
       return calculatedTotalSavings;
     });
     const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
+    const appliedCoupon = computed(() => { 
+      return cartGetters.getCoupon(cart.value)
+    });
+    
+    const handleApplyCoupon = async (couponCode) => {
+      if(couponCode && couponCode !== ""){
+        await applyCoupon({couponCode}).then(() =>{
+          if(cart.value.checkoutUserErrors.length > 0){
+            errorMsg.value = cart.value.checkoutUserErrors[0];
+            isValidCoupon.value = false;
+          }else{
+            isValidCoupon.value = true;
+          }
+        });
+      }
+    }
+    const handleRemoveCoupon = async (couponCode) => {
+      if(couponCode && couponCode !== ""){
+        await removeCoupon({couponCode}).then(() =>{
+          errorMsg.value = "Coupon removed";
+        });
+      }
+    }
     const handleCheckout = (checkoutUrl) => {
       setTimeout(() => {
         window.location.replace(checkoutUrl)
-      }, 400)
+      }, 300)
     }
-
     const updateQuantity = debounce(async ({ product, quantity }) => {
       await updateItemQty({ product, quantity });
     }, 300);
@@ -211,7 +274,13 @@ export default {
       totalSavings,
       cartGetters,
       sendNotification,
-      notifications
+      notifications,
+      handleApplyCoupon,
+      couponcode,
+      isValidCoupon,
+      errorMsg,
+      appliedCoupon,
+      handleRemoveCoupon
     };
   }
 };
@@ -243,6 +312,15 @@ export default {
     --price-font-weight: var(--font-weight--medium);
     margin: 0 0 var(--spacer-base) 0;
   }
+  &__discount {margin-bottom: 30px;}
+}
+.applied-discount {
+  display: flex;
+  align-items: center;
+}
+.remove-coupon {
+  margin: 0 5px;
+  cursor: pointer;
 }
 .empty-cart {
   --heading-description-margin: 0 0 var(--spacer-xl) 0;
@@ -314,5 +392,17 @@ export default {
       }
     }
   }
+}
+.coupon-form-wrapper{
+  display: flex;
+  margin-bottom: 40px;
+  max-height:50px; 
+}
+.coupon-code-input{
+  flex: 0 0 60%;
+  max-width: 60%;
+}
+.sf-apply-coupon{
+  flex-grow: 1;
 }
 </style>
