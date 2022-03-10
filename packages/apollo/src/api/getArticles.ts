@@ -33,6 +33,10 @@ const articlesQuery = gql`
             description
             title
           }
+          blog {
+            handle
+            title
+          }
         }
       }
     }
@@ -65,7 +69,10 @@ export async function getArticles(context: ShopifyApolloContext, params: GetArti
     ...response,
     data: {
       ...response?.data,
-      articles: response?.data?.articles?.edges?.map(edge => edge?.node),
+      articles: response?.data?.articles?.edges?.map(edge => ({
+        ...edge?.node,
+        link: `/blogs/${edge?.node?.blog?.handle}/${edge?.node?.handle}` 
+      })),
     }
   }
 }
