@@ -38,7 +38,11 @@ const params: UseContentFactoryParams<unknown, UseContentParams> = {
 
         if (response.error) throw response.error
 
-        return response?.data?.articles
+
+        return {
+          data: response?.data?.articles,
+          pageInfo: response?.pageInfo
+        }
       }
       default:
         return deprecatedApi.getBlogPosts(params);

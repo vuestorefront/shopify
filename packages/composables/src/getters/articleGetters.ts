@@ -1,9 +1,8 @@
 import { Article } from '@vue-storefront/shopify-apollo/src/shopify';
-
-const getArticleImage = (article: Article) => {
-  return article?.image?.url
-}
+import { formatDate } from './_utils';
 
 export const articleGetters = {
-  getImage: getArticleImage
+  getImage: (article: Article) => article?.image?.url,
+  getPublishedAt: (article: Article) =>
+    article?.publishedAt && formatDate(article?.publishedAt)
 };

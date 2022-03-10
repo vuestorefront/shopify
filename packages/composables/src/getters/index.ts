@@ -12,6 +12,8 @@ import userBillingGetters from './userBillingGetters';
 import orderGetters from './orderGetters';
 import wishlistGetters from './wishlistGetters';
 
+import { articleGetters } from './articleGetters'
+
 export {
   cartGetters,
   categoryGetters,
@@ -24,5 +26,7 @@ export {
   userShippingGetters,
   userBillingGetters,
   orderGetters,
-  wishlistGetters
+  wishlistGetters,
+
+  articleGetters
 };
