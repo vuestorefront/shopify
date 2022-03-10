@@ -1,17 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core';
-import { print } from 'graphql';
 import { getCountry } from '../../helpers/utils';
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function removeFromCart(context, params, _customQuery?: CustomQuery) {
+export async function removeFromCart(context, params, _customQuery?: CustomQuery) {
   const { currentCart, product } = params;
   // products to be remove
   const lineItemIdsToRemove = [
     product.id
   ];
 
-  const DEFAULT_MUTATION = gql`mutation checkoutLineItemsRemove($country:CountryCode, $checkoutId: ID!, $lineItemIds: [ID!]!) @inContext(country:$country){
+  const DEFAULT_MUTATION = `mutation checkoutLineItemsRemove($country:CountryCode, $checkoutId: ID!, $lineItemIds: [ID!]!) @inContext(country:$country){
   checkoutLineItemsRemove(checkoutId: $checkoutId, lineItemIds: $lineItemIds){
     checkout{
       appliedGiftCards{
@@ -33,14 +30,17 @@ export default async function removeFromCart(context, params, _customQuery?: Cus
           key
           value
         }
-        discountApplications(first:250){
+        discountApplications(first:20){
           edges{
             node{
-              allocationMethod
-              targetSelection
-              targetType
               value{
-                __typename
+                ... on MoneyV2{
+                  amount
+                  currencyCode
+                }
+                ... on PricingPercentageValue{
+                  percentage
+                }
               }
             }
           }
@@ -152,7 +152,7 @@ export default async function removeFromCart(context, params, _customQuery?: Cus
       _customQuery,
       {
         checkoutLineItemsRemove: {
-          mutation: print(DEFAULT_MUTATION as any),
+          mutation: DEFAULT_MUTATION,
           payload
         }
       }
@@ -174,6 +174,4 @@ export default async function removeFromCart(context, params, _customQuery?: Cus
       };
     return result.data.checkoutLineItemsRemove.checkout;
   });
-  // Add an item to the checkout
-  // return await context.client.checkout.removeLineItems(checkoutID, lineItemIdsToRemove).then((checkout) => checkout);
 }
