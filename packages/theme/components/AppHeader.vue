@@ -124,8 +124,7 @@ export default {
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props) {
-    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } =
-      useUiState();
+    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } = useUiState();
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
@@ -138,7 +137,7 @@ export default {
 
     // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
     const handleAccountClick = () => {
-      if (isAuthenticated.value) {
+      if (props.isUserAuthenticated) {
         return router.push('/my-account');
       }
       toggleLoginModal();
@@ -158,7 +157,7 @@ export default {
       await headerSearch({
         term: term.value
       });
-    }, 1000);
+    }, 500);
     const closeSearch = () => {
       if (!isSearchOpen.value) return;
       term.value = '';
@@ -172,15 +171,6 @@ export default {
     onSSR(async () => {
       await search({ slug: '' });
     });
-    // onBeforeMount(async () => {
-    //   if(root.$i18n && !root.$cookies.get('CurLocaleLang')){
-    //     root.$cookies.set('CurLocaleLang', (root.$i18n.localeProperties.alias).toUpperCase(), {maxAge: 60 * 60 * 24 * 24000, path: '/'});
-    //   }
-    //   else if (root.$i18n && root.$cookies.get('CurLocaleLang') !== (root.$i18n.localeProperties.alias).toUpperCase()){
-    //     root.$cookies.set('CurLocaleLang', (root.$i18n.localeProperties.alias).toUpperCase(), {maxAge: 60 * 60 * 24 * 24000, path: '/'});
-    //   }
-    // })
-
     return {
       accountIcon,
       closeSearch,

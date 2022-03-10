@@ -66,16 +66,32 @@ export const getCartTotals = (cart): AgnosticTotals => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartShippingPrice = (cart: Cart): number => 0;
 
+export const getCartSubTotal = (cart: Cart): number => cart.lineItemsSubtotalPrice || 0;
+
 export const getcheckoutURL = (cart: Cart): string => {
   return cart.webUrl || '';
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartTotalItems = (cart: Cart): number => {
-  if (cart && cart.lineItems && cart.lineItems.length > 0) {
+  if (cart?.lineItems?.length > 0) {
     return cart.lineItems.reduce((n, { quantity }) => n + quantity, 0);
   }
   return 0;
+};
+
+export const getCartTotalDiscount = (cart: Cart): number => {
+  if (cart?.discountApplications.length > 0) {
+    return cart.discountApplications[0].value;
+  }
+  return 0;
+};
+
+export const getAppliedCoupon = (cart: Cart): string => {
+  if (cart?.checkoutUserErrors?.length <= 0) {
+    return cart.couponCode;
+  }
+  return '';
 };
 
 export const getFormattedPrice = (price: number) => String(price);
@@ -100,9 +116,12 @@ const cartGetters: CartGetters<Cart, LineItem> = {
   getItemSku: getCartItemSku,
   getFormattedPrice,
   getTotalItems: getCartTotalItems,
+  getTotalDiscount:getCartTotalDiscount,
   getCoupons,
   getDiscounts,
-  getcheckoutURL
+  getcheckoutURL,
+  getSubTotal: getCartSubTotal,
+  getCoupon: getAppliedCoupon
 };
 
 export default cartGetters;

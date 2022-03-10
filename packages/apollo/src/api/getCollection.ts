@@ -36,6 +36,7 @@ const collectionQuery = gql`
             variants(first: 1) {
               edges {
                 node {
+                  id
                   price
                   availableForSale
                   compareAtPrice

@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
-import { print } from 'graphql'
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function addToCart(context, params, _customQuery?: CustomQuery) {
+import { getCountry } from '../../helpers/utils'
+export async function addToCart(context, params, _customQuery?: CustomQuery) {
   const { currentCart, product, quantity, customQuery } = params;
   // Items to be add to cart
   const lineItemsToAdd = [{
@@ -11,7 +9,6 @@ export default async function addToCart(context, params, _customQuery?: CustomQu
     quantity,
     customAttributes: customQuery
   }];
-
   const DEFAULT_MUTATION = gql`mutation checkoutLineItemsAdd($country:CountryCode, $checkoutId: ID!, $lineItems: [CheckoutLineItemInput!]! ) @inContext(country:$country){
   checkoutLineItemsAdd(checkoutId: $checkoutId, lineItems: $lineItems){
     checkout{
@@ -34,14 +31,17 @@ export default async function addToCart(context, params, _customQuery?: CustomQu
           key
           value
         }
-        discountApplications(first:250){
+        discountApplications(first:20){
           edges{
             node{
-              allocationMethod
-              targetSelection
-              targetType
               value{
-                __typename
+                ... on MoneyV2{
+                  amount
+                  currencyCode
+                }
+                ... on PricingPercentageValue{
+                  percentage
+                }
               }
             }
           }
@@ -145,7 +145,7 @@ export default async function addToCart(context, params, _customQuery?: CustomQu
   }`
   const payload = {
     lineItems: lineItemsToAdd,
-    country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase(),
+    country: getCountry(context),
     checkoutId: currentCart.id
   }
 
@@ -153,7 +153,7 @@ export default async function addToCart(context, params, _customQuery?: CustomQu
       customQuery,
       {
         checkoutLineItemsAdd: {
-          mutation: print(DEFAULT_MUTATION as any),
+          mutation: DEFAULT_MUTATION,
           payload
         }
       }
@@ -161,7 +161,7 @@ export default async function addToCart(context, params, _customQuery?: CustomQu
 
 
   return await context.client.apolloClient.mutate({
-    mutation: gql(checkoutLineItemsAdd.mutation) as any,
+    mutation: checkoutLineItemsAdd.mutation,
     variables: checkoutLineItemsAdd.payload
   }).then((result) => {
     const discountApplications = result.data.checkoutLineItemsAdd.checkout.discountApplications.edges.map((discountApplications => discountApplications.node));

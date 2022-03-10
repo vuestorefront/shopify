@@ -1,22 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
-import { print } from 'graphql'
-import { getCountry } from '../../helpers/utils';
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function updateCart(context, params, _customQuery?: CustomQuery) {
-  const { currentCart, product, quantity } = params;
-  // Existing Checkout ID
-  const lineItemsToUpdate = [{
-    id: product.id,
-    quantity
-  }];
-
-
-  const DEFAULT_MUTATION = gql`mutation checkoutLineItemsUpdate($country:CountryCode, $checkoutId: ID!, $lineItems: [CheckoutLineItemUpdateInput!]! ) @inContext(country:$country){
-  checkoutLineItemsUpdate(checkoutId: $checkoutId, lineItems: $lineItems){
-    checkout{
-      appliedGiftCards{
+export async function applyCoupon(context, params, _customQuery?: CustomQuery) {
+  const { currentCart, couponCode } = params;
+  const DEFAULT_MUTATION = gql`mutation APPLY_COUPON($checkoutId: ID!, $discountCode: String!){ 
+    checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
+        checkout {
+      		appliedGiftCards{
           id
           amountUsedV2{
             currencyCode
@@ -145,19 +135,23 @@ export default async function updateCart(context, params, _customQuery?: CustomQ
         updatedAt
         webUrl
       }
+      checkoutUserErrors {
+          code
+          field
+          message
+      }
     }
   }`
   const payload = {
-    lineItems: lineItemsToUpdate,
-    country: getCountry(context),
+    discountCode: couponCode,
     checkoutId: currentCart.id
   }
 
-    const { checkoutLineItemsUpdate } = context.extendQuery(
+    const { checkoutDiscountCodeApplyV2 } = context.extendQuery(
       _customQuery,
       {
-        checkoutLineItemsUpdate: {
-          mutation: print(DEFAULT_MUTATION as any),
+        checkoutDiscountCodeApplyV2: {
+          mutation: DEFAULT_MUTATION,
           payload
         }
       }
@@ -165,18 +159,22 @@ export default async function updateCart(context, params, _customQuery?: CustomQ
 
 
   return await context.client.apolloClient.mutate({
-    mutation: gql(checkoutLineItemsUpdate.mutation) as any,
-    variables: checkoutLineItemsUpdate.payload
+    mutation: checkoutDiscountCodeApplyV2.mutation,
+    variables: checkoutDiscountCodeApplyV2.payload
   }).then((result) => {
-    const discountApplications = result.data.checkoutLineItemsUpdate.checkout.discountApplications.edges.map((discountApplications => discountApplications.node));
-      const lineItems = result.data.checkoutLineItemsUpdate.checkout.lineItems.edges.map((lineItem => lineItem.node));
-      delete (result.data.checkoutLineItemsUpdate.checkout.lineItems);
-      delete (result.data.checkoutLineItemsUpdate.checkout.discountApplications);
-      result.data.checkoutLineItemsUpdate.checkout = {
-          ...result.data.checkoutLineItemsUpdate.checkout,
-          discountApplications,
-          lineItems
-      };
-    return result.data.checkoutLineItemsUpdate.checkout;
+    const discountApplications = result.data.checkoutDiscountCodeApplyV2.checkout.discountApplications.edges.map((discountApplications => discountApplications.node));
+    const lineItems = result.data.checkoutDiscountCodeApplyV2.checkout.lineItems.edges.map((lineItem => lineItem.node));
+    const checkoutUserErrors = result.data.checkoutDiscountCodeApplyV2.checkoutUserErrors ? result.data.checkoutDiscountCodeApplyV2.checkoutUserErrors.map((UserErrors => UserErrors.message)) : [];
+    delete (result.data.checkoutDiscountCodeApplyV2.checkout.lineItems);
+    delete (result.data.checkoutDiscountCodeApplyV2.checkout.discountApplications);
+    delete (result.data.checkoutDiscountCodeApplyV2.checkoutUserErrors);
+    result.data.checkoutDiscountCodeApplyV2.checkout = {
+        ...result.data.checkoutDiscountCodeApplyV2.checkout,
+        discountApplications,
+        lineItems,
+        checkoutUserErrors,
+        couponCode
+    };
+    return result.data.checkoutDiscountCodeApplyV2;
   });
 }

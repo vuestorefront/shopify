@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
-import { print } from 'graphql'
+import { getCountry } from '../../helpers/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function checkOut(context, checkoutId, customQuery?: CustomQuery) {
-  const DEFAULT_QUERY = `
-  query FETCH_CHECKOUT($country: CountryCode!, $id: ID!) @inContext(country: $country ) {
+  const DEFAULT_QUERY = `query FETCH_CHECKOUT($country: CountryCode!, $id: ID!) @inContext(country: $country ) {
     node(id: $id) {
       id
       ... on Checkout {
@@ -30,14 +29,17 @@ export default async function checkOut(context, checkoutId, customQuery?: Custom
           key
           value
         }
-        discountApplications(first:250){
+        discountApplications(first:20){
           edges{
             node{
-              allocationMethod
-              targetSelection
-              targetType
               value{
-                __typename
+                ... on MoneyV2{
+                  amount
+                  currencyCode
+                }
+                ... on PricingPercentageValue{
+                  percentage
+                }
               }
             }
           }
@@ -142,7 +144,7 @@ export default async function checkOut(context, checkoutId, customQuery?: Custom
 
   const payload = {
     id: checkoutId,
-    country: (context.res.req.cookies['vsf-locale'] === "en") ? "US" : (context.res.req.cookies['vsf-locale']).toUpperCase()
+    country: getCountry(context),
   }
 
   const { node } = context.extendQuery(

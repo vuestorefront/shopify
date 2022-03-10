@@ -4,8 +4,7 @@ import {
   useCartFactory,
   UseCartFactoryParams
 } from '@vue-storefront/core';
-import { Cart, CartItem, Coupon, Product } from '../types';
-
+import { Cart, CartItem, Product } from '../types';
 const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context) => {
@@ -72,19 +71,22 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applyCoupon: async (context: Context, { currentCart, couponCode, customQuery }) => {
-    console.log('Mocked: useCart.applyCoupon');
-    return {
-      updatedCart: {},
-      updatedCoupon: {}
-    };
+    return await context.$shopify.api.applyCoupon({ currentCart, couponCode, customQuery }).then((checkout) => {
+      // return updated checkout data
+      return {
+        updatedCart: JSON.parse(JSON.stringify(checkout.checkout))
+      };
+    });
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeCoupon: async (context: Context, { currentCart, couponCode, customQuery }) => {
-    console.log('Mocked: useCart.removeCoupon');
-    return {
-      updatedCart: {}
-    };
+    return await context.$shopify.api.removeCoupon({ currentCart, couponCode, customQuery }).then((checkout) => {
+      // return updated checkout data
+      return {
+        updatedCart: JSON.parse(JSON.stringify(checkout.checkout))
+      };
+    });
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
