@@ -1,7 +1,7 @@
 import { CustomQuery } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
-import { QueryRoot, QueryRootArticlesArgs } from '../shopify'
+import { QueryRoot } from '../shopify'
 import { GetArticlesParams } from '../types/GetArticlesParams'
 
 const articlesQuery = gql`
