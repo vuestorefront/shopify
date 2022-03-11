@@ -131,9 +131,11 @@ export default async function getProduct(
         }
       }
     }`
+
+    const curLocaleCode = params.curLocaleCode;
     const variables = {
       handle: params.slug,
-      country: getCountry(context),
+      country: curLocaleCode === "en" ? "US" : (curLocaleCode).toUpperCase(),
       selectedOptions: chosenVariant
     }
 
