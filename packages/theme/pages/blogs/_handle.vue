@@ -13,7 +13,7 @@
       <div class="navbar__main">
         <div class="navbar__sort desktop-only">
           <span class="navbar__label">Sort by:</span>
-          <SfComponentSelect v-model="sortBy" class="navbar__select">
+          <SfComponentSelect v-model="selectedSortBy" class="navbar__select">
             <SfComponentSelectOption
               v-for="option in sortByOptions"
               :key="option.value"
@@ -64,7 +64,10 @@
     <div class="main section">
       <div class="sidebar desktop-only">
         <LazyHydrate when-idle>
-          <SfLoader :loading="isPageLoading" :class="{ 'loading--categories': isPageLoading }">
+          <SfLoader
+            :loading="isPageLoading"
+            :class="{ 'loading--categories': isPageLoading }"
+          >
             <SfAccordion
               :open="sidebarAccordion[0].header"
               :show-chevron="true"
@@ -77,7 +80,10 @@
                       :key="j"
                       class="list__item"
                     >
-                      <SfMenuItem :label="item.title" :link="localePath(item.link)" />
+                      <SfMenuItem
+                        :label="item.title"
+                        :link="localePath(item.link)"
+                      />
                     </SfListItem>
                   </SfList>
                 </template>
@@ -86,10 +92,7 @@
           </SfLoader>
         </LazyHydrate>
       </div>
-      <SfLoader
-        :loading="isPageLoading"
-        :class="{ loading: isPageLoading }"
-      >
+      <SfLoader :loading="isPageLoading" :class="{ loading: isPageLoading }">
         <div v-if="!isPageLoading" class="products">
           <transition-group
             v-if="isGridView"
@@ -103,7 +106,7 @@
               :key="article.id"
               :style="{ '--index': i }"
               :title="article.title"
-              :image="article.image.transformedSrc"
+              :image="articleGetters.getImage(article)"
               :image-height="326"
               :image-width="216"
               :wishlist-icon="false"
@@ -117,6 +120,16 @@
             >
               <template #add-to-cart>
                 <div></div>
+              </template>
+
+              <template #title="{ title }">
+                <span class="sf-product-card__title">
+                  {{ title }}
+                </span>
+
+                <small class="sf-product-card__publishedAt">{{
+                  articleGetters.getPublishedAt(article)
+                }}</small>
               </template>
             </SfProductCard>
           </transition-group>
@@ -149,20 +162,43 @@
               </template>
             </SfProductCardHorizontal>
           </transition-group>
-          <SfPagination
-            class="products__pagination"
-            :current="currentPage"
-            :total="4"
-            :visible="5"
-            @click="
-              (page) => {
-                currentPage = page;
-              }
-            "
-          />
+          <SfPagination class="products__pagination" :total="0" :visible="0">
+            <template #next>
+              <SfButton
+                class="sf-button--pure sf-button"
+                :disabled="!hasNextPage"
+                @click="goNextPage"
+              >
+                <SfIcon
+                  icon="arrow_right"
+                  size="xs"
+                  viewBox="0 0 24 24"
+                  :coverage="1"
+                />
+              </SfButton>
+            </template>
+            <template #prev>
+              <SfButton
+                class="sf-button--pure sf-button"
+                :disabled="!hasPrevPage"
+                @click="goPrevPage"
+              >
+                <SfIcon
+                  icon="arrow_left"
+                  size="xs"
+                  viewBox="0 0 24 24"
+                  :coverage="1"
+                />
+              </SfButton>
+            </template>
+          </SfPagination>
           <div class="products__show-on-page desktop-only">
             <span class="products__show-on-page__label">Show on page:</span>
-            <SfSelect class="products__items-per-page">
+            <SfSelect
+              :value="selectedShowOnPage"
+              class="products__items-per-page"
+              @input="(perPage) => selectShowOnPage(perPage)"
+            >
               <SfSelectOption
                 v-for="option in showOnPage"
                 :key="option"
@@ -194,10 +230,11 @@ import {
   SfSelect,
   SfLoader
 } from '@storefront-ui/vue';
+import { SortBy } from '~/enums/SortBy';
 import LazyHydrate from 'vue-lazy-hydration';
-import { useRoute, computed } from '@nuxtjs/composition-api';
+import { useRoute, computed, ref, watchEffect } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
-import { useContent } from '@vue-storefront/shopify';
+import { useContent, articleGetters } from '@vue-storefront/shopify';
 import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
 export default {
   name: 'Category',
@@ -225,46 +262,118 @@ export default {
       loading: isBlogsLoading
     } = useContent('blogs');
     const { search: getBlog } = useContent('blog');
-    const { search: getArticles, content: articles, loading: isArticlesLoading } = useContent('articles');
+    const {
+      search: getArticles,
+      content: articlesContent,
+      loading: isArticlesLoading
+    } = useContent('articles');
+
+    const currentHandle = ref(route?.value?.params?.handle);
+    const cursors = ref(['']);
+
+    const showOnPage = ['5', '10', '20', '40', '60'];
+    const selectedShowOnPage = ref('5');
+    const sortByOptions = [
+      {
+        value: 'latest',
+        label: 'Latest First'
+      },
+      {
+        value: 'oldest',
+        label: 'Oldest First'
+      }
+    ];
+    const selectedSortBy = ref(SortBy.Latest);
 
     onSSR(async () => {
       await getBlogs({ contentType: ContentType.Blog });
-      const handle = route?.value?.params?.handle ?? blogs?.value?.[0]?.handle;
-      
+      currentHandle.value =
+        route?.value?.params?.handle ?? blogs?.value?.[0]?.handle;
+
       getBlog({
         contentType: ContentType.Blog,
-        handle
+        handle: currentHandle.value
       });
 
       await getArticles({
         contentType: ContentType.Article,
-        query: `blog_title:${handle}`
+        query: `blog_title:${currentHandle.value}`
       });
     });
 
-    const isPageLoading = computed(() => isBlogsLoading.value || isArticlesLoading.value)
+    const articles = computed(() => articlesContent?.value?.data ?? []);
+
+    const hasNextPage = computed(
+      () => articlesContent.value.pageInfo?.hasNextPage
+    );
+    const hasPrevPage = computed(
+      () => articlesContent.value.pageInfo?.hasPreviousPage
+    );
+
+    const goNextPage = () => {
+      const last = articles?.value?.slice(-1)[0];
+
+      if (!last.cursor) return;
+
+      cursors.value.push(last.cursor);
+    };
+
+    const goPrevPage = () => {
+      cursors.value.pop()
+    };
+
+    const isPageLoading = computed(
+      () => isBlogsLoading.value || isArticlesLoading.value
+    );
+
+    const selectShowOnPage = (perPage) => {
+      selectedShowOnPage.value = perPage;
+    };
+
+    watchEffect(() => {
+      const options = {
+        contentType: ContentType.Article,
+        query: `blog_title:${currentHandle.value}`,
+        first: parseInt(selectedShowOnPage.value),
+        reverse: selectedSortBy.value === SortBy.Latest,
+        sortKey: 'PUBLISHED_AT'
+      };
+
+      if (cursors.value.length > 1) {
+        options.after = [...cursors.value].splice(-1)[0];
+      }
+
+      getArticles(options);
+    });
 
     return {
+      selectShowOnPage,
+      selectedShowOnPage,
+      showOnPage,
+
+      sortByOptions,
+      selectedSortBy,
+
+      articleGetters,
+      hasNextPage,
+      hasPrevPage,
+
       blogs,
       articles,
+
+      goNextPage,
+      goPrevPage,
+
       totalPosts: 0,
       currentPage: 1,
-      sortBy: 'Latest',
       isGridView: true,
       category: 'Blogs',
       isPageLoading,
-      sortByOptions: [
-        {
-          value: 'Latest',
-          label: 'Latest'
-        }
-      ],
       sidebarAccordion: [
         {
           header: 'Categories'
         }
       ],
-      showOnPage: ['20', '40', '60'],
       breadcrumbs: [
         {
           text: 'Home',

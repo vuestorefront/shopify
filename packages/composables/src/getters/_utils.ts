@@ -54,6 +54,12 @@ export const capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
+export const formatDate = (date: string) => {
+  const monthsArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const toFormatDate = new Date(date);
+  return monthsArray[toFormatDate.getMonth()] + ' ' + toFormatDate.getDate() + ', ' + toFormatDate.getFullYear() + ' at ' + toFormatDate.getHours() + ':' + toFormatDate.getMinutes();
+}
+
 export const getVariantByAttributes = (products, attributes: any) => {
   const configurationKeys = Object.keys(attributes);
   return products.variants.find((variant) => {

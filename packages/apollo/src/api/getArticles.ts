@@ -16,7 +16,12 @@ const articlesQuery = gql`
   $truncateContent: Int
   ) {
     articles(after: $after, before: $before, first: $first, last: $last, query: $query, reverse: $reverse, sortKey: $sortKey) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
       edges {
+        cursor
         node {
           id
           handle
@@ -28,6 +33,7 @@ const articlesQuery = gql`
           image {
             transformedSrc
             altText
+            url
           }
           seo {
             description
@@ -67,11 +73,13 @@ export async function getArticles(context: ShopifyApolloContext, params: GetArti
 
   return {
     ...response,
+    pageInfo: response?.data?.articles?.pageInfo,
     data: {
       ...response?.data,
       articles: response?.data?.articles?.edges?.map(edge => ({
         ...edge?.node,
-        link: `/blogs/${edge?.node?.blog?.handle}/${edge?.node?.handle}` 
+        link: `/blogs/${edge?.node?.blog?.handle}/${edge?.node?.handle}`,
+        cursor: edge?.cursor
       })),
     }
   }
