@@ -7,6 +7,7 @@ import { getPage } from './getPage';
 import getBlogs from './getBlogs';
 import getBlog from './getBlog';
 import { getArticles } from './getArticles'
+import { getArticle } from './getArticle'
 
 const apis = {
   searchProduct,
@@ -17,7 +18,8 @@ const apis = {
   getPage,
   getBlogs,
   getBlog,
-  getArticles
+  getArticles,
+  getArticle
 }
 
 export type ShopifyApolloAPIs = {
