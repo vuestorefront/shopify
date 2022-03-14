@@ -93,13 +93,13 @@
         </LazyHydrate>
       </div>
       <SfLoader :loading="isPageLoading" :class="{ loading: isPageLoading }">
-        <div v-if="!isPageLoading" class="products">
+        <div v-if="!isPageLoading" class="blogs">
           <transition-group
             v-if="isGridView"
             appear
-            name="products__slide"
+            name="blogs__slide"
             tag="div"
-            class="products__grid"
+            class="blogs__grid"
           >
             <SfProductCard
               v-for="(article, i) in articles"
@@ -116,18 +116,19 @@
                 format: 'webp',
                 fit: 'cover'
               }"
-              class="products__product-card"
+              class="blogs__blog-card"
+              :link="localePath(`/articles/${article.handle}?id=${article.id}`)"
             >
               <template #add-to-cart>
                 <div></div>
               </template>
 
               <template #title="{ title }">
-                <span class="sf-product-card__title">
+                <span class="sf-blog-card__title">
                   {{ title }}
                 </span>
 
-                <small class="sf-product-card__publishedAt">{{
+                <small class="sf-blog-card__publishedAt">{{
                   articleGetters.getPublishedAt(article)
                 }}</small>
               </template>
@@ -136,9 +137,9 @@
           <transition-group
             v-else
             appear
-            name="products__slide"
+            name="blogs__slide"
             tag="div"
-            class="products__list"
+            class="blogs__list"
           >
             <SfProductCardHorizontal
               v-for="(article, i) in articles"
@@ -155,14 +156,14 @@
                 format: 'webp',
                 fit: 'cover'
               }"
-              class="products__product-card-horizontal"
+              class="blogs__blog-card-horizontal"
             >
               <template #add-to-cart>
                 <div></div>
               </template>
             </SfProductCardHorizontal>
           </transition-group>
-          <SfPagination class="products__pagination" :total="0" :visible="0">
+          <SfPagination class="blogs__pagination" :total="0" :visible="0">
             <template #next>
               <SfButton
                 class="sf-button--pure sf-button"
@@ -192,18 +193,18 @@
               </SfButton>
             </template>
           </SfPagination>
-          <div class="products__show-on-page desktop-only">
-            <span class="products__show-on-page__label">Show on page:</span>
+          <div class="blogs__show-on-page desktop-only">
+            <span class="blogs__show-on-page__label">Show on page:</span>
             <SfSelect
               :value="selectedShowOnPage"
-              class="products__items-per-page"
+              class="blogs__items-per-page"
               @input="(perPage) => selectShowOnPage(perPage)"
             >
               <SfSelectOption
                 v-for="option in showOnPage"
                 :key="option"
                 :value="option"
-                class="products__items-per-page__option"
+                class="blogs__items-per-page__option"
               >
                 {{ option }}
               </SfSelectOption>
@@ -297,7 +298,10 @@ export default {
 
       await getArticles({
         contentType: ContentType.Article,
-        query: `blog_title:${currentHandle.value}`
+        query: `blog_title:${currentHandle.value}`,
+        first: parseInt(selectedShowOnPage.value),
+        reverse: true,
+        sortKey: 'PUBLISHED_AT'
       });
     });
 
@@ -335,9 +339,12 @@ export default {
         contentType: ContentType.Article,
         query: `blog_title:${currentHandle.value}`,
         first: parseInt(selectedShowOnPage.value),
-        reverse: selectedSortBy.value === SortBy.Latest,
         sortKey: 'PUBLISHED_AT'
       };
+
+      if (selectedSortBy.value === SortBy.Latest) {
+        options.reverse = true
+      }
 
       if (cursors.value.length > 1) {
         options.after = [...cursors.value].splice(-1)[0];
@@ -571,7 +578,7 @@ export default {
     }
   }
 }
-.products {
+.blogs {
   box-sizing: border-box;
   flex: 1;
   margin: 0;
@@ -586,22 +593,22 @@ export default {
       justify-content: space-between;
     }
   }
-  &__product-card {
-    --product-card-max-width: 11rem;
-    --product-card-title-margin: var(--spacer-2xs) 0 0 0;
+  &__blog-card {
+    --blog-card-max-width: 11rem;
+    --blog-card-title-margin: var(--spacer-2xs) 0 0 0;
     --price-regular-font-line-height: 1;
     margin-bottom: var(--spacer-sm);
-    ::v-deep .sf-product-card__price {
-      margin: var(--spacer-2xs) 0 var(--spacer-xs);
+    ::v-deep .sf-blog-card__publishedAt {
+      display: block;
     }
     flex: 1 1 50%;
     @include for-desktop {
       margin-bottom: 0;
-      --product-card-max-width: 50%;
-      --product-card-title-margin: var(--spacer-base) 0 0 0;
+      --blog-card-max-width: 50%;
+      --blog-card-title-margin: var(--spacer-base) 0 0 0;
     }
   }
-  &__product-card-horizontal {
+  &__blog-card-horizontal {
     margin-bottom: var(--spacer-sm);
     flex: 0 0 100%;
     ::v-deep .sf-product-card-horizontal__wishlist-icon {
@@ -630,10 +637,10 @@ export default {
       justify-content: flex-start;
       margin: var(--spacer-xl) 0 0 0;
     }
-    &__product-card-horizontal {
+    &__blog-card-horizontal {
       margin: var(--spacer-lg) 0;
     }
-    &__product-card {
+    &__blog-card {
       flex: 1 1 25%;
     }
     &__list {

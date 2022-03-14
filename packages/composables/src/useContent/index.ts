@@ -3,7 +3,7 @@ import {
   useContentFactory,
   UseContentFactoryParams
 } from '@vue-storefront/core';
-import { QueryRootBlogArgs, QueryRootBlogsArgs, QueryRootPageArgs } from '@vue-storefront/shopify-apollo/src/shopify';
+import { QueryRootBlogArgs, QueryRootBlogsArgs, QueryRootNodeArgs, QueryRootPageArgs } from '@vue-storefront/shopify-apollo/src/shopify';
 import { GetArticlesParams } from '@vue-storefront/shopify-apollo/src/types/GetArticlesParams';
 import { Context } from '../types'
 import { ContentType } from '../types/ContentType';
@@ -24,7 +24,7 @@ const params: UseContentFactoryParams<unknown, UseContentParams> = {
         if (Object.prototype.hasOwnProperty.call(params, 'id') || Object.prototype.hasOwnProperty.call(params, 'handle')) {
           const response = await context.$shopify.api.getBlog(params as QueryRootBlogArgs)
           if (response.error) throw response.error
-          
+
           return response?.data?.blog
         } else {
           const response = await context.$shopify.api.getBlogs(params as QueryRootBlogsArgs)
@@ -34,18 +34,25 @@ const params: UseContentFactoryParams<unknown, UseContentParams> = {
         }
       }
       case ContentType.Article: {
-        const response = await context.$shopify.api.getArticles(params as GetArticlesParams)
+        if (Object.prototype.hasOwnProperty.call(params, 'id') || Object.prototype.hasOwnProperty.call(params, 'handle')) {
+          const response = await context.$shopify.api.getArticle(params as QueryRootNodeArgs)
 
-        if (response.error) throw response.error
+          return response?.data?.article
+        } else {
+          const response = await context.$shopify.api.getArticles(params as GetArticlesParams)
+
+          if (response.error) throw response.error
 
 
-        return {
-          data: response?.data?.articles,
-          pageInfo: response?.pageInfo
+          return {
+            data: response?.data?.articles,
+            pageInfo: response?.pageInfo
+          }
         }
       }
-      default:
+      default: {
         return deprecatedApi.getBlogPosts(params);
+      }
     }
   }
 };
