@@ -4,16 +4,19 @@ import { ShopifyApolloContext } from '../library'
 import { QueryRoot } from '../shopify'
 import { GetArticlesParams } from '../types/GetArticlesParams'
 
-const articlesQuery = gql`
+
+
+export async function getArticles(context: ShopifyApolloContext, params: GetArticlesParams, customQuery?: CustomQuery) {
+  const articlesQuery = gql`
   query getArticles(
-  $after: String,
-  $before: String,
-  $first: Int,
-  $last: Int,
-  $query: String,
-  $reverse: Boolean,
-  $sortKey: ArticleSortKeys,
-  $truncateContent: Int
+    $after: String,
+    $before: String,
+    $first: Int,
+    $last: Int,
+    $query: String,
+    $reverse: Boolean,
+    $sortKey: ArticleSortKeys,
+    $truncateContent: Int
   ) {
     articles(after: $after, before: $before, first: $first, last: $last, query: $query, reverse: $reverse, sortKey: $sortKey) {
       pageInfo {
@@ -49,7 +52,6 @@ const articlesQuery = gql`
   }
 `
 
-export async function getArticles(context: ShopifyApolloContext, params: GetArticlesParams, customQuery?: CustomQuery) {
   const variables = {
     first: 5,
     ...params

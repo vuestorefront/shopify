@@ -165,5 +165,6 @@ export default {
   'This promo code is invalid': 'This promo code is invalid',
   'Search results': 'Search results',
   'You haven\'t searched for items yet': 'You haven\'t searched for items yet',
-  'Let\'s start now - we\'ll help you': 'Let\'s start now - we\'ll help you'
+  'Let\'s start now - we\'ll help you': 'Let\'s start now - we\'ll help you',
+  'on': 'on'
 };
