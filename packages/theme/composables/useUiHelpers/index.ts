@@ -85,6 +85,12 @@ const useUiHelpers = () => {
 
   const isFacetCheckbox = (): boolean => false;
 
+  const formatDate = (date: string) => {
+    const monthsArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const toFormatDate = new Date(date);
+    return monthsArray[toFormatDate.getMonth()] + ' ' + toFormatDate.getDate() + ', ' + toFormatDate.getFullYear() + ' at ' + toFormatDate.getHours() + ':' + toFormatDate.getMinutes();
+  }
+
   return {
     getFacetsFromURL,
     getCatLink,
@@ -93,7 +99,8 @@ const useUiHelpers = () => {
     changeItemsPerPage,
     changeSearchTerm,
     isFacetColor,
-    isFacetCheckbox
+    isFacetCheckbox,
+    formatDate
   };
 };
 
