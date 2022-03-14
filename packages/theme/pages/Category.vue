@@ -375,7 +375,6 @@ export default {
   methods: {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     HandleAddTocart(productObj) {
-      console.log('productObj::', productObj);
       this.addItemToCart(productObj).then(() => {
         this.sendNotification({
           key: 'added_to_cart',
