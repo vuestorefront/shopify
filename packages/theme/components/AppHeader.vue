@@ -24,15 +24,15 @@
         </nuxt-link>
       </template>
 
-      <template v-if="categories.length > 0" #navigation>
+      <template v-if="menus.length > 0" #navigation>
         <div class="navigation-wrapper">
           <SfHeaderNavigationItem
-            v-for="cat in categories"
-            :key="cat.id"
+            v-for="menu in menus"
+            :key="menu.id"
             class="nav-item"
-            :data-cy="'app-header-url_' + cat.handle"
-            :label="cat.title"
-            :link="localePath('/c/' + cat.handle)"
+            :data-cy="'app-header-url_' + menu.handle"
+            :label="menu.title"
+            :link="menu.handle.includes('/blogs') ? menu.handle : localePath('/c/' + menu.handle)"
           />
         </div>
       </template>
@@ -101,7 +101,8 @@ import { computed, ref, useRouter } from '@nuxtjs/composition-api';
 import useUiHelpers from '~/composables/useUiHelpers';
 import LocaleSelector from './LocaleSelector';
 
-import { searchGetters, useCategory, useSearch } from '@vue-storefront/shopify';
+import { searchGetters, useCategory, useSearch, useContent } from '@vue-storefront/shopify';
+import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
 
 export default {
   components: {
@@ -129,6 +130,11 @@ export default {
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
     const router = useRouter();
+    const {
+      search: getArticles,
+      content: articlesContent,
+      loading: isArticlesLoading
+    } = useContent('articles');
 
     const curCatSlug = ref(getFacetsFromURL().categorySlug);
     const accountIcon = computed(() =>
@@ -157,6 +163,11 @@ export default {
       await headerSearch({
         term: term.value
       });
+      await getArticles({
+        contentType: ContentType.Article,
+        query: term.value,
+        first: 5
+      })
     }, 500);
     const closeSearch = () => {
       if (!isSearchOpen.value) return;
@@ -165,12 +176,17 @@ export default {
     };
 
     searchResults.value = {
-      products: computed(() => searchGetters.getItems(result.value))
+      products: computed(() => searchGetters.getItems(result.value)),
+      articles: computed(() => term.value === '' ? [] : articlesContent?.value?.data ?? [])
     };
     // #endregion Search Section
     onSSR(async () => {
       await search({ slug: '' });
     });
+
+
+    const menus = computed(() => [...categories.value, { id: 'blogs', title: 'blogs', handle: '/blogs' }])
+
     return {
       accountIcon,
       closeSearch,
@@ -182,7 +198,7 @@ export default {
       handleSearch,
       curCatSlug,
       searchResults,
-      categories,
+      menus,
       isSearchOpen
     };
   }
