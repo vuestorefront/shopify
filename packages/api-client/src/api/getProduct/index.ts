@@ -167,7 +167,7 @@ export async function getProduct(
     }).catch();
   }
   else if (params.related) {
-    const DEFAULT_QUERY = gql`query GET_PRODUCT_RECOMMENDATION($productId: ID!) @inContext(country: DE){
+    const DEFAULT_QUERY = `query GET_PRODUCT_RECOMMENDATION($productId: ID!, $country: CountryCode!) @inContext(country: $country){
       productRecommendations(productId:$productId){
         id
         title
@@ -247,15 +247,17 @@ export async function getProduct(
         }
       }
     }`
+    const localeInfo = params.localeInfo;
     const payload = {
-      productId: params.productId
+      productId: params.productId,
+      country: localeInfo.cur === "en" ? (localeInfo.default).toUpperCase() : (localeInfo.cur).toUpperCase()
     }
 
     const { productRecommendations } = context.extendQuery(
       customQuery,
       {
         productRecommendations: {
-          query: DEFAULT_QUERY,
+          query: DEFAULT_QUERY as any,
           payload
         }
       }
