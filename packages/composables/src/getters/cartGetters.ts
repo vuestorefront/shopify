@@ -2,19 +2,17 @@
 import { CartGetters, AgnosticPrice, AgnosticTotals, AgnosticCoupon, AgnosticDiscount } from '@vue-storefront/core';
 import { Cart, LineItem } from '@vue-storefront/shopify-api/src/types';
 import { formatSelectedAttributeList } from './_utils';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export const getCartItems = (cart: Cart): LineItem[] => {
   return cart.lineItems;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItemName = (product: any): string => product?.title || 'Product\'s name';
 export const getCartItemId = (product: any): string => product.id || '0';
 export const getCartItemSlug = (product: any): string => {
   return product.slug || '0';
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItemImage = (product: any): string => {
   if (product.variant && product?.variant?.image !== null) {
     const imgPath = product?.variant?.image?.src.substring(0, product?.variant.image.src.lastIndexOf('.'));
@@ -25,7 +23,6 @@ export const getCartItemImage = (product: any): string => {
   return '';
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItemPrice = (product: any): AgnosticPrice => {
   return {
     regular: product?.variant?.compareAtPriceV2?.amount || null,
@@ -36,8 +33,7 @@ export const getCartItemPrice = (product: any): AgnosticPrice => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItemQty = (product: LineItem): number => product?.quantity;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getCartItemAttributes = (product: LineItem, filterByAttributeName?: Array<string>) => {
+export const getCartItemAttributes = (product: LineItem) => {
   const formatAttedattributeList = formatSelectedAttributeList(product?.variant.selectedOptions);
   if (formatAttedattributeList.length) {
     const attribArr = [];
@@ -49,10 +45,8 @@ export const getCartItemAttributes = (product: LineItem, filterByAttributeName?:
   return {};
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartItemSku = (product: any): string => product?.variant.sku || '-';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getCartTotals = (cart): AgnosticTotals => {
   if (cart && cart !== null) {
     return {
@@ -68,29 +62,13 @@ export const getCartShippingPrice = (cart: Cart): number => 0;
 
 export const getCartSubTotal = (cart: Cart): number => cart.lineItemsSubtotalPrice || 0;
 
-export const getcheckoutURL = (cart: Cart): string => {
-  return cart.webUrl || '';
-};
+export const getcheckoutURL = (cart: Cart): string => cart.webUrl || '';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getCartTotalItems = (cart: Cart): number => {
-  if (cart?.lineItems?.length > 0) {
-    return cart.lineItems.reduce((n, { quantity }) => n + quantity, 0);
-  }
-  return 0;
-};
+export const getCartTotalItems = (cart: Cart): number => cart?.lineItems?.length > 0 ? cart.lineItems.reduce((n, { quantity }) => n + quantity, 0):0;
 
-export const getCartTotalDiscount = (cart: Cart): number => {
-  if (cart?.discountApplications.length > 0) {
-    return cart.discountApplications[0].value;
-  }
-  return 0;
-};
+export const getCartTotalDiscount = (cart: Cart): number => cart?.discountApplications.length > 0? cart.discountApplications[0].value : 0;
 
-export const getAppliedCoupon = (cart: Cart): string => {
-  if (cart?.discountApplications.length > 0) 
-  return cart.discountApplications[0].code;
-};
+export const getAppliedCoupon = (cart: Cart): string => cart?.discountApplications.length > 0 ? cart.discountApplications[0].code : '';
 
 export const getFormattedPrice = (price: number) => String(price);
 
@@ -115,11 +93,11 @@ const cartGetters: CartGetters<Cart, LineItem> = {
   getFormattedPrice,
   getTotalItems: getCartTotalItems,
   getTotalDiscount:getCartTotalDiscount,
-  getCoupons,
-  getDiscounts,
   getcheckoutURL,
   getSubTotal: getCartSubTotal,
-  getCoupon: getAppliedCoupon
+  getCoupon: getAppliedCoupon,
+  getCoupons,
+  getDiscounts
 };
 
 export default cartGetters;

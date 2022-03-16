@@ -40,9 +40,7 @@ export default defineComponent({
       await search({
         contentType: ContentType.Article,
         id: route.value.query.id as string
-      }).then(()=>
-        console.log('contents::', article.value)
-      );
+      });
     });
 
     return {

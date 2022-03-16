@@ -125,10 +125,10 @@ export async function getProduct(
         }
       }
     }`
-    const curLocaleCode = params.curLocaleCode;
+    const localeInfo = params.localeInfo;
     const variables = {
       handle: params.slug,
-      country: curLocaleCode === "en" ? "US" : (curLocaleCode).toUpperCase(),
+      country: localeInfo.cur === "en" ? (localeInfo.default).toUpperCase() : (localeInfo.cur).toUpperCase(),
       selectedOptions: chosenVariant
     }
 
@@ -167,7 +167,7 @@ export async function getProduct(
     }).catch();
   }
   else if (params.related) {
-    const DEFAULT_QUERY = `query GET_PRODUCT_RECOMMENDATION($productId: ID!) @inContext(country: DE){
+    const DEFAULT_QUERY = gql`query GET_PRODUCT_RECOMMENDATION($productId: ID!) @inContext(country: DE){
       productRecommendations(productId:$productId){
         id
         title

@@ -13,8 +13,9 @@ const params: UseUserFactoryParams<User, any, any> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context) => {
     // check for existing token, if yes user is logged in else logged out
-    const appKey = context.$shopify.config.app.$config.appKey;
-    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
+    const APP = context.$shopify.config.app;
+    const appKey = APP.$config.appKey;
+    const token = APP.$cookies.get(appKey + '_token');
     const result: any = await context.$shopify.api.fetchCustomer(token);
     let customer = null;
     if (result) {
@@ -29,16 +30,18 @@ const params: UseUserFactoryParams<User, any, any> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   logOut: async (context: Context) => {
-    const appKey = context.$shopify.config.app.$config.appKey;
-    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
-    context.$shopify.config.app.$cookies.remove(appKey + '_token');
+    const APP = context.$shopify.config.app;
+    const appKey = APP.$config.appKey;
+    const token = APP.$cookies.get(appKey + '_token');
+    APP.$cookies.remove(appKey + '_token');
     await context.$shopify.api.signOut(token);
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateUser: async (context: Context, { currentUser, updatedUserData }) => {
-    const appKey = context.$shopify.config.app.$config.appKey;
-    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
+    const APP = context.$shopify.config.app;
+    const appKey = APP.$config.appKey;
+    const token = APP.$cookies.get(appKey + '_token');
     await context.$shopify.api.editProfile({
       token,
       profile: {
@@ -88,21 +91,23 @@ const params: UseUserFactoryParams<User, any, any> = {
     };
     // store token in cookie
     if (response.token !== null) {
-      const appKey = context.$shopify.config.app.$config.appKey;
-      context.$shopify.config.app.$cookies.set(appKey + '_token', response.token);
+      const APP = context.$shopify.config.app;
+      const appKey = APP.$config.appKey;
+      APP.$cookies.set(appKey + '_token', response.token);
     }
     return response;
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   changePassword: async (context: Context, { currentUser, currentPassword, newPassword }) => {
-    const appKey = context.$shopify.config.app.$config.appKey;
-    let token = context.$shopify.config.app.$cookies.get(appKey + '_token');
+    const APP = context.$shopify.config.app;
+    const appKey = APP.$config.appKey;
+    let token = APP.$cookies.get(appKey + '_token');
     const result: any = await context.$shopify.api.changePassword({ token, newPassword });
     token = result.customerUpdate.customerAccessToken.accessToken;
     // store updated user token
     if (token !== null) {
-      context.$shopify.config.app.$cookies.set(appKey + '_token', token);
+      APP.$cookies.set(appKey + '_token', token);
     }
     return {};
   }
