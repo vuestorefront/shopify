@@ -1,7 +1,7 @@
 require('isomorphic-fetch');
 import webpack from 'webpack';
 
-/** @type { import('@nuxt/types').NuxtConfig } */ 
+/** @type { import('@nuxt/types').NuxtConfig } */
 const config = {
   server: {
     port: process.env.APP_PORT || 3001,
@@ -9,7 +9,9 @@ const config = {
   },
   publicRuntimeConfig: {
     appKey: 'vsf2spcon',
-    appVersion: Date.now()
+    appVersion: Date.now(),
+    blogsRoute: process.env.BLOGS_ROUTE || '/blogs',
+    articlesRoute: process.env.ARTICLES_ROUTE || '/articles'
   },
   privateRuntimeConfig: {
     storeURL: process.env.SHOPIFY_DOMAIN,
@@ -39,23 +41,19 @@ const config = {
       },
       {
         rel: 'preload',
-        href:
-          'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
+        href: 'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
         as: 'style'
       },
       {
         rel: 'stylesheet',
-        href:
-          'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
+        href: 'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
         media: 'print',
-        onload: 'this.media=\'all\''
+        onload: "this.media='all'"
       }
     ]
   },
   loading: { color: '#fff' },
-  plugins: [
-    '~/plugins/scrollToTop.client.js'
-  ],
+  plugins: ['~/plugins/scrollToTop.client.js'],
   buildModules: [
     // to core
     '@nuxtjs/composition-api/module',
@@ -198,13 +196,13 @@ const config = {
       })
     ],
     extend(config) {
-      config.resolve.extensions.push('.mjs')
+      config.resolve.extensions.push('.mjs');
 
       config.module.rules.push({
         test: /\.mjs$/,
         include: /node_modules/,
         type: 'javascript/auto'
-      })
+      });
     },
     extractCSS: {
       ignoreOrder: true
@@ -218,6 +216,37 @@ const config = {
       } else {
         return { x: 0, y: 0 };
       }
+    },
+    extendRoutes(routes) {
+      return routes.map((route) => {
+        if (process.env.BLOGS_ROUTE) {
+          if (route.component.includes('/blogs/index')) {
+            return {
+              ...route,
+              name: 'blogs',
+              path: route.path.replace('/blogs', process.env.BLOGS_ROUTE)
+            };
+          }
+
+          if (route.component.includes('/blogs/_handle')) {
+            return {
+              ...route,
+              path: route.path.replace('/blogs', process.env.BLOGS_ROUTE)
+            };
+          }
+        }
+
+        if (process.env.ARTICLES_ROUTE) {
+          if (route.component.includes('/articles/_handle')) {
+            return {
+              ...route,
+              path: route.path.replace('/articles', process.env.ARTICLES_ROUTE)
+            };
+          }
+        }
+
+        return route;
+      });
     }
   },
   pwa: {
@@ -314,4 +343,4 @@ const config = {
   }
 };
 
-export default config
+export default config;

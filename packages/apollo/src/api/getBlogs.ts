@@ -65,7 +65,7 @@ export default async function getBlogs(context: ShopifyApolloContext, params: Qu
       ...response?.data,
       blogs: response?.data?.blogs?.edges?.map(edge => ({
         ...edge?.node,
-        link: `/blogs/${edge?.node?.handle}`
+        link: `${context.config?.routes?.blogs ?? '/blogs'}/${edge?.node?.handle}`
       }))
     }
   }

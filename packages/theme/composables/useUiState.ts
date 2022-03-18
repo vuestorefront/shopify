@@ -7,7 +7,7 @@ const state = reactive({
   isCategoryGridView: true,
   isFilterSidebarOpen: false,
   isNavigationSidebarOpen: false,
-  articlesPerPage: 5
+  articlesPerPage: '5'
 });
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -43,7 +43,7 @@ const useUiState = () => {
   };
 
   const articlesPerPage = computed(() => state.articlesPerPage)
-  const setArticlesPerPage = (perPage: number) => {
+  const setArticlesPerPage = (perPage: string) => {
     state.articlesPerPage = perPage
   }
 

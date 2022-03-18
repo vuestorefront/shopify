@@ -118,7 +118,7 @@
                 fit: 'cover'
               }"
               class="blogs__blog-card"
-              :link="localePath(`/articles/${article.handle}?id=${article.id}`)"
+              :link="localePath(getArticleLink(article))"
             >
               <template #add-to-cart>
                 <div></div>
@@ -235,7 +235,7 @@ import {
 import { SortBy } from '~/enums/SortBy';
 import LazyHydrate from 'vue-lazy-hydration';
 import { useUiState } from '~/composables'
-import { useRoute, computed, ref, watchEffect } from '@nuxtjs/composition-api';
+import { useRoute, computed, ref, watchEffect, useContext } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useContent, articleGetters } from '@vue-storefront/shopify';
 import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
@@ -259,6 +259,7 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const context = useContext()
     const { articlesPerPage, setArticlesPerPage } = useUiState()
     const {
       search: getBlogs,
@@ -336,6 +337,10 @@ export default {
       setArticlesPerPage(perPage)
     };
 
+    const getArticleLink = (article) => {
+      return `${context.$config?.articlesRoute ?? '/articles'}/${article.handle}?id=${article.id}`
+    }
+
     watchEffect(() => {
       const options = {
         contentType: ContentType.Article,
@@ -364,6 +369,7 @@ export default {
       selectedSortBy,
 
       articleGetters,
+      getArticleLink,
       hasNextPage,
       hasPrevPage,
 
@@ -390,7 +396,7 @@ export default {
         },
         {
           text: 'Blogs',
-          link: '/blogs'
+          link:  context.$config?.blogsRoute ?? '/blogs'
         }
       ]
     };

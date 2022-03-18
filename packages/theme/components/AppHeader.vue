@@ -32,7 +32,7 @@
             class="nav-item"
             :data-cy="'app-header-url_' + menu.handle"
             :label="menu.title"
-            :link="menu.handle.includes('/blogs') ? menu.handle : localePath('/c/' + menu.handle)"
+            :link="localePath(getMenuPath(menu))"
           />
         </div>
       </template>
@@ -97,7 +97,7 @@ import SearchResults from './SearchResults.vue';
 import debounce from 'lodash/debounce';
 import useUiState from '~/composables/useUiState';
 import { onSSR } from '@vue-storefront/core';
-import { computed, ref, useRouter } from '@nuxtjs/composition-api';
+import { computed, ref, useRouter, useContext } from '@nuxtjs/composition-api';
 import useUiHelpers from '~/composables/useUiHelpers';
 import LocaleSelector from './LocaleSelector';
 
@@ -125,6 +125,7 @@ export default {
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props) {
+    const context = useContext()
     const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } = useUiState();
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
     const { search: headerSearch, result } = useSearch('header-search');
@@ -184,10 +185,12 @@ export default {
       await search({ slug: '' });
     });
 
+    const menus = computed(() => [...categories.value, { id: 'blogs', title: 'blogs', handle: context.$config?.blogsRoute ?? '/blogs' }])
 
-    const menus = computed(() => [...categories.value, { id: 'blogs', title: 'blogs', handle: '/blogs' }])
+    const getMenuPath = (menu) => menu.handle.indexOf(context.$config?.blogsRoute) === 0 ? menu.handle : '/c/' + menu.handle
 
     return {
+      getMenuPath,
       accountIcon,
       closeSearch,
       handleAccountClick,
