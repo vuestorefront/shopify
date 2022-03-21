@@ -9,8 +9,8 @@ module.exports = {
           apiVersion: "2022-01"
         },
         routes: {
-          blogs: process.env.BLOGS_ROUTE,
-          articles: process.env.ARTICLES_ROUTE
+          blogs: '/ba',
+          articles: '/aa'
         },
         currency: 'USD',
         country: 'US'

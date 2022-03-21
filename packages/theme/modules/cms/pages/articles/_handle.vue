@@ -22,9 +22,8 @@ import {
   useRoute
 } from '@nuxtjs/composition-api';
 import { SfLoader } from '@storefront-ui/vue';
-import { useContent, articleGetters } from '@vue-storefront/shopify';
+import { useContent, articleGetters, ContentType } from '@vue-storefront/shopify';
 import { onSSR } from '@vue-storefront/core';
-import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
 import useUiHelpers from '~/composables/useUiHelpers';
 
 export default {

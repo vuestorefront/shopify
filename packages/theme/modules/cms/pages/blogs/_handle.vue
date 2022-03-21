@@ -232,13 +232,13 @@ import {
   SfSelect,
   SfLoader
 } from '@storefront-ui/vue';
-import { SortBy } from '~/enums/SortBy';
+import { SortBy } from '~/modules/cms/enums/SortBy';
 import LazyHydrate from 'vue-lazy-hydration';
 import { useUiState } from '~/composables'
-import { useRoute, computed, ref, watchEffect, useContext } from '@nuxtjs/composition-api';
+import { useRoute, computed, ref, watchEffect } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
-import { useContent, articleGetters } from '@vue-storefront/shopify';
-import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
+import { useContent, articleGetters, ContentType } from '@vue-storefront/shopify';
+
 export default {
   name: 'Category',
   components: {
@@ -259,7 +259,6 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const context = useContext()
     const { articlesPerPage, setArticlesPerPage } = useUiState()
     const {
       search: getBlogs,
@@ -338,7 +337,11 @@ export default {
     };
 
     const getArticleLink = (article) => {
-      return `${context.$config?.articlesRoute ?? '/articles'}/${article.handle}?id=${article.id}`
+      return {
+        name: 'articles-handle',
+        params: { handle: article.handle },
+        query: { id: article.id }
+      }
     }
 
     watchEffect(() => {
@@ -396,7 +399,9 @@ export default {
         },
         {
           text: 'Blogs',
-          link:  context.$config?.blogsRoute ?? '/blogs'
+          link: {
+            name: 'blogs'
+          }
         }
       ]
     };

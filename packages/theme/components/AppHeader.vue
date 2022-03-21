@@ -95,13 +95,17 @@ import {
 } from '@storefront-ui/vue';
 import SearchResults from './SearchResults.vue';
 import debounce from 'lodash/debounce';
-import useUiState from '~/composables/useUiState';
 import { onSSR } from '@vue-storefront/core';
 import { computed, ref, useRouter, useContext } from '@nuxtjs/composition-api';
-import useUiHelpers from '~/composables/useUiHelpers';
-import LocaleSelector from './LocaleSelector';
+import { useUiHelpers, useUiState } from '~/composables';
+import LocaleSelector from './LocaleSelector.vue';
 
-import { searchGetters, useCategory, useSearch, useContent } from '@vue-storefront/shopify';
+import {
+  searchGetters,
+  useCategory,
+  useSearch,
+  useContent
+} from '@vue-storefront/shopify';
 import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
 
 export default {
@@ -125,16 +129,16 @@ export default {
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props) {
-    const context = useContext()
-    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } = useUiState();
+    const context = useContext();
+    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } =
+      useUiState();
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
     const router = useRouter();
     const {
       search: getArticles,
-      content: articlesContent,
-      loading: isArticlesLoading
+      content: articlesContent
     } = useContent('articles');
 
     const curCatSlug = ref(getFacetsFromURL().categorySlug);
@@ -168,26 +172,34 @@ export default {
         contentType: ContentType.Article,
         query: term.value,
         first: 5
-      })
+      });
     }, 500);
+
     const closeSearch = () => {
       if (!isSearchOpen.value) return;
       term.value = '';
       isSearchOpen.value = false;
     };
 
-    searchResults.value = {
-      products: computed(() => searchGetters.getItems(result.value)),
-      articles: computed(() => term.value === '' ? [] : articlesContent?.value?.data ?? [])
-    };
+    searchResults.value = computed(() => term.value === '' ? { products: [], articles: [] } : { products: searchGetters.getItems(result.value), articles: articlesContent?.value?.data })
     // #endregion Search Section
+    
     onSSR(async () => {
       await search({ slug: '' });
     });
 
-    const menus = computed(() => [...categories.value, { id: 'blogs', title: 'blogs', handle: context.$config?.blogsRoute ?? '/blogs' }])
+    const menus = computed(() => [
+      ...categories.value,
+      { id: 'blogs', title: 'blogs', handle: context.$config.routes.blogs }
+    ]);
 
-    const getMenuPath = (menu) => menu.handle.indexOf(context.$config?.blogsRoute) === 0 ? menu.handle : '/c/' + menu.handle
+    const getMenuPath = (menu) => {
+      if (menu.handle.indexOf(context.$config.routes.blogs) === 0) {
+        return { name: 'blogs' };
+      } else {
+        return { name: 'category', params: { slug_1: menu.handle } };
+      }
+    };
 
     return {
       getMenuPath,

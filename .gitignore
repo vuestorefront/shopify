@@ -40,3 +40,5 @@ packages/theme/.template
 tests/e2e/report
 
 docs/.vuepress/dist
+
+vetur.config.js

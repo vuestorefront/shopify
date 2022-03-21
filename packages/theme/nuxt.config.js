@@ -9,9 +9,7 @@ const config = {
   },
   publicRuntimeConfig: {
     appKey: 'vsf2spcon',
-    appVersion: Date.now(),
-    blogsRoute: process.env.BLOGS_ROUTE || '/blogs',
-    articlesRoute: process.env.ARTICLES_ROUTE || '/articles'
+    appVersion: Date.now()
   },
   privateRuntimeConfig: {
     storeURL: process.env.SHOPIFY_DOMAIN,
@@ -55,6 +53,7 @@ const config = {
   loading: { color: '#fff' },
   plugins: ['~/plugins/scrollToTop.client.js'],
   buildModules: [
+    './modules/cms/module',
     // to core
     '@nuxtjs/composition-api/module',
     '@nuxtjs/pwa',
@@ -216,37 +215,6 @@ const config = {
       } else {
         return { x: 0, y: 0 };
       }
-    },
-    extendRoutes(routes) {
-      return routes.map((route) => {
-        if (process.env.BLOGS_ROUTE) {
-          if (route.component.includes('/blogs/index')) {
-            return {
-              ...route,
-              name: 'blogs',
-              path: route.path.replace('/blogs', process.env.BLOGS_ROUTE)
-            };
-          }
-
-          if (route.component.includes('/blogs/_handle')) {
-            return {
-              ...route,
-              path: route.path.replace('/blogs', process.env.BLOGS_ROUTE)
-            };
-          }
-        }
-
-        if (process.env.ARTICLES_ROUTE) {
-          if (route.component.includes('/articles/_handle')) {
-            return {
-              ...route,
-              path: route.path.replace('/articles', process.env.ARTICLES_ROUTE)
-            };
-          }
-        }
-
-        return route;
-      });
     }
   },
   pwa: {
