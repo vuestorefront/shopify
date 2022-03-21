@@ -53,7 +53,7 @@
   </SfSection>
 </template>
 
-<script>
+<script lang="ts">
 
 import {
   SfCarousel,
