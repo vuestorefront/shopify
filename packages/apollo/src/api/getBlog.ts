@@ -3,7 +3,9 @@ import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootBlogArgs } from '../shopify'
 
-const defaultQuery = gql`
+
+export async function getBlog(context: ShopifyApolloContext, params: QueryRootBlogArgs, customQuery?: CustomQuery) {
+  const blogQuery = gql`
     query getBlog(
       $handle: String
       $id: ID
@@ -25,14 +27,13 @@ const defaultQuery = gql`
         }
       }
     }
-`
+  `
 
-export default async function getBlog(context: ShopifyApolloContext, params: QueryRootBlogArgs, customQuery?: CustomQuery) {
   const { blog } = context.extendQuery(
     customQuery,
     {
       blog: {
-        query: defaultQuery,
+        query: blogQuery,
         variables: params
       }
     }

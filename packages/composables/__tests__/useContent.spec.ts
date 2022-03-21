@@ -18,7 +18,7 @@ jest.mock('@vue-storefront/core', () => ({
 }));
 
 describe('[shopify-composables] mapping of useContent', () => {
-  it('should fetch single blog', () => {
+  it('should fetch single blog', async () => {
     const params = {
       contentType: ContentType.Blog,
       id: 'test'
@@ -26,12 +26,12 @@ describe('[shopify-composables] mapping of useContent', () => {
 
     const { search } = useContent('test') as { search: any }
 
-    search(mockContext, params)
+    await search(mockContext, params)
 
     expect(getBlog).toHaveBeenCalledWith(params)
   })
 
-  it('should fetch blogs', () => {
+  it('should fetch blogs', async () => {
     const params = {
       contentType: ContentType.Blog,
       query: 'blog_title:test'
@@ -39,7 +39,7 @@ describe('[shopify-composables] mapping of useContent', () => {
 
     const { search } = useContent('test') as { search: any }
 
-    search(mockContext, params)
+    await search(mockContext, params)
 
     expect(getBlogs).toHaveBeenCalledWith(params)
   })

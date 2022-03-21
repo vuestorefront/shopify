@@ -37,7 +37,7 @@ const defaultQuery = gql`
     }
 `
 
-export default async function getBlogs(context: ShopifyApolloContext, params: QueryRootBlogsArgs, customQuery?: CustomQuery) {
+export async function getBlogs(context: ShopifyApolloContext, params: QueryRootBlogsArgs, customQuery?: CustomQuery) {
 
   const variables = {
     first: 5,
