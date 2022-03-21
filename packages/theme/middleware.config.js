@@ -9,8 +9,8 @@ module.exports = {
           apiVersion: "2022-01"
         },
         routes: {
-          blogs: '/ba',
-          articles: '/aa'
+          blogs: '/blogs',
+          articles: '/articles'
         },
         currency: 'USD',
         country: 'US'

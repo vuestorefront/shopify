@@ -16,7 +16,7 @@
     "@nuxtjs/composition-api": "^0.30.0",
     "@vue-storefront/core": "~2.5.0",
     "@vue-storefront/shopify-apollo": "^1.0.19",
-    "graphql": "^14.5.8",
+    "graphql": "^16.0.1",
     "shopify-buy": "~2.14.0"
   },
   "devDependencies": {

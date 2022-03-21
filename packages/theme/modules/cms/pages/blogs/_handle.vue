@@ -107,7 +107,7 @@
               :key="article.id"
               :style="{ '--index': i }"
               :title="article.title"
-              :image="articleGetters.getImage(article)"
+              :image="getArticleImage(article)"
               :image-height="326"
               :image-width="216"
               :wishlist-icon="false"
@@ -130,7 +130,7 @@
                 </span>
 
                 <small class="sf-blog-card__publishedAt">{{
-                  articleGetters.getPublishedAt(article)
+                  getArticlePublishedAt(article)
                 }}</small>
               </template>
             </SfProductCard>
@@ -235,9 +235,10 @@ import {
 import { SortBy } from '~/modules/cms/enums/SortBy';
 import LazyHydrate from 'vue-lazy-hydration';
 import { useUiState } from '~/composables'
-import { useRoute, computed, ref, watchEffect } from '@nuxtjs/composition-api';
+import { useRoute, computed, ref, watchEffect, useContext } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
-import { useContent, articleGetters, ContentType } from '@vue-storefront/shopify';
+import { useContent, ContentType } from '@vue-storefront/shopify';
+import { getArticleImage, getArticleLink, getArticlePublishedAt } from '~/helpers/article'
 
 export default {
   name: 'Category',
@@ -259,6 +260,7 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const context = useContext()
     const { articlesPerPage, setArticlesPerPage } = useUiState()
     const {
       search: getBlogs,
@@ -336,14 +338,6 @@ export default {
       setArticlesPerPage(perPage)
     };
 
-    const getArticleLink = (article) => {
-      return {
-        name: 'articles-handle',
-        params: { handle: article.handle },
-        query: { id: article.id }
-      }
-    }
-
     watchEffect(() => {
       const options = {
         contentType: ContentType.Article,
@@ -371,7 +365,8 @@ export default {
       sortByOptions,
       selectedSortBy,
 
-      articleGetters,
+      getArticleImage,
+      getArticlePublishedAt,
       getArticleLink,
       hasNextPage,
       hasPrevPage,
@@ -399,9 +394,9 @@ export default {
         },
         {
           text: 'Blogs',
-          link: {
+          link: context.app.localePath({
             name: 'blogs'
-          }
+          })
         }
       ]
     };

@@ -7,10 +7,7 @@
     >
       <transition name="sf-fade" mode="out-in">
         <div
-          v-if="
-            (products && products.length > 0) ||
-            (articles && articles.length > 0)
-          "
+          v-if="isSearchResultAvailable"
           key="results"
           class="search__wrapper-results"
         >
@@ -29,8 +26,6 @@
             </template>
             <SfScrollable
               class="results--desktop desktop-only"
-              show-text=""
-              hide-text=""
             >
               <div class="results-listing">
                 <SfProductCard
@@ -49,24 +44,14 @@
                   :alt="productGetters.getName(product)"
                   :title="productGetters.getName(product)"
                   :add-to-cart-disabled="getStockCount(product) <= 0"
-                  :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                  :link="localePath(getProductLink(product))"
                   @click:add-to-cart="
                     handleAddToCart({ product, quantity: 1, currentCart })
                   "
                 >
                   <template slot="title">
                     <SfButton
-                      :link="
-                        localePath(
-                          `/p/${productGetters.getId(
-                            product
-                          )}/${productGetters.getSlug(product)}`
-                        )
-                      "
+                      :link="localePath(getProductLink(product))"
                       class="sf-button--pure sf-product-card__link"
                       data-testid="product-link"
                     >
@@ -96,24 +81,14 @@
                 :alt="productGetters.getName(product)"
                 :title="productGetters.getName(product)"
                 :add-to-cart-disabled="getStockCount(product) <= 0"
-                :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                :link="localePath(getProductLink(product))"
                 @click:add-to-cart="
                   handleAddToCart({ product, quantity: 1, currentCart })
                 "
               >
                 <template slot="title">
                   <SfButton
-                    :link="
-                      localePath(
-                        `/p/${productGetters.getId(
-                          product
-                        )}/${productGetters.getSlug(product)}`
-                      )
-                    "
+                    :link="localePath(getProductLink(product))"
                     class="sf-button--pure sf-product-card__link"
                     data-testid="product-link"
                   >
@@ -150,7 +125,7 @@
                   :key="article.id"
                   :style="{ '--index': i }"
                   :title="article.title"
-                  :image="articleGetters.getImage(article)"
+                  :image="getArticleImage(article)"
                   :image-height="326"
                   :image-width="216"
                   :wishlist-icon="false"
@@ -161,9 +136,7 @@
                     fit: 'cover'
                   }"
                   class="blogs__blog-card"
-                  :link="
-                    localePath(`/articles/${article.handle}?id=${article.id}`)
-                  "
+                  :link="localePath(getArticleLink(article))"
                 >
                   <template #add-to-cart>
                     <div></div>
@@ -175,7 +148,7 @@
                     </span>
 
                     <small class="sf-blog-card__publishedAt">{{
-                      articleGetters.getPublishedAt(article)
+                      getArticlePublishedAt(article)
                     }}</small>
                   </template>
                 </SfProductCard>
@@ -187,7 +160,7 @@
                 :key="article.id"
                 :style="{ '--index': i }"
                 :title="article.title"
-                :image="articleGetters.getImage(article)"
+                :image="getArticleImage(article)"
                 :image-height="326"
                 :image-width="216"
                 :wishlist-icon="false"
@@ -198,9 +171,7 @@
                   fit: 'cover'
                 }"
                 class="blogs__blog-card"
-                :link="
-                  localePath(`/articles/${article.handle}?id=${article.id}`)
-                "
+                :link="localePath(getArticleLink(article))"
               >
                 <template #add-to-cart>
                   <div></div>
@@ -212,7 +183,7 @@
                   </span>
 
                   <small class="sf-blog-card__publishedAt">{{
-                    articleGetters.getPublishedAt(article)
+                    getArticlePublishedAt(article)
                   }}</small>
                 </template>
               </SfProductCard>
@@ -261,9 +232,13 @@ import {
 } from '@storefront-ui/vue';
 
 import { ref, watch, computed } from '@vue/composition-api';
-import { productGetters, useCart, articleGetters } from '@vue-storefront/shopify';
+import {
+  productGetters,
+  useCart
+} from '@vue-storefront/shopify';
 import { useUiNotification } from '~/composables';
 import useUiHelpers from '../composables/useUiHelpers';
+import { getArticleImage, getArticleLink, getArticlePublishedAt } from '~/helpers/article'
 export default {
   name: 'SearchResults',
   components: {
@@ -290,7 +265,7 @@ export default {
     const { addItem: addItemToCart, cart: currentCart } = useCart();
     const { send: sendNotification } = useUiNotification();
     const products = computed(() => props.result?.products);
-    const articles = computed(() => props.result?.articles)
+    const articles = computed(() => props.result?.articles);
     const categories = computed(() => props.result?.categories);
     const getStockCount = (product) => product?.totalInventory ?? 0
 
@@ -319,14 +294,32 @@ export default {
       });
     };
 
+    const getProductLink = (product) => {
+      if (!product?.id || product?._slug) return '';
+
+      return {
+        name: 'product',
+        params: { id: product?.id, slug: product?._slug }
+      };
+    };
+
+    const isSearchResultAvailable = computed(
+      () =>
+        (products && products.length > 0) || (articles && articles.length > 0)
+    );
+
     return {
+      isSearchResultAvailable,
       getCatLink,
+      getArticleLink,
+      getArticleImage,
+      getArticlePublishedAt,
+      getProductLink,
       articles,
       isSearchOpen,
       getStockCount,
       productGetters,
       products,
-      articleGetters,
       categories,
       currentCart,
       handleAddToCart

@@ -1,39 +1,16 @@
+import { ApolloQueryResult } from '@apollo/client/core'
 import { CustomQuery } from '@vue-storefront/core'
-import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
+import { GetBlogQuery } from '../query/GetBlog.gql'
 import { QueryRoot, QueryRootBlogArgs } from '../shopify'
 
 
-export async function getBlog(context: ShopifyApolloContext, params: QueryRootBlogArgs, customQuery?: CustomQuery) {
-  const blogQuery = gql`
-    query getBlog(
-      $handle: String
-      $id: ID
-    ) {
-      blog(handle: $handle, id: $id) {
-        id
-        title
-        authors {
-          bio
-          email
-          firstName
-          lastName
-          name
-        }
-        onlineStoreUrl
-        seo {
-          description
-          title
-        }
-      }
-    }
-  `
-
+export async function getBlog(context: ShopifyApolloContext, params: QueryRootBlogArgs, customQuery?: CustomQuery): Promise<ApolloQueryResult<QueryRoot>> {
   const { blog } = context.extendQuery(
     customQuery,
     {
       blog: {
-        query: blogQuery,
+        query: GetBlogQuery,
         variables: params
       }
     }

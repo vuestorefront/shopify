@@ -2,7 +2,7 @@
   <SfLoader :loading="loading">
     <article>
       <header>
-        <img :src="articleGetters.getImage(article)" />
+        <img :src="getArticleImage(article)" />
         <h2>{{ article.title }}</h2>
         <p>
           {{ $t('Published by') }} {{ article.fullAuthorName }} {{ $t('on') }} 
@@ -17,14 +17,15 @@
   </SfLoader>
 </template>
 
-<script>
+<script lang="ts">
 import {
   useRoute
 } from '@nuxtjs/composition-api';
 import { SfLoader } from '@storefront-ui/vue';
-import { useContent, articleGetters, ContentType } from '@vue-storefront/shopify';
+import { useContent, ContentType } from '@vue-storefront/shopify';
 import { onSSR } from '@vue-storefront/core';
 import useUiHelpers from '~/composables/useUiHelpers';
+import { getArticleImage } from '~/helpers/article'
 
 export default {
   components: {
@@ -38,12 +39,12 @@ export default {
     onSSR(async () => {
       await search({
         contentType: ContentType.Article,
-        id: route.value.query.id
+        id: route.value.query.id as string
       });
     });
 
     return {
-      articleGetters,
+      getArticleImage,
       formatDate,
       article,
       loading

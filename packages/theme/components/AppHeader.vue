@@ -196,9 +196,9 @@ export default {
     const getMenuPath = (menu) => {
       if (menu.handle.indexOf(context.$config.routes.blogs) === 0) {
         return { name: 'blogs' };
-      } else {
-        return { name: 'category', params: { slug_1: menu.handle } };
       }
+        
+      return { name: 'category', params: { slug_1: menu.handle } };
     };
 
     return {
