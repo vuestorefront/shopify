@@ -19,7 +19,7 @@
             :image-height="295"
             class="pdp-product-card"
             @click:add-to-cart="
-              HandleAddTocart({ product, quantity: 1, currentCart })
+              handleAddToCart({ product, quantity: 1, currentCart })
             "
           >
             <template #title>
@@ -132,7 +132,7 @@ export default {
     };
   },
   methods: {
-    HandleAddTocart(productObj) {
+    handleAddToCart(productObj) {
       this.addItemToCart(productObj).then(() => {
         this.sendNotification({
           key: 'added_to_cart',
