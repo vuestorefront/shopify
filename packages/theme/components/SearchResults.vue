@@ -68,6 +68,7 @@
                   :image="productGetters.getCoverImage(product)"
                   :alt="productGetters.getName(product)"
                   :title="productGetters.getName(product)"
+                  :add-to-cart-disabled="getStockCount(product) <= 0"
                   :link="localePath(
                   `/p/${productGetters.getId(product)}/${productGetters.getSlug(
                     product
@@ -112,6 +113,7 @@
                 :image="productGetters.getCoverImage(product)"
                 :alt="productGetters.getName(product)"
                 :title="productGetters.getName(product)"
+                :add-to-cart-disabled="getStockCount(product) <= 0"
                 :link="localePath(
                   `/p/${productGetters.getId(product)}/${productGetters.getSlug(
                     product
@@ -214,6 +216,7 @@ export default {
     const { send: sendNotification } = useUiNotification();
     const products = computed(() => props.result?.products);
     const categories = computed(() => props.result?.categories);
+    const getStockCount = (product) => product?.totalInventory ?? 0
 
     watch(
       () => props.visible,
@@ -243,6 +246,7 @@ export default {
     return {
       getCatLink,
       isSearchOpen,
+      getStockCount,
       productGetters,
       products,
       categories,
