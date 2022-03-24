@@ -11,11 +11,16 @@
           <SfProductCard
             :title="productGetters.getName(product)"
             :image="productGetters.getPDPCoverImage(product)"
+            :is-added-to-cart="isInCart({ product, currentCart })"
+            :add-to-cart-disabled="getStockCount(product) <= 0"
             :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
             :wishlist-icon="false"
             :image-width="295"
             :image-height="295"
             class="pdp-product-card"
+            @click:add-to-cart="
+              handleAddToCart({ product, quantity: 1, currentCart })
+            "
           >
             <template #title>
               <!-- RYVIU APP :: COLLECTION-WIDGET-TOTAL -->
@@ -23,7 +28,7 @@
                 class="sf-product-card__link"
                 :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
               >
-                  <h3 class="sf-product-card__title">
+                <h3 class="sf-product-card__title">
                   {{ productGetters.getName(product) }}
                 </h3>
               </SfLink>
@@ -58,7 +63,8 @@ import {
   SfLink,
   SfPrice
 } from '@storefront-ui/vue';
-import { productGetters } from '@vue-storefront/shopify';
+import { useUiNotification } from '~/composables';
+import { productGetters, useCart } from '@vue-storefront/shopify';
 
 export default {
   name: 'RelatedProducts',
@@ -75,11 +81,21 @@ export default {
     products: Array,
     loading: Boolean
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
-    return { productGetters };
+    const { addItem: addItemToCart, isInCart, cart: currentCart } = useCart();
+    const { send: sendNotification } = useUiNotification();
+
+    const getStockCount = (product) => product?.totalInventory ?? 0
+
+    return { 
+      currentCart,
+      productGetters,
+      sendNotification,
+      addItemToCart,
+      isInCart,
+      getStockCount
+    };
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data () {
     return {
       pdpUpsellSettings: {
@@ -114,6 +130,19 @@ export default {
         }
       }
     };
+  },
+  methods: {
+    handleAddToCart(productObj) {
+      this.addItemToCart(productObj).then(() => {
+        this.sendNotification({
+          key: 'added_to_cart',
+          message: 'Product has been successfully added to cart !',
+          type: 'success',
+          title: 'Product added!',
+          icon: 'check'
+        });
+      });
+    },
   }
 };
 </script>
