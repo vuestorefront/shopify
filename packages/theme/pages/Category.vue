@@ -112,7 +112,7 @@
               :wishlist-icon="false"
               class="products__product-card"
               @click:add-to-cart="
-                HandleAddTocart({ product, quantity: 1, currentCart })
+                handleAddToCart({ product, quantity: 1, currentCart })
               "
             />
           </transition-group>
@@ -151,7 +151,7 @@
                 )
               "
               @click:add-to-cart="
-                HandleAddTocart({ product, quantity: 1, currentCart })
+                handleAddToCart({ product, quantity: 1, currentCart })
               "
             >
               <template #configuration>
@@ -394,7 +394,7 @@ export default {
   },
   methods: {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    HandleAddTocart(productObj) {
+    handleAddToCart(productObj) {
       console.log('productObj::', productObj);
       this.addItemToCart(productObj).then(() => {
         this.sendNotification({
