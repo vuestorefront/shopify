@@ -176,6 +176,7 @@ export async function getProduct(
           name
           values
         }
+        totalInventory
         collections(first:250){
           edges{
             node{
@@ -305,6 +306,7 @@ export async function getProduct(
             createdAt
             updatedAt
             description
+            totalInventory
             descriptionHtml
             handle
             title

@@ -93,6 +93,7 @@ const productsQuery = gql`
                   description
                   descriptionHtml
                   handle
+                  totalInventory
               }
           }
         } 

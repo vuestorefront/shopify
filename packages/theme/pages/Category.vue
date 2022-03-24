@@ -112,7 +112,7 @@
               :wishlist-icon="false"
               class="products__product-card"
               @click:add-to-cart="
-                HandleAddTocart({ product, quantity: 1, currentCart })
+                handleAddToCart({ product, quantity: 1, currentCart })
               "
             />
           </transition-group>
@@ -138,6 +138,7 @@
                 productGetters.getPrice(product).special &&
                 $n(productGetters.getPrice(product).special, 'currency')
               "
+              :add-to-cart-disabled="!productGetters.getStockStatus(product)"
               :max-rating="5"
               :score-rating="3"
               :is-on-wishlist="false"
@@ -150,7 +151,7 @@
                 )
               "
               @click:add-to-cart="
-                HandleAddTocart({ product, quantity: 1, currentCart })
+                handleAddToCart({ product, quantity: 1, currentCart })
               "
             >
               <template #configuration>
@@ -161,6 +162,21 @@
                   style="margin: 0 0 1rem 0"
                 />
                 <SfProperty class="desktop-only" name="Color" value="white" />
+              </template>
+              <template #add-to-cart>
+                <SfAddToCart
+                  v-model="productsQuantity[product.id]"
+                  :disabled="!productGetters.getStockStatus(product)"
+                  class="sf-product-card-horizontal__add-to-cart desktop-only"
+                  @click="
+                    addItemToCart({
+                      product,
+                      quantity: Number(
+                        productsQuantity[productData.getId(product)] || 1
+                      )
+                    })
+                  "
+                />
               </template>
             </SfProductCardHorizontal>
           </transition-group>
@@ -287,9 +303,10 @@ import {
   SfBreadcrumbs,
   SfLoader,
   SfColor,
-  SfProperty
+  SfProperty,
+  SfAddToCart
 } from '@storefront-ui/vue';
-import { computed, onMounted } from '@nuxtjs/composition-api';
+import { computed, onMounted, ref } from '@nuxtjs/composition-api';
 import {
   useCart,
   productGetters,
@@ -314,7 +331,8 @@ export default {
     SfLoader,
     SfColor,
     SfHeading,
-    SfProperty
+    SfProperty,
+    SfAddToCart
   },
   transition: 'fade',
   setup(_, context) {
@@ -332,6 +350,7 @@ export default {
     onSSR(async () => {
       await search(th.getFacetsFromURL());
     });
+    const productsQuantity = ref({});
 
     const { isFacetColor } = useUiHelpers();
     const { toggleCategoryGridView } = useUiState();
@@ -342,6 +361,7 @@ export default {
 
     return {
       ...uiState,
+      productsQuantity,
       th,
       products,
       loading,
@@ -374,7 +394,7 @@ export default {
   },
   methods: {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    HandleAddTocart(productObj) {
+    handleAddToCart(productObj) {
       this.addItemToCart(productObj).then(() => {
         this.sendNotification({
           key: 'added_to_cart',
