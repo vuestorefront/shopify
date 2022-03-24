@@ -1,12 +1,12 @@
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
-import { print } from 'graphql'
 import { getCountry } from '../../helpers/utils';
 export async function getProduct(
   context,
   params,
   customQuery?: CustomQuery
 ) {
+  const localeInfo = params.localeInfo;
   if (params.slug) {
     let chosenVariant = [];
     if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {
@@ -125,10 +125,9 @@ export async function getProduct(
         }
       }
     }`
-    const localeInfo = params.localeInfo;
     const variables = {
       handle: params.slug,
-      country: localeInfo.cur === "en" ? (localeInfo.default).toUpperCase() : (localeInfo.cur).toUpperCase(),
+      country: getCountry(context, true, localeInfo.default, localeInfo.cur),
       selectedOptions: chosenVariant
     }
 
@@ -250,7 +249,7 @@ export async function getProduct(
     const localeInfo = params.localeInfo;
     const payload = {
       productId: params.productId,
-      country: localeInfo.cur === "en" ? (localeInfo.default).toUpperCase() : (localeInfo.cur).toUpperCase()
+      country: getCountry(context, true, localeInfo.default, localeInfo.cur),
     }
 
     const { productRecommendations } = context.extendQuery(
@@ -383,14 +382,13 @@ export async function getProduct(
       first: (params.limit ? params.limit : 20),
       sortKey: (params.sortBy ? params.sortBy : 'CREATED_AT'),
       reverse: false,
-      country: getCountry(context),
+      country: getCountry(context, true, localeInfo.default, localeInfo.cur)
     }
-
     const { products } = context.extendQuery(
       customQuery,
       {
         products: {
-          query: print(DEFAULT_QUERY as any),
+          query: DEFAULT_QUERY as any,
           payload
         }
       }
