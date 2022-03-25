@@ -10,10 +10,11 @@ import { ContentType } from '../types/ContentType';
 import { UseContentParams } from '../types/UseContentParams';
 
 const params: UseContentFactoryParams<unknown, UseContentParams> = {
-  search: async (context: Context, params) => {
+  search: async (context: Context, allParams) => {
+    const { contentType, ...params } = allParams
     const deprecatedApi = (context as DeprecatedContext).$shopify.api
 
-    switch (params.contentType) {
+    switch (contentType) {
       case ContentType.UpdatePreference:
         return deprecatedApi.updateNewsLetterPreferences(params);
       case ContentType.Page: {
@@ -23,32 +24,38 @@ const params: UseContentFactoryParams<unknown, UseContentParams> = {
       case ContentType.Blog: {
         if (Object.prototype.hasOwnProperty.call(params, 'id') || Object.prototype.hasOwnProperty.call(params, 'handle')) {
           const response = await context.$shopify.api.getBlog(params as QueryRootBlogArgs)
-          if (response.error) throw response.error
+            .catch(err => ({ error: err, data: null }))
+
+          if (response?.error) throw response.error
 
           return response?.data?.blog
-        } else {
-          const response = await context.$shopify.api.getBlogs(params as QueryRootBlogsArgs)
-          if (response.error) throw response.error
-
-          return response?.data?.blogs
         }
+
+        const response = await context.$shopify.api.getBlogs(params as QueryRootBlogsArgs)
+          .catch(err => ({ error: err, data: null }))
+
+        if (response?.error) throw response.error
+
+        return response?.data?.blogs
+
       }
       case ContentType.Article: {
         if (Object.prototype.hasOwnProperty.call(params, 'id') || Object.prototype.hasOwnProperty.call(params, 'handle')) {
           const response = await context.$shopify.api.getArticle(params as QueryRootNodeArgs)
 
           return response?.data?.article
-        } else {
-          const response = await context.$shopify.api.getArticles(params as GetArticlesParams)
-
-          if (response.error) throw response.error
-
-
-          return {
-            data: response?.data?.articles,
-            pageInfo: response?.pageInfo
-          }
         }
+
+        const response = await context.$shopify.api.getArticles(params as GetArticlesParams)
+
+        if (response.error) throw response.error
+
+
+        return {
+          data: response?.data?.articles,
+          pageInfo: response?.pageInfo
+        }
+
       }
       default: {
         return deprecatedApi.getBlogPosts(params);

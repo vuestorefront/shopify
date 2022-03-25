@@ -2,12 +2,13 @@ import { ProductVariant } from '@vue-storefront/shopify-api';
 import { ShopifyApolloContext } from '@vue-storefront/shopify-apollo'
 
 // New Types
-
 export interface Context {
   $shopify: ShopifyApolloContext
   [key: string]: any
 }
 
+export * from './ContentType'
+export * from './UseContentParams'
 
 // Old Types
 export { UseCategory, UseProduct } from '@vue-storefront/core';
@@ -30,8 +31,6 @@ export type User = {
 };
 
 export type UserAddress = Record<string, unknown>;
-
-export type ContentType = Record<string, unknown>;
 
 export type ContentPosition = Record<string, unknown>;
 

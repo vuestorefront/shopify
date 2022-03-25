@@ -6,7 +6,8 @@ const state = reactive({
   isLoginModalOpen: false,
   isCategoryGridView: true,
   isFilterSidebarOpen: false,
-  isNavigationSidebarOpen: false
+  isNavigationSidebarOpen: false,
+  articlesPerPage: '5'
 });
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -41,6 +42,11 @@ const useUiState = () => {
     state.isFilterSidebarOpen = !state.isFilterSidebarOpen;
   };
 
+  const articlesPerPage = computed(() => state.articlesPerPage)
+  const setArticlesPerPage = (perPage: string) => {
+    state.articlesPerPage = perPage
+  }
+
   return {
     isCartSidebarOpen,
     isWishlistSidebarOpen,
@@ -53,7 +59,9 @@ const useUiState = () => {
     toggleLoginModal,
     toggleCategoryGridView,
     toggleFilterSidebar,
-    toggleNavigationSidebar
+    toggleNavigationSidebar,
+    articlesPerPage,
+    setArticlesPerPage
   };
 };
 
