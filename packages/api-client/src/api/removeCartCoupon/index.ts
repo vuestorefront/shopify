@@ -29,13 +29,19 @@ export async function removeCoupon(context, params, _customQuery?: CustomQuery) 
         discountApplications(first:20){
           edges{
             node{
-              value{
-                ... on MoneyV2{
-                  amount
-                  currencyCode
-                }
-                ... on PricingPercentageValue{
-                  percentage
+              ... on DiscountCodeApplication {
+                code
+                allocationMethod
+                targetType
+                targetSelection
+                value{
+                  ... on MoneyV2{
+                    amount
+                    currencyCode
+                  }
+                  ... on PricingPercentageValue{
+                    percentage
+                  }
                 }
               }
             }

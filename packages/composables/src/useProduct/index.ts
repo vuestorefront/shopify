@@ -11,9 +11,8 @@ const params: UseProductFactoryParams<ProductsResponse, any> = {
     const APP = context.$shopify.config.app;
 
     // check if cart is already initiated
-    const curLocaleCode = APP.$cookies.get('CurLocaleLang');
     const { customQuery, ...searchParams } = params;
-    searchParams.curLocaleCode = curLocaleCode;
+    searchParams.curLocaleCode = APP.i18n.locale;
     return await context.$shopify.api.getProduct(searchParams, customQuery);
   }
 };
