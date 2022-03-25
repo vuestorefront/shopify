@@ -7,7 +7,8 @@ const state = reactive({
   isCategoryGridView: true,
   isFilterSidebarOpen: false,
   isNavigationSidebarOpen: false,
-  isMobileMenuOpen: false
+  isMobileMenuOpen: false,
+  articlesPerPage: '5'
 });
 
 const useUiState = () => {
@@ -46,6 +47,11 @@ const useUiState = () => {
     state.isFilterSidebarOpen = !state.isFilterSidebarOpen;
   };
 
+  const articlesPerPage = computed(() => state.articlesPerPage)
+  const setArticlesPerPage = (perPage: string) => {
+    state.articlesPerPage = perPage
+  }
+
   return {
     isCartSidebarOpen,
     isWishlistSidebarOpen,
@@ -60,7 +66,9 @@ const useUiState = () => {
     toggleLoginModal,
     toggleCategoryGridView,
     toggleFilterSidebar,
-    toggleNavigationSidebar
+    toggleNavigationSidebar,
+    articlesPerPage,
+    setArticlesPerPage
   };
 };
 
