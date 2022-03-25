@@ -27,5 +27,6 @@
       "@nuxt/types",
       "nuxt-i18n"
     ]
-  }
+  },
+  "exclude": ["_theme"]
 }
