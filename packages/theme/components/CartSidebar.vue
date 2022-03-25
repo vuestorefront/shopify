@@ -101,12 +101,16 @@
               class="sf-property--full-width sf-property--large my-cart__discount"
             >
             <template #name>
-              <span class="sf-property__name applied-discount">{{appliedCoupon ? `Discount [${appliedCoupon}]`: 'Discount'}}<SfIcon v-if="couponcode && couponcode !==''" class="remove-coupon" @click="handleRemoveCoupon(couponcode)" icon="cross" size="xxs" color="green-primary"/></span>
+              <span class="sf-property__name applied-discount">{{appliedCoupon ? `Discount [${appliedCoupon}${totalDiscount.percentage ? ' | ' + $n(totalDiscount.percentage/100, 'percent'): ''}]`: 'Discount'}}<SfIcon v-if="appliedCoupon" class="remove-coupon" icon="cross" size="xxs" color="green-primary" @click="handleRemoveCoupon(couponcode)"/></span>
             </template>
               <template #value>
                 <SfPrice
-                  :regular="$n(totalDiscount.percentage ? totalDiscount.percentage/100 : totalDiscount.amount, totalDiscount.percentage ? 'percent':'currency')"
+                  v-if="!totalDiscount.percentage"
+                  :regular="$n(totalDiscount.amount, 'currency')"
                 />
+                <SfPrice
+                v-else
+                :regular="$n(totals.subtotal * totalDiscount.percentage/ (100 - totalDiscount.percentage), 'currency')"/>
               </template>
             </SfProperty>
             <SfProperty
@@ -242,11 +246,9 @@ export default {
       }
     }
     const handleRemoveCoupon = async (couponCode) => {
-      if(couponCode && couponCode !== ""){
-        await removeCoupon({couponCode}).then(() =>{
+      await removeCoupon({couponCode}).then(() =>{
           errorMsg.value = "Coupon removed";
         });
-      }
     }
     const handleCheckout = (checkoutUrl) => {
       setTimeout(() => {

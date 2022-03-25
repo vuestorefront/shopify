@@ -88,10 +88,8 @@ export const getCartTotalDiscount = (cart: Cart): number => {
 };
 
 export const getAppliedCoupon = (cart: Cart): string => {
-  if (cart?.checkoutUserErrors?.length <= 0) {
-    return cart.couponCode;
-  }
-  return '';
+  if (cart?.discountApplications.length > 0) 
+  return cart.discountApplications[0].code;
 };
 
 export const getFormattedPrice = (price: number) => String(price);
