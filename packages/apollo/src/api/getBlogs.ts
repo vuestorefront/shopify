@@ -1,44 +1,11 @@
 import { CustomQuery } from '@vue-storefront/core'
-import { gql } from '@apollo/client/core'
+import { ApolloQueryResult } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootBlogsArgs } from '../shopify'
+import { GetBlogsResult } from '../types/GetBlog/GetBlogsResult'
+import { GetBlogsQuery } from '../query/GetBlogs.gql'
 
-const defaultQuery = gql`
-    query getBlogs(
-      $after: String
-      $before: String
-      $first: Int
-      $last: Int
-      $query: String
-      $reverse: Boolean
-      $sortKey: BlogSortKeys
-    ) {
-        blogs(after: $after, before: $before, first: $first, last: $last, query: $query, reverse: $reverse, sortKey: $sortKey) {
-          edges {
-            node {
-              id
-              handle
-              title
-              authors {
-                bio
-                email
-                firstName
-                lastName
-                name
-              }
-              onlineStoreUrl
-              seo {
-                description
-                title
-              }
-            }
-          }
-        }
-    }
-`
-
-export default async function getBlogs(context: ShopifyApolloContext, params: QueryRootBlogsArgs, customQuery?: CustomQuery) {
-
+export async function getBlogs(context: ShopifyApolloContext, params: QueryRootBlogsArgs, customQuery?: CustomQuery): Promise<ApolloQueryResult<GetBlogsResult>> {
   const variables = {
     first: 5,
     ...params,
@@ -48,7 +15,7 @@ export default async function getBlogs(context: ShopifyApolloContext, params: Qu
     customQuery,
     {
       blogs: {
-        query: defaultQuery,
+        query: GetBlogsQuery,
         variables
       }
     }
@@ -65,7 +32,7 @@ export default async function getBlogs(context: ShopifyApolloContext, params: Qu
       ...response?.data,
       blogs: response?.data?.blogs?.edges?.map(edge => ({
         ...edge?.node,
-        link: `/blogs/${edge?.node?.handle}`
+        link: `${context.config?.routes?.blogs}/${edge?.node?.handle}`
       }))
     }
   }

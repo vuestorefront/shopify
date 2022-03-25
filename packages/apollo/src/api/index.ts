@@ -4,8 +4,8 @@ import customerCreate from './customerCreate'
 import availableFilters from './availableFilters';
 import getCollection from './getCollection';
 import { getPage } from './getPage';
-import getBlogs from './getBlogs';
-import getBlog from './getBlog';
+import { getBlogs } from './getBlogs';
+import { getBlog } from './getBlog';
 import { getArticles } from './getArticles'
 import { getArticle } from './getArticle'
 

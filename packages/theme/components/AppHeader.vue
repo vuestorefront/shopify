@@ -24,15 +24,15 @@
         </nuxt-link>
       </template>
 
-      <template v-if="categories.length > 0" #navigation>
+      <template v-if="menus.length > 0" #navigation>
         <div class="navigation-wrapper">
           <SfHeaderNavigationItem
-            v-for="cat in categories"
-            :key="cat.id"
+            v-for="menu in menus"
+            :key="menu.id"
             class="nav-item"
-            :data-cy="'app-header-url_' + cat.handle"
-            :label="cat.title"
-            :link="localePath('/c/' + cat.handle)"
+            :data-cy="'app-header-url_' + menu.handle"
+            :label="menu.title"
+            :link="localePath(getMenuPath(menu))"
           />
         </div>
       </template>
@@ -95,13 +95,18 @@ import {
 } from '@storefront-ui/vue';
 import SearchResults from './SearchResults.vue';
 import debounce from 'lodash/debounce';
-import useUiState from '~/composables/useUiState';
 import { onSSR } from '@vue-storefront/core';
-import { computed, ref, useRouter } from '@nuxtjs/composition-api';
-import useUiHelpers from '~/composables/useUiHelpers';
-import LocaleSelector from './LocaleSelector';
+import { computed, ref, useRouter, useContext } from '@nuxtjs/composition-api';
+import { useUiHelpers, useUiState } from '~/composables';
+import LocaleSelector from './LocaleSelector.vue';
 
-import { searchGetters, useCategory, useSearch } from '@vue-storefront/shopify';
+import {
+  searchGetters,
+  useCategory,
+  useSearch,
+  useContent
+} from '@vue-storefront/shopify';
+import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
 
 export default {
   components: {
@@ -124,11 +129,17 @@ export default {
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props) {
-    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } = useUiState();
+    const context = useContext();
+    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal } =
+      useUiState();
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
     const router = useRouter();
+    const {
+      search: getArticles,
+      content: articlesContent
+    } = useContent('articles');
 
     const curCatSlug = ref(getFacetsFromURL().categorySlug);
     const accountIcon = computed(() =>
@@ -157,21 +168,41 @@ export default {
       await headerSearch({
         term: term.value
       });
+      await getArticles({
+        contentType: ContentType.Article,
+        query: term.value,
+        first: 5
+      });
     }, 500);
+
     const closeSearch = () => {
       if (!isSearchOpen.value) return;
       term.value = '';
       isSearchOpen.value = false;
     };
 
-    searchResults.value = {
-      products: computed(() => searchGetters.getItems(result.value))
-    };
+    searchResults.value = computed(() => term.value === '' ? { products: [], articles: [] } : { products: searchGetters.getItems(result.value), articles: articlesContent?.value?.data })
     // #endregion Search Section
+    
     onSSR(async () => {
       await search({ slug: '' });
     });
+
+    const menus = computed(() => [
+      ...categories.value,
+      { id: 'blogs', title: 'blogs', handle: context.$config.routes.blogs }
+    ]);
+
+    const getMenuPath = (menu) => {
+      if (menu.handle.indexOf(context.$config.routes.blogs) === 0) {
+        return { name: 'blogs' };
+      }
+        
+      return { name: 'category', params: { slug_1: menu.handle } };
+    };
+
     return {
+      getMenuPath,
       accountIcon,
       closeSearch,
       handleAccountClick,
@@ -182,7 +213,7 @@ export default {
       handleSearch,
       curCatSlug,
       searchResults,
-      categories,
+      menus,
       isSearchOpen
     };
   }
