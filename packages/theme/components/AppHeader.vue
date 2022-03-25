@@ -244,22 +244,24 @@ export default {
   }
 }
 .nav-item {
+  flex: 0;
   .sf-header-navigation-item__item--mobile {
     display: none;
   }
   &--mobile {
     padding: var(--spacer-xs) 0;
   }
+  ::v-deep &__item--mobile {
+    display: block;
+  }
+  ::v-deep .nuxt-link-active {
+    color: var(--c-primary);
+    --header-navigation-item-border-color: var(--c-primary);
+  }
 }
 .cart-badge {
   position: absolute;
   bottom: 40%;
   left: 40%;
-}
-.sf-header-navigation-item {
-  flex: 0;
-  ::v-deep &__item--mobile {
-    display: block;
-  }
 }
 </style>
