@@ -1,8 +1,12 @@
 import { ContentType } from '../src/types/ContentType'
 import useContent from '../src/useContent'
 
-const getBlog = jest.fn()
-const getBlogs = jest.fn()
+const getBlog = jest.fn(() => ({
+  catch: jest.fn()
+}))
+const getBlogs = jest.fn(() => ({
+  catch: jest.fn()
+}))
 
 const mockContext = {
   $shopify: {
@@ -18,7 +22,7 @@ jest.mock('@vue-storefront/core', () => ({
 }));
 
 describe('[shopify-composables] mapping of useContent', () => {
-  it('should fetch single blog', () => {
+  it('should fetch single blog', async () => {
     const params = {
       contentType: ContentType.Blog,
       id: 'test'
@@ -26,21 +30,20 @@ describe('[shopify-composables] mapping of useContent', () => {
 
     const { search } = useContent('test') as { search: any }
 
-    search(mockContext, params)
+    await search(mockContext, params)
 
-    expect(getBlog).toHaveBeenCalledWith(params)
+    expect(getBlog).toHaveBeenCalledWith({ id: 'test' })
   })
 
-  it('should fetch blogs', () => {
+  it('should fetch blogs', async () => {
     const params = {
-      contentType: ContentType.Blog,
-      query: 'blog_title:test'
+      contentType: ContentType.Blog
     }
 
     const { search } = useContent('test') as { search: any }
 
-    search(mockContext, params)
+    await search(mockContext, params)
 
-    expect(getBlogs).toHaveBeenCalledWith(params)
+    expect(getBlogs).toHaveBeenCalledWith({})
   })
 })
