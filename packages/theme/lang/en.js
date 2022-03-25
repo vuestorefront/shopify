@@ -166,5 +166,19 @@ export default {
   'Search results': 'Search results',
   'You haven\'t searched for items yet': 'You haven\'t searched for items yet',
   'Let\'s start now - we\'ll help you': 'Let\'s start now - we\'ll help you',
-  'on': 'on'
+  'on': 'on',
+  'January': 'January',
+  'February': 'February',
+  'March': 'March',
+  'April': 'April',
+  'May': 'May',
+  'June': 'June',
+  'July': 'July',
+  'August': 'August',
+  'September': 'September',
+  'October': 'October',
+  'November': 'November',
+  'December': 'December',
+  'Men Fashion': 'Men Fashion',
+  'Social': 'Social'
 };

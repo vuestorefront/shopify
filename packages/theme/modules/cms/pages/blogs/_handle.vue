@@ -94,6 +94,7 @@
       </div>
       <SfLoader :loading="isPageLoading" :class="{ loading: isPageLoading }">
         <div v-if="!isPageLoading" class="blogs">
+          <div v-if="articles.length === 0">{{ $t('No Article Available') }}</div>
           <transition-group
             v-if="isGridView"
             appear
@@ -106,7 +107,7 @@
               :key="article.id"
               :style="{ '--index': i }"
               :title="article.title"
-              :image="articleGetters.getImage(article)"
+              :image="getArticleImage(article)"
               :image-height="326"
               :image-width="216"
               :wishlist-icon="false"
@@ -117,7 +118,7 @@
                 fit: 'cover'
               }"
               class="blogs__blog-card"
-              :link="localePath(`/articles/${article.handle}?id=${article.id}`)"
+              :link="localePath(getArticleLink(article))"
             >
               <template #add-to-cart>
                 <div></div>
@@ -129,7 +130,7 @@
                 </span>
 
                 <small class="sf-blog-card__publishedAt">{{
-                  articleGetters.getPublishedAt(article)
+                  getArticlePublishedAt(article)
                 }}</small>
               </template>
             </SfProductCard>
@@ -163,7 +164,7 @@
               </template>
             </SfProductCardHorizontal>
           </transition-group>
-          <SfPagination class="blogs__pagination" :total="0" :visible="0">
+          <SfPagination v-if="articles.length !== 0" class="blogs__pagination" :total="0" :visible="0" >
             <template #next>
               <SfButton
                 class="sf-button--pure sf-button"
@@ -193,10 +194,10 @@
               </SfButton>
             </template>
           </SfPagination>
-          <div class="blogs__show-on-page desktop-only">
+          <div v-if="articles.length !== 0" class="blogs__show-on-page desktop-only">
             <span class="blogs__show-on-page__label">Show on page:</span>
             <SfSelect
-              :value="selectedShowOnPage"
+              :value="articlesPerPage"
               class="blogs__items-per-page"
               @input="(perPage) => selectShowOnPage(perPage)"
             >
@@ -231,12 +232,14 @@ import {
   SfSelect,
   SfLoader
 } from '@storefront-ui/vue';
-import { SortBy } from '~/enums/SortBy';
+import { SortBy } from '~/modules/cms/enums/SortBy';
 import LazyHydrate from 'vue-lazy-hydration';
-import { useRoute, computed, ref, watchEffect } from '@nuxtjs/composition-api';
+import { useUiState } from '~/composables'
+import { useRoute, computed, ref, watchEffect, useContext } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
-import { useContent, articleGetters } from '@vue-storefront/shopify';
-import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
+import { useContent, ContentType } from '@vue-storefront/shopify';
+import { getArticleImage, getArticleLink, getArticlePublishedAt } from '~/helpers/article'
+
 export default {
   name: 'Category',
   components: {
@@ -257,6 +260,8 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const context = useContext()
+    const { articlesPerPage, setArticlesPerPage } = useUiState()
     const {
       search: getBlogs,
       content: blogs,
@@ -273,7 +278,6 @@ export default {
     const cursors = ref(['']);
 
     const showOnPage = ['5', '10', '20', '40', '60'];
-    const selectedShowOnPage = ref('5');
     const sortByOptions = [
       {
         value: 'latest',
@@ -299,7 +303,7 @@ export default {
       await getArticles({
         contentType: ContentType.Article,
         query: `blog_title:${currentHandle.value}`,
-        first: parseInt(selectedShowOnPage.value),
+        first: parseInt(articlesPerPage.value),
         reverse: true,
         sortKey: 'PUBLISHED_AT'
       });
@@ -331,14 +335,14 @@ export default {
     );
 
     const selectShowOnPage = (perPage) => {
-      selectedShowOnPage.value = perPage;
+      setArticlesPerPage(perPage)
     };
 
     watchEffect(() => {
       const options = {
         contentType: ContentType.Article,
         query: `blog_title:${currentHandle.value}`,
-        first: parseInt(selectedShowOnPage.value),
+        first: parseInt(articlesPerPage.value),
         sortKey: 'PUBLISHED_AT'
       };
 
@@ -355,13 +359,15 @@ export default {
 
     return {
       selectShowOnPage,
-      selectedShowOnPage,
+      articlesPerPage,
       showOnPage,
 
       sortByOptions,
       selectedSortBy,
 
-      articleGetters,
+      getArticleImage,
+      getArticlePublishedAt,
+      getArticleLink,
       hasNextPage,
       hasPrevPage,
 
@@ -388,7 +394,9 @@ export default {
         },
         {
           text: 'Blogs',
-          link: '/blogs'
+          link: context.app.localePath({
+            name: 'blogs'
+          })
         }
       ]
     };

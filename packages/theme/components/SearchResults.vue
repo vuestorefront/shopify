@@ -7,36 +7,13 @@
     >
       <transition name="sf-fade" mode="out-in">
         <div
-          v-if="products && products.length > 0"
+          v-if="isSearchResultAvailable"
           key="results"
           class="search__wrapper-results"
         >
           <SfMegaMenuColumn
-            v-if="false"
-            :title="$t('Categories')"
-            class="sf-mega-menu-column--pined-content-on-mobile search__categories"
-          >
-            <template #title="{ title }">
-              <SfMenuItem :label="title" @click="megaMenu.changeActive(title)">
-                <template #mobile-nav-icon> &#8203; </template>
-              </SfMenuItem>
-            </template>
-            <SfList>
-              <SfListItem
-                v-for="(category, key) in categories.items"
-                :key="key"
-              >
-                <SfMenuItem
-                  :label="category.label"
-                  :link="localePath(getCatLink(category))"
-                >
-                  <template #mobile-nav-icon> &#8203; </template>
-                </SfMenuItem>
-              </SfListItem>
-            </SfList>
-          </SfMegaMenuColumn>
-          <SfMegaMenuColumn
-            :title="$t('Product suggestions')"
+            v-if="products && products.length > 0"
+            :title="$t('Products')"
             class="sf-mega-menu-column--pined-content-on-mobile search__results"
           >
             <template #title="{ title }">
@@ -49,8 +26,6 @@
             </template>
             <SfScrollable
               class="results--desktop desktop-only"
-              show-text=""
-              hide-text=""
             >
               <div class="results-listing">
                 <SfProductCard
@@ -69,22 +44,14 @@
                   :alt="productGetters.getName(product)"
                   :title="productGetters.getName(product)"
                   :add-to-cart-disabled="getStockCount(product) <= 0"
-                  :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                  :link="localePath(getProductLink(product))"
                   @click:add-to-cart="
                     handleAddToCart({ product, quantity: 1, currentCart })
                   "
                 >
                   <template slot="title">
                     <SfButton
-                      :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                      :link="localePath(getProductLink(product))"
                       class="sf-button--pure sf-product-card__link"
                       data-testid="product-link"
                     >
@@ -114,22 +81,14 @@
                 :alt="productGetters.getName(product)"
                 :title="productGetters.getName(product)"
                 :add-to-cart-disabled="getStockCount(product) <= 0"
-                :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                :link="localePath(getProductLink(product))"
                 @click:add-to-cart="
                   handleAddToCart({ product, quantity: 1, currentCart })
                 "
               >
                 <template slot="title">
                   <SfButton
-                    :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                    :link="localePath(getProductLink(product))"
                     class="sf-button--pure sf-product-card__link"
                     data-testid="product-link"
                   >
@@ -138,6 +97,94 @@
                       v-html="productGetters.getName(product)"
                     ></h3>
                   </SfButton>
+                </template>
+              </SfProductCard>
+            </div>
+          </SfMegaMenuColumn>
+          <SfMegaMenuColumn
+            v-if="articles && articles.length > 0"
+            :title="$t('Articles')"
+            class="sf-mega-menu-column--pined-content-on-mobile search__results"
+          >
+            <template #title="{ title }">
+              <SfMenuItem
+                :label="title"
+                class="sf-mega-menu-column__header search__header"
+              >
+                <template #mobile-nav-icon> &#8203; </template>
+              </SfMenuItem>
+            </template>
+            <SfScrollable
+              class="results--desktop desktop-only"
+              show-text=""
+              hide-text=""
+            >
+              <div class="results-listing">
+                <SfProductCard
+                  v-for="(article, i) in articles"
+                  :key="article.id"
+                  :style="{ '--index': i }"
+                  :title="article.title"
+                  :image="getArticleImage(article)"
+                  :image-height="326"
+                  :image-width="216"
+                  :wishlist-icon="false"
+                  :show-add-to-cart-button="false"
+                  image-tag="nuxt-img"
+                  :nuxt-img-config="{
+                    format: 'webp',
+                    fit: 'cover'
+                  }"
+                  class="blogs__blog-card"
+                  :link="localePath(getArticleLink(article))"
+                >
+                  <template #add-to-cart>
+                    <div></div>
+                  </template>
+
+                  <template #title="{ title }">
+                    <span class="sf-blog-card__title">
+                      {{ title }}
+                    </span>
+
+                    <small class="sf-blog-card__publishedAt">{{
+                      getArticlePublishedAt(article)
+                    }}</small>
+                  </template>
+                </SfProductCard>
+              </div>
+            </SfScrollable>
+            <div class="results--mobile smartphone-only">
+              <SfProductCard
+                v-for="(article, i) in articles"
+                :key="article.id"
+                :style="{ '--index': i }"
+                :title="article.title"
+                :image="getArticleImage(article)"
+                :image-height="326"
+                :image-width="216"
+                :wishlist-icon="false"
+                :show-add-to-cart-button="false"
+                image-tag="nuxt-img"
+                :nuxt-img-config="{
+                  format: 'webp',
+                  fit: 'cover'
+                }"
+                class="blogs__blog-card"
+                :link="localePath(getArticleLink(article))"
+              >
+                <template #add-to-cart>
+                  <div></div>
+                </template>
+
+                <template #title="{ title }">
+                  <span class="sf-blog-card__title">
+                    {{ title }}
+                  </span>
+
+                  <small class="sf-blog-card__publishedAt">{{
+                    getArticlePublishedAt(article)
+                  }}</small>
                 </template>
               </SfProductCard>
             </div>
@@ -177,37 +224,40 @@
 <script>
 import {
   SfMegaMenu,
-  SfList,
   SfProductCard,
   SfScrollable,
   SfMenuItem,
   SfButton,
-  SfImage,
+  SfImage
 } from '@storefront-ui/vue';
-import { ref, watch, computed, inject } from '@vue/composition-api';
-import { productGetters, useCart } from '@vue-storefront/shopify';
+
+import { ref, watch, computed } from '@vue/composition-api';
+import {
+  productGetters,
+  useCart
+} from '@vue-storefront/shopify';
 import { useUiNotification } from '~/composables';
 import useUiHelpers from '../composables/useUiHelpers';
+import { getArticleImage, getArticleLink, getArticlePublishedAt } from '~/helpers/article'
 export default {
   name: 'SearchResults',
   components: {
     SfMegaMenu,
-    SfList,
     SfProductCard,
     SfScrollable,
     SfMenuItem,
     SfButton,
-    SfImage,
+    SfImage
   },
   props: {
     visible: {
       type: Boolean,
-      default: false,
+      default: false
     },
     result: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
   setup(props, { emit }) {
     const { getCatLink } = useUiHelpers();
@@ -215,6 +265,7 @@ export default {
     const { addItem: addItemToCart, cart: currentCart } = useCart();
     const { send: sendNotification } = useUiNotification();
     const products = computed(() => props.result?.products);
+    const articles = computed(() => props.result?.articles);
     const categories = computed(() => props.result?.categories);
     const getStockCount = (product) => product?.totalInventory ?? 0
 
@@ -238,22 +289,42 @@ export default {
           message: 'Product has been successfully added to cart !',
           type: 'success',
           title: 'Product added!',
-          icon: 'check',
+          icon: 'check'
         });
       });
     };
 
+    const getProductLink = (product) => {
+      if (!product?.id || product?._slug) return '';
+
+      return {
+        name: 'product',
+        params: { id: product?.id, slug: product?._slug }
+      };
+    };
+
+    const isSearchResultAvailable = computed(
+      () =>
+        (products && products.length > 0) || (articles && articles.length > 0)
+    );
+
     return {
+      isSearchResultAvailable,
       getCatLink,
+      getArticleLink,
+      getArticleImage,
+      getArticlePublishedAt,
+      getProductLink,
+      articles,
       isSearchOpen,
       getStockCount,
       productGetters,
       products,
       categories,
       currentCart,
-      handleAddToCart,
+      handleAddToCart
     };
-  },
+  }
 };
 </script>
 
