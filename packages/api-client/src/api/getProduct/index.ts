@@ -135,7 +135,7 @@ export async function getProduct(
       customQuery,
       {
         productByHandle: {
-          query: DEFAULT_QUERY as any,
+          query: DEFAULT_QUERY,
           variables
         }
       }
@@ -257,7 +257,7 @@ export async function getProduct(
       customQuery,
       {
         productRecommendations: {
-          query: DEFAULT_QUERY as any,
+          query: DEFAULT_QUERY,
           payload
         }
       }
@@ -390,7 +390,7 @@ export async function getProduct(
       customQuery,
       {
         products: {
-          query: DEFAULT_QUERY as any,
+          query: DEFAULT_QUERY,
           payload
         }
       }
