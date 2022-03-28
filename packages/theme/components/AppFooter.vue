@@ -34,7 +34,7 @@
           class="footer__social-image"
           v-for="item in social"
           :key="item"
-          :src="`/icons/${item}.svg`"
+          :src="`/icons/${item}.webp`"
           :alt="item"
           :width="32"
           :height="32"

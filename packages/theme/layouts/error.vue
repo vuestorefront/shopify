@@ -2,7 +2,7 @@
   <div id="error">
     <SfImage
       class="image"
-      src="/error/error.svg"
+      src="/error/error.webp"
       alt="leaves"
     />
      <SfHeading
