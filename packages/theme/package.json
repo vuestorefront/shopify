@@ -3,9 +3,9 @@
   "version": "1.0.20",
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build -m",
-    "build:analyze": "nuxt build -a -m",
-    "start": "nuxt start",
+    "build": "nuxt build --modern=client",
+    "build:analyze": "nuxt build -a --modern=client",
+    "start": "nuxt start --modern=client",
     "generate": "nuxt generate",
     "test": "jest",
     "test:e2e:open": "cypress open --config-file tests/e2e/cypress.json",
