@@ -7,7 +7,7 @@ describe('[shopify-apollo] mapping of params into the qraphql client', () => {
     // Given (BDD) or Arrange (TDD)
     const params = {
       categorySlug: 'test',
-      perPage: 10, 
+      itemsPerPage: 10, 
       filters: {
         filterOne: ['filter-one']
       }
@@ -46,7 +46,7 @@ describe('[shopify-apollo] mapping of params into the qraphql client', () => {
     extendQuery.mockImplementationOnce(() => ({ collection: { query: 'test-quert', variables: mappedVariables } }));
     const params = {
       categorySlug: 'test',
-      perPage: 10, 
+      itemsPerPage: 10, 
       filters: {
         filterOne: ['filter-one']
       }

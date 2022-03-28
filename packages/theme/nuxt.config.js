@@ -1,7 +1,7 @@
 require('isomorphic-fetch');
 import webpack from 'webpack';
 
-/** @type { import('@nuxt/types').NuxtConfig } */ 
+/** @type { import('@nuxt/types').NuxtConfig } */
 const config = {
   server: {
     port: process.env.APP_PORT || 3001,
@@ -39,24 +39,20 @@ const config = {
       },
       {
         rel: 'preload',
-        href:
-          'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
+        href: 'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
         as: 'style'
       },
       {
         rel: 'stylesheet',
-        href:
-          'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
+        href: 'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
         media: 'print',
-        onload: 'this.media=\'all\''
+        onload: "this.media='all'"
       }
     ]
   },
   loading: { color: '#fff' },
-  plugins: [
-    '~/plugins/scrollToTop.client.js'
-  ],
   buildModules: [
+    './modules/cms/module',
     // to core
     '@nuxtjs/composition-api/module',
     '@nuxtjs/pwa',
@@ -198,13 +194,13 @@ const config = {
       })
     ],
     extend(config) {
-      config.resolve.extensions.push('.mjs')
+      config.resolve.extensions.push('.mjs');
 
       config.module.rules.push({
         test: /\.mjs$/,
         include: /node_modules/,
         type: 'javascript/auto'
-      })
+      });
     },
     extractCSS: {
       ignoreOrder: true
@@ -314,4 +310,4 @@ const config = {
   }
 };
 
-export default config
+export default config;
