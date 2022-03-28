@@ -17,7 +17,7 @@
       <template #logo>
         <nuxt-link :to="localePath('/')" class="sf-header__logo">
           <SfImage
-            src="/icons/logo.svg"
+            src="/icons/logo.webp"
             alt="Vue Storefront Next"
             class="sf-header__logo-image"
           />
