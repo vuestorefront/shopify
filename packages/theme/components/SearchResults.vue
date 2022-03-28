@@ -199,7 +199,7 @@
         </div>
         <div v-else key="no-results" class="before-results">
           <SfImage
-            src="/error/error.svg"
+            src="/error/error.webp"
             class="before-results__picture"
             alt="error"
             loading="lazy"

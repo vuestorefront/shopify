@@ -60,7 +60,7 @@
             <SfImage
               alt="Empty bag"
               class="empty-cart__image"
-              src="/icons/empty-cart.svg"
+              src="/icons/empty-cart.webp"
             />
             <SfHeading
               title="Your cart is empty"
