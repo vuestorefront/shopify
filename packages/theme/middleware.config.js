@@ -8,7 +8,7 @@ module.exports = {
           storefrontAccessToken: process.env.SHOPIFY_STOREFRONT_TOKEN,
           apiVersion: "2022-01"
         },
-        routes: {
+        cms: {
           blogs: '/blogs',
           articles: '/articles'
         },

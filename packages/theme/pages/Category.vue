@@ -408,7 +408,7 @@ export default {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     removeSpaceFromText(str) {
       let i;
-      const frags = str.split('-');
+      const frags = (str ?? '').split('-');
       for (i = 0; i < frags.length; i++) {
         frags[i] = frags[i].charAt(0).toUpperCase() + frags[i].slice(1);
       }
