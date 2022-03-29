@@ -80,7 +80,7 @@ export async function getArticles(context: ShopifyApolloContext, params: GetArti
       ...response?.data,
       articles: response?.data?.articles?.edges?.map(edge => ({
         ...edge?.node,
-        link: `${context.config?.routes?.blogs}/${edge?.node?.blog?.handle}/${edge?.node?.handle}`,
+        link: `${context.config?.cms?.blogs}/${edge?.node?.blog?.handle}/${edge?.node?.handle}`,
         cursor: edge?.cursor
       })),
     }

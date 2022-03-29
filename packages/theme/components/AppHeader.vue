@@ -190,11 +190,11 @@ export default {
 
     const menus = computed(() => [
       ...categories.value,
-      { id: 'blogs', title: 'blogs', handle: context.$config.routes.blogs }
+      { id: 'blogs', title: 'blogs', handle: context.$config.cms.blogs }
     ]);
 
     const getMenuPath = (menu) => {
-      if (menu.handle.indexOf(context.$config.routes.blogs) === 0) {
+      if (menu.id === 'blogs') {
         return { name: 'blogs' };
       }
         
