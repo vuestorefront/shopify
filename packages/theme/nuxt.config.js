@@ -53,8 +53,8 @@ const config = {
   },
   loading: { color: '#fff' },
   buildModules: [
-    './modules/cms/module',
     // to core
+    './modules/cms/build',
     '@nuxtjs/composition-api/module',
     '@nuxtjs/pwa',
     '@nuxt/typescript-build',
@@ -102,7 +102,8 @@ const config = {
     'cookie-universal-nuxt',
     'vue-scrollto/nuxt',
     '@vue-storefront/middleware/nuxt',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    './modules/cms/runtime'
   ],
   i18n: {
     currency: 'USD',

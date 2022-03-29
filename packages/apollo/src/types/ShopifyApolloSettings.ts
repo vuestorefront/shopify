@@ -4,7 +4,7 @@ export interface ShopifyApolloSettings {
     storefrontAccessToken: string
     cookies?: string,
   },
-  routes?: Record<string, string>
+  cms?: Record<string, string>
   currency: string
   country: string
 }
