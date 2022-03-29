@@ -1,7 +1,6 @@
 import { resolve, join } from 'path';
 import { readdirSync, statSync } from 'fs';
 
-// eslint-disable-next-line func-names
 export default function () {
   this.nuxt.hook('build:before', () => {
     const folder = resolve(__dirname, '../integrations');
