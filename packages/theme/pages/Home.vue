@@ -62,12 +62,12 @@ import {
   productGetters
 } from '@vue-storefront/shopify';
 import {
-  computed,
-  onBeforeMount
+  computed
 } from '@nuxtjs/composition-api';
 import LazyHydrate from 'vue-lazy-hydration';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
+import { onSSR } from '@vue-storefront/core';
 
 export default {
   name: 'Home',
@@ -88,7 +88,7 @@ export default {
     } = useProduct('relatedProducts');
     const { cart, addItem: addToCart, isInCart } = useCart();
 
-    onBeforeMount(async () => {
+    onSSR(async () => {
       await productsSearch({ limit: 8 });
     });
     return {

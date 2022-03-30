@@ -12,7 +12,7 @@
             :title="productGetters.getName(product)"
             :image="productGetters.getPDPCoverImage(product)"
             :is-added-to-cart="isInCart({ product, currentCart })"
-            :add-to-cart-disabled="getStockCount(product) <= 0"
+            :add-to-cart-disabled="!productGetters.getStockStatus(product)"
             :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
             :wishlist-icon="false"
             :image-width="295"
@@ -63,7 +63,7 @@ import {
   SfLink,
   SfPrice
 } from '@storefront-ui/vue';
-import { useUiNotification } from '~/composables';
+import useUiNotification from '../composables/useUiNotification';
 import { productGetters, useCart } from '@vue-storefront/shopify';
 
 export default {
