@@ -9,19 +9,21 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context) => {
     // check if cart is already initiated
-    const appKey = context.$shopify.config.app.$config.appKey;
-    let existingLocale = context.$shopify.config.app.$cookies.get('cur-vsf-locale');
+    const app = context.$shopify.config.app;
+    const appKey = app.$config.appKey;
+    const localeInfo = { cur: app.i18n.locale, default: app.i18n.localeProperties.alias};
+    let existingLocale = app.$cookies.get('cur-vsf-locale');
     let isLocaleSwitched = false;
-    if (existingLocale === undefined || existingLocale === '' || existingLocale !== context.$shopify.config.app.$cookies.get('vsf-locale')) {
-      context.$shopify.config.app.$cookies.set('cur-vsf-locale', context.$shopify.config.app.$cookies.get('vsf-locale'));
-      existingLocale = context.$shopify.config.app.$cookies.get('cur-vsf-locale');
+    if (existingLocale === undefined || existingLocale === '' || existingLocale !== app.i18n.locale) {
+      app.$cookies.set('cur-vsf-locale', app.i18n.locale);
+      existingLocale = app.$cookies.get('cur-vsf-locale');
       isLocaleSwitched = true;
     } 
-    let existngCartId = context.$shopify.config.app.$cookies.get(appKey + '_cart_id');
+    let existngCartId = app.$cookies.get(appKey + '_cart_id');
     if ((existngCartId === undefined || existngCartId === '' || isLocaleSwitched)) {
       // Initiate new cart
       existngCartId = await context.$shopify.api.createCart().then((checkout) => {
-        context.$shopify.config.app.$cookies.set(appKey + '_cart_id', checkout.id, {maxAge: 60 * 60 * 24 * 365, path: '/'});
+        app.$cookies.set(appKey + '_cart_id', checkout.id, {maxAge: 60 * 60 * 24 * 365, path: '/'});
         return checkout.id;
       });
     }
@@ -36,11 +38,12 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addItem: async (context: Context, { currentCart, product, quantity, customQuery }) => {
-    const appKey = context.$shopify.config.app.$config.appKey;
+    const app = context.$shopify.config.app;
+    const appKey = app.$config.appKey;
     return await context.$shopify.api.addToCart({ currentCart, product, quantity, customQuery }).then((checkout) => {
       // store cart id
-      if (!context.$shopify.config.app.$cookies.get(appKey + '_cart_id', currentCart.id)) {
-        context.$shopify.config.app.$cookies.set(appKey + '_cart_id', currentCart.id, { maxAge: 60 * 60 * 24 * 365, path: '/' });  
+      if (!app.$cookies.get(appKey + '_cart_id', currentCart.id)) {
+        app.$cookies.set(appKey + '_cart_id', currentCart.id, { maxAge: 60 * 60 * 24 * 365, path: '/' });  
       }
       return JSON.parse(JSON.stringify(checkout));
     });
