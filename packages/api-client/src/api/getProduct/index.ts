@@ -1,12 +1,12 @@
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
-import { print } from 'graphql'
 import { getCountry } from '../../helpers/utils';
 export async function getProduct(
   context,
   params,
   customQuery?: CustomQuery
 ) {
+  const localeInfo = params.localeInfo;
   if (params.slug) {
     let chosenVariant = [];
     if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {
@@ -125,10 +125,9 @@ export async function getProduct(
         }
       }
     }`
-    const curLocaleCode = params.curLocaleCode;
     const variables = {
       handle: params.slug,
-      country: curLocaleCode === "en" ? "US" : (curLocaleCode).toUpperCase(),
+      country: getCountry(context, true, localeInfo.default, localeInfo.cur),
       selectedOptions: chosenVariant
     }
 
@@ -136,7 +135,7 @@ export async function getProduct(
       customQuery,
       {
         productByHandle: {
-          query: DEFAULT_QUERY as any,
+          query: DEFAULT_QUERY,
           variables
         }
       }
@@ -167,7 +166,7 @@ export async function getProduct(
     }).catch();
   }
   else if (params.related) {
-    const DEFAULT_QUERY = `query GET_PRODUCT_RECOMMENDATION($productId: ID!) @inContext(country: DE){
+    const DEFAULT_QUERY = `query GET_PRODUCT_RECOMMENDATION($productId: ID!, $country: CountryCode!) @inContext(country: $country){
       productRecommendations(productId:$productId){
         id
         title
@@ -248,8 +247,10 @@ export async function getProduct(
         }
       }
     }`
+    const localeInfo = params.localeInfo;
     const payload = {
-      productId: params.productId
+      productId: params.productId,
+      country: getCountry(context, true, localeInfo.default, localeInfo.cur),
     }
 
     const { productRecommendations } = context.extendQuery(
@@ -383,14 +384,13 @@ export async function getProduct(
       first: (params.limit ? params.limit : 20),
       sortKey: (params.sortBy ? params.sortBy : 'CREATED_AT'),
       reverse: false,
-      country: getCountry(context),
+      country: getCountry(context, true, localeInfo.default, localeInfo.cur)
     }
-
     const { products } = context.extendQuery(
       customQuery,
       {
         products: {
-          query: print(DEFAULT_QUERY as any),
+          query: DEFAULT_QUERY,
           payload
         }
       }

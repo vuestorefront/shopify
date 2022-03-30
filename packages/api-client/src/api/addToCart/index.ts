@@ -155,16 +155,15 @@ export async function addToCart(context, params, _customQuery?: CustomQuery) {
     checkoutId: currentCart.id
   }
 
-    const { checkoutLineItemsAdd } = context.extendQuery(
-      customQuery,
-      {
-        checkoutLineItemsAdd: {
-          mutation: DEFAULT_MUTATION,
-          payload
-        }
+  const { checkoutLineItemsAdd } = context.extendQuery(
+    customQuery,
+    {
+      checkoutLineItemsAdd: {
+        mutation: DEFAULT_MUTATION,
+        payload
       }
-    )
-
+    }
+  )
 
   return await context.client.apolloClient.mutate({
     mutation: checkoutLineItemsAdd.mutation,
