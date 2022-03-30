@@ -247,6 +247,7 @@ export async function getProduct(
         }
       }
     }`
+    const localeInfo = params.localeInfo;
     const payload = {
       productId: params.productId,
       country: getCountry(context, true, localeInfo.default, localeInfo.cur),
