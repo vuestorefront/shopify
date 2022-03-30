@@ -248,6 +248,7 @@ export async function getProduct(
         }
       }
     }`
+    const localeInfo = params.localeInfo;
     const payload = {
       productId: params.productId,
       country: getCountry(context, true, localeInfo.default, localeInfo.cur),
@@ -296,7 +297,7 @@ export async function getProduct(
       return products;
     });
   } else {
-    const DEFAULT_QUERY = gql`query GET_PRODUCTS($country: CountryCode!, $first: Int!, $sortKey:  ProductSortKeys!, $reverse: Boolean!) @inContext(country: $country){
+    const DEFAULT_QUERY = `query GET_PRODUCTS($country: CountryCode!, $first: Int!, $sortKey:  ProductSortKeys!, $reverse: Boolean!) @inContext(country: $country){
       products(first:$first, sortKey: $sortKey, reverse: $reverse) {
         edges{
           node{

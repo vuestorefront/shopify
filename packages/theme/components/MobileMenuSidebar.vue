@@ -7,11 +7,11 @@
   >
     <SfList class="mobile-menu-sidebar__list">
       <SfMenuItem
-        v-for="category in categories"
+        v-for="category in menus"
         :key="category.id"
         :label="category.title"
         :data-cy="'app-header-url_' + category.handle"
-        :link="localePath('/c/' + category.handle)"
+        :link="localePath(getMenuPath(category))"
         class="mobile-menu-sidebar__item"
         @click.native="toggleMobileMenu"
       />
@@ -20,7 +20,7 @@
 </template>
 <script lang="ts">
 import { SfSidebar, SfList, SfMenuItem } from '@storefront-ui/vue';
-import { defineComponent } from '@nuxtjs/composition-api';
+import { defineComponent, computed, useContext } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useCategory } from '@vue-storefront/shopify';
 import { useUiState } from '~/composables';
@@ -33,6 +33,7 @@ export default defineComponent({
     SfMenuItem
   },
   setup() {
+    const context = useContext()
     const { search, categories } = useCategory('menuCategories');
     const { isMobileMenuOpen, toggleMobileMenu } = useUiState();
 
@@ -40,8 +41,22 @@ export default defineComponent({
       await search({ slug: '' });
     });
 
+     const menus = computed(() => [
+      ...categories.value,
+      { id: 'blogs', title: 'Blogs', handle: context.$config.cms.blogs }
+    ]);
+
+    const getMenuPath = (menu) => {
+      if (menu.id === 'blogs') {
+        return { name: 'blogs' };
+      }
+        
+      return { name: 'category', params: { slug_1: menu.handle } };
+    };
+
     return {
-      categories,
+      menus,
+      getMenuPath,
       isMobileMenuOpen,
       toggleMobileMenu
     };
