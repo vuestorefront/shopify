@@ -3368,18 +3368,18 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@storefront-ui/shared@0.11.5":
-  version "0.11.5"
-  resolved "https://registry.yarnpkg.com/@storefront-ui/shared/-/shared-0.11.5.tgz#14214d6298536d9e5a9567d00d23b321caaf2a7f"
-  integrity sha512-VjPP9kPIyBKtypDjPeQpkaoR0f7Afkv12gMlubr2LCCd/0eHm+x7R9Ve2nuCjCEuSvnb1a5A2S+4qpSxBWl2ag==
+"@storefront-ui/shared@0.12.3":
+  version "0.12.3"
+  resolved "https://registry.yarnpkg.com/@storefront-ui/shared/-/shared-0.12.3.tgz#98bed5975331816f90ded3e05e5c5ec71d80bd49"
+  integrity sha512-ari13tRJCijnjUPWMt8vrFMYO3bRbi+uVCed95004q1pTExjGzOEV8VJfVMLok4Wo2DnP6wTEKZZbya73tyTcg==
 
-"@storefront-ui/vue@^0.11.4":
-  version "0.11.5"
-  resolved "https://registry.yarnpkg.com/@storefront-ui/vue/-/vue-0.11.5.tgz#4d430deeeb405c45e0c54bb06d4fc367245b8d8c"
-  integrity sha512-bevOM1oAtXFGQBRZYJ0i5n9xIDl5eeOi0blGW/pTVYbjxtAzJCC2JE/hmLTmV2wx98sY6xyEi1VbpM24kpkO+A==
+"@storefront-ui/vue@^0.12.0":
+  version "0.12.3"
+  resolved "https://registry.yarnpkg.com/@storefront-ui/vue/-/vue-0.12.3.tgz#bbb72039bbe11fda8766f2ed5b156b51ca4b03de"
+  integrity sha512-u+SE6yJeznscnvEyMleB5TwPl+P8ZjIk2rjwXK57+LfvCujP5Mpa/uChZdzUIwLUN/GxLjTr9fSzXyVTIXCZ/A==
   dependencies:
     "@glidejs/glide" "^3.3.0"
-    "@storefront-ui/shared" "0.11.5"
+    "@storefront-ui/shared" "0.12.3"
     body-scroll-lock "^3.0.1"
     cloudinary-build-url "^0.1.1"
     core-js "^3.6.5"
@@ -4040,10 +4040,10 @@
     "@typescript-eslint/types" "5.14.0"
     eslint-visitor-keys "^3.0.0"
 
-"@vue-storefront/core@~2.5.0":
-  version "2.5.5"
-  resolved "https://registry.yarnpkg.com/@vue-storefront/core/-/core-2.5.5.tgz#c8b62d7521c4361779c9e64cbc7de8c8670ac2f6"
-  integrity sha512-zZFRS9l9lOngq/1qebFlAIm9nKKl/EfBXliavsqRL5FVC/ghSiDo4IU/04iufh+qIWxQbirWNEGGMQMQWZ4TtQ==
+"@vue-storefront/core@2.5.6":
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/@vue-storefront/core/-/core-2.5.6.tgz#dfbfce48487a9a4a6b34576fb23d625ed0ebfada"
+  integrity sha512-+nJHlcUdn0hJs0lD4AdxGZzLj3GrI9wXvPw1SFR4i2q0cJDiaCyoX/13e7BuRbJOuI8Cnoe/oK+O9VWZXrvXOQ==
   dependencies:
     axios "0.21.1"
     express "^4.17.1"
@@ -4051,30 +4051,30 @@
     lodash-es "^4.17.15"
     vue "^2.6.11"
 
-"@vue-storefront/middleware@~2.5.0":
-  version "2.5.5"
-  resolved "https://registry.yarnpkg.com/@vue-storefront/middleware/-/middleware-2.5.5.tgz#a6ddd4822679fa85193a5b47266da31255d15df3"
-  integrity sha512-li+wP9IzGiCNA/9eYHsWaRwuOafQK++nZeSAEE16qEBvQ6YiPVxvIHcWp+xFTeeHgf5RE3ijX+j67PLGl6Xc0Q==
+"@vue-storefront/middleware@2.5.6":
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/@vue-storefront/middleware/-/middleware-2.5.6.tgz#ab9ba8e5b3ac15bc7b24a32ab3d9de5bcf0b7c7e"
+  integrity sha512-mr5+8beDmOLZ30kYLr3UfI+k106tfihABkE96Pi11LQA5pR/RjAbDqCTCrvDLoHxeQGX95xeh8ee2QB6ds+p3Q==
   dependencies:
     consola "2.15.3"
     cookie-parser "^1.4.5"
     cors "^2.8.5"
     express "^4.17.1"
 
-"@vue-storefront/nuxt-theme@~2.5.0":
-  version "2.5.5"
-  resolved "https://registry.yarnpkg.com/@vue-storefront/nuxt-theme/-/nuxt-theme-2.5.5.tgz#7f71cdf1a6c4d89c55759c2f0274afe1af5e96b9"
-  integrity sha512-u38r1nIeIw05l5GiNn3RySc9jcvtkoo/XutKuxLfMZdIe5JpRkDa1Ap/WrH4p3nN2X3xlqhvCVQQUeHvjG7ZCg==
+"@vue-storefront/nuxt-theme@2.5.6":
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/@vue-storefront/nuxt-theme/-/nuxt-theme-2.5.6.tgz#9da7d49af57e1fe24d5c61c52b9d6fc160e51e3e"
+  integrity sha512-k67fM+3DNt4xLqs2nyqdMjem1SBFdi8TCl3Q5NG46yX6GWbOd7fIiarSVtYAt2/g+9jXao8Ho+mftZp8IF8FUw==
   dependencies:
     ejs "^3.0.2"
     lodash.debounce "^4.0.8"
     lodash.merge "^4.6.2"
     vue-lazy-hydration "^2.0.0-beta.4"
 
-"@vue-storefront/nuxt@~2.5.0":
-  version "2.5.5"
-  resolved "https://registry.yarnpkg.com/@vue-storefront/nuxt/-/nuxt-2.5.5.tgz#7232887304c4ddac9976673e90ab054901b928a4"
-  integrity sha512-rRFgg2BWC5a53XbsXquWbcZz+FshbZntMPcepdbZHtuigpkqu48/DhrXADnX7FZTCl9ZpaEUkCcKdvrRLxXPTg==
+"@vue-storefront/nuxt@2.5.6":
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/@vue-storefront/nuxt/-/nuxt-2.5.6.tgz#52a84a2ffb5f29445e073e5295726d191cf6fd8d"
+  integrity sha512-Dy1+iKGwAqVPtOPLjeGVg0PDa7LJ5rQEQldc+jlAcj8gP121nP8PdiK/NDSNOFZzC39y6BGfinNJP8weDbEnYQ==
   dependencies:
     "@nuxt/typescript-build" "^2.0.0"
     "@nuxtjs/composition-api" "^0.29.3"
