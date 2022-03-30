@@ -101,7 +101,7 @@
               class="sf-property--full-width sf-property--large my-cart__discount"
             >
             <template #name>
-              <span class="sf-property__name applied-discount">{{appliedCoupon ? `Discount [${appliedCoupon}${totalDiscount.percentage ? ' | ' + $n(totalDiscount.percentage/100, 'percent'): ''}]`: 'Discount'}}<SfIcon v-if="appliedCoupon" class="remove-coupon" icon="cross" size="xxs" color="green-primary" @click="handleRemoveCoupon(couponcode)"/></span>
+              <span class="sf-property__name applied-discount">{{displayDiscountStr}}<SfIcon v-if="appliedCoupon" class="remove-coupon" icon="cross" size="xxs" color="green-primary" @click="handleRemoveCoupon(couponcode)"/></span>
             </template>
               <template #value>
                 <SfPrice
@@ -189,7 +189,7 @@ export default {
     SfQuantitySelector,
     SfIcon
   },
-  setup() {
+  setup(_, context) {
     const isValidCoupon = ref(true);
     const errorMsg = ref("Invalid coupon code");
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
@@ -218,9 +218,8 @@ export default {
       return calculatedTotalSavings;
     });
     const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
-    const appliedCoupon = computed(() => { 
-      return cartGetters.getCoupon(cart.value)
-    });
+    const appliedCoupon = computed(() => cartGetters.getCoupon(cart.value));
+    const displayDiscountStr = computed(() => appliedCoupon.value ? `Discount [${appliedCoupon.value}${totalDiscount.value.percentage ? ' | ' + context.root.$n(totalDiscount.value.percentage/100, 'percent'): ''}]`: 'Discount');
     
     const handleApplyCoupon = async (couponCode) => {
       if(couponCode && couponCode !== ""){
@@ -271,7 +270,8 @@ export default {
       isValidCoupon,
       errorMsg,
       appliedCoupon,
-      handleRemoveCoupon
+      handleRemoveCoupon,
+      displayDiscountStr
     };
   }
 };
