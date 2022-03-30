@@ -93,10 +93,15 @@ import {
   SfIcon,
   SfOverlay
 } from '@storefront-ui/vue';
-import SearchResults from './SearchResults.vue';
+import SearchResultsComp from './SearchResults.vue';
 import debounce from 'lodash/debounce';
 import { onSSR } from '@vue-storefront/core';
-import { computed, ref, useRouter, useContext } from '@nuxtjs/composition-api';
+import {
+  computed,
+  ref,
+  useRouter,
+  useContext
+} from '@nuxtjs/composition-api';
 import { useUiHelpers, useUiState } from '~/composables';
 import LocaleSelector from './LocaleSelector.vue';
 
@@ -110,7 +115,7 @@ import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
 
 export default {
   components: {
-    SearchResults,
+    SearchResults: SearchResultsComp,
     SfHeader,
     SfImage,
     SfIcon,
@@ -136,10 +141,8 @@ export default {
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
     const router = useRouter();
-    const {
-      search: getArticles,
-      content: articlesContent
-    } = useContent('articles');
+    const { search: getArticles, content: articlesContent } =
+      useContent('articles');
 
     const curCatSlug = ref(getFacetsFromURL().categorySlug);
     const accountIcon = computed(() =>
@@ -156,7 +159,6 @@ export default {
 
     // #region Search Section
     const isSearchOpen = ref(false);
-    const searchResults = ref(null);
     const term = ref(getFacetsFromURL().term);
     const handleSearch = debounce(async (searchTerm) => {
       if (!searchTerm.target) {
@@ -181,23 +183,30 @@ export default {
       isSearchOpen.value = false;
     };
 
-    searchResults.value = computed(() => term.value === '' ? { products: [], articles: [] } : { products: searchGetters.getItems(result.value), articles: articlesContent?.value?.data })
+    const searchResults = computed(() =>
+      !term.value
+        ? { products: [], articles: [] }
+        : {
+            products: searchGetters.getItems(result.value),
+            articles: articlesContent?.value?.data
+          }
+    );
     // #endregion Search Section
-    
+
     onSSR(async () => {
       await search({ slug: '' });
     });
 
     const menus = computed(() => [
       ...categories.value,
-      { id: 'blogs', title: 'blogs', handle: context.$config.cms.blogs }
+      { id: 'blogs', title: 'Blogs', handle: context.$config.cms.blogs }
     ]);
 
     const getMenuPath = (menu) => {
       if (menu.id === 'blogs') {
         return { name: 'blogs' };
       }
-        
+
       return { name: 'category', params: { slug_1: menu.handle } };
     };
 
