@@ -20,7 +20,7 @@
 </template>
 <script lang="ts">
 import { SfSidebar, SfList, SfMenuItem } from '@storefront-ui/vue';
-import { defineComponent } from '@nuxtjs/composition-api';
+import { defineComponent, computed, useContext } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useCategory } from '@vue-storefront/shopify';
 import { useUiState } from '~/composables';
@@ -33,6 +33,7 @@ export default defineComponent({
     SfMenuItem
   },
   setup() {
+    const context = useContext()
     const { search, categories } = useCategory('menuCategories');
     const { isMobileMenuOpen, toggleMobileMenu } = useUiState();
 
@@ -40,8 +41,22 @@ export default defineComponent({
       await search({ slug: '' });
     });
 
+     const menus = computed(() => [
+      ...categories.value,
+      { id: 'blogs', title: 'blogs', handle: context.$config.cms.blogs }
+    ]);
+
+    const getMenuPath = (menu) => {
+      if (menu.id === 'blogs') {
+        return { name: 'blogs' };
+      }
+        
+      return { name: 'category', params: { slug_1: menu.handle } };
+    };
+
     return {
-      categories,
+      menus,
+      getMenuPath,
       isMobileMenuOpen,
       toggleMobileMenu
     };

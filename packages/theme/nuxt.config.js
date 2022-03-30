@@ -10,7 +10,7 @@ const config = {
   publicRuntimeConfig: {
     appKey: 'vsf2spcon',
     appVersion: Date.now(),
-    middlewareUrl: '/api/'
+    middlewareUrl: process.env.NODE_ENV === 'production' ? `https://${process.env.BASE_URL}/api/`: `http://${process.env.BASE_URL}/api/`
   },
   privateRuntimeConfig: {
     storeURL: process.env.SHOPIFY_DOMAIN,
