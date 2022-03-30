@@ -287,8 +287,6 @@ export async function getProduct(
       }
       return result.data.productRecommendations;
     });
-
-    
   } else if (params.id) {
     return await context.client.product.fetch(params.id).then((product) => {
       return product;
@@ -298,7 +296,7 @@ export async function getProduct(
       return products;
     });
   } else {
-    const DEFAULT_QUERY = gql`query GET_PRODUCTS($country: CountryCode!, $first: Int!, $sortKey:  ProductSortKeys!, $reverse: Boolean!) @inContext(country: $country){
+    const DEFAULT_QUERY = `query GET_PRODUCTS($country: CountryCode!, $first: Int!, $sortKey:  ProductSortKeys!, $reverse: Boolean!) @inContext(country: $country){
       products(first:$first, sortKey: $sortKey, reverse: $reverse) {
         edges{
           node{
