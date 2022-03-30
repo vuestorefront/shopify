@@ -7,11 +7,11 @@
   >
     <SfList class="mobile-menu-sidebar__list">
       <SfMenuItem
-        v-for="category in categories"
+        v-for="category in menus"
         :key="category.id"
         :label="category.title"
         :data-cy="'app-header-url_' + category.handle"
-        :link="localePath('/c/' + category.handle)"
+        :link="localePath(getMenuPath(category))"
         class="mobile-menu-sidebar__item"
         @click.native="toggleMobileMenu"
       />
@@ -43,7 +43,7 @@ export default defineComponent({
 
      const menus = computed(() => [
       ...categories.value,
-      { id: 'blogs', title: 'blogs', handle: context.$config.cms.blogs }
+      { id: 'blogs', title: 'Blogs', handle: context.$config.cms.blogs }
     ]);
 
     const getMenuPath = (menu) => {
