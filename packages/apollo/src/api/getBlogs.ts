@@ -32,7 +32,7 @@ export async function getBlogs(context: ShopifyApolloContext, params: QueryRootB
       ...response?.data,
       blogs: response?.data?.blogs?.edges?.map(edge => ({
         ...edge?.node,
-        link: `${context.config?.routes?.blogs}/${edge?.node?.handle}`
+        link: `${context.config?.cms?.blogs}/${edge?.node?.handle}`
       }))
     }
   }
