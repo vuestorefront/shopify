@@ -3,7 +3,7 @@ import { ProductVariant } from "@vue-storefront/shopify-api";
 type EnhancedProduct = ProductVariant
 
 const enhanceProduct = (productResponse) => {
-  if (Object.keys(productResponse).length === 0) return;
+  if (Object.keys(productResponse).length === 0) return [] as ProductVariant[];
 
   let products = []
   if (Array.isArray(productResponse)) {
