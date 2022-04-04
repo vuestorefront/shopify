@@ -208,16 +208,6 @@ const config = {
       ignoreOrder: true
     }
   },
-  router: {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    scrollBehavior(_to, _from, savedPosition) {
-      if (savedPosition) {
-        return savedPosition;
-      } else {
-        return { x: 0, y: 0 };
-      }
-    }
-  },
   pwa: {
     manifest: {
       name: 'VSF Next: Shopify APP',
