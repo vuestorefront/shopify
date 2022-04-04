@@ -28,26 +28,23 @@
 
 <script type="module">
 import {
-  SfImage,
-  SfSelect,
   SfButton,
   SfList,
   SfBottomModal,
   SfCharacteristic
 } from '@storefront-ui/vue';
-import { ref, computed } from '@nuxtjs/composition-api';
+import { ref, computed, useRouter } from '@nuxtjs/composition-api';
 
 export default {
   components: {
-    SfImage,
-    SfSelect,
     SfButton,
     SfList,
     SfBottomModal,
     SfCharacteristic
   },
-  setup(props, context) {
-    const { locales, locale } = context.root.$i18n;
+  setup() {
+    const router = useRouter();
+    const { locales, locale } = router.app.$i18n;
     const isLangModalOpen = ref(false);
     const availableLocales = computed(() => locales.filter(i => i.code !== locale));
 

@@ -12,6 +12,7 @@
             :title="productGetters.getName(product)"
             :image="productGetters.getPDPCoverImage(product)"
             :is-added-to-cart="isInCart({ product, currentCart })"
+            :show-add-to-cart-button="true"
             :add-to-cart-disabled="!productGetters.getStockStatus(product)"
             :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
             :wishlist-icon="false"
