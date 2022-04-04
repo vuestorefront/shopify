@@ -33,8 +33,8 @@ module.exports = {
           domain: 'YOUR SHOPIFY STORE DOMAIN',
           storefrontAccessToken: 'SHOPIFY STORE API KEY'
         },
-        routes: {
-          blogs: '/blogs',
+        cms: {
+          blogs: '/blogs', 
           articles: '/articles'
         },
         currency: 'USD',
@@ -51,10 +51,12 @@ module.exports = {
 - `domain` - link to your Shopify storefront.
 - `storefrontAccessToken` - Shopify private app API key. Visit [Shopify documentation](https://shopify.dev/tutorials/generate-api-credentials) for more details about creating an API key
 
-### `routes`
+### `cms`
 
 - `blogs` - prefix url for your blogs content defaults to `/blogs`
+  - Which results to https://yourdomain.com/blogs/:blog-handle
 - `articles` - prefix url for your articles content defaults to `/articles`
+  - Which results to https://yourdomain.com/articles/:article-handle
 
 ### `acceptLanguage`
 
