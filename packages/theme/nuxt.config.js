@@ -113,7 +113,7 @@ const config = {
       { name: 'DE', label: 'Germany' }
     ],
     currencies: [
-      { name: 'EUR', label: 'Euro' },
+      { name: 'GBP', label: 'Pound' },
       { name: 'USD', label: 'Dollar' }
     ],
     locales: [

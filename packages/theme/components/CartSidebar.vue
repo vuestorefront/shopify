@@ -61,6 +61,8 @@
               alt="Empty bag"
               class="empty-cart__image"
               src="/icons/empty-cart.webp"
+              :width="256"
+              :height="173"
             />
             <SfHeading
               title="Your cart is empty"

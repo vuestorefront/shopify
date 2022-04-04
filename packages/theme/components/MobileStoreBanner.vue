@@ -4,6 +4,8 @@
     subtitle="Fashon to take away"
     title="Download our application to your mobile"
     class="sf-banner--left desktop-only banner-app"
+    :image-width="174"
+    :image-height="57"
   >
     <template #call-to-action>
       <div class="banner-app__call-to-action">
@@ -36,14 +38,12 @@
 <script type="module">
 import {
   SfBanner,
-  SfImage,
   SfButton
 } from '@storefront-ui/vue';
 export default {
   name: 'AppStoreBanner',
   components: {
     SfBanner,
-    SfImage,
     SfButton
   }
 };

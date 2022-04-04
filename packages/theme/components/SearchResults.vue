@@ -26,6 +26,8 @@
             </template>
             <SfScrollable
               class="results--desktop desktop-only"
+              show-text=""
+              hide-text=""
             >
               <div class="results-listing">
                 <SfProductCard
@@ -203,6 +205,8 @@
             class="before-results__picture"
             alt="error"
             loading="lazy"
+            :width="300"
+            :height="300"
           />
           <p class="before-results__paragraph">
             {{ $t("You haven't searched for items yet") }}
@@ -231,14 +235,15 @@ import {
   SfImage
 } from '@storefront-ui/vue';
 
-import { ref, watch, computed } from '@vue/composition-api';
-import {
-  productGetters,
-  useCart
-} from '@vue-storefront/shopify';
+import { ref, watch, computed, watchEffect } from '@vue/composition-api';
+import { productGetters, useCart } from '@vue-storefront/shopify';
 import { useUiNotification } from '~/composables';
 import useUiHelpers from '../composables/useUiHelpers';
-import { getArticleImage, getArticleLink, getArticlePublishedAt } from '~/helpers/article'
+import {
+  getArticleImage,
+  getArticleLink,
+  getArticlePublishedAt
+} from '~/helpers/article';
 export default {
   name: 'SearchResults',
   components: {
@@ -267,7 +272,7 @@ export default {
     const products = computed(() => props.result?.products);
     const articles = computed(() => props.result?.articles);
     const categories = computed(() => props.result?.categories);
-    const getStockCount = (product) => product?.totalInventory ?? 0
+    const getStockCount = (product) => product?.totalInventory ?? 0;
 
     watch(
       () => props.visible,
@@ -305,8 +310,14 @@ export default {
 
     const isSearchResultAvailable = computed(
       () =>
-        (products && products.length > 0) || (articles && articles.length > 0)
+        (products?.value?.length ?? 0) > 0 || (articles?.value?.length ?? 0) > 0
     );
+
+    watchEffect(() => {
+      console.log(props.result?.articles);
+      console.log(props.result?.products);
+      // console.log(isSearchResultAvailable.value)
+    });
 
     return {
       isSearchResultAvailable,

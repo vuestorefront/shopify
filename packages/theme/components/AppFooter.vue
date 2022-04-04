@@ -31,9 +31,9 @@
     <SfFooterColumn :title="$t('Social')">
       <div class="footer__socials">
         <SfImage
-          class="footer__social-image"
           v-for="item in social"
           :key="item"
+          class="footer__social-image"
           :src="`/icons/${item}.webp`"
           :alt="item"
           :width="32"

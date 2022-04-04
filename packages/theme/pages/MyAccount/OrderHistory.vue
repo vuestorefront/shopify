@@ -37,8 +37,8 @@
               <nuxt-link class="product-img" :to="'/products/'+orderGetters.getItemSlug(item)">
                 <SfImage
                 :src="`${orderGetters.getItemImage(item)}?fm=webp`"
-                height="100"
-                width="100"
+                :height="100"
+                :width="100"
                 :lazy="false"
                 loading="lazy"
                 />
