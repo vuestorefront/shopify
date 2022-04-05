@@ -73,7 +73,8 @@ export const getActiveVariantImage = (product) => {
   }
 };
 
-export const getProductFiltered = (products, filters: ProductVariantFilters | any = {}) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const getProductFiltered = (products, _filters: ProductVariantFilters | any = {}) => {
   if (!products) {
     return [];
   }
@@ -191,7 +192,7 @@ export const getProductCollections = (product, field = 'all') => {
   }
   if (product.collections && Object.keys(product.collections).length > 0) {
     const collections = [];
-    Object.values(product.collections).map((collection: Record<string, unknown>) => {
+    Object.values(product.collections).forEach((collection: Record<string, unknown>) => {
       if (field === 'all') {
         collections.push({
           id: collection.id,
