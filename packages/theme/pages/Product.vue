@@ -122,7 +122,6 @@
               />
             </template>
           </SfAlert>
-          {{productGetters.getStockStatus(product)}}
           <SfAddToCart
             v-model="qty"
             :disabled="!productGetters.getStockStatus(product)"
