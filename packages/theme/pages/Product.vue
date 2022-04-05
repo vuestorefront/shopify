@@ -122,6 +122,7 @@
               />
             </template>
           </SfAlert>
+          {{productGetters.getStockStatus(product)}}
           <SfAddToCart
             v-model="qty"
             :disabled="!productGetters.getStockStatus(product)"
@@ -144,7 +145,7 @@
                   })
                 "
               >
-                Add to Cart
+                {{ $t( 'Add to Cart') }}
               </SfButton>
             </template>
           </SfAddToCart>
