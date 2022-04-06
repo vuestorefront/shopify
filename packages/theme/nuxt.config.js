@@ -98,7 +98,7 @@ const config = {
     ]
   ],
   modules: [
-    'nuxt-i18n',
+    '@nuxtjs/i18n',
     'cookie-universal-nuxt',
     'vue-scrollto/nuxt',
     '@vue-storefront/middleware/nuxt',
@@ -158,7 +158,7 @@ const config = {
         de: {
           currency: {
             style: 'currency',
-            currency: 'GBP',
+            currency: 'EUR',
             currencyDisplay: 'symbol'
           },
           decimal: {
