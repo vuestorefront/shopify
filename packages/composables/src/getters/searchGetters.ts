@@ -28,34 +28,34 @@ const searchGetters: UseSearchGetters<QueryResult, Product> = {
 
     return items
   },
-  getCategoryTree(result: QueryResult): AgnosticCategoryTree {
+  getCategoryTree(_: QueryResult): AgnosticCategoryTree {
     throw new Error('Function not implemented.')
   },
-  getPagination(result: QueryResult): AgnosticPagination {
+  getPagination(_: QueryResult): AgnosticPagination {
     throw new Error('Function not implemented.')
   },
-  getItemPrice(item: Product): AgnosticPrice {
+  getItemPrice(_: Product): AgnosticPrice {
     throw new Error('Function not implemented.')
   },
-  getSortOptions(result: QueryResult): AgnosticSort {
+  getSortOptions(_: QueryResult): AgnosticSort {
     throw new Error('Function not implemented.')
   },
-  getBreadcrumbs(result: QueryResult): AgnosticBreadcrumb[] {
+  getBreadcrumbs(_: QueryResult): AgnosticBreadcrumb[] {
     throw new Error('Function not implemented.')
   },
-  getItemImages(item: Product): AgnosticMediaGalleryItem[] {
+  getItemImages(_: Product): AgnosticMediaGalleryItem[] {
     throw new Error('Function not implemented.')
   },
-  getFilters(result: QueryResult): AgnosticFilter[] {
+  getFilters(_: QueryResult): AgnosticFilter[] {
     throw new Error('Function not implemented.')
   },
-  getItemName(item: Product): string {
+  getItemName(_: Product): string {
     throw new Error('Function not implemented.')
   },
-  getItemId(item: Product): string {
+  getItemId(_: Product): string {
     throw new Error('Function not implemented.')
   },
-  getItemSlug(item: Product): string {
+  getItemSlug(_: Product): string {
     throw new Error('Function not implemented.')
   }
 }

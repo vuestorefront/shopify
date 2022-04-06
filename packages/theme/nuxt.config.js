@@ -10,7 +10,7 @@ const config = {
   publicRuntimeConfig: {
     appKey: 'vsf2spcon',
     appVersion: Date.now(),
-    middlewareUrl: process.env.NODE_ENV === 'production' ? `http://${process.env.BASE_URL}/api/`: `http://${process.env.BASE_URL}/api/`
+    middlewareUrl: process.env.NODE_ENV === 'production' ? `https://${process.env.BASE_URL}/api/`: `http://${process.env.BASE_URL}/api/`
   },
   privateRuntimeConfig: {
     storeURL: process.env.SHOPIFY_DOMAIN,
@@ -99,7 +99,7 @@ const config = {
     ]
   ],
   modules: [
-    'nuxt-i18n',
+    '@nuxtjs/i18n',
     'cookie-universal-nuxt',
     'vue-scrollto/nuxt',
     '@vue-storefront/middleware/nuxt',
@@ -163,7 +163,7 @@ const config = {
         de: {
           currency: {
             style: 'currency',
-            currency: 'GBP',
+            currency: 'EUR',
             currencyDisplay: 'symbol'
           },
           decimal: {

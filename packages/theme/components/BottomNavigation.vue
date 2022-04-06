@@ -19,13 +19,6 @@
         @click="toggleMobileMenu"
       />
       <SfBottomNavigationItem
-        data-cy="bottom-navigation-url_wishlist"
-        icon="heart"
-        size="20px"
-        label="Wishlist"
-        @click="toggleWishlistSidebar"
-      />
-      <SfBottomNavigationItem
         data-cy="bottom-navigation-url_account"
         icon="profile"
         size="20px"

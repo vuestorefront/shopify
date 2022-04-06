@@ -48,7 +48,11 @@
                   :alt="productGetters.getName(product)"
                   :title="productGetters.getName(product)"
                   :add-to-cart-disabled="getStockCount(product) <= 0"
-                  :link="localePath(getProductLink(product))"
+                  :link="localePath(
+                    `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                      product
+                    )}`
+                  )"
                   @click:add-to-cart="
                     handleAddToCart({ product, quantity: 1, currentCart })
                   "
@@ -84,14 +88,17 @@
                   </template>
                   <template slot="title">
                     <SfButton
-                      :link="localePath(getProductLink(product))"
+                      :link="localePath(
+                        `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                          product
+                        )}`
+                      )"
                       class="sf-button--pure sf-product-card__link"
                       data-testid="product-link"
                     >
                       <h3
                         class="sf-product-card__title"
-                        v-html="productGetters.getName(product)"
-                      ></h3>
+                      >{{productGetters.getName(product)}}</h3>
                     </SfButton>
                   </template>
                 </SfProductCard>
@@ -116,7 +123,11 @@
                 :alt="productGetters.getName(product)"
                 :title="productGetters.getName(product)"
                 :add-to-cart-disabled="getStockCount(product) <= 0"
-                :link="localePath(getProductLink(product))"
+                :link="localePath(
+                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                    product
+                  )}`
+                )"
                 @click:add-to-cart="
                   handleAddToCart({ product, quantity: 1, currentCart })
                 "
@@ -152,7 +163,11 @@
                 </template>
                 <template slot="title">
                   <SfButton
-                    :link="localePath(getProductLink(product))"
+                    :link="localePath(
+                      `/p/${productGetters.getId(product)}/${productGetters.getSlug(
+                        product
+                      )}`
+                    )"
                     class="sf-button--pure sf-product-card__link"
                     data-testid="product-link"
                   >
@@ -194,15 +209,10 @@
                   :image-height="$device.isDesktopOrTablet ? 320 : 232"
                   :wishlist-icon="false"
                   :show-add-to-cart-button="false"
-                  image-tag="nuxt-img"
-                  :nuxt-img-config="{
-                    format: 'webp',
-                    fit: 'cover'
-                  }"
                   class="blogs__blog-card"
                   :link="localePath(getArticleLink(article))"
                 >
-                  <template #image="imageSlotProps">
+                  <template v-if="getArticleImage(article)" #image="imageSlotProps">
                 <SfButton
                   :link="imageSlotProps.link"
                   aria-label="Go To Product"
@@ -258,18 +268,13 @@
                 :image-height="$device.isDesktopOrTablet ? 320 : 232"
                 :wishlist-icon="false"
                 :show-add-to-cart-button="false"
-                image-tag="nuxt-img"
-                :nuxt-img-config="{
-                  format: 'webp',
-                  fit: 'cover'
-                }"
                 class="blogs__blog-card"
                 :link="localePath(getArticleLink(article))"
               >
                 <template #add-to-cart>
                   <div></div>
                 </template>
-                <template #image="imageSlotProps">
+                <template v-if="getArticleImage(article)" #image="imageSlotProps">
                   <SfButton
                     :link="imageSlotProps.link"
                     aria-label="Go To Product"
@@ -354,7 +359,7 @@ import {
   SfImage
 } from '@storefront-ui/vue';
 
-import { ref, watch, computed, watchEffect } from '@vue/composition-api';
+import { ref, watch, computed } from '@vue/composition-api';
 import { productGetters, useCart } from '@vue-storefront/shopify';
 import { useUiNotification } from '~/composables';
 import useUiHelpers from '../composables/useUiHelpers';
@@ -418,25 +423,19 @@ export default {
       });
     };
 
-    const getProductLink = (product) => {
-      if (!product?.id || product?._slug) return '';
+    // const getProductLink = (product) => {
+    //   if (!product?.id || product?._slug) return '';
 
-      return {
-        name: 'product',
-        params: { id: product?.id, slug: product?._slug }
-      };
-    };
+    //   return {
+    //     name: 'product',
+    //     params: { id: product?.id, slug: product?._slug }
+    //   };
+    // };
 
     const isSearchResultAvailable = computed(
       () =>
         (products?.value?.length ?? 0) > 0 || (articles?.value?.length ?? 0) > 0
     );
-
-    // watchEffect(() => {
-    //   console.log(props.result?.articles);
-    //   console.log(props.result?.products);
-    //   // console.log(isSearchResultAvailable.value)
-    // });
 
     return {
       isSearchResultAvailable,
@@ -444,7 +443,6 @@ export default {
       getArticleLink,
       getArticleImage,
       getArticlePublishedAt,
-      getProductLink,
       articles,
       isSearchOpen,
       getStockCount,
