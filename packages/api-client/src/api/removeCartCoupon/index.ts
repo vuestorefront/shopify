@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
 import { gql } from '@apollo/client/core'
+import { getCountry } from '../../helpers/utils'
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export async function removeCoupon(context, params, _customQuery?: CustomQuery) {
   const { currentCart, couponCode, customQuery } = params;
-  const DEFAULT_MUTATION = gql`mutation REMOVE_COUPON($checkoutId: ID!){ 
+  const DEFAULT_MUTATION = gql`mutation REMOVE_COUPON($checkoutId: ID!, $country: CountryCode!) @inContext(country: $country ){ 
     checkoutDiscountCodeRemove(checkoutId: $checkoutId) {
         checkout {
       		appliedGiftCards{
@@ -150,7 +151,8 @@ export async function removeCoupon(context, params, _customQuery?: CustomQuery) 
     }
   }`
   const payload = {
-    checkoutId: currentCart.id
+    checkoutId: currentCart.id,
+    country: getCountry(context)
   }
 
     const { checkoutDiscountCodeRemove } = context.extendQuery(

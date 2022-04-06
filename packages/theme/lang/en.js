@@ -180,5 +180,6 @@ export default {
   'November': 'November',
   'December': 'December',
   'Men Fashion': 'Men Fashion',
-  'Social': 'Social'
+  'Social': 'Social',
+  'Add to Cart': 'Add to Cart'
 };
