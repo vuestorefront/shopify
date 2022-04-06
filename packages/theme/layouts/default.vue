@@ -23,9 +23,9 @@
     <div id="layout">
       <nuxt :key="route.fullPath" />
     </div>
-    <client-only>
+    <LoadWhenVisible>
       <AppFooter />
-    </client-only>
+    </LoadWhenVisible>
   </div>
 </template>
 
@@ -39,6 +39,7 @@ import {
   useCart,
 } from '@vue-storefront/shopify';
 import { computed, onBeforeMount, provide, useRoute, useContext } from '@nuxtjs/composition-api';
+import LoadWhenVisible from '~/components/utils/LoadWhenVisible';
 export default {
   name: 'DefaultLayout',
   components: {
@@ -51,6 +52,7 @@ export default {
     WishlistSidebar: () => import(/* webpackPrefetch: true */ '~/components/WishlistSidebar.vue'),
     LoginModal: () => import(/* webpackPrefetch: true */ '~/components/LoginModal.vue'),
     Notification: () => import(/* webpackPrefetch: true */ '~/components/Notification'),
+    LoadWhenVisible
   },
   setup() {
     const route = useRoute();
