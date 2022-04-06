@@ -60,8 +60,8 @@
           class="footer__social-image"
           :src="addBasePath('/icons/'+item+'.webp')"
           :alt="item"
-          width="32"
-          height="32"
+          :width="32"
+          :height="32"
         />
       </div>
     </SfFooterColumn>

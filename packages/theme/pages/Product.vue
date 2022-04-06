@@ -11,7 +11,7 @@
       <template #link="{ breadcrumb }">
         <nuxt-link
           :data-testid="breadcrumb.text"
-          :to="breadcrumb.route.link"
+          :to="breadcrumb.link ? localePath(breadcrumb.link) : ''"
           class="sf-link disable-active-link sf-breadcrumbs__breadcrumb"
         >
           {{ breadcrumb.text }}
@@ -316,15 +316,15 @@ export default {
       breadcrumbs.value = [
         {
           text: 'Home',
-          route: { link: '/' }
+          link: '/'
         },
         {
           text: 'products',
-          route: { link: '#' }
+          link: '#'
         },
         {
           text: productTitle.value,
-          route: { link: '#' }
+          link: '#'
         }
       ];
     };

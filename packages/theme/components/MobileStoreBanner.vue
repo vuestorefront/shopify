@@ -16,8 +16,8 @@
             image-tag="nuxt-picture"
             src="/homepage/apple.png"
             loading="lazy"
-            width="174"
-            height="57"
+            :width="174"
+            :height="57"
             alt="Apple Store"
           />
         </SfButton>
@@ -30,8 +30,8 @@
             image-tag="nuxt-picture"
             src="/homepage/google.png"
             loading="lazy"
-            width="174"
-            height="57"
+            :width="174"
+            :height="57"
             alt="Play Store"
           />
         </SfButton>
