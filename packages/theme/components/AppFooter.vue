@@ -87,13 +87,26 @@ export default {
   },
   data() {
     return {
-      aboutUs: ['Who we are', 'Quality in the details', 'Customer Reviews'],
-      departments: ['Women fashion', 'Men fashion', 'Kidswear', 'Home'],
-      help: ['Customer service', 'Size guide', 'Contact us'],
-      paymentsDelivery: ['Purchase terms', 'Guarantee'],
+      aboutUs: [
+        this.$t('Who we are'),
+        this.$t('Quality in the details'),
+        this.$t('Customer Reviews')
+      ],
+      departments: [
+        this.$t('Women fashion'),
+        this.$t('Men Fashion'),
+        this.$t('Kidswear'),
+        this.$t('Home')
+      ],
+      help: [
+        this.$t('Customer service'),
+        this.$t('Size guide'),
+        this.$t('Contact us')
+      ],
+      paymentsDelivery: [this.$t('Purchase terms'), this.$t('Guarantee')],
       social: ['facebook', 'pinterest', 'google', 'twitter', 'youtube'],
       isMobile: false,
-      desktopMin: 1024,
+      desktopMin: 1024
     };
   },
 };

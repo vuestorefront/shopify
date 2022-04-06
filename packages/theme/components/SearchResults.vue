@@ -119,7 +119,7 @@
                 :score-rating="productGetters.getAverageRating(product)"
                 :image="productGetters.getCoverImage(product)"
                 :image-width="$device.isDesktopOrTablet ? 212 : 154"
-                  :image-height="$device.isDesktopOrTablet ? 320 : 232"
+                :image-height="$device.isDesktopOrTablet ? 320 : 232"
                 :alt="productGetters.getName(product)"
                 :title="productGetters.getName(product)"
                 :add-to-cart-disabled="getStockCount(product) <= 0"
