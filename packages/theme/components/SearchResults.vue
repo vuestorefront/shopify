@@ -173,8 +173,9 @@
                   >
                     <h3
                       class="sf-product-card__title"
-                      v-html="productGetters.getName(product)"
-                    ></h3>
+                    >
+                      {{productGetters.getName(product)}}
+                    </h3>
                   </SfButton>
                 </template>
               </SfProductCard>
