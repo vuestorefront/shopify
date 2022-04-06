@@ -144,7 +144,7 @@
                   })
                 "
               >
-                Add to Cart
+                {{ $t( 'Add to Cart') }}
               </SfButton>
             </template>
           </SfAddToCart>

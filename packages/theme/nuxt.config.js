@@ -1,7 +1,6 @@
 require('isomorphic-fetch');
 import webpack from 'webpack';
-
-/** @type { import('@nuxt/types').NuxtConfig } */
+const platformENV = process.env.NODE_ENV !== 'production' ? 'http' : 'https'
 const config = {
   server: {
     port: process.env.APP_PORT || 3001,
@@ -10,7 +9,7 @@ const config = {
   publicRuntimeConfig: {
     appKey: 'vsf2spcon',
     appVersion: Date.now(),
-    middlewareUrl: process.env.NODE_ENV === 'production' ? `https://${process.env.BASE_URL}/api/`: `http://${process.env.BASE_URL}/api/`
+    middlewareUrl:  `${platformENV}://${process.env.BASE_URL}/api/`
   },
   privateRuntimeConfig: {
     storeURL: process.env.SHOPIFY_DOMAIN,

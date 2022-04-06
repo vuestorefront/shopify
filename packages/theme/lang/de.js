@@ -166,5 +166,6 @@ export default {
   'Out of Stock': 'Ausverkauft',
   'You haven\'t searched for items yet': 'You haven\'t searched for items yet',
   'Let\'s start now - we\'ll help you': 'Let\'s start now - we\'ll help you',
-  'on': 'on'
+  'on': 'on',
+  'Add to Cart': 'Añadir al carrito'
 };
