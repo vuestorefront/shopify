@@ -1,19 +1,29 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
+import { gql } from '@apollo/client/core';
 import { signInMutation as mutation } from './../customerMutations/buildMutations';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function signIn(context, params, customQuery?: CustomQuery) {
+export async function signIn(context, params, _customQuery?: CustomQuery) {
   const { username, password } = params;
-  const data = {
-    input: {
+  
+  // Listen to inputs
+  const payload = {
       email: username,
       password
-    }
   };
-  // send user data to authenticate, return token if valid
-  return await context.client.graphQLClient.send(mutation(context), data).then(({model}) => {
-    return model;
+
+  const { customerAccessTokenCreate } = context.extendQuery(
+      _customQuery,
+      {
+        customerAccessTokenCreate: {
+          mutation,
+          payload
+        }
+      }
+  )
+  
+  return await context.client.apolloClient.mutate({
+    mutation: gql(customerAccessTokenCreate.mutation) as any,
+    variables: customerAccessTokenCreate.payload
+  }).then((result) => {
+    return result.data.customerAccessTokenCreate;
   });
 }
