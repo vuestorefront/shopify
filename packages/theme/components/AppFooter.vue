@@ -52,7 +52,7 @@
         </SfListItem>
       </SfList>
     </SfFooterColumn>
-    <SfFooterColumn title="Social">
+    <SfFooterColumn :title="$t('Social')">
       <div class="footer__socials">
         <SfImage
           v-for="item in social"
@@ -114,7 +114,7 @@ export default {
 
 <style lang="scss">
 .footer {
-  margin-bottom: 3.75rem;
+  margin-bottom: var(--spacer-xl);
   @include for-desktop {
     margin-bottom: 0;
   }
