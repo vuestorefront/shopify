@@ -123,15 +123,13 @@ import {
   SfColor
 } from '@storefront-ui/vue';
 
-import { ref, computed, useRoute, useRouter } from '@nuxtjs/composition-api';
+import { ref, computed, useRoute } from '@nuxtjs/composition-api';
 import {
   useCart,
   productGetters,
   useReview,
   reviewGetters
 } from '@vue-storefront/shopify';
-import LazyHydrate from 'vue-lazy-hydration';
-import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 
 export default {
   name: 'Product',
@@ -144,9 +142,7 @@ export default {
     SfAddToCart,
     SfGallery,
     SfIcon,
-    SfBadge,
-    MobileStoreBanner,
-    LazyHydrate
+    SfBadge
   },
   transition: 'fade',
   props: {
@@ -155,7 +151,7 @@ export default {
       type: Array || Object
     }
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  
   setup(props) {
     const route = useRoute();
     const qty = ref(1);
@@ -220,7 +216,6 @@ export default {
       productGallery
     };
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
       stock: 5
