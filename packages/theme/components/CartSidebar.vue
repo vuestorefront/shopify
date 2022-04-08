@@ -61,6 +61,8 @@
               alt="Empty bag"
               class="empty-cart__image"
               src="/icons/empty-cart.webp"
+              :width="256"
+              :height="173"
             />
             <SfHeading
               title="Your cart is empty"
@@ -169,7 +171,7 @@ import {
   SfQuantitySelector,
   SfIcon
 } from '@storefront-ui/vue';
-import { computed, ref } from '@nuxtjs/composition-api';
+import { computed, ref, useRoute } from '@nuxtjs/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
 import { useUiState, useUiNotification } from '~/composables';
 import debounce from 'lodash.debounce';
@@ -189,7 +191,8 @@ export default {
     SfQuantitySelector,
     SfIcon
   },
-  setup(_, context) {
+  setup() {
+    const route = useRoute();
     const isValidCoupon = ref(true);
     const errorMsg = ref("Invalid coupon code");
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
@@ -219,7 +222,7 @@ export default {
     });
     const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
     const appliedCoupon = computed(() => cartGetters.getCoupon(cart.value));
-    const displayDiscountStr = computed(() => appliedCoupon.value ? `Discount [${appliedCoupon.value}${totalDiscount.value.percentage ? ' | ' + context.root.$n(totalDiscount.value.percentage/100, 'percent'): ''}]`: 'Discount');
+    const displayDiscountStr = computed(() => appliedCoupon.value ? `Discount [${appliedCoupon.value}${totalDiscount.value.percentage ? ' | ' + route?.value?.$n(totalDiscount.value.percentage/100, 'percent'): ''}]`: 'Discount');
     
     const handleApplyCoupon = async (couponCode) => {
       if(couponCode && couponCode !== ""){

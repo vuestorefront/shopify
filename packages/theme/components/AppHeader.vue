@@ -20,6 +20,8 @@
             src="/icons/logo.webp"
             alt="Vue Storefront Next"
             class="sf-header__logo-image"
+            :width="34"
+            :height="34"
           />
         </nuxt-link>
       </template>

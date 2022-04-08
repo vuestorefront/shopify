@@ -7,7 +7,7 @@
       <template #link="{ breadcrumb }">
         <nuxt-link
           :data-testid="breadcrumb.text"
-          :to="breadcrumb.route.link"
+          :to="breadcrumb.link ? localePath(breadcrumb.link) : ''"
           class="sf-link disable-active-link sf-breadcrumbs__breadcrumb"
         >
           {{ breadcrumb.text }}
@@ -85,10 +85,12 @@
             <SfProductCard
               v-for="(product, i) in products"
               :key="productGetters.getId(product)"
-              data-cy="category-product-card"
+              v-e2e="'category-product-card'"
               :style="{ '--index': i }"
               :title="productGetters.getName(product)"
               :image="productGetters.getCoverImage(product)"
+              :image-width="$device.isDesktopOrTablet ? 212 : 154"
+              :image-height="$device.isDesktopOrTablet ? 320 : 232"
               :regular-price="
                 $n(productGetters.getPrice(product).regular, 'currency')
               "
@@ -114,7 +116,37 @@
               @click:add-to-cart="
                 handleAddToCart({ product, quantity: 1, currentCart })
               "
-            />
+            >
+            <template #image="imageSlotProps">
+                <SfButton
+                  :link="imageSlotProps.link"
+                  aria-label="Go To Product"
+                  class="sf-button--pure sf-product-card__link"
+                  data-testid="product-link"
+                  v-on="$listeners"
+                >
+                  <template v-if="Array.isArray(imageSlotProps.image)">
+                    <nuxt-img
+                      v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                      :key="key"
+                      :alt="imageSlotProps.title"
+                      :height="imageSlotProps.imageHeight"
+                      :src="picture"
+                      :width="imageSlotProps.imageWidth"
+                      class="sf-product-card__picture"
+                    />
+                  </template>
+                  <nuxt-img
+                    v-else
+                    :alt="imageSlotProps.title"
+                    :height="imageSlotProps.imageHeight"
+                    :src="imageSlotProps.image"
+                    :width="imageSlotProps.imageWidth"
+                    class="sf-product-card__image lol"
+                  />
+                </SfButton>
+              </template>
+            </SfProductCard>
           </transition-group>
           <transition-group
             v-else
@@ -131,6 +163,8 @@
               :title="productGetters.getName(product)"
               :description="productGetters.getDescription(product)"
               :image="productGetters.getCoverImage(product)"
+              :image-width="$device.isDesktopOrTablet ? 85 : 140"
+              :image-height="$device.isDesktopOrTablet ? 128 : 212"
               :regular-price="
                 $n(productGetters.getPrice(product).regular, 'currency')
               "
@@ -153,7 +187,37 @@
               @click:add-to-cart="
                 handleAddToCart({ product, quantity: 1, currentCart })
               "
-            >
+            ><template #image="imageSlotProps">
+                  <SfLink
+                    :link="imageSlotProps.link"
+                    class="
+                    sf-product-card-horizontal__link
+                    sf-product-card-horizontal__link--image
+                  "
+                  >
+                    <template v-if="Array.isArray(imageSlotProps.image)">
+                      <SfImage
+                        v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                        :key="key"
+                        image-tag="nuxt-img"
+                        :src="picture"
+                        :alt="imageSlotProps.title"
+                        :width="imageSlotProps.imageWidth"
+                        :height="imageSlotProps.imageHeight"
+                        class="sf-product-card-horizontal__picture"
+                      />
+                    </template>
+                    <SfImage
+                      v-else
+                      image-tag="nuxt-img"
+                      :src="imageSlotProps.image"
+                      :alt="imageSlotProps.title"
+                      :width="imageSlotProps.imageWidth"
+                      :height="imageSlotProps.imageHeight"
+                      class="sf-product-card-horizontal__image"
+                    />
+                  </SfLink>
+                </template>
               <template #configuration>
                 <SfProperty
                   class="desktop-only"
@@ -304,7 +368,9 @@ import {
   SfLoader,
   SfColor,
   SfProperty,
-  SfAddToCart
+  SfAddToCart,
+  SfLink,
+  SfImage
 } from '@storefront-ui/vue';
 import { computed, onMounted, ref } from '@nuxtjs/composition-api';
 import {
@@ -332,7 +398,9 @@ export default {
     SfColor,
     SfHeading,
     SfProperty,
-    SfAddToCart
+    SfAddToCart,
+    SfLink,
+    SfImage
   },
   transition: 'fade',
   setup(_, context) {
@@ -383,11 +451,11 @@ export default {
       breadcrumbs: [
         {
           text: 'Home',
-          route: { link: '/' }
+          link: '/'
         },
         {
           text: this.removeSpaceFromText(this.$route.params.slug_1),
-          route: { link: '#' }
+          link: '#'
         }
       ]
     };

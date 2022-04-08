@@ -108,18 +108,43 @@
               :style="{ '--index': i }"
               :title="article.title"
               :image="getArticleImage(article)"
-              :image-height="326"
-              :image-width="216"
+              :image-width="$device.isDesktopOrTablet ? 212 : 154"
+              :image-height="$device.isDesktopOrTablet ? 320 : 232"
               :wishlist-icon="false"
               :show-add-to-cart-button="false"
-              image-tag="nuxt-img"
-              :nuxt-img-config="{
-                format: 'webp',
-                fit: 'cover'
-              }"
               class="blogs__blog-card"
               :link="localePath(getArticleLink(article))"
             >
+            
+              <template v-if="getArticleImage(article)" #image="imageSlotProps">
+                <SfButton
+                  :link="imageSlotProps.link"
+                  aria-label="Go To Product"
+                  class="sf-button--pure sf-product-card__link"
+                  data-testid="product-link"
+                  v-on="$listeners"
+                >
+                  <template v-if="Array.isArray(imageSlotProps.image)">
+                    <nuxt-img
+                      v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                      :key="key"
+                      :alt="imageSlotProps.title"
+                      :height="imageSlotProps.imageHeight"
+                      :src="picture"
+                      :width="imageSlotProps.imageWidth"
+                      class="sf-product-card__picture"
+                    />
+                  </template>
+                  <nuxt-img
+                    v-else
+                    :alt="imageSlotProps.title"
+                    :height="imageSlotProps.imageHeight"
+                    :src="imageSlotProps.image"
+                    :width="imageSlotProps.imageWidth"
+                    class="sf-product-card__image lol"
+                  />
+                </SfButton>
+              </template>
               <template #add-to-cart>
                 <div></div>
               </template>
@@ -148,17 +173,41 @@
               :style="{ '--index': i }"
               :title="article.title"
               :description="article.content"
-              :image="article.image.transformedSrc"
-              :image-height="200"
-              :image-width="140"
-              image-tag="nuxt-img"
+              :image="getArticleImage(article)"
+              :image-width="$device.isDesktopOrTablet ? 212 : 154"
+              :image-height="$device.isDesktopOrTablet ? 320 : 232"
               link="#"
-              :nuxt-img-config="{
-                format: 'webp',
-                fit: 'cover'
-              }"
               class="blogs__blog-card-horizontal"
             >
+              <template v-if="getArticleImage(article)" #image="imageSlotProps">
+                <SfButton
+                  :link="imageSlotProps.link"
+                  aria-label="Go To Product"
+                  class="sf-button--pure sf-product-card__link"
+                  data-testid="product-link"
+                  v-on="$listeners"
+                >
+                  <template v-if="Array.isArray(imageSlotProps.image)">
+                    <nuxt-img
+                      v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                      :key="key"
+                      :alt="imageSlotProps.title"
+                      :height="imageSlotProps.imageHeight"
+                      :src="picture"
+                      :width="imageSlotProps.imageWidth"
+                      class="sf-product-card__picture"
+                    />
+                  </template>
+                  <nuxt-img
+                    v-else
+                    :alt="imageSlotProps.title"
+                    :height="imageSlotProps.imageHeight"
+                    :src="imageSlotProps.image"
+                    :width="imageSlotProps.imageWidth"
+                    class="sf-product-card__image lol"
+                  />
+                </SfButton>
+              </template>
               <template #add-to-cart>
                 <div></div>
               </template>

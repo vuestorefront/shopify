@@ -125,7 +125,7 @@ import {
   SfColor
 } from '@storefront-ui/vue';
 
-import { ref, computed } from '@nuxtjs/composition-api';
+import { ref, computed, useRoute, useRouter } from '@nuxtjs/composition-api';
 import {
   useCart,
   productGetters,
@@ -158,7 +158,8 @@ export default {
     }
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(props, context) {
+  setup(props) {
+    const route = useRoute();
     const qty = ref(1);
     const { addItem, loading } = useCart();
     const { reviews: productReviews } = useReview(
@@ -168,7 +169,7 @@ export default {
       () =>
         productGetters.getFiltered(props.productModel, {
           master: true,
-          attributes: context.root.$route.query
+          attributes: route?.value?.query
         })[0]
     );
     const productDescription = computed(() =>
@@ -202,8 +203,8 @@ export default {
     const updateFilter = (filter) => {
       console.log(filter);
 
-      /* context.root.$router.push({
-        path: context.root.$route.path,
+      /* router.push({
+        path: route?.value?.path,
         query: {
           ...configuration.value,
           ...filter
