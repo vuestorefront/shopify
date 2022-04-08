@@ -480,7 +480,6 @@ import {
   SfRadio,
   SfSelect
 } from '@storefront-ui/vue';
-import { watchEffect } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useContent } from '@vue-storefront/shopify';
 import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
@@ -534,19 +533,12 @@ export default {
       }
     });
 
-    // watchEffect(() => {
-    //   console.log('first 5 blogs', blogs.value);
-    //   console.log('first blog', blog.value);
-    //   console.log(error.value);
-    // });
-
     return {
       // Methods
       clearAllFilters,
       toggleWishlist,
       // Data
       blogs,
-
       totalPosts: 0,
       currentPage: 1,
       sortBy: 'Latest',

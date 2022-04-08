@@ -158,7 +158,6 @@ export default {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup(props) {
     const route = useRoute();
-    // const router = useRouter();
     const qty = ref(1);
     const { addItem, loading } = useCart();
     const { reviews: productReviews } = useReview(
