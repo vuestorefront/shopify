@@ -73,7 +73,6 @@
               label="Size"
               class="sf-select--underlined product__select-size"
               :required="true"
-              @input="(size) => updateFilter({ size })"
             >
               <SfSelectOption
                 v-for="size in options.Size"
@@ -94,7 +93,6 @@
                 data-cy="product-color_update"
                 :color="color.value"
                 class="product__color"
-                @click="updateFilter({ color })"
               />
             </div>
             <SfAddToCart
@@ -201,20 +199,7 @@ export default {
       }))
     );
 
-    const updateFilter = (filter) => {
-      console.log(filter);
-
-      /* router.push({
-        path: route?.value?.path,
-        query: {
-          ...configuration.value,
-          ...filter
-        }
-      }); */
-    };
-
     return {
-      updateFilter,
       configuration,
       product,
       productDescription,
