@@ -33,8 +33,9 @@ const params: UseUserFactoryParams<User, any, any> = {
     const app = context.$shopify.config.app;
     const appKey = app.$config.appKey;
     const token = app.$cookies.get(appKey + '_token');
-    app.$cookies.remove(appKey + '_token');
-    await context.$shopify.api.signOut(token);
+    await context.$shopify.api.signOut(token).then(() => {
+      app.$cookies.remove(appKey + '_token');
+    });
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
