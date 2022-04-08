@@ -48,11 +48,7 @@
                   :alt="productGetters.getName(product)"
                   :title="productGetters.getName(product)"
                   :add-to-cart-disabled="getStockCount(product) <= 0"
-                  :link="localePath(
-                    `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                      product
-                    )}`
-                  )"
+                  :link="localePath(getProductLink(product))"
                   @click:add-to-cart="
                     handleAddToCart({ product, quantity: 1, currentCart })
                   "
@@ -88,11 +84,7 @@
                   </template>
                   <template slot="title">
                     <SfButton
-                      :link="localePath(
-                        `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                          product
-                        )}`
-                      )"
+                      :link="localePath(getProductLink(product))"
                       class="sf-button--pure sf-product-card__link"
                       data-testid="product-link"
                     >
@@ -123,11 +115,7 @@
                 :alt="productGetters.getName(product)"
                 :title="productGetters.getName(product)"
                 :add-to-cart-disabled="getStockCount(product) <= 0"
-                :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                :link="localePath(getProductLink(product))"
                 @click:add-to-cart="
                   handleAddToCart({ product, quantity: 1, currentCart })
                 "
@@ -163,11 +151,7 @@
                 </template>
                 <template slot="title">
                   <SfButton
-                    :link="localePath(
-                      `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                        product
-                      )}`
-                    )"
+                    :link="localePath(getProductLink(product))"
                     class="sf-button--pure sf-product-card__link"
                     data-testid="product-link"
                   >
