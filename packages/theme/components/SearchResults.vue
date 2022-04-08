@@ -424,14 +424,14 @@ export default {
       });
     };
 
-    // const getProductLink = (product) => {
-    //   if (!product?.id || product?._slug) return '';
+    const getProductLink = (product) => {
+      if (!product?.id || !product?._slug) return '';
 
-    //   return {
-    //     name: 'product',
-    //     params: { id: product?.id, slug: product?._slug }
-    //   };
-    // };
+      return {
+        name: 'product',
+        params: { id: product.id, slug: product._slug }
+      };
+    };
 
     const isSearchResultAvailable = computed(
       () =>
@@ -441,6 +441,7 @@ export default {
     return {
       isSearchResultAvailable,
       getCatLink,
+      getProductLink,
       getArticleLink,
       getArticleImage,
       getArticlePublishedAt,
