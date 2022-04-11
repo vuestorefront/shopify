@@ -14,7 +14,7 @@ import { applyCoupon } from './api/applyCartCoupon';
 import { removeCoupon } from './api/removeCartCoupon';
 import signUp from './api/signUp';
 import { signIn } from './api/signIn';
-import signOut from './api/signOut';
+import { signOut } from './api/signOut';
 import changePassword from './api/changePassword';
 import forgotPassword from './api/forgotPassword';
 import fetchCustomer from './api/fetchCustomer';

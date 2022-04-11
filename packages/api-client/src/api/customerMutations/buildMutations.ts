@@ -153,21 +153,16 @@ const signInMutation = `mutation customerAccessTokenCreate($email: String!, $pas
     }
   }`;
 
-const signOutMutation: (context) => any = (context): any => {
-
-  const customerAccessToken = context.client.graphQLClient.variable('customerAccessToken', 'String!');
-
-  return context.client.graphQLClient.mutation('customerAccessTokenDelete', [customerAccessToken], (root) => {
-    root.add('customerAccessTokenDelete', {args: {customerAccessToken}}, (customer) => {
-      customer.add('deletedAccessToken');
-      customer.add('deletedCustomerAccessTokenId');
-      customer.add('userErrors', (error) => {
-        error.add('field');
-        error.add('message');
-      });
-    });
-  });
-};
+const signOutMutation = `mutation customerAccessTokenDelete($customerAccessToken: String!, $password: String!){
+    customerAccessTokenDelete(customerAccessToken:$customerAccessToken){
+      deletedAccessToken
+      deletedCustomerAccessTokenId
+      userErrors{
+        field
+        message
+      }
+    }
+  }`;
 
 const signUpMutation: (context) => any = (context): any => {
 
