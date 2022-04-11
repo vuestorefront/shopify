@@ -151,6 +151,7 @@ export default {
       type: Array || Object
     }
   },
+  
   setup(props) {
     const route = useRoute();
     const qty = ref(1);
