@@ -11,7 +11,7 @@
       <template #link="{ breadcrumb }">
         <nuxt-link
           :data-testid="breadcrumb.text"
-          :to="breadcrumb.route.link"
+          :to="breadcrumb.link ? localePath(breadcrumb.link) : ''"
           class="sf-link disable-active-link sf-breadcrumbs__breadcrumb"
         >
           {{ breadcrumb.text }}
@@ -229,7 +229,7 @@ import {
 
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
-import { ref, computed, watch } from '@nuxtjs/composition-api';
+import { ref, computed, watch, useRoute, useRouter } from '@nuxtjs/composition-api';
 import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
@@ -263,11 +263,13 @@ export default {
     });
   },
   transition: 'fade',
-  setup(_, context) {
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
     const breadcrumbs = ref([]);
     const atttLbl = '';
     const qty = ref(1);
-    const { slug } = context.root.$route.params;
+    const { slug } = route?.value?.params;
     const {
       loading: productloading,
       products,
@@ -285,7 +287,7 @@ export default {
       () =>
         productGetters.getFiltered(products.value, {
           master: true,
-          attributes: context.root.$route.query
+          attributes: route?.value?.query
         })[0]
     );
 
@@ -307,22 +309,22 @@ export default {
       productGetters.getAttributes(products.value)
     );
     const configuration = computed(() => {
-      return productGetters.getSelectedVariant(context.root.$route.query);
+      return productGetters.getSelectedVariant(route?.value?.query);
     });
 
     const setBreadcrumb = () => {
       breadcrumbs.value = [
         {
           text: 'Home',
-          route: { link: '/' }
+          link: '/'
         },
         {
           text: 'products',
-          route: { link: '#' }
+          link: '#'
         },
         {
           text: productTitle.value,
-          route: { link: '#' }
+          link: '#'
         }
       ];
     };
@@ -361,7 +363,7 @@ export default {
       await search({ slug, selectedOptions: configuration.value }).then(() => {
         // "Product Title" serve as the flag if the product is existing or not
         if (!productTitle.value) {
-          return context.root.error({
+          return route?.value?.error({
             statusCode: 404,
             message: 'This product could not be found'
           });
@@ -381,8 +383,8 @@ export default {
               : options.value[attr][0];
         });
       }
-      context.root.$router.push({
-        path: context.root.$route.path,
+      router.push({
+        path: route?.value?.path,
         query: {
           ...configuration.value,
           ...filter

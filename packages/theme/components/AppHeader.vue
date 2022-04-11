@@ -21,6 +21,8 @@
             alt="Vue Storefront Next"
             class="sf-header__logo-image"
             @click="isSearchOpen = false"
+            :width="34"
+            :height="34"
           />
         </nuxt-link>
       </template>

@@ -56,6 +56,7 @@ const config = {
     './modules/cms/build',
     '@nuxtjs/composition-api/module',
     '@nuxtjs/pwa',
+    '@nuxtjs/device',
     '@nuxt/typescript-build',
     '@nuxtjs/style-resources',
     [
@@ -102,8 +103,12 @@ const config = {
     'vue-scrollto/nuxt',
     '@vue-storefront/middleware/nuxt',
     '@nuxtjs/sitemap',
-    './modules/cms/runtime'
+    './modules/cms/runtime',
+    '@nuxt/image'
   ],
+  device: {
+    refreshOnResize: true
+  },
   i18n: {
     currency: 'USD',
     country: 'US',

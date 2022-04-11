@@ -39,7 +39,7 @@ export default {
     onSSR(async () => {
       await search({
         contentType: ContentType.Article,
-        id: route.value.query.id as string
+        id: route?.value?.query.id as string
       });
     });
 

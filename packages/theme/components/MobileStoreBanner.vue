@@ -1,8 +1,8 @@
 <template>
   <SfBanner
     image="/homepage/bannerD.png"
-    subtitle="Fashon to take away"
-    title="Download our application to your mobile"
+    :subtitle="$t('Fashion to take away')"
+    :title="$t('Download our application to your mobile')"
     class="sf-banner--left desktop-only banner-app"
   >
     <template #call-to-action>
@@ -12,10 +12,13 @@
           aria-label="Go to Apple Product"
           @click="() => {}"
         >
-          <img
+          <SfImage
+            image-tag="nuxt-picture"
             src="/homepage/apple.png"
-            width="174"
-            height="57"
+            loading="lazy"
+            :width="174"
+            :height="57"
+            alt="Apple Store"
           />
         </SfButton>
         <SfButton
@@ -23,10 +26,13 @@
           aria-label="Go to Google Product"
           @click="() => {}"
         >
-          <img
+          <SfImage
+            image-tag="nuxt-picture"
             src="/homepage/google.png"
-            width="174"
-            height="57"
+            loading="lazy"
+            :width="174"
+            :height="57"
+            alt="Play Store"
           />
         </SfButton>
       </div>
@@ -36,15 +42,15 @@
 <script type="module">
 import {
   SfBanner,
-  SfImage,
-  SfButton
+  SfButton,
+  SfImage
 } from '@storefront-ui/vue';
 export default {
   name: 'AppStoreBanner',
   components: {
     SfBanner,
-    SfImage,
-    SfButton
+    SfButton,
+    SfImage
   }
 };
 </script>

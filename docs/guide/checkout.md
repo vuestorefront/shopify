@@ -31,14 +31,15 @@ handle (url key) or product id.
 
 This example fetch a single product by handle.
 ```typescript
-import { computed } from '@nuxtjs/composition-api';
+import { computed, useRoute } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useProduct, productGetters } from '@vue-storefront/shopify';
 
 export default {
-  setup(props, context) {
+  setup() {
+    const route = useRoute();
     const { products, search } = useProduct('products');
-    const { slug } = context.root.$route.params;
+    const { slug } = route?.value?.params;
     
     const product = computed(() => productGetters.getFiltered(products.value));
 
