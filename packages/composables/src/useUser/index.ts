@@ -85,8 +85,8 @@ const params: UseUserFactoryParams<User, any, any> = {
 
     const result: any = await context.$shopify.api.signIn({ username, password });
     const response: User = {
-      token: (result.customerAccessTokenCreate.customerAccessToken) ? result.customerAccessTokenCreate.customerAccessToken.accessToken : null,
-      error: (result.customerAccessTokenCreate.customerUserErrors.length) ? result.customerAccessTokenCreate.customerUserErrors[0].message : ''
+      token: (result.customerAccessToken) ? result.customerAccessToken.accessToken : null,
+      error: (result.customerUserErrors.length) ? result.customerUserErrors[0].message : ''
     };
     // store token in cookie
     if (response.token !== null) {

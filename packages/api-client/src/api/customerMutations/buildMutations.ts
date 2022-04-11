@@ -139,23 +139,19 @@ const editProfileMutation: (context) => any = (context): any => {
   });
 };
 
-const signInMutation: (context) => any = (context): any => {
-  const input = context.client.graphQLClient.variable('input', 'CustomerAccessTokenCreateInput!');
-
-  return context.client.graphQLClient.mutation('customerAccessTokenCreate', [input], (root) => {
-    root.add('customerAccessTokenCreate', {args: {input}}, (customer) => {
-      customer.add('customerAccessToken', (token) => {
-        token.add('accessToken');
-        token.add('expiresAt');
-      });
-      customer.add('customerUserErrors', (error) => {
-        error.add('code');
-        error.add('field');
-        error.add('message');
-      });
-    });
-  });
-};
+const signInMutation = `mutation customerAccessTokenCreate($email: String!, $password: String!){
+    customerAccessTokenCreate(input:{email: $email, password: $password}){
+      customerAccessToken{
+        accessToken
+        expiresAt
+      }
+      customerUserErrors{
+        code
+        field
+        message
+      }
+    }
+  }`;
 
 const signOutMutation: (context) => any = (context): any => {
 
