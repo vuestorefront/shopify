@@ -1,16 +1,26 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CustomQuery } from '@vue-storefront/core';
+import { gql } from '@apollo/client/core';
 import { signUpMutation as mutation } from './../customerMutations/buildMutations';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function signUp(context, params, customQuery?: CustomQuery) {
-  const data = {
+export async function signUp(context, params, customQuery?: CustomQuery) {
+  const payload = {
     input: params
   };
 
-  // send userdata to register
-  return await context.client.graphQLClient.send(mutation(context), data).then(({model}) => {
-    return model;
+ const { customerCreate } = context.extendQuery(
+      customQuery,
+      {
+        customerCreate: {
+          mutation,
+          payload
+        }
+      }
+  )
+  
+  return await context.client.apolloClient.mutate({
+    mutation: gql(customerCreate.mutation) as any,
+    variables: customerCreate.payload
+  }).then((result) => {
+    return result.data.customerCreate;
   });
 }
