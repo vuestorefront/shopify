@@ -12,7 +12,7 @@ import { addToCart } from './api/addToCart';
 import {removeFromCart} from './api/removeFromCart';
 import { applyCoupon } from './api/applyCartCoupon';
 import { removeCoupon } from './api/removeCartCoupon';
-import signUp from './api/signUp';
+import { signUp } from './api/signUp';
 import { signIn } from './api/signIn';
 import { signOut } from './api/signOut';
 import changePassword from './api/changePassword';

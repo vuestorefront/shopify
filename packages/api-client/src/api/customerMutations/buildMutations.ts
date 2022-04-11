@@ -164,23 +164,18 @@ const signOutMutation = `mutation customerAccessTokenDelete($customerAccessToken
     }
   }`;
 
-const signUpMutation: (context) => any = (context): any => {
-
-  const input = context.client.graphQLClient.variable('input', 'CustomerCreateInput!');
-
-  return context.client.graphQLClient.mutation('customerCreate', [input], (root) => {
-    root.add('customerCreate', {args: {input}}, (customer) => {
-      customer.add('customer', (token) => {
-        token.add('id');
-      });
-      customer.add('customerUserErrors', (error) => {
-        error.add('code');
-        error.add('field');
-        error.add('message');
-      });
-    });
-  });
-};
+const signUpMutation= `mutation CREATE_CUSTOMER( $input: CustomerCreateInput! ){
+	customerCreate(input: $input){
+		customer{
+      id
+    }
+    customerUserErrors{
+      code
+			field
+      message
+    }
+	}
+}`;
 
 export {
   changePasswordMutation,
