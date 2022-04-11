@@ -20,6 +20,7 @@
             src="/icons/logo.webp"
             alt="Vue Storefront Next"
             class="sf-header__logo-image"
+            @click="isSearchOpen = false"
             :width="34"
             :height="34"
           />
@@ -35,6 +36,7 @@
             :data-cy="'app-header-url_' + menu.handle"
             :label="menu.title"
             :link="localePath(getMenuPath(menu))"
+            @click="isSearchOpen = false"
           />
         </div>
       </template>
