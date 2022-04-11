@@ -17,7 +17,7 @@ import { signIn } from './api/signIn';
 import { signOut } from './api/signOut';
 import changePassword from './api/changePassword';
 import forgotPassword from './api/forgotPassword';
-import fetchCustomer from './api/fetchCustomer';
+import { fetchCustomer } from './api/fetchCustomer';
 import fetchOrders from './api/fetchOrders';
 import fetchAddresses from './api/fetchAddresses';
 import deleteAddress from './api/deleteAddress';

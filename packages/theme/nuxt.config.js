@@ -9,7 +9,7 @@ const config = {
   publicRuntimeConfig: {
     appKey: 'vsf2spcon',
     appVersion: Date.now(),
-    middlewareUrl:  `${platformENV}://${process.env.BASE_URL}/api/`
+    middlewareUrl:  `${platformENV}://${process.env.BASE_URL}:${process.env.APP_PORT || 3001}/api/`
   },
   privateRuntimeConfig: {
     storeURL: process.env.SHOPIFY_DOMAIN,
@@ -51,6 +51,9 @@ const config = {
     ]
   },
   loading: { color: '#fff' },
+  plugins: [
+    '~/plugins/scrollToTop.client.js'
+  ],
   buildModules: [
     // to core
     './modules/cms/build',
