@@ -26,21 +26,6 @@ const changePasswordMutation: (context) => any = (context): any => {
   });
 };
 
-const forgotPasswordMutation: (context) => any = (context): any => {
-
-  const email = context.client.graphQLClient.variable('email', 'String!');
-
-  return context.client.graphQLClient.mutation('customerRecover', [email], (root) => {
-    root.add('customerRecover', {args: {email}}, (customer) => {
-      customer.add('customerUserErrors', (error) => {
-        error.add('code');
-        error.add('field');
-        error.add('message');
-      });
-    });
-  });
-};
-
 const resetPasswordByUrlMutation: (context) => any = (context): any => {
 
   const resetUrl = context.client.graphQLClient.variable('resetUrl', 'URL!');
@@ -175,6 +160,16 @@ const signUpMutation= `mutation CREATE_CUSTOMER( $input: CustomerCreateInput! ){
       message
     }
 	}
+}`;
+
+const forgotPasswordMutation = `mutation RESET_PASSWORD($email: String!){
+  customerRecover(email: $email){
+    customerUserErrors{
+      code
+      field
+      message
+    }
+  }
 }`;
 
 export {
