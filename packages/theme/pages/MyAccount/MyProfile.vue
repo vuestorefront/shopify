@@ -66,7 +66,7 @@
               </ValidationProvider>
               <div class="my-account-bottom-action-wrap">
                 <div class="form__button_wrap">
-                  <SfButton data-cy="my-profile-btn_update" class="form__button"
+                  <SfButton data-cy="my-profile-btn_update" class="form__button" type="submit"
                     >Update Profile</SfButton
                   >
                 </div>
@@ -125,6 +125,7 @@
                   <SfButton
                     data-cy="my-profile-btn_update-password"
                     class="form__button"
+                    type="submit"
                     >Change password</SfButton
                   >
                 </div>
