@@ -51,6 +51,12 @@
                     />
                   </div>
                 </template>
+                <template #actions>
+                  <div />
+                </template>
+                <template #more-actions>
+                  <div />
+                </template>
               </SfCollectedProduct>
             </transition-group>
           </div>
@@ -243,7 +249,7 @@ export default {
     }
     const handleCheckout = (checkoutUrl) => {
       setTimeout(() => {
-        window.location.replace(checkoutUrl)
+        window.location.href = checkoutUrl;
       }, 300)
     }
     const updateQuantity = debounce(async ({ product, quantity }) => {
@@ -382,10 +388,13 @@ export default {
     --cp-compare-opacity: 1;
     @include for-desktop {
       .collected-product__properties {
-        display: none;
+        display: block;
       }
     }
   }
+}
+::v-deep .sf-collected-product__configuration {
+  display: block;
 }
 .coupon-form-wrapper{
   display: flex;

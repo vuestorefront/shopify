@@ -49,6 +49,7 @@
                   :title="productGetters.getName(product)"
                   :add-to-cart-disabled="getStockCount(product) <= 0"
                   :link="localePath(getProductLink(product))"
+                  :wishlist-icon="false"
                   @click:add-to-cart="
                     handleAddToCart({ product, quantity: 1, currentCart })
                   "
@@ -116,6 +117,7 @@
                 :title="productGetters.getName(product)"
                 :add-to-cart-disabled="getStockCount(product) <= 0"
                 :link="localePath(getProductLink(product))"
+                :wishlist-icon="false"
                 @click:add-to-cart="
                   handleAddToCart({ product, quantity: 1, currentCart })
                 "
