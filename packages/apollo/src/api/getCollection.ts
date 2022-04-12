@@ -3,9 +3,9 @@ import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
 import { QueryRoot, QueryRootCollectionArgs, ProductFilter } from '../shopify'
 import { mapFacetToProductFilter } from '../helpers/mapFacetToProductFilter'
+import { getCountry } from '../helpers'
 
-const collectionQuery = gql`
-  query collection($handle: String, $first: Int, $filters: [ProductFilter!]) {
+const collectionQuery = gql`query collection($handle: String, $first: Int, $filters: [ProductFilter!], $country: CountryCode!) @inContext(country: $country ){
     collection(handle: $handle) {
       id
       handle
@@ -81,9 +81,10 @@ export default async function getCollection(context: ShopifyApolloContext, { cat
   const variables = {
     handle: categorySlug,
     first: itemsPerPage ?? 5,
-    filters: mapFacetToProductFilter(filters)
+    filters: mapFacetToProductFilter(filters),
+    country: getCountry(context)
   }
-
+  
   const { collection } = context.extendQuery(
     customQuery,
     {
