@@ -1,31 +1,4 @@
 /* TODO: Fetch custom client directly, may be using context  */
-const changePasswordMutation: (context) => any = (context): any => {
-  const customerAccessToken = context.client.graphQLClient.variable('customerAccessToken', 'String!');
-  const customer = context.client.graphQLClient.variable('customer', 'CustomerUpdateInput!');
-
-  return context.client.graphQLClient.mutation('customerUpdate', [customerAccessToken, customer], (root) => {
-    root.add('customerUpdate', {args: {customerAccessToken, customer}}, (customer) => {
-      customer.add('customer', (fields) => {
-        fields.add('id');
-        fields.add('displayName');
-        fields.add('email');
-        fields.add('firstName');
-        fields.add('lastName');
-        fields.add('phone');
-      });
-      customer.add('customerAccessToken', (token) => {
-        token.add('accessToken');
-        token.add('expiresAt');
-      });
-      customer.add('customerUserErrors', (error) => {
-        error.add('code');
-        error.add('field');
-        error.add('message');
-      });
-    });
-  });
-};
-
 const resetPasswordByUrlMutation: (context) => any = (context): any => {
 
   const resetUrl = context.client.graphQLClient.variable('resetUrl', 'URL!');
@@ -165,6 +138,28 @@ const signUpMutation= `mutation CREATE_CUSTOMER( $input: CustomerCreateInput! ){
 const forgotPasswordMutation = `mutation RESET_PASSWORD($email: String!){
   customerRecover(email: $email){
     customerUserErrors{
+      code
+      field
+      message
+    }
+  }
+}`;
+
+const changePasswordMutation = `mutation CHANGE_PASSWORD($customerAccessToken: String!, $customer: CustomerUpdateInput!){
+  customerUpdate(customerAccessToken: $customerAccessToken, customer: $customer) {
+    customerAccessToken {
+      accessToken
+      expiresAt
+    }
+    customer {
+      id
+      firstName
+      lastName
+      email
+      displayName
+      acceptsMarketing
+    }
+    customerUserErrors {
       code
       field
       message
