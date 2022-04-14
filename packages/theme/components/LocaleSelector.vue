@@ -10,7 +10,7 @@
     <SfBottomModal :is-open="isLangModalOpen" title="Choose language" @click:close="isLangModalOpen = !isLangModalOpen">
       <SfList>
         <SfListItem v-for="lang in availableLocales" :key="lang.code">
-          <nuxt-link :to="switchLocalePath(lang.code)" class="">
+          <nuxt-link :to="switchLocalePath(lang.code)">
             <SfCharacteristic class="language">
               <template #title>
                 <span>{{ lang.label }}</span>
