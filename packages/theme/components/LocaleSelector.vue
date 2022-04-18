@@ -10,7 +10,7 @@
     <SfBottomModal :is-open="isLangModalOpen" title="Choose language" @click:close="isLangModalOpen = !isLangModalOpen">
       <SfList>
         <SfListItem v-for="lang in availableLocales" :key="lang.code">
-          <a :href="switchLocalePath(lang.code)">
+          <nuxt-link :to="switchLocalePath(lang.code)">
             <SfCharacteristic class="language">
               <template #title>
                 <span>{{ lang.label }}</span>
@@ -19,7 +19,7 @@
                 <img :src="`https://cdn.shopify.com/s/files/1/0407/1902/4288/files/${lang.code}_20x20.jpg`" width="20" height="20"/>
               </template>
             </SfCharacteristic>
-          </a>
+          </nuxt-link>
         </SfListItem>
       </SfList>
     </SfBottomModal>
@@ -47,7 +47,6 @@ export default {
     const { locales, locale } = router.app.$i18n;
     const isLangModalOpen = ref(false);
     const availableLocales = computed(() => locales.filter(i => i.code !== locale));
-
     return {
       availableLocales,
       locale,
