@@ -9,7 +9,7 @@
       :class="{ 'header-on-top': isSearchOpen }"
       @click:cart="toggleCartSidebar"
       @click:wishlist="toggleWishlistSidebar"
-      @click:account="handleAccountClick"
+      @click:account="handleAccountClick()"
       @enter:search="changeSearchTerm"
       @change:search="(p) => (term = p)"
     >
@@ -156,7 +156,7 @@ export default {
     // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
     const handleAccountClick = () => {
       if (props.isUserAuthenticated) {
-        return router.push('/my-account');
+        return router.push(context.app.localePath('/my-account'));
       }
       toggleLoginModal();
     };

@@ -37,6 +37,7 @@ import {
   useUser,
   cartGetters,
   useCart,
+  userGetters
 } from '@vue-storefront/shopify';
 import { computed, onBeforeMount, provide, useRoute, useContext } from '@nuxtjs/composition-api';
 import LoadWhenVisible from '~/components/utils/LoadWhenVisible';
@@ -57,10 +58,11 @@ export default {
   setup() {
     const route = useRoute();
     const context = useContext();
-    const { load: loadUser, isAuthenticated } = useUser();
+    const { load: loadUser, user: userInfo } = useUser();
     const { load: loadCart, cart } = useCart();
     const getCartTotalItems = computed(() => cartGetters.getTotalItems(cart.value));
-    
+    const firstName = computed(() => userGetters.getFirstName(userInfo.value));
+    const isAuthenticated = computed(() => !!firstName.value);
     provide('currentCart', cart);
     onBeforeMount(async () => {
       loadUser();
