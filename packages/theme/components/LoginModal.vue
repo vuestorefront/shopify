@@ -295,6 +295,7 @@ export default {
     const closeModal = () => {
       setIsForgottenValue(false);
       toggleLoginModal();
+      isThankYouAfterForgotten.value = false;
     };
 
     const handleRegister = () => handleForm(register)();
