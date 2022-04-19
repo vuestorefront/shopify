@@ -8,6 +8,7 @@ import { getBlogs } from './getBlogs';
 import { getBlog } from './getBlog';
 import { getArticles } from './getArticles'
 import { getArticle } from './getArticle'
+import { availableCountries } from './availableCountries'
 
 const apis = {
   searchProduct,
@@ -19,7 +20,8 @@ const apis = {
   getBlogs,
   getBlog,
   getArticles,
-  getArticle
+  getArticle,
+  availableCountries
 }
 
 export type ShopifyApolloAPIs = {

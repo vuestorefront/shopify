@@ -40,7 +40,7 @@
           >
             <SfIcon
               class="navbar__view-icon"
-              :color="'#43464E'"
+              :color="isGridView ? 'var(--c-primary)' : 'black'"
               icon="tiles"
               size="12px"
             />
@@ -53,7 +53,7 @@
           >
             <SfIcon
               class="navbar__view-icon"
-              :color="'#43464E'"
+               :color="!isGridView ? 'var(--c-primary)' : 'black'"
               icon="list"
               size="12px"
             />
@@ -94,7 +94,9 @@
       </div>
       <SfLoader :loading="isPageLoading" :class="{ loading: isPageLoading }">
         <div v-if="!isPageLoading" class="blogs">
-          <div v-if="articles.length === 0">{{ $t('No Article Available') }}</div>
+          <div v-if="articles.length === 0">
+            {{ $t('No Article Available') }}
+          </div>
           <transition-group
             v-if="isGridView"
             appear
@@ -115,7 +117,6 @@
               class="blogs__blog-card"
               :link="localePath(getArticleLink(article))"
             >
-            
               <template v-if="getArticleImage(article)" #image="imageSlotProps">
                 <SfButton
                   :link="imageSlotProps.link"
@@ -213,7 +214,12 @@
               </template>
             </SfProductCardHorizontal>
           </transition-group>
-          <SfPagination v-if="articles.length !== 0" class="blogs__pagination" :total="0" :visible="0" >
+          <SfPagination
+            v-if="articles.length !== 0"
+            class="blogs__pagination"
+            :total="0"
+            :visible="0"
+          >
             <template #next>
               <SfButton
                 class="sf-button--pure sf-button"
@@ -243,7 +249,10 @@
               </SfButton>
             </template>
           </SfPagination>
-          <div v-if="articles.length !== 0" class="blogs__show-on-page desktop-only">
+          <div
+            v-if="articles.length !== 0"
+            class="blogs__show-on-page desktop-only"
+          >
             <span class="blogs__show-on-page__label">Show on page:</span>
             <SfSelect
               :value="articlesPerPage"
@@ -283,11 +292,21 @@ import {
 } from '@storefront-ui/vue';
 import { SortBy } from '~/modules/cms/enums/SortBy';
 import LazyHydrate from 'vue-lazy-hydration';
-import { useUiState } from '~/composables'
-import { useRoute, computed, ref, watchEffect, useContext } from '@nuxtjs/composition-api';
+import { useUiState } from '~/composables';
+import {
+  useRoute,
+  computed,
+  ref,
+  watchEffect,
+  useContext
+} from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useContent, ContentType } from '@vue-storefront/shopify';
-import { getArticleImage, getArticleLink, getArticlePublishedAt } from '~/helpers/article'
+import {
+  getArticleImage,
+  getArticleLink,
+  getArticlePublishedAt
+} from '~/helpers/article';
 
 export default {
   name: 'Category',
@@ -309,8 +328,8 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const context = useContext()
-    const { articlesPerPage, setArticlesPerPage } = useUiState()
+    const context = useContext();
+    const { articlesPerPage, setArticlesPerPage } = useUiState();
     const {
       search: getBlogs,
       content: blogs,
@@ -376,7 +395,7 @@ export default {
     };
 
     const goPrevPage = () => {
-      cursors.value.pop()
+      cursors.value.pop();
     };
 
     const isPageLoading = computed(
@@ -384,7 +403,7 @@ export default {
     );
 
     const selectShowOnPage = (perPage) => {
-      setArticlesPerPage(perPage)
+      setArticlesPerPage(perPage);
     };
 
     watchEffect(() => {
@@ -396,7 +415,7 @@ export default {
       };
 
       if (selectedSortBy.value === SortBy.Latest) {
-        options.reverse = true
+        options.reverse = true;
       }
 
       if (cursors.value.length > 1) {
