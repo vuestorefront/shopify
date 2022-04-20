@@ -195,12 +195,12 @@ v-e2e="'login-modal-submit'"
   </SfModal>
 </template>
 <script>
-import { ref, watch, reactive, computed } from '@nuxtjs/composition-api';
-import { SfModal, SfInput, SfButton, SfCheckbox, SfLoader, SfAlert, SfBar } from '@storefront-ui/vue';
+import { ref, watch, reactive, computed, useRouter, useContext } from '@nuxtjs/composition-api';
+import { SfModal, SfInput, SfButton, SfCheckbox, SfLoader, SfBar } from '@storefront-ui/vue';
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
 import { required, email } from 'vee-validate/dist/rules';
 import { useUser, useForgotPassword } from '@vue-storefront/shopify';
-import { useUiState } from '~/composables';
+import { useUiState, useUiNotification } from '~/composables';
 
 extend('email', {
   ...email,
@@ -220,7 +220,6 @@ export default {
     SfButton,
     SfCheckbox,
     SfLoader,
-    SfAlert,
     ValidationProvider,
     ValidationObserver,
     SfBar
@@ -234,10 +233,13 @@ export default {
     const userEmail = ref('');
     const createAccount = ref(false);
     const rememberMe = ref(false);
-    const { register, login, loading, error: userError } = useUser();
+    const { register, login, loading, error: userError, user } = useUser();
     const forgotPasswordError = ref(false)
     const forgotPasswordLoading = ref(false)
     const { request } = useForgotPassword()
+    const { send: sendNotification} = useUiNotification();
+    const router = useRouter();
+    const context = useContext();
     // const { request } = useForgotPassword()
     // const { request, error: forgotPasswordError, loading: forgotPasswordLoading } = useForgotPassword();
 
@@ -282,14 +284,51 @@ export default {
     const handleForm = (fn) => async () => {
       resetErrorValues();
       await fn({ user: form.value });
-
-      const hasUserErrors = userError.value.register || userError.value.login;
-      if (hasUserErrors) {
-        error.login = userError.value.login?.message;
-        error.register = userError.value.register?.message;
-        return;
+      if (user.value.error && user.value.error !== '') {
+        if (user.value.error === 'Unidentified customer') {
+          user.value.error = 'Invalid email id or password!';
+        } else if (user.value.error === 'Email has already been taken') {
+          user.value.error = 'This email address is already associated with an account. If this account is yours, you can reset your password';
+        }
+        sendNotification({
+          key: 'login_failed',
+          message: user.value.error,
+          type: 'danger',
+          title: 'Failed!'
+        });
+      } else if (user.value.token && user.value.token === 'forgotPassword') {
+        sendNotification({
+          key: 'link_sent',
+          message: 'Reset password link has been successfully sent to ' + form.value.username,
+          type: 'success',
+          icon: 'check',
+          title: 'linkSent!'
+        });
+        isForgotPassword.value = false;
+        isLogin.value = true;
+      } else if (user.value.token && user.value.token === 'SignUpSuccess') {
+        sendNotification({
+          key: 'signup_success',
+          message: 'Your registration is successfully done',
+          type: 'success',
+          icon: 'check',
+          title: 'Sign Up Success!'
+        });
+        form.value = {};
+        if (process.client) {
+          document.querySelector('button[data-cy="login-btn_login-into-account"]').click();
+        }
+      } else {
+        toggleLoginModal();
+        sendNotification({
+          key: 'login_success',
+          message: 'You are successfully logged in',
+          type: 'success',
+          title: 'Success!',
+          icon: 'check'
+        });
+        router.push(context.app.localePath('/my-account'));
       }
-      toggleLoginModal();
     };
 
     const closeModal = () => {

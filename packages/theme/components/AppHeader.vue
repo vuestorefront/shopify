@@ -9,7 +9,7 @@
       :class="{ 'header-on-top': isSearchOpen }"
       @click:cart="toggleCartSidebar"
       @click:wishlist="toggleWishlistSidebar"
-      @click:account="handleAccountClick"
+      @click:account="isUserAuthenticated ? localePath({name:'my-account'}) : toggleLoginModal()"
       @enter:search="changeSearchTerm"
       @change:search="(p) => (term = p)"
     >
@@ -22,7 +22,6 @@
             class="sf-header__logo-image"
             :width="34"
             :height="34"
-            @click="isSearchOpen = false"
           />
         </nuxt-link>
       </template>
@@ -36,7 +35,6 @@
             :data-cy="'app-header-url_' + menu.handle"
             :label="menu.title"
             :link="localePath(getMenuPath(menu))"
-            @click="isSearchOpen = false"
           />
         </div>
       </template>
@@ -47,7 +45,7 @@
         <div class="sf-header__icons">
           <SfButton
             class="sf-button--pure sf-header__action"
-            @click="handleAccountClick"
+            @click="isUserAuthenticated ? localePath({name:'my-account'}) : toggleLoginModal()"
           >
             <SfIcon :icon="accountIcon" size="1.25rem" />
           </SfButton>
@@ -73,15 +71,17 @@
           :value="term"
           :icon="{ size: '1.25rem', color: '#43464E' }"
           aria-label="Search"
+          @keydown.esc="closeSearch"
+          @keydown.tab="hideSearch"
           @input="handleSearch"
           @focus="isSearchOpen = true"
         ></SfSearchBar>
       </template>
     </SfHeader>
     <SearchResults
+      v-if="isSearchOpen"
       :visible="isSearchOpen"
       :result="searchResults"
-      @close="closeSearch"
     />
     <SfOverlay :visible="isSearchOpen" @click="isSearchOpen = false" />
   </div>
@@ -103,8 +103,9 @@ import { onSSR } from '@vue-storefront/core';
 import {
   computed,
   ref,
-  useRouter,
-  useContext
+  watch,
+  useRoute,
+  useContext,
 } from '@nuxtjs/composition-api';
 import { useUiHelpers, useUiState } from '~/composables';
 import LocaleSelector from './LocaleSelector.vue';
@@ -144,7 +145,6 @@ export default {
     const { changeSearchTerm, getFacetsFromURL } = useUiHelpers();
     const { search: headerSearch, result } = useSearch('header-search');
     const { search, categories } = useCategory('menuCategories');
-    const router = useRouter();
     const { search: getArticles, content: articlesContent } =
       useContent('articles');
 
@@ -153,17 +153,10 @@ export default {
       props.isUserAuthenticated ? 'profile_fill' : 'profile'
     );
 
-    // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
-    const handleAccountClick = () => {
-      if (props.isUserAuthenticated) {
-        return router.push('/my-account');
-      }
-      toggleLoginModal();
-    };
-
     // #region Search Section
     const isSearchOpen = ref(false);
     const term = ref(getFacetsFromURL().term);
+    const route = useRoute();
     const handleSearch = debounce(async (searchTerm) => {
       if (!searchTerm.target) {
         term.value = searchTerm;
@@ -180,6 +173,20 @@ export default {
         first: 5
       });
     }, 500);
+
+    watch(route, () => {
+      hideSearch();
+      term.value = '';
+    });
+
+    const hideSearch = () => {
+      if (isSearchOpen.value) {
+        isSearchOpen.value = false;
+        if (document) {
+          document.body.classList.remove('no-scroll');
+        }
+      }
+    };
 
     const closeSearch = () => {
       if (!isSearchOpen.value) return;
@@ -216,8 +223,9 @@ export default {
     return {
       getMenuPath,
       accountIcon,
+      hideSearch,
       closeSearch,
-      handleAccountClick,
+      toggleLoginModal,
       toggleCartSidebar,
       toggleWishlistSidebar,
       changeSearchTerm,
