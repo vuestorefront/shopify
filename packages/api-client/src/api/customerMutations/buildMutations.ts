@@ -145,8 +145,8 @@ const forgotPasswordMutation = `mutation RESET_PASSWORD($email: String!){
   }
 }`;
 
-const changePasswordMutation = `mutation CHANGE_PASSWORD($customerAccessToken: String!, $customer: CustomerUpdateInput!){
-  customerUpdate(customerAccessToken: $customerAccessToken, customer: $customer) {
+const changePasswordMutation = `mutation customerUpdate($customer: CustomerUpdateInput!, $customerAccessToken: String!) {
+  customerUpdate(customer: $customer, customerAccessToken: $customerAccessToken) {
     customerAccessToken {
       accessToken
       expiresAt
