@@ -22,7 +22,6 @@
             class="sf-header__logo-image"
             :width="34"
             :height="34"
-            @click="isSearchOpen = false"
           />
         </nuxt-link>
       </template>
@@ -36,7 +35,6 @@
             :data-cy="'app-header-url_' + menu.handle"
             :label="menu.title"
             :link="localePath(getMenuPath(menu))"
-            @click="isSearchOpen = false"
           />
         </div>
       </template>
@@ -73,15 +71,17 @@
           :value="term"
           :icon="{ size: '1.25rem', color: '#43464E' }"
           aria-label="Search"
+          @keydown.esc="closeSearch"
+          @keydown.tab="hideSearch"
           @input="handleSearch"
           @focus="isSearchOpen = true"
         ></SfSearchBar>
       </template>
     </SfHeader>
     <SearchResults
+      v-if="isSearchOpen"
       :visible="isSearchOpen"
       :result="searchResults"
-      @close="closeSearch"
     />
     <SfOverlay :visible="isSearchOpen" @click="isSearchOpen = false" />
   </div>
@@ -103,7 +103,9 @@ import { onSSR } from '@vue-storefront/core';
 import {
   computed,
   ref,
-  useContext
+  watch,
+  useRoute,
+  useContext,
 } from '@nuxtjs/composition-api';
 import { useUiHelpers, useUiState } from '~/composables';
 import LocaleSelector from './LocaleSelector.vue';
@@ -154,6 +156,7 @@ export default {
     // #region Search Section
     const isSearchOpen = ref(false);
     const term = ref(getFacetsFromURL().term);
+    const route = useRoute();
     const handleSearch = debounce(async (searchTerm) => {
       if (!searchTerm.target) {
         term.value = searchTerm;
@@ -170,6 +173,20 @@ export default {
         first: 5
       });
     }, 500);
+
+    watch(route, () => {
+      hideSearch();
+      term.value = '';
+    });
+
+    const hideSearch = () => {
+      if (isSearchOpen.value) {
+        isSearchOpen.value = false;
+        if (document) {
+          document.body.classList.remove('no-scroll');
+        }
+      }
+    };
 
     const closeSearch = () => {
       if (!isSearchOpen.value) return;
@@ -206,6 +223,7 @@ export default {
     return {
       getMenuPath,
       accountIcon,
+      hideSearch,
       closeSearch,
       toggleLoginModal,
       toggleCartSidebar,

@@ -15,10 +15,12 @@ import useWishlist from './useWishlist';
 import useCart from './useCart';
 import useForgotPassword from './useForgotPassword';
 import useAvailableFilters from './useAvailableFilters';
+import useAvailableCountries from './useAvailableCountries';
 
 
 export {
   useAvailableFilters,
+  useAvailableCountries,
   useCart,
   useCategory,
   useCheckout,
