@@ -49,24 +49,24 @@
           <SfIcon
             data-cy="category-icon_grid-view"
             class="navbar__view-icon"
-            :color="isCategoryGridView ? 'black' : 'dark-secondary'"
+            :color="isCategoryGridView ? 'var(--c-primary)' : 'black'"
             icon="tiles"
             size="12px"
             role="button"
             aria-label="Change to grid view"
             :aria-pressed="isCategoryGridView"
-            @click="toggleCategoryGridView"
+            v-on="isCategoryGridView ? {}: {click: toggleCategoryGridView}"
           />
           <SfIcon
             data-cy="category-icon_list-view"
             class="navbar__view-icon"
-            :color="!isCategoryGridView ? 'black' : 'dark-secondary'"
+            :color="!isCategoryGridView ? 'var(--c-primary)' : 'black'"
             icon="list"
             size="12px"
             role="button"
             aria-label="Change to list view"
             :aria-pressed="!isCategoryGridView"
-            @click="toggleCategoryGridView"
+            v-on="!isCategoryGridView ? {}: {click: toggleCategoryGridView}"
           />
         </div>
       </div>
