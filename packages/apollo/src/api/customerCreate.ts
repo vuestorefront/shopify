@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client/core'
 import { ShopifyApolloContext } from '../library'
-import { CustomerCreateInput, CustomerCreatePayload, MutationCustomerCreateArgs } from '../shopify'
+import { CustomerCreateInput } from '../shopify'
 
 
 const DEFAULT_MUTATION = gql`
@@ -23,10 +23,10 @@ export default async function customerCreate(context: ShopifyApolloContext, para
       input: params
   }
 
-  const response = await context.client.apolloClient.mutate<CustomerCreatePayload, MutationCustomerCreateArgs>({
+  const response = await context.client.apolloClient.mutate({
     mutation: DEFAULT_MUTATION as any,
     variables
   })
 
-  return response
+  return response.data.customerCreate
 }
