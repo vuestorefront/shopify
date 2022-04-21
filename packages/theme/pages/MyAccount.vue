@@ -108,8 +108,6 @@ export default {
     };
     onSSR(async () => {
       await loadUser();
-      console.log('loaduser called my account');
-      
     });
     onBeforeMount(()=>{
       changeActivePage(activePage.value);
