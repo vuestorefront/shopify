@@ -174,6 +174,7 @@
               :style="{ '--index': i }"
               :title="article.title"
               :description="article.content"
+              :wishlist-icon="false"
               :image="getArticleImage(article)"
               :image-width="$device.isDesktopOrTablet ? 212 : 154"
               :image-height="$device.isDesktopOrTablet ? 320 : 232"
