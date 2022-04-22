@@ -186,7 +186,7 @@ v-e2e="'login-modal-submit'"
         </ValidationObserver>
         <div class="action">
           {{ $t('or') }}
-          <SfButton class="sf-button--text" @click="setIsLoginValue(true)">
+          <SfButton class="sf-button--text back-to-login" @click="setIsLoginValue(true)">
             {{ $t('login in to your account') }}
           </SfButton>
         </div>
@@ -315,6 +315,9 @@ export default {
           title: 'Sign Up Success!'
         });
         form.value = {};
+        if (process.client) {
+          document.querySelector('button.back-to-login').click();
+        }
       } else {
         toggleLoginModal();
         sendNotification({
