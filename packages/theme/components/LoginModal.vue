@@ -242,7 +242,7 @@ export default {
     const context = useContext();
     // const { request } = useForgotPassword()
     // const { request, error: forgotPasswordError, loading: forgotPasswordLoading } = useForgotPassword();
-
+    
     const error = reactive({
       login: null,
       register: null
@@ -315,9 +315,6 @@ export default {
           title: 'Sign Up Success!'
         });
         form.value = {};
-        if (process.client) {
-          document.querySelector('button[data-cy="login-btn_login-into-account"]').click();
-        }
       } else {
         toggleLoginModal();
         sendNotification({

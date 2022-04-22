@@ -9,7 +9,7 @@
       :class="{ 'header-on-top': isSearchOpen }"
       @click:cart="toggleCartSidebar"
       @click:wishlist="toggleWishlistSidebar"
-      @click:account="isUserAuthenticated ? localePath({name:'my-account'}) : toggleLoginModal()"
+      @click:account="isUserAuthenticated ? $router.push(localePath({name:'my-account'})) : toggleLoginModal()"
       @enter:search="changeSearchTerm"
       @change:search="(p) => (term = p)"
     >
@@ -44,12 +44,19 @@
       <template #header-icons>
         <div class="sf-header__icons">
           <SfButton
+            v-if="isUserAuthenticated"
             class="sf-button--pure sf-header__action"
-            @click="isUserAuthenticated ? localePath({name:'my-account'}) : toggleLoginModal()"
+            @click="$router.push(localePath({name:'my-account'}))"
           >
             <SfIcon :icon="accountIcon" size="1.25rem" />
           </SfButton>
-
+          <SfButton
+            v-else
+            class="sf-button--pure sf-header__action"
+            @click="toggleLoginModal()"
+          >
+          <SfIcon :icon="accountIcon" size="1.25rem" />
+          </SfButton>
           <SfButton
             v-e2e="'app-header-cart'"
             class="sf-button--pure sf-header__action"
