@@ -291,11 +291,12 @@ export default {
     const updatePassword = async () => await handleForm(changePassword, true)();
     const updateProfile = async () => await handleForm(updateUser, false)();
     onSSR(async () => {
-      await loadUser().then(() => {
+      if (user.value === null){
+        await loadUser();
         form.value.email = user.value.email;
         form.value.firstName = user.value.firstName;
         form.value.lastName = user.value.lastName;
-      });
+      }
     });
     return {
       user,

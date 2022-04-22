@@ -242,7 +242,7 @@ export default {
     const context = useContext();
     // const { request } = useForgotPassword()
     // const { request, error: forgotPasswordError, loading: forgotPasswordLoading } = useForgotPassword();
-
+    
     const error = reactive({
       login: null,
       register: null

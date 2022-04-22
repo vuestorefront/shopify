@@ -61,11 +61,10 @@ export default {
     const { load: loadUser, user: userInfo } = useUser();
     const { load: loadCart, cart } = useCart();
     const getCartTotalItems = computed(() => cartGetters.getTotalItems(cart.value));
-    const firstName = computed(() => userGetters.getFirstName(userInfo.value));
-    const isAuthenticated = computed(() => !!firstName.value);
+    const isAuthenticated = computed(() => !!userGetters.getFirstName(userInfo.value));
     provide('currentCart', cart);
     onBeforeMount(async () => {
-      loadUser();
+      await loadUser();
       await loadCart().then(() => {
         if (cart && cart.value && cart.value.orderStatusUrl !== null) {
           context.$cookies.remove(`${context.$config.appKey}_cart_id`);
