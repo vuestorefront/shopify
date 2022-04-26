@@ -3,8 +3,9 @@ import { gql } from "@apollo/client/core";
 export const SearchProductQuery = gql`
     query products(
         $first: Int,
-        $query: String
-    ) {
+        $query: String,
+        $country: CountryCode!
+    ) @inContext(country: $country) {
         products(first: $first, query: $query) {
           edges {
               node {

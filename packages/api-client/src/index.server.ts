@@ -1,7 +1,7 @@
 import { apiClientFactory } from '@vue-storefront/core';
 
 // TODO: extract api's into another directory
-import {getProduct} from './api/getProduct';
+import { getProduct } from './api/getProduct';
 import getCategory from './api/getCategory';
 import editProfile from './api/editProfile';
 import getBlogPosts from './api/getBlogPosts';
@@ -12,12 +12,12 @@ import { addToCart } from './api/addToCart';
 import {removeFromCart} from './api/removeFromCart';
 import { applyCoupon } from './api/applyCartCoupon';
 import { removeCoupon } from './api/removeCartCoupon';
-import signUp from './api/signUp';
-import signIn from './api/signIn';
-import signOut from './api/signOut';
-import changePassword from './api/changePassword';
-import forgotPassword from './api/forgotPassword';
-import fetchCustomer from './api/fetchCustomer';
+import { signUp } from './api/signUp';
+import { signIn } from './api/signIn';
+import { signOut } from './api/signOut';
+import { changePassword } from './api/changePassword';
+import { forgotPassword } from './api/forgotPassword';
+import { fetchCustomer } from './api/fetchCustomer';
 import fetchOrders from './api/fetchOrders';
 import fetchAddresses from './api/fetchAddresses';
 import deleteAddress from './api/deleteAddress';

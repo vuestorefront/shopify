@@ -33,8 +33,9 @@ const params: UseUserFactoryParams<User, any, any> = {
     const app = context.$shopify.config.app;
     const appKey = app.$config.appKey;
     const token = app.$cookies.get(appKey + '_token');
-    app.$cookies.remove(appKey + '_token');
-    await context.$shopify.api.signOut(token);
+    await context.$shopify.api.signOut(token).then(() => {
+      app.$cookies.remove(appKey + '_token');
+    });
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -67,14 +68,13 @@ const params: UseUserFactoryParams<User, any, any> = {
 
     const response: User = {
       token: 'SignUpSuccess',
-      error: (result.data.customerUserErrors?.length) ? result.data.customerUserErrors[0].message : ''
+      error: (result.customerUserErrors?.length) ? result.customerUserErrors[0].message : ''
     };
     return response;
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   logIn: async (context: Context, { username, password }) => {
-
     if (username && !password) {
       const result = await context.$shopify.api.forgotPassword({ username });
       const response: User = {
@@ -86,8 +86,8 @@ const params: UseUserFactoryParams<User, any, any> = {
 
     const result: any = await context.$shopify.api.signIn({ username, password });
     const response: User = {
-      token: (result.customerAccessTokenCreate.customerAccessToken) ? result.customerAccessTokenCreate.customerAccessToken.accessToken : null,
-      error: (result.customerAccessTokenCreate.customerUserErrors.length) ? result.customerAccessTokenCreate.customerUserErrors[0].message : ''
+      token: (result.customerAccessToken) ? result.customerAccessToken.accessToken : null,
+      error: (result.customerUserErrors.length) ? result.customerUserErrors[0].message : ''
     };
     // store token in cookie
     if (response.token !== null) {

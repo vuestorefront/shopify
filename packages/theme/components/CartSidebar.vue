@@ -51,6 +51,12 @@
                     />
                   </div>
                 </template>
+                <template #actions>
+                  <div />
+                </template>
+                <template #more-actions>
+                  <div />
+                </template>
               </SfCollectedProduct>
             </transition-group>
           </div>
@@ -61,6 +67,8 @@
               alt="Empty bag"
               class="empty-cart__image"
               src="/icons/empty-cart.webp"
+              :width="256"
+              :height="173"
             />
             <SfHeading
               title="Your cart is empty"
@@ -111,17 +119,6 @@
                 <SfPrice
                 v-else
                 :regular="$n(totals.subtotal * totalDiscount.percentage/ (100 - totalDiscount.percentage), 'currency')"/>
-              </template>
-            </SfProperty>
-            <SfProperty
-            v-if="totalDiscount"
-              name="Discount"
-              class="sf-property--full-width sf-property--large my-cart__total-price"
-            >
-              <template #value>
-                <SfPrice
-                  :regular="$n(totalDiscount.percentage ? totalDiscount.percentage/100 : totalDiscount.amount, totalDiscount.percentage ? 'percent':'currency')"
-                />
               </template>
             </SfProperty>
             <SfProperty
@@ -180,7 +177,7 @@ import {
   SfQuantitySelector,
   SfIcon
 } from '@storefront-ui/vue';
-import { computed, ref } from '@nuxtjs/composition-api';
+import { computed, ref, useRoute } from '@nuxtjs/composition-api';
 import { useCart, useUser, cartGetters } from '@vue-storefront/shopify';
 import { useUiState, useUiNotification } from '~/composables';
 import debounce from 'lodash.debounce';
@@ -200,7 +197,8 @@ export default {
     SfQuantitySelector,
     SfIcon
   },
-  setup(_, context) {
+  setup() {
+    const route = useRoute();
     const isValidCoupon = ref(true);
     const errorMsg = ref("Invalid coupon code");
     const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
@@ -230,7 +228,7 @@ export default {
     });
     const checkoutURL = computed(() => cartGetters.getcheckoutURL(cart.value));
     const appliedCoupon = computed(() => cartGetters.getCoupon(cart.value));
-    const displayDiscountStr = computed(() => appliedCoupon.value ? `Discount [${appliedCoupon.value}${totalDiscount.value.percentage ? ' | ' + context.root.$n(totalDiscount.value.percentage/100, 'percent'): ''}]`: 'Discount');
+    const displayDiscountStr = computed(() => appliedCoupon.value ? `Discount [${appliedCoupon.value}${totalDiscount.value.percentage ? ' | ' + route?.value?.$n(totalDiscount.value.percentage/100, 'percent'): ''}]`: 'Discount');
     
     const handleApplyCoupon = async (couponCode) => {
       if(couponCode && couponCode !== ""){
@@ -251,7 +249,7 @@ export default {
     }
     const handleCheckout = (checkoutUrl) => {
       setTimeout(() => {
-        window.location.replace(checkoutUrl)
+        window.location.href = checkoutUrl;
       }, 300)
     }
     const updateQuantity = debounce(async ({ product, quantity }) => {
@@ -390,10 +388,13 @@ export default {
     --cp-compare-opacity: 1;
     @include for-desktop {
       .collected-product__properties {
-        display: none;
+        display: block;
       }
     }
   }
+}
+::v-deep .sf-collected-product__configuration {
+  display: block;
 }
 .coupon-form-wrapper{
   display: flex;

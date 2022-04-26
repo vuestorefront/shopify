@@ -10,9 +10,6 @@ const factoryParams: UseForgotPasswordFactoryParams<any> = {
     const response = await context.$shopify.api.customerRecover({
       email
     })
-
-    console.log(response)
-
     return response
   },
   setNewPassword: async (context: Context, { tokenValue, newPassword, customQuery }) => {

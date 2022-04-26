@@ -12,16 +12,45 @@
             :title="productGetters.getName(product)"
             :image="productGetters.getPDPCoverImage(product)"
             :is-added-to-cart="isInCart({ product, currentCart })"
+            :show-add-to-cart-button="true"
             :add-to-cart-disabled="!productGetters.getStockStatus(product)"
             :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
             :wishlist-icon="false"
-            :image-width="295"
-            :image-height="295"
+            :image-width="$device.isDesktopOrTablet ? 212 : 154"
+            :image-height="$device.isDesktopOrTablet ? 320 : 232"
             class="pdp-product-card"
             @click:add-to-cart="
               handleAddToCart({ product, quantity: 1, currentCart })
             "
-          >
+          > <template #image="imageSlotProps">
+              <SfButton
+                :link="imageSlotProps.link"
+                aria-label="Go To Product"
+                class="sf-button--pure sf-product-card__link"
+                data-testid="product-link"
+                v-on="$listeners"
+              >
+                <template v-if="Array.isArray(imageSlotProps.image)">
+                  <nuxt-img
+                    v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                    :key="key"
+                    :alt="imageSlotProps.title"
+                    :height="imageSlotProps.imageHeight"
+                    :src="picture"
+                    :width="imageSlotProps.imageWidth"
+                    class="sf-product-card__picture"
+                  />
+                </template>
+                <nuxt-img
+                  v-else
+                  :alt="imageSlotProps.title"
+                  :height="imageSlotProps.imageHeight"
+                  :src="imageSlotProps.image"
+                  :width="imageSlotProps.imageWidth"
+                  class="sf-product-card__image lol"
+                />
+              </SfButton>
+            </template>
             <template #title>
               <!-- RYVIU APP :: COLLECTION-WIDGET-TOTAL -->
               <SfLink
@@ -61,7 +90,8 @@ import {
   SfSection,
   SfLoader,
   SfLink,
-  SfPrice
+  SfPrice,
+  SfButton
 } from '@storefront-ui/vue';
 import useUiNotification from '../composables/useUiNotification';
 import { productGetters, useCart } from '@vue-storefront/shopify';
@@ -74,7 +104,8 @@ export default {
     SfSection,
     SfLoader,
     SfLink,
-    SfPrice
+    SfPrice,
+    SfButton
   },
   props: {
     title: String,

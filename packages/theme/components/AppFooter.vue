@@ -1,40 +1,64 @@
 <template>
-  <SfFooter :column="4" multiple class="footer">
+  <SfFooter
+    :column="4"
+    multiple
+    class="footer"
+  >
     <SfFooterColumn :title="$t('About us')">
       <SfList>
-        <SfListItem v-for="item in aboutUs" :key="item">
-          <SfMenuItem :label="$t(item)" />
+        <SfListItem
+          v-for="item in aboutUs"
+          :key="item"
+        >
+          <SfMenuItem
+            :label="$t(item)"
+          />
         </SfListItem>
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn :title="$t('Departments')">
       <SfList>
-        <SfListItem v-for="item in departments" :key="item">
-          <SfMenuItem :label="$t(item)" />
+        <SfListItem
+          v-for="item in departments"
+          :key="item"
+        >
+          <SfMenuItem
+            :label="$t(item)"
+          />
         </SfListItem>
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn :title="$t('Help')">
       <SfList>
-        <SfListItem v-for="item in help" :key="item">
-          <SfMenuItem :label="$t(item)" />
+        <SfListItem
+          v-for="item in help"
+          :key="item"
+        >
+          <SfMenuItem
+            :label="$t(item)"
+          />
         </SfListItem>
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn :title="$t('Payment & Delivery')">
       <SfList>
-        <SfListItem v-for="item in paymentsDelivery" :key="item">
-          <SfMenuItem :label="$t(item)" />
+        <SfListItem
+          v-for="item in paymentsDelivery"
+          :key="item"
+        >
+          <SfMenuItem
+            :label="$t(item)"
+          />
         </SfListItem>
       </SfList>
     </SfFooterColumn>
     <SfFooterColumn :title="$t('Social')">
       <div class="footer__socials">
         <SfImage
-          class="footer__social-image"
           v-for="item in social"
           :key="item"
-          :src="`/icons/${item}.webp`"
+          class="footer__social-image"
+          :src="addBasePath('/icons/'+item+'.webp')"
           :alt="item"
           :width="32"
           :height="32"
@@ -45,13 +69,21 @@
 </template>
 
 <script>
-import { SfFooter, SfList, SfImage, SfMenuItem } from '@storefront-ui/vue';
+import {
+  SfFooter, SfList, SfImage, SfMenuItem,
+} from '@storefront-ui/vue';
+import { addBasePath } from '@vue-storefront/core';
 export default {
   components: {
     SfFooter,
     SfList,
     SfImage,
-    SfMenuItem
+    SfMenuItem,
+  },
+  setup() {
+    return {
+      addBasePath,
+    };
   },
   data() {
     return {
@@ -76,7 +108,7 @@ export default {
       isMobile: false,
       desktopMin: 1024
     };
-  }
+  },
 };
 </script>
 
@@ -99,6 +131,10 @@ export default {
   }
   &__social-image {
     margin: 0 var(--spacer-2xs) 0 0;
+    background-color: #fff;
+    border-radius: 100%;
+    --image-width: 32px;
+    --image-height: 32px;
   }
 }
 .sf-footer {
@@ -108,12 +144,10 @@ export default {
     margin-top: var(--spacer-2xl);
   }
   &__container {
-    padding-bottom: var(--spacer-xl);
     margin: var(--spacer-sm);
     @include for-desktop {
       max-width: 69rem;
       margin: 0 auto;
-      padding-bottom: 0;
     }
   }
 }

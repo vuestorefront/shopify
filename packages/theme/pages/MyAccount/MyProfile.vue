@@ -1,32 +1,27 @@
 <template>
-  <div class="my_account_content_wrap">
-    <div class="my_accoutn_title_wrap">
-      <SfHeading
-        class="my_accoutn_title"
-        :level="1"
-        :title="title"
-      />
-      <div v-if="!isEdited" class="my_accoutn_title_actions">
-        <SfButton
-          class="edit_action"
-          @click="isEdited = true; scrollToTop()"
-        >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11.7167 7.51667L12.4833 8.28333L4.93333 15.8333H4.16667V15.0667L11.7167 7.51667ZM14.7167 2.5C14.5083 2.5 14.2917 2.58333 14.1333 2.74167L12.6083 4.26667L15.7333 7.39167L17.2583 5.86667C17.5833 5.54167 17.5833 5.01667 17.2583 4.69167L15.3083 2.74167C15.1417 2.575 14.9333 2.5 14.7167 2.5ZM11.7167 5.15833L2.5 14.375V17.5H5.625L14.8417 8.28333L11.7167 5.15833Z" fill="black"/>
-          </svg>
+  <div class="my-profile">
+    <div class="my-profile__title">
+      <SfHeading :level="1" :title="title" />
+      <template v-if="!isEdited">
+        <SfButton class="edit_action" @click="isEdited = true">
           Edit Your Profile
         </SfButton>
-      </div>
+      </template>
     </div>
-    <div v-if="isEdited" class="my_account_content container-small">
+    <div v-if="isEdited" class="my-profile__content container-small">
       <tabs>
         <tab title="Personal Data">
           <ValidationObserver v-slot="{ handleSubmit }" tag="div">
             <form class="form" @submit.prevent="handleSubmit(updateProfile)">
               <div class="row">
-                <ValidationProvider v-slot="{ errors }" tag="div" rules="required|min:2" class="col-6">
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  tag="div"
+                  rules="required|min:2"
+                  class="col-6"
+                >
                   <SfInput
-                    v-model= "form.firstName"
+                    v-model="form.firstName"
                     data-cy="my-profile-input_firstName"
                     name="firstName"
                     label="First Name"
@@ -35,9 +30,14 @@
                     :error-message="errors[0]"
                   />
                 </ValidationProvider>
-                <ValidationProvider v-slot="{ errors }" tag="div" rules="required|min:2" class="col-6">
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  tag="div"
+                  rules="required|min:2"
+                  class="col-6"
+                >
                   <SfInput
-                    v-model= "form.lastName"
+                    v-model="form.lastName"
                     data-cy="my-profile-input_lastName"
                     name="lastName"
                     label="Last Name"
@@ -47,9 +47,13 @@
                   />
                 </ValidationProvider>
               </div>
-              <ValidationProvider v-slot="{ errors }" tag="div" rules="required|email">
+              <ValidationProvider
+                v-slot="{ errors }"
+                tag="div"
+                rules="required|email"
+              >
                 <SfInput
-                  v-model= "form.email"
+                  v-model="form.email"
                   data-cy="my-profile-input_email"
                   type="email"
                   name="email"
@@ -62,10 +66,17 @@
               </ValidationProvider>
               <div class="my-account-bottom-action-wrap">
                 <div class="form__button_wrap">
-                  <SfButton data-cy="my-profile-btn_update" class="form__button" @click.native="scrollToTop()">Update Profile</SfButton>
+                  <SfButton data-cy="my-profile-btn_update" class="form__button" type="submit"
+                    >Update Profile</SfButton
+                  >
                 </div>
                 <div class="form__button_wrap">
-                  <SfButton data-cy="my-profile-btn_cancel" class="form__button" @click="isEdited = false, scrollToTop()">Cancel</SfButton>
+                  <SfButton
+                    data-cy="my-profile-btn_cancel"
+                    class="form__button"
+                    @click="isEdited = false"
+                    >Cancel</SfButton
+                  >
                 </div>
               </div>
             </form>
@@ -75,7 +86,12 @@
           <ValidationObserver v-slot="{ handleSubmit }" tag="div">
             <form class="form" @submit.prevent="handleSubmit(updatePassword)">
               <div class="form__horizontal">
-                <ValidationProvider v-slot="{ errors }" tag="div" rules="required|min:5" vid="password">
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  tag="div"
+                  rules="required|min:5"
+                  vid="password"
+                >
                   <SfInput
                     v-model="form.newPassword"
                     data-cy="my-profile-input_newPassword"
@@ -87,7 +103,11 @@
                     :error-message="errors[0]"
                   />
                 </ValidationProvider>
-                <ValidationProvider v-slot="{ errors }" tag="div" rules="required|confirmed:password">
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  tag="div"
+                  rules="required|confirmed:password"
+                >
                   <SfInput
                     v-model="form.repeatPassword"
                     data-cy="my-profile-input_repeatPassword"
@@ -102,10 +122,20 @@
               </div>
               <div class="my-account-bottom-action-wrap">
                 <div class="form__button_wrap">
-                  <SfButton data-cy="my-profile-btn_update-password" class="form__button" @click.native="scrollToTop()">Change password</SfButton>
+                  <SfButton
+                    data-cy="my-profile-btn_update-password"
+                    class="form__button"
+                    type="submit"
+                    >Change password</SfButton
+                  >
                 </div>
                 <div class="form__button_wrap">
-                  <SfButton data-cy="my-profile-btn_cancel" class="form__button" @click.native="isEdited = false, scrollToTop()">Cancel</SfButton>
+                  <SfButton
+                    data-cy="my-profile-btn_cancel"
+                    class="form__button"
+                    @click.native="isEdited = false"
+                    >Cancel</SfButton
+                  >
                 </div>
               </div>
             </form>
@@ -113,22 +143,25 @@
         </tab>
       </tabs>
     </div>
-    <div v-else class="user_profile_detail">
+    <div v-else class="user_profile_detail my-profile__content">
       <SfProperty
-      v-if="displayName"
-      class="my-profile-cname"
-      name="Name"
-      :value="displayName" />
+        v-if="displayName"
+        class="my-profile-cname"
+        name="Name"
+        :value="displayName"
+      />
       <SfProperty
-      v-if="email"
-      class="my-profile-cemail"
-      name="Email"
-      :value="email" />
+        v-if="email"
+        class="my-profile-cemail"
+        name="Email"
+        :value="email"
+      />
       <SfProperty
-      v-if="phone"
-      class="my-profile-cmobile"
-      name="Mobile"
-      :value="phone" />
+        v-if="phone"
+        class="my-profile-cmobile"
+        name="Mobile"
+        :value="phone"
+      />
     </div>
   </div>
 </template>
@@ -139,7 +172,7 @@ import { email, required, min, confirmed } from 'vee-validate/dist/rules';
 import { SfInput, SfButton, SfProperty, SfHeading } from '@storefront-ui/vue';
 import { useUser, userGetters } from '@vue-storefront/shopify';
 import { onSSR } from '@vue-storefront/core';
-import { useUiNotification} from '~/composables';
+import { useUiNotification } from '~/composables';
 import Tab from '~/components/Tab.vue';
 import Tabs from '~/components/Tabs.vue';
 
@@ -159,13 +192,17 @@ extend('min', {
 });
 
 extend('password', {
-  validate: value => String(value).length >= 8 && String(value).match(/[A-Za-z]/gi) && String(value).match(/[0-9]/gi),
-  message: 'Password must have at least 8 characters including one letter and a number'
+  validate: (value) =>
+    String(value).length >= 8 &&
+    String(value).match(/[A-Za-z]/gi) &&
+    String(value).match(/[0-9]/gi),
+  message:
+    'Password must have at least 8 characters including one letter and a number'
 });
 
 extend('confirmed', {
   ...confirmed,
-  message: 'Passwords don\'t match'
+  message: "Passwords don't match"
 });
 
 export default {
@@ -196,21 +233,11 @@ export default {
     const { user, load: loadUser, changePassword, updateUser } = useUser();
     const success = ref(null);
     const error = ref(null);
-    const firstName = computed(() =>
-      userGetters.getFirstName(user.value)
-    );
-    const lastName = computed(() =>
-      userGetters.getLastName(user.value)
-    );
-    const email = computed(() =>
-      userGetters.getEmailAddress(user.value)
-    );
-    const phone = computed(() =>
-      userGetters.getPhone(user.value)
-    );
-    const displayName = computed(() =>
-      userGetters.getdisplayName(user.value)
-    );
+    const firstName = computed(() => userGetters.getFirstName(user.value));
+    const lastName = computed(() => userGetters.getLastName(user.value));
+    const email = computed(() => userGetters.getEmailAddress(user.value));
+    const phone = computed(() => userGetters.getPhone(user.value));
+    const displayName = computed(() => userGetters.getdisplayName(user.value));
     const resetForm = () => ({
       firstName: firstName.value,
       lastName: lastName.value,
@@ -219,7 +246,7 @@ export default {
       displayName: displayName.value,
       newPassword: ''
     });
-    const { send: sendNotification} = useUiNotification();
+    const { send: sendNotification } = useUiNotification();
     const isEdited = ref(false);
     const form = ref(resetForm());
     const handleForm = (fn, reset) => async () => {
@@ -264,11 +291,12 @@ export default {
     const updatePassword = async () => await handleForm(changePassword, true)();
     const updateProfile = async () => await handleForm(updateUser, false)();
     onSSR(async () => {
-      await loadUser().then(()=> {
+      if (user.value === null){
+        await loadUser();
         form.value.email = user.value.email;
         form.value.firstName = user.value.firstName;
         form.value.lastName = user.value.lastName;
-      });
+      }
     });
     return {
       user,
@@ -288,20 +316,31 @@ export default {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   head() {
     return {
-      title: 'My Profile - Pure Daily Care',
+      title: 'My Profile',
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
         {
-          hid: 'My Profile - Pure Daily Care',
-          name: 'My Profile - Pure Daily Care',
-          content: 'Pure Daily Care promotes natural beauty by combining the most modern technologies into easy-to-use, at-home products. Pure Daily Care technologies harness the healing power of naturally occurring phenomenon like steam, electricity and light to drastically improve your skin profile without the use of cosmetics.'
+          hid: 'My Profile',
+          name: 'My Profile',
+          content:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur convallis nisi nec sem dapibus vestibulum. Aliquam consectetur venenatis sem. In hac habitasse platea dictumst. Nam semper, quam vitae scelerisque iaculis, quam est ullamcorper ante, eget egestas nunc massa a odio. Fusce eget ligula tempus, luctus ex sit amet, ullamcorper ipsum. Ut id nunc malesuada, ultrices ipsum vel, eleifend metus. Donec vel luctus odio.'
         }
       ]
     };
   }
 };
 </script>
-<style lang='scss'>
+<style lang="scss">
+.my-profile {
+  .edit_action {
+    margin-left: auto;
+    font-size: 0.9rem;
+  }
+
+  &__content {
+    margin-top: 1rem;
+  }
+}
 .user_profile_detail {
   .sf-property {
     margin-bottom: 25px;

@@ -1,6 +1,6 @@
 {
   "name": "@vue-storefront/shopify-theme",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build --modern=client",
@@ -13,11 +13,12 @@
     "test:e2e": "start-server-and-test dev http://localhost:3000 test:e2e:run"
   },
   "dependencies": {
+    "@nuxt/image": "0.6.0",
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/sitemap": "^2.4.0",
     "@nuxtjs/style-resources": "^1.0.0",
-    "@storefront-ui/vue": "^0.11.4",
-    "@vue-storefront/shopify": "^1.1.0",
+    "@storefront-ui/vue": "^0.12.0",
+    "@vue-storefront/shopify": "^1.1.1",
     "@vue-storefront/middleware": "2.5.6",
     "@vue-storefront/nuxt": "2.5.6",
     "@vue-storefront/nuxt-theme": "2.5.6",
@@ -25,9 +26,11 @@
     "core-js": "^3.19.1",
     "isomorphic-fetch": "^2.2.1",
     "nuxt": "^2.13.3",
-    "nuxt-i18n": "^6.5.0",
+    "@nuxtjs/i18n": "^7.2.1",
     "vee-validate": "^3.2.3",
-    "vue-scrollto": "^2.17.1"
+    "vue-scrollto": "^2.17.1",
+    "@nuxtjs/device": "^2.1.0",
+    "ipx": "0.9.1"
   },
   "devDependencies": {
     "@nuxt/types": "^2.13.3",

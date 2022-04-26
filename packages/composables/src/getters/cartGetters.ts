@@ -66,12 +66,7 @@ export const getcheckoutURL = (cart: Cart): string => cart.webUrl || '';
 
 export const getCartTotalItems = (cart: Cart): number => cart?.lineItems?.length > 0 ? cart.lineItems.reduce((n, { quantity }) => n + quantity, 0):0;
 
-export const getCartTotalDiscount = (cart: Cart): number => {
-  if ((cart?.discountApplications ?? []).length > 0) {
-    return cart.discountApplications[0].value;
-  }
-  return 0;
-};
+export const getCartTotalDiscount = (cart: Cart): number => cart?.discountApplications.length > 0? cart.discountApplications[0].value : 0;
 
 export const getAppliedCoupon = (cart: Cart): string => cart?.discountApplications.length > 0 ? cart.discountApplications[0].code : '';
 

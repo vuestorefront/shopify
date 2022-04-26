@@ -5,21 +5,33 @@
       class="container__lang container__lang--selected"
       @click="isLangModalOpen = !isLangModalOpen"
     >
-      <img :src="`https://cdn.shopify.com/s/files/1/0407/1902/4288/files/${locale}_20x20.jpg`" width="20" height="20"/>
+      <img
+        :src="`https://cdn.shopify.com/s/files/1/0407/1902/4288/files/${locale}_20x20.jpg`"
+        width="20"
+        height="20"
+      />
     </SfButton>
-    <SfBottomModal :is-open="isLangModalOpen" title="Choose language" @click:close="isLangModalOpen = !isLangModalOpen">
+    <SfBottomModal
+      :is-open="isLangModalOpen"
+      title="Choose language"
+      @click:close="isLangModalOpen = !isLangModalOpen"
+    >
       <SfList>
         <SfListItem v-for="lang in availableLocales" :key="lang.code">
-          <a :href="switchLocalePath(lang.code)">
+          <nuxt-link :to="switchLocalePath(lang.code)">
             <SfCharacteristic class="language">
               <template #title>
-                <span>{{ lang.label }}</span>
+                <span>{{ lang.label }} ({{ lang.currentIso }})</span>
               </template>
               <template #icon>
-                <img :src="`https://cdn.shopify.com/s/files/1/0407/1902/4288/files/${lang.code}_20x20.jpg`" width="20" height="20"/>
+                <img
+                  :src="`https://cdn.shopify.com/s/files/1/0407/1902/4288/files/${lang.code}_20x20.jpg`"
+                  width="20"
+                  height="20"
+                />
               </template>
             </SfCharacteristic>
-          </a>
+          </nuxt-link>
         </SfListItem>
       </SfList>
     </SfBottomModal>
@@ -28,33 +40,68 @@
 
 <script type="module">
 import {
-  SfImage,
-  SfSelect,
   SfButton,
   SfList,
   SfBottomModal,
   SfCharacteristic
 } from '@storefront-ui/vue';
-import { ref, computed } from '@nuxtjs/composition-api';
+import { useAvailableCountries } from '@vue-storefront/shopify';
+import {
+  ref,
+  computed,
+  useRouter,
+  onBeforeMount,
+  watchEffect
+} from '@nuxtjs/composition-api';
 
 export default {
   components: {
-    SfImage,
-    SfSelect,
     SfButton,
     SfList,
     SfBottomModal,
     SfCharacteristic
   },
-  setup(props, context) {
-    const { locales, locale } = context.root.$i18n;
+
+  setup() {
+    const { load, countries } = useAvailableCountries();
+    const router = useRouter();
+    const { locales, locale } = router.app.$i18n;
     const isLangModalOpen = ref(false);
-    const availableLocales = computed(() => locales.filter(i => i.code !== locale));
+
+    function findCurrency(_countries, _locale) {
+      const currency = { currentIso: '' };
+
+      if (!_countries) return currency;
+
+      const singleCountry = _countries?.find(
+        (country) => country.isoCode === _locale.alias.toUpperCase()
+      )?.currency;
+
+      if (!singleCountry) return currency;
+
+      currency.currentIso = singleCountry.isoCode;
+
+      return currency;
+    }
+
+    const availableLocales = computed(() => {
+      return locales
+        .map((item) => ({
+          ...item,
+          ...findCurrency(countries.value, item)
+        }))
+        .filter((i) => i.code !== locale);
+    });
+
+    onBeforeMount(() => {
+      load();
+    });
 
     return {
       availableLocales,
       locale,
-      isLangModalOpen
+      isLangModalOpen,
+      countries
     };
   }
 };

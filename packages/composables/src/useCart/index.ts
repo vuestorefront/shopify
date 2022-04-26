@@ -11,7 +11,6 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
     // check if cart is already initiated
     const app = context.$shopify.config.app;
     const appKey = app.$config.appKey;
-    const localeInfo = { cur: app.i18n.locale, default: app.i18n.localeProperties.alias};
     let existingLocale = app.$cookies.get('cur-vsf-locale');
     let isLocaleSwitched = false;
     if (existingLocale === undefined || existingLocale === '' || existingLocale !== app.i18n.locale) {

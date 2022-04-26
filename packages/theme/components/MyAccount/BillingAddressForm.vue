@@ -198,7 +198,7 @@
         </div> -->
         <div class="my-account-bottom-action-wrap">
           <div class="form__button_wrap">
-            <SfButton data-cy="billing-details-btn_update" class="form__button" @click.native="scrollToTop()">
+            <SfButton data-cy="billing-details-btn_update" type="submit" class="form__button" @click.native="scrollToTop()">
               {{ isNew ? "Add To My Address Book" : "Update My Address Book" }}
             </SfButton>
           </div>

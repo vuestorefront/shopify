@@ -40,7 +40,7 @@
           >
             <SfIcon
               class="navbar__view-icon"
-              :color="'#43464E'"
+              :color="isGridView ? 'var(--c-primary)' : 'black'"
               icon="tiles"
               size="12px"
             />
@@ -53,7 +53,7 @@
           >
             <SfIcon
               class="navbar__view-icon"
-              :color="'#43464E'"
+               :color="!isGridView ? 'var(--c-primary)' : 'black'"
               icon="list"
               size="12px"
             />
@@ -94,7 +94,9 @@
       </div>
       <SfLoader :loading="isPageLoading" :class="{ loading: isPageLoading }">
         <div v-if="!isPageLoading" class="blogs">
-          <div v-if="articles.length === 0">{{ $t('No Article Available') }}</div>
+          <div v-if="articles.length === 0">
+            {{ $t('No Article Available') }}
+          </div>
           <transition-group
             v-if="isGridView"
             appear
@@ -108,18 +110,42 @@
               :style="{ '--index': i }"
               :title="article.title"
               :image="getArticleImage(article)"
-              :image-height="326"
-              :image-width="216"
+              :image-width="$device.isDesktopOrTablet ? 212 : 154"
+              :image-height="$device.isDesktopOrTablet ? 320 : 232"
               :wishlist-icon="false"
               :show-add-to-cart-button="false"
-              image-tag="nuxt-img"
-              :nuxt-img-config="{
-                format: 'webp',
-                fit: 'cover'
-              }"
               class="blogs__blog-card"
               :link="localePath(getArticleLink(article))"
             >
+              <template v-if="getArticleImage(article)" #image="imageSlotProps">
+                <SfButton
+                  :link="imageSlotProps.link"
+                  aria-label="Go To Product"
+                  class="sf-button--pure sf-product-card__link"
+                  data-testid="product-link"
+                  v-on="$listeners"
+                >
+                  <template v-if="Array.isArray(imageSlotProps.image)">
+                    <nuxt-img
+                      v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                      :key="key"
+                      :alt="imageSlotProps.title"
+                      :height="imageSlotProps.imageHeight"
+                      :src="picture"
+                      :width="imageSlotProps.imageWidth"
+                      class="sf-product-card__picture"
+                    />
+                  </template>
+                  <nuxt-img
+                    v-else
+                    :alt="imageSlotProps.title"
+                    :height="imageSlotProps.imageHeight"
+                    :src="imageSlotProps.image"
+                    :width="imageSlotProps.imageWidth"
+                    class="sf-product-card__image lol"
+                  />
+                </SfButton>
+              </template>
               <template #add-to-cart>
                 <div></div>
               </template>
@@ -148,23 +174,53 @@
               :style="{ '--index': i }"
               :title="article.title"
               :description="article.content"
-              :image="article.image.transformedSrc"
-              :image-height="200"
-              :image-width="140"
-              image-tag="nuxt-img"
-              link="#"
-              :nuxt-img-config="{
-                format: 'webp',
-                fit: 'cover'
-              }"
+              :wishlist-icon="false"
+              :image="getArticleImage(article)"
+              :image-width="$device.isDesktopOrTablet ? 212 : 154"
+              :image-height="$device.isDesktopOrTablet ? 320 : 232"
+              :link="localePath(getArticleLink(article))"
               class="blogs__blog-card-horizontal"
             >
+              <template v-if="getArticleImage(article)" #image="imageSlotProps">
+                <SfButton
+                  :link="imageSlotProps.link"
+                  aria-label="Go To Product"
+                  class="sf-button--pure sf-product-card__link"
+                  data-testid="product-link"
+                  v-on="$listeners"
+                >
+                  <template v-if="Array.isArray(imageSlotProps.image)">
+                    <nuxt-img
+                      v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                      :key="key"
+                      :alt="imageSlotProps.title"
+                      :height="imageSlotProps.imageHeight"
+                      :src="picture"
+                      :width="imageSlotProps.imageWidth"
+                      class="sf-product-card__picture"
+                    />
+                  </template>
+                  <nuxt-img
+                    v-else
+                    :alt="imageSlotProps.title"
+                    :height="imageSlotProps.imageHeight"
+                    :src="imageSlotProps.image"
+                    :width="imageSlotProps.imageWidth"
+                    class="sf-product-card__image lol"
+                  />
+                </SfButton>
+              </template>
               <template #add-to-cart>
                 <div></div>
               </template>
             </SfProductCardHorizontal>
           </transition-group>
-          <SfPagination v-if="articles.length !== 0" class="blogs__pagination" :total="0" :visible="0" >
+          <SfPagination
+            v-if="articles.length !== 0"
+            class="blogs__pagination"
+            :total="0"
+            :visible="0"
+          >
             <template #next>
               <SfButton
                 class="sf-button--pure sf-button"
@@ -194,7 +250,10 @@
               </SfButton>
             </template>
           </SfPagination>
-          <div v-if="articles.length !== 0" class="blogs__show-on-page desktop-only">
+          <div
+            v-if="articles.length !== 0"
+            class="blogs__show-on-page desktop-only"
+          >
             <span class="blogs__show-on-page__label">Show on page:</span>
             <SfSelect
               :value="articlesPerPage"
@@ -234,11 +293,21 @@ import {
 } from '@storefront-ui/vue';
 import { SortBy } from '~/modules/cms/enums/SortBy';
 import LazyHydrate from 'vue-lazy-hydration';
-import { useUiState } from '~/composables'
-import { useRoute, computed, ref, watchEffect, useContext } from '@nuxtjs/composition-api';
+import { useUiState } from '~/composables';
+import {
+  useRoute,
+  computed,
+  ref,
+  watchEffect,
+  useContext
+} from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useContent, ContentType } from '@vue-storefront/shopify';
-import { getArticleImage, getArticleLink, getArticlePublishedAt } from '~/helpers/article'
+import {
+  getArticleImage,
+  getArticleLink,
+  getArticlePublishedAt
+} from '~/helpers/article';
 
 export default {
   name: 'Category',
@@ -260,8 +329,8 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const context = useContext()
-    const { articlesPerPage, setArticlesPerPage } = useUiState()
+    const context = useContext();
+    const { articlesPerPage, setArticlesPerPage } = useUiState();
     const {
       search: getBlogs,
       content: blogs,
@@ -327,7 +396,7 @@ export default {
     };
 
     const goPrevPage = () => {
-      cursors.value.pop()
+      cursors.value.pop();
     };
 
     const isPageLoading = computed(
@@ -335,7 +404,7 @@ export default {
     );
 
     const selectShowOnPage = (perPage) => {
-      setArticlesPerPage(perPage)
+      setArticlesPerPage(perPage);
     };
 
     watchEffect(() => {
@@ -347,7 +416,7 @@ export default {
       };
 
       if (selectedSortBy.value === SortBy.Latest) {
-        options.reverse = true
+        options.reverse = true;
       }
 
       if (cursors.value.length > 1) {

@@ -105,8 +105,8 @@
             :style="{ '--index': i }"
             :title="product.title"
             :image="product.image"
-            :image-height="326"
-            :image-width="216"
+            :image-width="$device.isDesktopOrTablet ? 212 : 154"
+            :image-height="$device.isDesktopOrTablet ? 320 : 232"
             :regular-price="product.price.regular"
             :special-price="product.price.special"
             :max-rating="product.rating.max"
@@ -120,7 +120,37 @@
             }"
             class="products__product-card"
             @click:wishlist="toggleWishlist(i)"
-          />
+          >
+            <template #image="imageSlotProps">
+              <SfButton
+                :link="imageSlotProps.link"
+                aria-label="Go To Product"
+                class="sf-button--pure sf-product-card__link"
+                data-testid="product-link"
+                v-on="$listeners"
+              >
+                <template v-if="Array.isArray(imageSlotProps.image)">
+                  <nuxt-img
+                    v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                    :key="key"
+                    :alt="imageSlotProps.title"
+                    :height="imageSlotProps.imageHeight"
+                    :src="picture"
+                    :width="imageSlotProps.imageWidth"
+                    class="sf-product-card__picture"
+                  />
+                </template>
+                <nuxt-img
+                  v-else
+                  :alt="imageSlotProps.title"
+                  :height="imageSlotProps.imageHeight"
+                  :src="imageSlotProps.image"
+                  :width="imageSlotProps.imageWidth"
+                  class="sf-product-card__image lol"
+                />
+              </SfButton>
+            </template>
+          </SfProductCard>
         </transition-group>
         <transition-group
           v-else
@@ -142,8 +172,8 @@
             :reviews-count="product.reviewsCount"
             :score-rating="product.rating.score"
             :is-in-wishlist="product.isInWishlist"
-            :image-height="200"
-            :image-width="140"
+            :image-width="$device.isDesktopOrTablet ? 212 : 154"
+            :image-height="$device.isDesktopOrTablet ? 320 : 232"
             image-tag="nuxt-img"
             :nuxt-img-config="{
               format: 'webp',
@@ -152,6 +182,35 @@
             class="products__product-card-horizontal"
             @click:wishlist="toggleWishlist(i)"
           >
+            <template #image="imageSlotProps">
+                <SfButton
+                  :link="imageSlotProps.link"
+                  aria-label="Go To Product"
+                  class="sf-button--pure sf-product-card__link"
+                  data-testid="product-link"
+                  v-on="$listeners"
+                >
+                  <template v-if="Array.isArray(imageSlotProps.image)">
+                    <nuxt-img
+                      v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                      :key="key"
+                      :alt="imageSlotProps.title"
+                      :height="imageSlotProps.imageHeight"
+                      :src="picture"
+                      :width="imageSlotProps.imageWidth"
+                      class="sf-product-card__picture"
+                    />
+                  </template>
+                  <nuxt-img
+                    v-else
+                    :alt="imageSlotProps.title"
+                    :height="imageSlotProps.imageHeight"
+                    :src="imageSlotProps.image"
+                    :width="imageSlotProps.imageWidth"
+                    class="sf-product-card__image lol"
+                  />
+                </SfButton>
+              </template>
             <template #configuration>
               <SfProperty
                 class="desktop-only"
@@ -421,7 +480,6 @@ import {
   SfRadio,
   SfSelect
 } from '@storefront-ui/vue';
-import { watchEffect, watch } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import { useContent } from '@vue-storefront/shopify';
 import { ContentType } from '@vue-storefront/shopify/src/types/ContentType';
@@ -475,19 +533,12 @@ export default {
       }
     });
 
-    watchEffect(() => {
-      console.log('first 5 blogs', blogs.value);
-      console.log('first blog', blog.value);
-      console.log(error.value);
-    });
-
     return {
       // Methods
       clearAllFilters,
       toggleWishlist,
       // Data
       blogs,
-
       totalPosts: 0,
       currentPage: 1,
       sortBy: 'Latest',

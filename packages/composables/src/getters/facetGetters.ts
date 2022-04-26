@@ -7,6 +7,7 @@ import {
   AgnosticBreadcrumb,
   AgnosticFacet
 } from '@vue-storefront/core';
+import { ProductVariant } from "@vue-storefront/shopify-api";
 import { enhanceProduct, getSortedProducts } from '../helpers/internals';
 import { buildBreadcrumbs, buildFacets, reduceForGroupedFacets, reduceForFacets } from './../useFacet/_utils';
 import { getCategoryTree as buildCategoryTree } from './categoryGetters';
@@ -34,7 +35,7 @@ const getSortOptions = (searchData): AgnosticSort => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getCategoryTree = (searchData) => {
   if (!searchData.data) {
-    return {} as any;
+    return [] as any;
   }
   const allCats = searchData.data.categories;
   const formattedCats = [];
@@ -67,7 +68,7 @@ const identifyCurrentCat = (searchData): any => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getProducts = (searchData): any => {
   if (searchData.input === null || searchData.data === null) {
-    return {};
+    return [] as ProductVariant[];
   }
   let catProducts = [];
   const sortBy = searchData.input.sort;

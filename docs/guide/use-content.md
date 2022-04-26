@@ -25,12 +25,13 @@ Fetch a single page by handle of the shop.
 
 ```javascript
 import { onSSR } from '@vue-storefront/core';
-import { useContent, contentGetters } from '@vue-storefront/shopify';
+import { useContent, contentGetters, useRoute } from '@vue-storefront/shopify';
 
 export default {
-  setup(props, context) {
+  setup() {
+    const route = useRoute();
     const { search, content } = useContent();
-    const { slug } = context.root.$route.params;
+    const { slug } = route?.value?.params;
 
     onSSR(async () => {
       await search(slug);

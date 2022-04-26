@@ -12,7 +12,7 @@ export async function getProduct(
     if (params.selectedOptions && Object.keys(params.selectedOptions).length > 0) {
       chosenVariant = Object.entries(params.selectedOptions).map(k => ({ name: k[0], value: k[1] }));
     }
-    const DEFAULT_QUERY = `query product($handle: String!, $country: CountryCode!, $selectedOptions: [SelectedOptionInput!]! ) @inContext(country: $country ) {
+    const DEFAULT_QUERY = gql`query product($handle: String!, $country: CountryCode!, $selectedOptions: [SelectedOptionInput!]! ) @inContext(country: $country ) {
       productByHandle(handle: $handle){
         id
         title
@@ -143,7 +143,7 @@ export async function getProduct(
 
 
     return await context.client.apolloClient.query({
-      query: gql(productByHandle.query) as any,
+      query: productByHandle.query,
       variables: productByHandle.variables
     }).then((result) => {
       const collections = result.data.productByHandle.collections.edges.map((collection => collection.node));
@@ -166,7 +166,7 @@ export async function getProduct(
     }).catch();
   }
   else if (params.related) {
-    const DEFAULT_QUERY = `query GET_PRODUCT_RECOMMENDATION($productId: ID!, $country: CountryCode!) @inContext(country: $country){
+    const DEFAULT_QUERY = gql`query GET_PRODUCT_RECOMMENDATION($productId: ID!, $country: CountryCode!) @inContext(country: $country){
       productRecommendations(productId:$productId){
         id
         title
@@ -197,6 +197,7 @@ export async function getProduct(
         variants(first:20){
           edges{
             node{
+              id
               title
               weight
               availableForSale
@@ -252,7 +253,7 @@ export async function getProduct(
       productId: params.productId,
       country: getCountry(context, true, localeInfo.default, localeInfo.cur),
     }
-
+    
     const { productRecommendations } = context.extendQuery(
       customQuery,
       {
@@ -264,7 +265,7 @@ export async function getProduct(
     )
 
     return await context.client.apolloClient.query({
-      query: gql(productRecommendations.query) as any,
+      query: productRecommendations.query,
       variables: productRecommendations.payload
     }).then((result) => {
       if (result.data.productRecommendations && result.data.productRecommendations.length > 0) {
@@ -296,7 +297,7 @@ export async function getProduct(
       return products;
     });
   } else {
-    const DEFAULT_QUERY = `query GET_PRODUCTS($country: CountryCode!, $first: Int!, $sortKey:  ProductSortKeys!, $reverse: Boolean!) @inContext(country: $country){
+    const DEFAULT_QUERY = gql`query GET_PRODUCTS($country: CountryCode!, $first: Int!, $sortKey:  ProductSortKeys!, $reverse: Boolean!) @inContext(country: $country){
       products(first:$first, sortKey: $sortKey, reverse: $reverse) {
         edges{
           node{
@@ -395,7 +396,7 @@ export async function getProduct(
     )
 
     return await context.client.apolloClient.query({
-      query: gql(products.query) as any,
+      query: products.query,
       variables: products.payload
     }).then((result) => {
       const items = result.data.products.edges.map(item => {

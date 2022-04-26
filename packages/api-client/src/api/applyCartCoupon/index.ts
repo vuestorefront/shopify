@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { CustomQuery } from '@vue-storefront/core';
+import { CustomQuery } from '@vue-storefront/core'
 import { gql } from '@apollo/client/core'
+import { getCountry } from '../../helpers/utils'
 export async function applyCoupon(context, params, _customQuery?: CustomQuery) {
   const { currentCart, couponCode } = params;
-  const DEFAULT_MUTATION = gql`mutation APPLY_COUPON($checkoutId: ID!, $discountCode: String!){ 
+  const DEFAULT_MUTATION = gql`mutation APPLY_COUPON($checkoutId: ID!, $discountCode: String!, $country: CountryCode!) @inContext(country: $country ){ 
     checkoutDiscountCodeApplyV2(checkoutId: $checkoutId, discountCode: $discountCode) {
         checkout {
       		appliedGiftCards{
@@ -148,9 +149,11 @@ export async function applyCoupon(context, params, _customQuery?: CustomQuery) {
       }
     }
   }`
+
   const payload = {
     discountCode: couponCode,
-    checkoutId: currentCart.id
+    checkoutId: currentCart.id,
+    country: getCountry(context)
   }
 
     const { checkoutDiscountCodeApplyV2 } = context.extendQuery(

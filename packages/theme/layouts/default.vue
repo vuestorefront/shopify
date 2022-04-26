@@ -1,31 +1,31 @@
 <template>
   <div>
+    <client-only>
+      <BottomNavigation />
+    </client-only>  
+    <client-only>  
+      <CartSidebar />
+    </client-only>  
+    <client-only>  
+      <WishlistSidebar />
+    </client-only>  
+    <client-only>   
+      <LoginModal />
+    </client-only>  
+    <LazyHydrate when-visible>
+      <Notification />
+    </LazyHydrate>
     <TopBar class="desktop-only" />
     <AppHeader
       :cart-total-items="getCartTotalItems"
       :is-user-authenticated="isAuthenticated"
     />
     <div id="layout">
-      <nuxt :key="$route.fullPath" />
-      <client-only>
-        <BottomNavigation />
-      </client-only>
-      <client-only>
-        <CartSidebar />
-      </client-only>
-      <client-only>
-        <WishlistSidebar />
-      </client-only>
-      <client-only>
-        <LoginModal />
-      </client-only>
-      <client-only>
-        <Notification />
-      </client-only>
+      <nuxt :key="route.fullPath" />
     </div>
-    <LazyHydrate when-visible>
+    <LoadWhenVisible>
       <AppFooter />
-    </LazyHydrate>
+    </LoadWhenVisible>
   </div>
 </template>
 
@@ -37,40 +37,45 @@ import {
   useUser,
   cartGetters,
   useCart,
+  userGetters
 } from '@vue-storefront/shopify';
-import { computed, onBeforeMount, provide } from '@nuxtjs/composition-api';
+import { computed, onBeforeMount, provide, useRoute, useContext } from '@nuxtjs/composition-api';
+import LoadWhenVisible from '~/components/utils/LoadWhenVisible';
 export default {
   name: 'DefaultLayout',
   components: {
     LazyHydrate,
     TopBar,
     AppHeader,
-    BottomNavigation: () => import('~/components/BottomNavigation.vue'),
-    AppFooter: () => import('~/components/AppFooter.vue'),
-    CartSidebar: () => import('~/components/CartSidebar.vue'),
-    WishlistSidebar: () => import('~/components/WishlistSidebar.vue'),
-    LoginModal: () => import('~/components/LoginModal.vue'),
-    Notification: () => import('~/components/Notification'),
+    BottomNavigation: () => import(/* webpackPrefetch: true */ '~/components/BottomNavigation.vue'),
+    AppFooter: () => import(/* webpackPrefetch: true */ '~/components/AppFooter.vue'),
+    CartSidebar: () => import(/* webpackPrefetch: true */ '~/components/CartSidebar.vue'),
+    WishlistSidebar: () => import(/* webpackPrefetch: true */ '~/components/WishlistSidebar.vue'),
+    LoginModal: () => import(/* webpackPrefetch: true */ '~/components/LoginModal.vue'),
+    Notification: () => import(/* webpackPrefetch: true */ '~/components/Notification'),
+    LoadWhenVisible
   },
-  setup(_, { root }) {
-    const { load: loadUser, isAuthenticated } = useUser();
+  setup() {
+    const route = useRoute();
+    const context = useContext();
+    const { load: loadUser, user: userInfo } = useUser();
     const { load: loadCart, cart } = useCart();
     const getCartTotalItems = computed(() => cartGetters.getTotalItems(cart.value));
-    
+    const isAuthenticated = computed(() => !!userGetters.getFirstName(userInfo.value));
     provide('currentCart', cart);
-
     onBeforeMount(async () => {
       await loadUser();
       await loadCart().then(() => {
         if (cart && cart.value && cart.value.orderStatusUrl !== null) {
-          root.$cookies.remove(`${root.$config.appKey}_cart_id`);
+          context.$cookies.remove(`${context.$config.appKey}_cart_id`);
         }
       });
     });
 
     return {
       getCartTotalItems,
-      isAuthenticated
+      isAuthenticated,
+      route
     };
   },
 };

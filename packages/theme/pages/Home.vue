@@ -8,7 +8,7 @@
         :subtitle="hero.subtitle"
         :button-text="hero.buttonText"
         :background="hero.background"
-        :image="hero.image"
+        :image="$device.isDesktopOrTablet ? hero.image.desktop : hero.image.mobile"
         :class="hero.className"
       />
     </SfHero>
