@@ -51,9 +51,7 @@ const config = {
     ]
   },
   loading: { color: '#fff' },
-  plugins: [
-    '~/plugins/scrollToTop.client.js'
-  ],
+  plugins: ["~/plugins/scrollToTop.client.js"],
   buildModules: [
     // to core
     './modules/cms/build',

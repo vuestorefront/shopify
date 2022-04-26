@@ -41,6 +41,7 @@
                 :width="100"
                 :lazy="false"
                 loading="lazy"
+                :alt="orderGetters.getItemName(item)"
                 />
               </nuxt-link>
               <nuxt-link :to="'/products/'+orderGetters.getItemSlug(item)">
