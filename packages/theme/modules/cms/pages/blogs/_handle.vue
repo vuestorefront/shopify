@@ -174,10 +174,11 @@
               :style="{ '--index': i }"
               :title="article.title"
               :description="article.content"
+              :wishlist-icon="false"
               :image="getArticleImage(article)"
               :image-width="$device.isDesktopOrTablet ? 212 : 154"
               :image-height="$device.isDesktopOrTablet ? 320 : 232"
-              link="#"
+              :link="localePath(getArticleLink(article))"
               class="blogs__blog-card-horizontal"
             >
               <template v-if="getArticleImage(article)" #image="imageSlotProps">

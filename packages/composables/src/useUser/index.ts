@@ -68,7 +68,7 @@ const params: UseUserFactoryParams<User, any, any> = {
 
     const response: User = {
       token: 'SignUpSuccess',
-      error: (result.data.customerUserErrors?.length) ? result.data.customerUserErrors[0].message : ''
+      error: (result.customerUserErrors?.length) ? result.customerUserErrors[0].message : ''
     };
     return response;
   },

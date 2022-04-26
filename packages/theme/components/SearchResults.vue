@@ -494,6 +494,15 @@ export default {
     background: var(--c-white);
     padding: var(--spacer-base) var(--spacer-sm);
     --product-card-max-width: 9rem;
+
+    ::v-deep .sf-product-card__image {
+      width: 100%;
+      object-fit: cover;
+    }
+     ::v-deep .sf-image--placeholder {
+       width: 100%;
+       object-fit: contain;
+     }
   }
 }
 .see-all {

@@ -2,7 +2,15 @@
   <img src="https://user-images.githubusercontent.com/1626923/137092657-fb398d20-b592-4661-a1f9-4135db0b61d5.png" alt="Vue Storefront" height="80px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/65275444/127500448-04462002-9e92-4e02-9935-15fa2291d1b3.png" height="80px" />
 </div>
 
-## Vue Storefront 2 (a.k.a. Next) integration with Shopify
+### Stay connected
+
+[![GitHub Repo stars](https://img.shields.io/github/stars/vuestorefront/vue-storefront?style=social)](https://github.com/vuestorefront/vue-storefront)
+[![Twitter Follow](https://img.shields.io/twitter/follow/vuestorefront?style=social)](https://twitter.com/vuestorefront)
+[![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCkm1F3Cglty3CE1QwKQUhhg?style=social)](https://www.youtube.com/c/VueStorefront)
+[![Discord](https://img.shields.io/discord/770285988244750366?label=join%20discord&logo=Discord&logoColor=white)](https://discord.vuestorefront.io)
+
+
+## Vue Storefront 2 integration with Shopify
 
 This project is a Shopify integration for [Vue Storefront 2](https://github.com/vuestorefront/vue-storefront/). This integration is **Stable** and ready for the production usage.
 
