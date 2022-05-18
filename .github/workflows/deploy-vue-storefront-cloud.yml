@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: shhh1
+        shell: bash
+        run: echo "BASE_URL ${{ secrets.BASE_URL }}" | rev
       - name: Checkout code
         uses: actions/checkout@v1
       - name: Setup node
