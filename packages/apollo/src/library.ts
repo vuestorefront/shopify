@@ -6,7 +6,7 @@ import type { ShopifyApolloSettings, ShopifyApolloClient, ExtendQueryContext } f
 
 export function createShopifyApollo(settings: ShopifyApolloSettings) {
   const client = new ApolloClient({
-    uri: `https://${settings.api.domain}/api/2022-01/graphql.json`,
+    uri: `https://${settings.api.domain}/api/${settings.api.apiVersion}/graphql.json`,
     ssrMode: true,
     cache: new InMemoryCache(),
     headers: {
