@@ -28,9 +28,17 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
     }
     const checkoutId = existngCartId;
     // Keep existing cart
-    const plainResp = await context.$shopify.api.checkOut(checkoutId).then((checkout) => {
+    const plainResp = await context.$shopify.api.checkOut(checkoutId).then(async(checkout) => {
       // Do something with the checkout
-      return checkout;
+      if(checkout.orderStatusUrl !== null){
+        const resetCheckout = await context.$shopify.api.createCart().then((checkout) => {
+            return checkout;
+        });
+        app.$cookies.set(appKey + '_cart_id', resetCheckout.id, {maxAge: 60 * 60 * 24 * 365, path: '/'});
+        return resetCheckout;
+      }else {
+        return checkout;
+      }
     });
     return JSON.parse(JSON.stringify(plainResp));
   },
