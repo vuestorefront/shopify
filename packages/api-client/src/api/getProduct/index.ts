@@ -125,6 +125,8 @@ export async function getProduct(
         }
       }
     }`
+
+    const curLocaleCode = params.curLocaleCode;
     const variables = {
       handle: params.slug,
       country: getCountry(context, true, localeInfo.default, localeInfo.cur),
