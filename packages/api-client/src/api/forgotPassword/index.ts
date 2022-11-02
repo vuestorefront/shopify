@@ -1,14 +1,27 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import { gql } from '@apollo/client/core';
 import { forgotPasswordMutation as mutation } from './../customerMutations/buildMutations';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function forgotPassword(context, params) {
+export async function forgotPassword(context, params) {
   const { username } = params;
-  const data = {
+
+  const payload = {
     email: username
   };
 
-  // Remove customer access token
-  return await context.client.graphQLClient.send(mutation(context), data);
+  const { customerRecover } = context.extendQuery(
+    {
+      customerRecover: {
+        mutation,
+        payload
+      }
+    }
+  );
+
+  return await context.client.apolloClient.mutate({
+    mutation: gql(customerRecover.mutation) as any,
+    variables: customerRecover.payload
+  }).then((result) => { 
+    return result.data.customerUserErrors
+  });
 }

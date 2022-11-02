@@ -7,7 +7,7 @@
       <template #link="{ breadcrumb }">
         <nuxt-link
           :data-testid="breadcrumb.text"
-          :to="breadcrumb.route.link"
+          :to="breadcrumb.link ? localePath(breadcrumb.link) : ''"
           class="sf-link disable-active-link sf-breadcrumbs__breadcrumb"
         >
           {{ breadcrumb.text }}
@@ -49,24 +49,24 @@
           <SfIcon
             data-cy="category-icon_grid-view"
             class="navbar__view-icon"
-            :color="isCategoryGridView ? 'black' : 'dark-secondary'"
+            :color="isCategoryGridView ? 'var(--c-primary)' : 'black'"
             icon="tiles"
             size="12px"
             role="button"
             aria-label="Change to grid view"
             :aria-pressed="isCategoryGridView"
-            @click="toggleCategoryGridView"
+            v-on="isCategoryGridView ? {}: {click: toggleCategoryGridView}"
           />
           <SfIcon
             data-cy="category-icon_list-view"
             class="navbar__view-icon"
-            :color="!isCategoryGridView ? 'black' : 'dark-secondary'"
+            :color="!isCategoryGridView ? 'var(--c-primary)' : 'black'"
             icon="list"
             size="12px"
             role="button"
             aria-label="Change to list view"
             :aria-pressed="!isCategoryGridView"
-            @click="toggleCategoryGridView"
+            v-on="!isCategoryGridView ? {}: {click: toggleCategoryGridView}"
           />
         </div>
       </div>
@@ -85,10 +85,12 @@
             <SfProductCard
               v-for="(product, i) in products"
               :key="productGetters.getId(product)"
-              data-cy="category-product-card"
+              v-e2e="'category-product-card'"
               :style="{ '--index': i }"
               :title="productGetters.getName(product)"
               :image="productGetters.getCoverImage(product)"
+              :image-width="$device.isDesktopOrTablet ? 212 : 154"
+              :image-height="$device.isDesktopOrTablet ? 320 : 232"
               :regular-price="
                 $n(productGetters.getPrice(product).regular, 'currency')
               "
@@ -101,6 +103,7 @@
               :show-add-to-cart-button="true"
               :is-on-wishlist="false"
               :is-added-to-cart="isInCart({ product, currentCart })"
+              :add-to-cart-disabled="!productGetters.getStockStatus(product)"
               :link="
                 localePath(
                   `/p/${productGetters.getId(product)}/${productGetters.getSlug(
@@ -111,9 +114,39 @@
               :wishlist-icon="false"
               class="products__product-card"
               @click:add-to-cart="
-                HandleAddTocart({ product, quantity: 1, currentCart })
+                handleAddToCart({ product, quantity: 1, currentCart })
               "
-            />
+            >
+            <template #image="imageSlotProps">
+                <SfButton
+                  :link="imageSlotProps.link"
+                  aria-label="Go To Product"
+                  class="sf-button--pure sf-product-card__link"
+                  data-testid="product-link"
+                  v-on="$listeners"
+                >
+                  <template v-if="Array.isArray(imageSlotProps.image)">
+                    <nuxt-img
+                      v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                      :key="key"
+                      :alt="imageSlotProps.title"
+                      :height="imageSlotProps.imageHeight"
+                      :src="picture"
+                      :width="imageSlotProps.imageWidth"
+                      class="sf-product-card__picture"
+                    />
+                  </template>
+                  <nuxt-img
+                    v-else
+                    :alt="imageSlotProps.title"
+                    :height="imageSlotProps.imageHeight"
+                    :src="imageSlotProps.image"
+                    :width="imageSlotProps.imageWidth"
+                    class="sf-product-card__image lol"
+                  />
+                </SfButton>
+              </template>
+            </SfProductCard>
           </transition-group>
           <transition-group
             v-else
@@ -130,6 +163,8 @@
               :title="productGetters.getName(product)"
               :description="productGetters.getDescription(product)"
               :image="productGetters.getCoverImage(product)"
+              :image-width="$device.isDesktopOrTablet ? 85 : 140"
+              :image-height="$device.isDesktopOrTablet ? 128 : 212"
               :regular-price="
                 $n(productGetters.getPrice(product).regular, 'currency')
               "
@@ -137,6 +172,7 @@
                 productGetters.getPrice(product).special &&
                 $n(productGetters.getPrice(product).special, 'currency')
               "
+              :add-to-cart-disabled="!productGetters.getStockStatus(product)"
               :max-rating="5"
               :score-rating="3"
               :is-on-wishlist="false"
@@ -149,9 +185,39 @@
                 )
               "
               @click:add-to-cart="
-                HandleAddTocart({ product, quantity: 1, currentCart })
+                handleAddToCart({ product, quantity: 1, currentCart })
               "
-            >
+            ><template #image="imageSlotProps">
+                  <SfLink
+                    :link="imageSlotProps.link"
+                    class="
+                    sf-product-card-horizontal__link
+                    sf-product-card-horizontal__link--image
+                  "
+                  >
+                    <template v-if="Array.isArray(imageSlotProps.image)">
+                      <SfImage
+                        v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                        :key="key"
+                        image-tag="nuxt-img"
+                        :src="picture"
+                        :alt="imageSlotProps.title"
+                        :width="imageSlotProps.imageWidth"
+                        :height="imageSlotProps.imageHeight"
+                        class="sf-product-card-horizontal__picture"
+                      />
+                    </template>
+                    <SfImage
+                      v-else
+                      image-tag="nuxt-img"
+                      :src="imageSlotProps.image"
+                      :alt="imageSlotProps.title"
+                      :width="imageSlotProps.imageWidth"
+                      :height="imageSlotProps.imageHeight"
+                      class="sf-product-card-horizontal__image"
+                    />
+                  </SfLink>
+                </template>
               <template #configuration>
                 <SfProperty
                   class="desktop-only"
@@ -160,6 +226,21 @@
                   style="margin: 0 0 1rem 0"
                 />
                 <SfProperty class="desktop-only" name="Color" value="white" />
+              </template>
+              <template #add-to-cart>
+                <SfAddToCart
+                  v-model="productsQuantity[product.id]"
+                  :disabled="!productGetters.getStockStatus(product)"
+                  class="sf-product-card-horizontal__add-to-cart desktop-only"
+                  @click="
+                    addItemToCart({
+                      product,
+                      quantity: Number(
+                        productsQuantity[productData.getId(product)] || 1
+                      )
+                    })
+                  "
+                />
               </template>
             </SfProductCardHorizontal>
           </transition-group>
@@ -286,12 +367,14 @@ import {
   SfBreadcrumbs,
   SfLoader,
   SfColor,
-  SfProperty
+  SfProperty,
+  SfAddToCart,
+  SfLink,
+  SfImage
 } from '@storefront-ui/vue';
-import { computed, onMounted } from '@nuxtjs/composition-api';
+import { computed, onMounted, ref } from '@nuxtjs/composition-api';
 import {
   useCart,
-  useWishlist,
   productGetters,
   useFacet,
   facetGetters
@@ -314,7 +397,10 @@ export default {
     SfLoader,
     SfColor,
     SfHeading,
-    SfProperty
+    SfProperty,
+    SfAddToCart,
+    SfLink,
+    SfImage
   },
   transition: 'fade',
   setup(_, context) {
@@ -332,6 +418,7 @@ export default {
     onSSR(async () => {
       await search(th.getFacetsFromURL());
     });
+    const productsQuantity = ref({});
 
     const { isFacetColor } = useUiHelpers();
     const { toggleCategoryGridView } = useUiState();
@@ -342,6 +429,7 @@ export default {
 
     return {
       ...uiState,
+      productsQuantity,
       th,
       products,
       loading,
@@ -363,18 +451,18 @@ export default {
       breadcrumbs: [
         {
           text: 'Home',
-          route: { link: '/' }
+          link: '/'
         },
         {
           text: this.removeSpaceFromText(this.$route.params.slug_1),
-          route: { link: '#' }
+          link: '#'
         }
       ]
     };
   },
   methods: {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    HandleAddTocart(productObj) {
+    handleAddToCart(productObj) {
       this.addItemToCart(productObj).then(() => {
         this.sendNotification({
           key: 'added_to_cart',
@@ -388,7 +476,7 @@ export default {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     removeSpaceFromText(str) {
       let i;
-      const frags = str.split('-');
+      const frags = (str ?? '').split('-');
       for (i = 0; i < frags.length; i++) {
         frags[i] = frags[i].charAt(0).toUpperCase() + frags[i].slice(1);
       }

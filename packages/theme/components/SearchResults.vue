@@ -7,36 +7,13 @@
     >
       <transition name="sf-fade" mode="out-in">
         <div
-          v-if="products && products.length > 0"
+          v-if="isSearchResultAvailable"
           key="results"
           class="search__wrapper-results"
         >
           <SfMegaMenuColumn
-            v-if="false"
-            :title="$t('Categories')"
-            class="sf-mega-menu-column--pined-content-on-mobile search__categories"
-          >
-            <template #title="{ title }">
-              <SfMenuItem :label="title" @click="megaMenu.changeActive(title)">
-                <template #mobile-nav-icon> &#8203; </template>
-              </SfMenuItem>
-            </template>
-            <SfList>
-              <SfListItem
-                v-for="(category, key) in categories.items"
-                :key="key"
-              >
-                <SfMenuItem
-                  :label="category.label"
-                  :link="localePath(getCatLink(category))"
-                >
-                  <template #mobile-nav-icon> &#8203; </template>
-                </SfMenuItem>
-              </SfListItem>
-            </SfList>
-          </SfMegaMenuColumn>
-          <SfMegaMenuColumn
-            :title="$t('Product suggestions')"
+            v-if="products && products.length > 0"
+            :title="$t('Products')"
             class="sf-mega-menu-column--pined-content-on-mobile search__results"
           >
             <template #title="{ title }">
@@ -66,31 +43,55 @@
                   "
                   :score-rating="productGetters.getAverageRating(product)"
                   :image="productGetters.getCoverImage(product)"
+                  :image-width="$device.isDesktopOrTablet ? 212 : 154"
+                  :image-height="$device.isDesktopOrTablet ? 320 : 232"
                   :alt="productGetters.getName(product)"
                   :title="productGetters.getName(product)"
-                  :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                  :add-to-cart-disabled="getStockCount(product) <= 0"
+                  :link="localePath(getProductLink(product))"
+                  :wishlist-icon="false"
                   @click:add-to-cart="
                     handleAddToCart({ product, quantity: 1, currentCart })
                   "
                 >
+                  <template #image="imageSlotProps">
+                    <SfButton
+                      :link="imageSlotProps.link"
+                      aria-label="Go To Product"
+                      class="sf-button--pure sf-product-card__link"
+                      data-testid="product-link"
+                      v-on="$listeners"
+                    >
+                      <template v-if="Array.isArray(imageSlotProps.image)">
+                        <nuxt-img
+                          v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                          :key="key"
+                          :alt="imageSlotProps.title"
+                          :height="imageSlotProps.imageHeight"
+                          :src="picture"
+                          :width="imageSlotProps.imageWidth"
+                          class="sf-product-card__picture"
+                        />
+                      </template>
+                      <nuxt-img
+                        v-else
+                        :alt="imageSlotProps.title"
+                        :height="imageSlotProps.imageHeight"
+                        :src="imageSlotProps.image"
+                        :width="imageSlotProps.imageWidth"
+                        class="sf-product-card__image lol"
+                      />
+                    </SfButton>
+                  </template>
                   <template slot="title">
                     <SfButton
-                      :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                      :link="localePath(getProductLink(product))"
                       class="sf-button--pure sf-product-card__link"
                       data-testid="product-link"
                     >
                       <h3
                         class="sf-product-card__title"
-                        v-html="productGetters.getName(product)"
-                      ></h3>
+                      >{{productGetters.getName(product)}}</h3>
                     </SfButton>
                   </template>
                 </SfProductCard>
@@ -110,32 +111,193 @@
                 "
                 :score-rating="productGetters.getAverageRating(product)"
                 :image="productGetters.getCoverImage(product)"
+                :image-width="$device.isDesktopOrTablet ? 212 : 154"
+                :image-height="$device.isDesktopOrTablet ? 320 : 232"
                 :alt="productGetters.getName(product)"
                 :title="productGetters.getName(product)"
-                :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                :add-to-cart-disabled="getStockCount(product) <= 0"
+                :link="localePath(getProductLink(product))"
+                :wishlist-icon="false"
                 @click:add-to-cart="
                   handleAddToCart({ product, quantity: 1, currentCart })
                 "
               >
+                <template #image="imageSlotProps">
+                  <SfButton
+                    :link="imageSlotProps.link"
+                    aria-label="Go To Product"
+                    class="sf-button--pure sf-product-card__link"
+                    data-testid="product-link"
+                    v-on="$listeners"
+                  >
+                    <template v-if="Array.isArray(imageSlotProps.image)">
+                      <nuxt-img
+                        v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                        :key="key"
+                        :alt="imageSlotProps.title"
+                        :height="imageSlotProps.imageHeight"
+                        :src="picture"
+                        :width="imageSlotProps.imageWidth"
+                        class="sf-product-card__picture"
+                      />
+                    </template>
+                    <nuxt-img
+                      v-else
+                      :alt="imageSlotProps.title"
+                      :height="imageSlotProps.imageHeight"
+                      :src="imageSlotProps.image"
+                      :width="imageSlotProps.imageWidth"
+                      class="sf-product-card__image lol"
+                    />
+                  </SfButton>
+                </template>
                 <template slot="title">
                   <SfButton
-                    :link="localePath(
-                  `/p/${productGetters.getId(product)}/${productGetters.getSlug(
-                    product
-                  )}`
-                )"
+                    :link="localePath(getProductLink(product))"
                     class="sf-button--pure sf-product-card__link"
                     data-testid="product-link"
                   >
                     <h3
                       class="sf-product-card__title"
-                      v-html="productGetters.getName(product)"
-                    ></h3>
+                    >
+                      {{productGetters.getName(product)}}
+                    </h3>
                   </SfButton>
+                </template>
+              </SfProductCard>
+            </div>
+          </SfMegaMenuColumn>
+          <SfMegaMenuColumn
+            v-if="articles && articles.length > 0"
+            :title="$t('Articles')"
+            class="sf-mega-menu-column--pined-content-on-mobile search__results"
+          >
+            <template #title="{ title }">
+              <SfMenuItem
+                :label="title"
+                class="sf-mega-menu-column__header search__header"
+              >
+                <template #mobile-nav-icon> &#8203; </template>
+              </SfMenuItem>
+            </template>
+            <SfScrollable
+              class="results--desktop desktop-only"
+              show-text=""
+              hide-text=""
+            >
+              <div class="results-listing">
+                <SfProductCard
+                  v-for="(article, i) in articles"
+                  :key="article.id"
+                  :style="{ '--index': i }"
+                  :title="article.title"
+                  :image="getArticleImage(article)"
+                  :image-width="$device.isDesktopOrTablet ? 212 : 154"
+                  :image-height="$device.isDesktopOrTablet ? 320 : 232"
+                  :wishlist-icon="false"
+                  :show-add-to-cart-button="false"
+                  class="blogs__blog-card"
+                  :link="localePath(getArticleLink(article))"
+                >
+                  <template v-if="getArticleImage(article)" #image="imageSlotProps">
+                <SfButton
+                  :link="imageSlotProps.link"
+                  aria-label="Go To Product"
+                  class="sf-button--pure sf-product-card__link"
+                  data-testid="product-link"
+                  v-on="$listeners"
+                >
+                  <template v-if="Array.isArray(imageSlotProps.image)">
+                        <nuxt-img
+                          v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                          :key="key"
+                          :alt="imageSlotProps.title"
+                          :height="imageSlotProps.imageHeight"
+                          :src="picture"
+                          :width="imageSlotProps.imageWidth"
+                          class="sf-product-card__picture"
+                        />
+                      </template>
+                      <nuxt-img
+                        v-else
+                        :alt="imageSlotProps.title"
+                        :height="imageSlotProps.imageHeight"
+                        :src="imageSlotProps.image"
+                        :width="imageSlotProps.imageWidth"
+                        class="sf-product-card__image lol"
+                      />
+                    </SfButton>
+                  </template>
+                  <template #add-to-cart>
+                    <div></div>
+                  </template>
+
+                  <template #title="{ title }">
+                    <span class="sf-blog-card__title">
+                      {{ title }}
+                    </span>
+
+                    <small class="sf-blog-card__publishedAt">{{
+                      getArticlePublishedAt(article)
+                    }}</small>
+                  </template>
+                </SfProductCard>
+              </div>
+            </SfScrollable>
+            <div class="results--mobile smartphone-only">
+              <SfProductCard
+                v-for="(article, i) in articles"
+                :key="article.id"
+                :style="{ '--index': i }"
+                :title="article.title"
+                :image="getArticleImage(article)"
+                :image-width="$device.isDesktopOrTablet ? 212 : 154"
+                :image-height="$device.isDesktopOrTablet ? 320 : 232"
+                :wishlist-icon="false"
+                :show-add-to-cart-button="false"
+                class="blogs__blog-card"
+                :link="localePath(getArticleLink(article))"
+              >
+                <template #add-to-cart>
+                  <div></div>
+                </template>
+                <template v-if="getArticleImage(article)" #image="imageSlotProps">
+                  <SfButton
+                    :link="imageSlotProps.link"
+                    aria-label="Go To Product"
+                    class="sf-button--pure sf-product-card__link"
+                    data-testid="product-link"
+                    v-on="$listeners"
+                  >
+                    <template v-if="Array.isArray(imageSlotProps.image)">
+                      <nuxt-img
+                        v-for="(picture, key) in imageSlotProps.image.slice(0, 2)"
+                        :key="key"
+                        :alt="imageSlotProps.title"
+                        :height="imageSlotProps.imageHeight"
+                        :src="picture"
+                        :width="imageSlotProps.imageWidth"
+                        class="sf-product-card__picture"
+                      />
+                    </template>
+                    <nuxt-img
+                      v-else
+                      :alt="imageSlotProps.title"
+                      :height="imageSlotProps.imageHeight"
+                      :src="imageSlotProps.image"
+                      :width="imageSlotProps.imageWidth"
+                      class="sf-product-card__image lol"
+                    />
+                  </SfButton>
+                </template>
+                <template #title="{ title }">
+                  <span class="sf-blog-card__title">
+                    {{ title }}
+                  </span>
+
+                  <small class="sf-blog-card__publishedAt">{{
+                    getArticlePublishedAt(article)
+                  }}</small>
                 </template>
               </SfProductCard>
             </div>
@@ -150,10 +312,12 @@
         </div>
         <div v-else key="no-results" class="before-results">
           <SfImage
-            src="/error/error.svg"
+            src="/error/error.webp"
             class="before-results__picture"
             alt="error"
             loading="lazy"
+            :width="300"
+            :height="300"
           />
           <p class="before-results__paragraph">
             {{ $t("You haven't searched for items yet") }}
@@ -175,37 +339,41 @@
 <script>
 import {
   SfMegaMenu,
-  SfList,
   SfProductCard,
   SfScrollable,
   SfMenuItem,
   SfButton,
-  SfImage,
+  SfImage
 } from '@storefront-ui/vue';
-import { ref, watch, computed, inject } from '@vue/composition-api';
+
+import { ref, watch, computed } from '@nuxtjs/composition-api';
 import { productGetters, useCart } from '@vue-storefront/shopify';
 import { useUiNotification } from '~/composables';
 import useUiHelpers from '../composables/useUiHelpers';
+import {
+  getArticleImage,
+  getArticleLink,
+  getArticlePublishedAt
+} from '~/helpers/article';
 export default {
   name: 'SearchResults',
   components: {
     SfMegaMenu,
-    SfList,
     SfProductCard,
     SfScrollable,
     SfMenuItem,
     SfButton,
-    SfImage,
+    SfImage
   },
   props: {
     visible: {
       type: Boolean,
-      default: false,
+      default: false
     },
     result: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
   setup(props, { emit }) {
     const { getCatLink } = useUiHelpers();
@@ -213,7 +381,9 @@ export default {
     const { addItem: addItemToCart, cart: currentCart } = useCart();
     const { send: sendNotification } = useUiNotification();
     const products = computed(() => props.result?.products);
+    const articles = computed(() => props.result?.articles);
     const categories = computed(() => props.result?.categories);
+    const getStockCount = (product) => product?.totalInventory ?? 0;
 
     watch(
       () => props.visible,
@@ -235,21 +405,42 @@ export default {
           message: 'Product has been successfully added to cart !',
           type: 'success',
           title: 'Product added!',
-          icon: 'check',
+          icon: 'check'
         });
       });
     };
 
+    const getProductLink = (product) => {
+      if (!product?.id || !product?._slug) return '';
+
+      return {
+        name: 'product',
+        params: { id: product.id, slug: product._slug }
+      };
+    };
+
+    const isSearchResultAvailable = computed(
+      () =>
+        (products?.value?.length ?? 0) > 0 || (articles?.value?.length ?? 0) > 0
+    );
+
     return {
+      isSearchResultAvailable,
       getCatLink,
+      getProductLink,
+      getArticleLink,
+      getArticleImage,
+      getArticlePublishedAt,
+      articles,
       isSearchOpen,
+      getStockCount,
       productGetters,
       products,
       categories,
       currentCart,
-      handleAddToCart,
+      handleAddToCart
     };
-  },
+  }
 };
 </script>
 
@@ -303,6 +494,15 @@ export default {
     background: var(--c-white);
     padding: var(--spacer-base) var(--spacer-sm);
     --product-card-max-width: 9rem;
+
+    ::v-deep .sf-product-card__image {
+      width: 100%;
+      object-fit: cover;
+    }
+     ::v-deep .sf-image--placeholder {
+       width: 100%;
+       object-fit: contain;
+     }
   }
 }
 .see-all {

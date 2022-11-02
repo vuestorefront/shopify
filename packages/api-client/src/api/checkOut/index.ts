@@ -6,8 +6,7 @@ import { getCountry } from '../../helpers/utils';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default async function checkOut(context, checkoutId, customQuery?: CustomQuery) {
-  const DEFAULT_QUERY = `
-  query FETCH_CHECKOUT($country: CountryCode!, $id: ID!) @inContext(country: $country ) {
+  const DEFAULT_QUERY = `query FETCH_CHECKOUT($country: CountryCode!, $id: ID!) @inContext(country: $country ) {
     node(id: $id) {
       id
       ... on Checkout {
@@ -33,13 +32,19 @@ export default async function checkOut(context, checkoutId, customQuery?: Custom
         discountApplications(first:20){
           edges{
             node{
-              value{
-                ... on MoneyV2{
-                  amount
-                  currencyCode
-                }
-                ... on PricingPercentageValue{
-                  percentage
+              ... on DiscountCodeApplication {
+                code
+                allocationMethod
+                targetType
+                targetSelection
+                value{
+                  ... on MoneyV2{
+                    amount
+                    currencyCode
+                  }
+                  ... on PricingPercentageValue{
+                    percentage
+                  }
                 }
               }
             }

@@ -6,11 +6,17 @@ const state = reactive({
   isLoginModalOpen: false,
   isCategoryGridView: true,
   isFilterSidebarOpen: false,
-  isNavigationSidebarOpen: false
+  isNavigationSidebarOpen: false,
+  isMobileMenuOpen: false,
+  articlesPerPage: '5'
 });
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const useUiState = () => {
+  const isMobileMenuOpen = computed(() => state.isMobileMenuOpen);
+  const toggleMobileMenu = () => {
+    state.isMobileMenuOpen = !state.isMobileMenuOpen;
+  };
+
   const isCartSidebarOpen = computed(() => state.isCartSidebarOpen);
   const toggleCartSidebar = () => {
     state.isCartSidebarOpen = !state.isCartSidebarOpen;
@@ -41,6 +47,11 @@ const useUiState = () => {
     state.isFilterSidebarOpen = !state.isFilterSidebarOpen;
   };
 
+  const articlesPerPage = computed(() => state.articlesPerPage)
+  const setArticlesPerPage = (perPage: string) => {
+    state.articlesPerPage = perPage
+  }
+
   return {
     isCartSidebarOpen,
     isWishlistSidebarOpen,
@@ -48,12 +59,16 @@ const useUiState = () => {
     isCategoryGridView,
     isFilterSidebarOpen,
     isNavigationSidebarOpen,
+    isMobileMenuOpen,
+    toggleMobileMenu,
     toggleCartSidebar,
     toggleWishlistSidebar,
     toggleLoginModal,
     toggleCategoryGridView,
     toggleFilterSidebar,
-    toggleNavigationSidebar
+    toggleNavigationSidebar,
+    articlesPerPage,
+    setArticlesPerPage
   };
 };
 

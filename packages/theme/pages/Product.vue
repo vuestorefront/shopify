@@ -11,7 +11,7 @@
       <template #link="{ breadcrumb }">
         <nuxt-link
           :data-testid="breadcrumb.text"
-          :to="breadcrumb.route.link"
+          :to="breadcrumb.link ? localePath(breadcrumb.link) : ''"
           class="sf-link disable-active-link sf-breadcrumbs__breadcrumb"
         >
           {{ breadcrumb.text }}
@@ -31,7 +31,7 @@
       <div class="product__info">
         <div class="product__header">
           <SfHeading
-            :title="productGetters.getName(product)"
+            :title="productGetters.getFullName(product)"
             :level="3"
             class="sf-heading--no-underline sf-heading--left"
           />
@@ -144,7 +144,7 @@
                   })
                 "
               >
-                Add to Cart
+                {{ $t( 'Add to Cart') }}
               </SfButton>
             </template>
           </SfAddToCart>
@@ -215,19 +215,12 @@ import {
   SfProperty,
   SfHeading,
   SfPrice,
-  SfRating,
   SfSelect,
-  SfColorPicker,
   SfAddToCart,
   SfTabs,
   SfGallery,
   SfIcon,
-  SfImage,
-  SfBadge,
-  SfBanner,
   SfAlert,
-  SfSticky,
-  SfReview,
   SfBreadcrumbs,
   SfLoader,
   SfButton,
@@ -236,7 +229,7 @@ import {
 
 import InstagramFeed from '~/components/InstagramFeed.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
-import { ref, computed, watch } from '@nuxtjs/composition-api';
+import { ref, computed, watch, useRoute, useRouter } from '@nuxtjs/composition-api';
 import { useProduct, useCart, productGetters } from '@vue-storefront/shopify';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import LazyHydrate from 'vue-lazy-hydration';
@@ -252,17 +245,11 @@ export default {
     SfProperty,
     SfHeading,
     SfPrice,
-    SfRating,
     SfSelect,
     SfAddToCart,
     SfTabs,
     SfGallery,
     SfIcon,
-    SfImage,
-    SfBanner,
-    SfSticky,
-    SfReview,
-    SfBadge,
     SfBreadcrumbs,
     SfButton,
     InstagramFeed,
@@ -270,18 +257,19 @@ export default {
     MobileStoreBanner,
     LazyHydrate
   },
-  beforeRouteEnter(to, from, next) {
+  beforeRouteEnter(__, from, next) {
     next((vm) => {
       vm.prevRoute = from;
     });
   },
   transition: 'fade',
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(props, context) {
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
     const breadcrumbs = ref([]);
     const atttLbl = '';
     const qty = ref(1);
-    const { slug } = context.root.$route.params;
+    const { slug } = route?.value?.params;
     const {
       loading: productloading,
       products,
@@ -299,9 +287,10 @@ export default {
       () =>
         productGetters.getFiltered(products.value, {
           master: true,
-          attributes: context.root.$route.query
+          attributes: route?.value?.query
         })[0]
     );
+
     const id = computed(() => productGetters.getId(product.value));
     const originalId = computed(() =>
       productGetters.getProductOriginalId(product.value)
@@ -320,25 +309,22 @@ export default {
       productGetters.getAttributes(products.value)
     );
     const configuration = computed(() => {
-      return productGetters.getSelectedVariant(
-        products.value,
-        context.root.$route.query
-      );
+      return productGetters.getSelectedVariant(route?.value?.query);
     });
 
     const setBreadcrumb = () => {
       breadcrumbs.value = [
         {
           text: 'Home',
-          route: { link: '/' }
+          link: '/'
         },
         {
           text: 'products',
-          route: { link: '#' }
+          link: '#'
         },
         {
           text: productTitle.value,
-          route: { link: '#' }
+          link: '#'
         }
       ];
     };
@@ -377,7 +363,7 @@ export default {
       await search({ slug, selectedOptions: configuration.value }).then(() => {
         // "Product Title" serve as the flag if the product is existing or not
         if (!productTitle.value) {
-          return context.root.error({
+          return route?.value?.error({
             statusCode: 404,
             message: 'This product could not be found'
           });
@@ -385,7 +371,6 @@ export default {
       });
       await searchRelatedProducts({ productId: id.value, related: true });
     });
-
     const updateFilter = (filter) => {
       if (options.value) {
         Object.keys(options.value).forEach((attr) => {
@@ -398,8 +383,8 @@ export default {
               : options.value[attr][0];
         });
       }
-      context.root.$router.push({
-        path: context.root.$route.path,
+      router.push({
+        path: route?.value?.path,
         query: {
           ...configuration.value,
           ...filter
@@ -632,6 +617,7 @@ export default {
   &__tabs {
     margin: var(--spacer-lg) auto var(--spacer-2xl);
     --tabs-title-font-size: var(--font-size--lg);
+    --tabs-title-z-index: 0;
     @include for-desktop {
       margin-top: var(--spacer-2xl);
     }

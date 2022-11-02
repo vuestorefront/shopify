@@ -1,19 +1,30 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { gql } from '@apollo/client/core';
+import { CustomQuery } from '@vue-storefront/core';
 import { changePasswordMutation as mutation } from './../customerMutations/buildMutations';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default async function changePassword(context, params) {
+export  async function changePassword(context, params, _customQuery?: CustomQuery) {
   const { token, newPassword } = params;
-  const data = {
+  
+  const payload = {
     customerAccessToken: token,
-    customer: {
-      password: newPassword
+      customer: {
+        password: newPassword
+      }
+  }
+  
+  const { customerUpdate } = context.extendQuery(
+      _customQuery,
+    {
+    customerUpdate: {
+      mutation,
+      payload
     }
-  };
-
-  // Remove customer access token
-  return await context.client.graphQLClient.send(mutation(context), data).then(({model}) => {
-    return model;
-  });
+  })
+  
+  return await context.client.apolloClient.mutate({
+    mutation: gql(customerUpdate.mutation) as any,
+    variables: customerUpdate.payload
+  }).then((result) => {
+    return result.data;
+});
 }

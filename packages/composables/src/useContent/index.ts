@@ -1,22 +1,67 @@
 import {
-  Context,
+  Context as DeprecatedContext,
   useContentFactory,
   UseContentFactoryParams
 } from '@vue-storefront/core';
-import { ContentType, ContentPosition } from '../types';
+import { QueryRootBlogArgs, QueryRootBlogsArgs, QueryRootNodeArgs, QueryRootPageArgs } from '@vue-storefront/shopify-apollo/src/shopify';
+import { GetArticlesParams } from '@vue-storefront/shopify-apollo/src/types/GetArticlesParams';
+import { Context } from '../types'
+import { ContentType } from '../types/ContentType';
+import { UseContentParams } from '../types/UseContentParams';
 
-const params: UseContentFactoryParams<ContentType, ContentPosition> = {
-  search: async (context: Context, params) => {
-    const { ...searchParams } = params;
-    if (params.ContentType) {
-      if (params.ContentType === 'updatePreferences') {
-        return await context.$shopify.api.updateNewsLetterPreferences(searchParams);
-      } else if (params.ContentType === 'page') {
-        return await context.$shopify.api.getPages(searchParams);
+const params: UseContentFactoryParams<unknown, UseContentParams> = {
+  search: async (context: Context, allParams) => {
+    const { contentType, ...params } = allParams
+    const deprecatedApi = (context as DeprecatedContext).$shopify.api
+
+    switch (contentType) {
+      case ContentType.UpdatePreference:
+        return deprecatedApi.updateNewsLetterPreferences(params);
+      case ContentType.Page: {
+        const response = await context.$shopify.api.getPage(params as QueryRootPageArgs)
+        return response?.data?.page;
+      }
+      case ContentType.Blog: {
+        if (Object.prototype.hasOwnProperty.call(params, 'id') || Object.prototype.hasOwnProperty.call(params, 'handle')) {
+          const response = await context.$shopify.api.getBlog(params as QueryRootBlogArgs)
+            .catch(err => ({ error: err, data: null }))
+
+          if (response?.error) throw response.error
+
+          return response?.data?.blog
+        }
+
+        const response = await context.$shopify.api.getBlogs(params as QueryRootBlogsArgs)
+          .catch(err => ({ error: err, data: null }))
+
+        if (response?.error) throw response.error
+
+        return response?.data?.blogs
+
+      }
+      case ContentType.Article: {
+        if (Object.prototype.hasOwnProperty.call(params, 'id') || Object.prototype.hasOwnProperty.call(params, 'handle')) {
+          const response = await context.$shopify.api.getArticle(params as QueryRootNodeArgs)
+
+          return response?.data?.article
+        }
+
+        const response = await context.$shopify.api.getArticles(params as GetArticlesParams)
+
+        if (response.error) throw response.error
+
+
+        return {
+          data: response?.data?.articles,
+          pageInfo: response?.pageInfo
+        }
+
+      }
+      default: {
+        return deprecatedApi.getBlogPosts(params);
       }
     }
-    return await context.$shopify.api.getBlogPosts(searchParams);
   }
 };
 
-export default useContentFactory<ContentType, ContentPosition>(params);
+export default useContentFactory<unknown, UseContentParams>(params);

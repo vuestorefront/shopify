@@ -22,8 +22,6 @@ Shopify configuration is located in two places:
 
 ## Middleware shopify configuration
 
-You can read more about middleware configuration in Vue Storefront [here](../advanced/server-middleware.md#configuration)
-
 ```js
 // middleware.config.js
 module.exports = {
@@ -34,6 +32,10 @@ module.exports = {
         api: {
           domain: 'YOUR SHOPIFY STORE DOMAIN',
           storefrontAccessToken: 'SHOPIFY STORE API KEY'
+        },
+        cms: {
+          blogs: '/blogs', 
+          articles: '/articles'
         },
         currency: 'USD',
         country: 'US'
@@ -48,6 +50,13 @@ module.exports = {
 
 - `domain` - link to your Shopify storefront.
 - `storefrontAccessToken` - Shopify private app API key. Visit [Shopify documentation](https://shopify.dev/tutorials/generate-api-credentials) for more details about creating an API key
+
+### `cms`
+
+- `blogs` - prefix url for your blogs content defaults to `/blogs`
+  - Which results to https://yourdomain.com/blogs/:blog-handle
+- `articles` - prefix url for your articles content defaults to `/articles`
+  - Which results to https://yourdomain.com/articles/:article-handle
 
 ### `acceptLanguage`
 

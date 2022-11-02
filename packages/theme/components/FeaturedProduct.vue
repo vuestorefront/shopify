@@ -73,7 +73,6 @@
               label="Size"
               class="sf-select--underlined product__select-size"
               :required="true"
-              @input="(size) => updateFilter({ size })"
             >
               <SfSelectOption
                 v-for="size in options.Size"
@@ -94,7 +93,6 @@
                 data-cy="product-color_update"
                 :color="color.value"
                 class="product__color"
-                @click="updateFilter({ color })"
               />
             </div>
             <SfAddToCart
@@ -125,15 +123,13 @@ import {
   SfColor
 } from '@storefront-ui/vue';
 
-import { ref, computed } from '@nuxtjs/composition-api';
+import { ref, computed, useRoute } from '@nuxtjs/composition-api';
 import {
   useCart,
   productGetters,
   useReview,
   reviewGetters
 } from '@vue-storefront/shopify';
-import LazyHydrate from 'vue-lazy-hydration';
-import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 
 export default {
   name: 'Product',
@@ -146,9 +142,7 @@ export default {
     SfAddToCart,
     SfGallery,
     SfIcon,
-    SfBadge,
-    MobileStoreBanner,
-    LazyHydrate
+    SfBadge
   },
   transition: 'fade',
   props: {
@@ -157,8 +151,9 @@ export default {
       type: Array || Object
     }
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(props, context) {
+  
+  setup(props) {
+    const route = useRoute();
     const qty = ref(1);
     const { addItem, loading } = useCart();
     const { reviews: productReviews } = useReview(
@@ -168,7 +163,7 @@ export default {
       () =>
         productGetters.getFiltered(props.productModel, {
           master: true,
-          attributes: context.root.$route.query
+          attributes: route?.value?.query
         })[0]
     );
     const productDescription = computed(() =>
@@ -199,20 +194,7 @@ export default {
       }))
     );
 
-    const updateFilter = (filter) => {
-      console.log(filter);
-
-      /* context.root.$router.push({
-        path: context.root.$route.path,
-        query: {
-          ...configuration.value,
-          ...filter
-        }
-      }); */
-    };
-
     return {
-      updateFilter,
       configuration,
       product,
       productDescription,
@@ -234,7 +216,6 @@ export default {
       productGallery
     };
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
       stock: 5

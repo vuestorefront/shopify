@@ -2,8 +2,10 @@
   <div id="error">
     <SfImage
       class="image"
-      src="/error/error.svg"
+      src="/error/error.webp"
       alt="leaves"
+      :width="300"
+      :height="300"
     />
      <SfHeading
       :title="error.statusCode === 404 ? error.message ? error.message : 'Item not found' : 'An error occured'"

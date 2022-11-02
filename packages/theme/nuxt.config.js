@@ -1,7 +1,6 @@
 require('isomorphic-fetch');
 import webpack from 'webpack';
-
-/** @type { import('@nuxt/types').NuxtConfig } */ 
+const platformENV = process.env.NODE_ENV !== 'production' ? 'http' : 'https'
 const config = {
   server: {
     port: process.env.APP_PORT || 3001,
@@ -9,7 +8,8 @@ const config = {
   },
   publicRuntimeConfig: {
     appKey: 'vsf2spcon',
-    appVersion: Date.now()
+    appVersion: Date.now(),
+    middlewareUrl:  `${platformENV}://${process.env.BASE_URL}/api/`
   },
   privateRuntimeConfig: {
     storeURL: process.env.SHOPIFY_DOMAIN,
@@ -39,27 +39,25 @@ const config = {
       },
       {
         rel: 'preload',
-        href:
-          'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
+        href: 'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
         as: 'style'
       },
       {
         rel: 'stylesheet',
-        href:
-          'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
+        href: 'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
         media: 'print',
-        onload: 'this.media=\'all\''
+        onload: "this.media='all'"
       }
     ]
   },
   loading: { color: '#fff' },
-  plugins: [
-    '~/plugins/scrollToTop.client.js'
-  ],
+  plugins: ["~/plugins/scrollToTop.client.js"],
   buildModules: [
     // to core
+    './modules/cms/build',
     '@nuxtjs/composition-api/module',
     '@nuxtjs/pwa',
+    '@nuxtjs/device',
     '@nuxt/typescript-build',
     '@nuxtjs/style-resources',
     [
@@ -101,12 +99,17 @@ const config = {
     ]
   ],
   modules: [
-    'nuxt-i18n',
+    '@nuxtjs/i18n',
     'cookie-universal-nuxt',
     'vue-scrollto/nuxt',
     '@vue-storefront/middleware/nuxt',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    './modules/cms/runtime',
+    '@nuxt/image'
   ],
+  device: {
+    refreshOnResize: true
+  },
   i18n: {
     currency: 'USD',
     country: 'US',
@@ -160,7 +163,7 @@ const config = {
         de: {
           currency: {
             style: 'currency',
-            currency: 'GBP',
+            currency: 'EUR',
             currencyDisplay: 'symbol'
           },
           decimal: {
@@ -198,26 +201,16 @@ const config = {
       })
     ],
     extend(config) {
-      config.resolve.extensions.push('.mjs')
+      config.resolve.extensions.push('.mjs');
 
       config.module.rules.push({
         test: /\.mjs$/,
         include: /node_modules/,
         type: 'javascript/auto'
-      })
+      });
     },
     extractCSS: {
       ignoreOrder: true
-    }
-  },
-  router: {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    scrollBehavior(_to, _from, savedPosition) {
-      if (savedPosition) {
-        return savedPosition;
-      } else {
-        return { x: 0, y: 0 };
-      }
     }
   },
   pwa: {
@@ -314,4 +307,4 @@ const config = {
   }
 };
 
-export default config
+export default config;

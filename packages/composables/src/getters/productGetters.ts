@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
   AgnosticMediaGalleryItem,
   AgnosticAttribute,
@@ -9,9 +8,17 @@ import { ProductVariant } from '@vue-storefront/shopify-api/src/types';
 import { enhanceProduct } from '../helpers/internals';
 import { formatAttributeList, capitalize } from './_utils';
 
-type ProductVariantFilters = any
+export type ProductVariantFilters = any
 
 export const getProductName = (product: ProductVariant): string => product?.name || undefined;
+
+export const getFullProductName = (product: ProductVariant): string => {
+  if (product?.variantBySelectedOptions) {
+    return `${product.name} - ${product.variantBySelectedOptions.title}`
+  } else {
+    return `${product.name} - ${product.variants?.[0]?.title ?? ''}`
+  }
+}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductSlug = (product: ProductVariant): string => {
@@ -20,7 +27,6 @@ export const getProductSlug = (product: ProductVariant): string => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductPrice = (product: ProductVariant): AgnosticPrice => {
   return {
     regular: product?.price?.original || 0,
@@ -28,7 +34,6 @@ export const getProductPrice = (product: ProductVariant): AgnosticPrice => {
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProductDiscountPercentage = (product): number => {
   const regular = parseFloat(product?.price?.original) || 0;
   const special = parseFloat(product?.price?.current) || 0;
@@ -39,7 +44,7 @@ export const getProductDiscountPercentage = (product): number => {
   }
   return 0;
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export const getProductGallery = (product: ProductVariant): AgnosticMediaGalleryItem[] =>
   (product ? product.images : [])
     .map((image) => {
@@ -69,7 +74,7 @@ export const getActiveVariantImage = (product) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getProductFiltered = (products, filters: ProductVariantFilters | any = {}) => {
+export const getProductFiltered = (products, _filters: ProductVariantFilters | any = {}) => {
   if (!products) {
     return [];
   }
@@ -84,7 +89,7 @@ export const getFilteredSingle = (product) => {
   return enhanceProduct(product) as ProductVariant[];
 };
 
-export const getSelectedVariant = (product: ProductVariant, attribs) => {
+export const getSelectedVariant = (attribs) => {
   return attribs;
 };
 export const getProductOptions = (product: ProductVariant): Record<string, AgnosticAttribute | string> => {
@@ -187,7 +192,7 @@ export const getProductCollections = (product, field = 'all') => {
   }
   if (product.collections && Object.keys(product.collections).length > 0) {
     const collections = [];
-    Object.values(product.collections).map((collection: Record<string, unknown>) => {
+    Object.values(product.collections).forEach((collection: Record<string, unknown>) => {
       if (field === 'all') {
         collections.push({
           id: collection.id,
@@ -275,6 +280,7 @@ export const getProductAverageRating = (product: ProductVariant): number => 0;
 
 const productGetters: ProductGetters<ProductVariant, ProductVariantFilters> = {
   getName: getProductName,
+  getFullName: getFullProductName,
   getSlug: getProductSlug,
   getPrice: getProductPrice,
   getGallery: getProductGallery,

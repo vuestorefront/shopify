@@ -2,7 +2,6 @@
   <div class="my_account_content_wrap">
     <div data-cy="order-history-tab_my-orders no-title" :class="currentOrder == null ? '' : 'no-title'">
       <div v-if="currentOrder">
-        <template>
           <div class='order-head-wrapper'>
             <div class="order-number">
               <SfButton data-cy="order-history-btn_orders" class="sf-button--text all-orders" @click="currentOrder = null, scrollToTop()">
@@ -16,7 +15,7 @@
             <p v-if="orderGetters.getStatus(currentOrder) === 'FULFILLED'">
               Order Tracking:&nbsp;<strong>{{ orderGetters.getTracking(currentOrder) }}</strong>
               <span v-if="orderGetters.getTracking(currentOrder) != ' - '" class="redirect-icon">
-                <SfLink target="_blank" :href="orderGetters.getTrackingUrl(currentOrder)">
+                <SfLink target="_blank" :link="orderGetters.getTrackingUrl(currentOrder)">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M13.8333 13.8333H2.16667V2.16667H8V0.5H2.16667C1.24167 0.5 0.5 1.25 0.5 2.16667V13.8333C0.5 14.75 1.24167 15.5 2.16667 15.5H13.8333C14.75 15.5 15.5 14.75 15.5 13.8333V8H13.8333V13.8333ZM9.66667 0.5V2.16667H12.6583L4.46667 10.3583L5.64167 11.5333L13.8333 3.34167V6.33333H15.5V0.5H9.66667Z" fill="#000000"/>
                   </svg>
@@ -24,7 +23,6 @@
               </span>
             </p>
           </div>
-      </template>
       <div class="table-responsive">
         <SfTable class="ordered-products-table">
           <SfTableHeading>
@@ -39,10 +37,11 @@
               <nuxt-link class="product-img" :to="'/products/'+orderGetters.getItemSlug(item)">
                 <SfImage
                 :src="`${orderGetters.getItemImage(item)}?fm=webp`"
-                height="100"
-                width="100"
+                :height="100"
+                :width="100"
                 :lazy="false"
                 loading="lazy"
+                :alt="orderGetters.getItemName(item)"
                 />
               </nuxt-link>
               <nuxt-link :to="'/products/'+orderGetters.getItemSlug(item)">
@@ -174,7 +173,7 @@
                 <span class="order-track-wrap">
                   {{ orderGetters.getTracking(order) }}
                   <span v-if="orderGetters.getTracking(order) != ' - '">
-                    <SfLink target="_blank" :href="orderGetters.getTrackingUrl(order)">
+                    <SfLink target="_blank" :link="orderGetters.getTrackingUrl(order)">
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13.8333 13.8333H2.16667V2.16667H8V0.5H2.16667C1.24167 0.5 0.5 1.25 0.5 2.16667V13.8333C0.5 14.75 1.24167 15.5 2.16667 15.5H13.8333C14.75 15.5 15.5 14.75 15.5 13.8333V8H13.8333V13.8333ZM9.66667 0.5V2.16667H12.6583L4.46667 10.3583L5.64167 11.5333L13.8333 3.34167V6.33333H15.5V0.5H9.66667Z" fill="#666666"/>
                       </svg>
@@ -226,7 +225,6 @@
 
 <script type="module">
 import {
-  SfTabs,
   SfTable,
   SfButton,
   SfProperty,
@@ -234,7 +232,6 @@ import {
   SfIcon,
   SfImage,
   SfHeading,
-  SfAlert,
   SfBadge,
   SfLoader
 } from '@storefront-ui/vue';
@@ -245,7 +242,6 @@ import { AgnosticOrderStatus , onSSR } from '@vue-storefront/core';
 export default {
   name: 'PersonalDetails',
   components: {
-    SfTabs,
     SfTable,
     SfButton,
     SfProperty,
@@ -253,7 +249,6 @@ export default {
     SfIcon,
     SfImage,
     SfHeading,
-    SfAlert,
     SfBadge,
     SfLoader
   },
@@ -306,11 +301,11 @@ export default {
     };
 
     const downloadOrders = async () => {
-      downloadFile(new Blob([JSON.stringify(orders.value)], {type: 'application/json'}), 'orders.json');
+      await downloadFile(new Blob([JSON.stringify(orders.value)], {type: 'application/json'}), 'orders.json');
     };
 
     const downloadOrder = async (order) => {
-      downloadFile(new Blob([JSON.stringify(order)], {type: 'application/json'}), 'order ' + orderGetters.getId(order) + '.json');
+      await downloadFile(new Blob([JSON.stringify(order)], {type: 'application/json'}), 'order ' + orderGetters.getId(order) + '.json');
     };
 
     return {
@@ -322,20 +317,6 @@ export default {
       downloadOrders,
       currentOrder,
       loading
-    };
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  head() {
-    return {
-      title: 'My Orders - Pure Daily Care',
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        {
-          hid: 'My Orders - Pure Daily Care',
-          name: 'My Orders - Pure Daily Care',
-          content: 'Pure Daily Care promotes natural beauty by combining the most modern technologies into easy-to-use, at-home products. Pure Daily Care technologies harness the healing power of naturally occurring phenomenon like steam, electricity and light to drastically improve your skin profile without the use of cosmetics.'
-        }
-      ]
     };
   }
 };

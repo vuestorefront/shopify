@@ -8,7 +8,7 @@
         :subtitle="hero.subtitle"
         :button-text="hero.buttonText"
         :background="hero.background"
-        :image="hero.image"
+        :image="$device.isDesktopOrTablet ? hero.image.desktop : hero.image.mobile"
         :class="hero.className"
       />
     </SfHero>
@@ -54,13 +54,7 @@ import {
   SfHero,
   SfBanner,
   SfCallToAction,
-  SfSection,
-  SfCarousel,
-  SfImage,
-  SfBannerGrid,
-  SfHeading,
-  SfArrow,
-  SfButton
+  SfBannerGrid
 } from '@storefront-ui/vue';
 import {
   useProduct,
@@ -68,12 +62,12 @@ import {
   productGetters
 } from '@vue-storefront/shopify';
 import {
-  computed,
-  onBeforeMount
+  computed
 } from '@nuxtjs/composition-api';
 import LazyHydrate from 'vue-lazy-hydration';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
+import { onSSR } from '@vue-storefront/core';
 
 export default {
   name: 'Home',
@@ -82,18 +76,11 @@ export default {
     RelatedProducts,
     SfBanner,
     SfCallToAction,
-    SfSection,
-    SfCarousel,
-    SfImage,
     SfBannerGrid,
-    SfHeading,
-    SfArrow,
-    SfButton,
     MobileStoreBanner,
     LazyHydrate
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  setup(contect) {
+  setup() {
     const {
       products: relatedProducts,
       search: productsSearch,
@@ -101,7 +88,7 @@ export default {
     } = useProduct('relatedProducts');
     const { cart, addItem: addToCart, isInCart } = useCart();
 
-    onBeforeMount(async () => {
+    onSSR(async () => {
       await productsSearch({ limit: 8 });
     });
     return {
@@ -115,7 +102,6 @@ export default {
       isInCart
     };
   },
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   data() {
     return {
       heroes: [
@@ -224,7 +210,6 @@ export default {
     };
   },
   methods: {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     toggleWishlist(index) {
       this.products[index].isInWishlist = !this.products[index].isInWishlist;
     }

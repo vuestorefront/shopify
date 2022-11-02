@@ -59,8 +59,9 @@ const sortDefaultAtTop = (a, b) => {
 
 const params: UseUserBillingFactoryParams<any, any> = {
   addAddress: async (context: Context, params?) => {
-    const appKey = context.$shopify.config.app.$config.appKey;
-    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
+    const app = context.$shopify.config.app;
+    const appKey = app.$config.appKey;
+    const token = app.$cookies.get(appKey + '_token');
     const formatedAddress = {
       address1: params.address.streetName,
       address2: params.address.apartment,
@@ -83,8 +84,9 @@ const params: UseUserBillingFactoryParams<any, any> = {
   },
 
   deleteAddress: async (context: Context, params) => {
-    const appKey = context.$shopify.config.app.$config.appKey;
-    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
+    const app = context.$shopify.config.app;
+    const appKey = app.$config.appKey;
+    const token = app.$cookies.get(appKey + '_token');
     const result: any = await context.$shopify.api.deleteAddress({ token, AddressId: params.address.id });
     if (result) {
       if (result.customerUserErrors.length === 0) {
@@ -95,8 +97,9 @@ const params: UseUserBillingFactoryParams<any, any> = {
   },
 
   updateAddress: async (context: Context, params?) => {
-    const appKey = context.$shopify.config.app.$config.appKey;
-    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
+    const app = context.$shopify.config.app;
+    const appKey = app.$config.appKey;
+    const token = app.$cookies.get(appKey + '_token');
     const formatedAddress = {
       address1: params.address.streetName,
       address2: params.address.apartment,
@@ -120,8 +123,9 @@ const params: UseUserBillingFactoryParams<any, any> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context, params?) => {
-    const appKey = context.$shopify.config.app.$config.appKey;
-    const token = context.$shopify.config.app.$cookies.get(appKey + '_token');
+    const app = context.$shopify.config.app;
+    const appKey = app.$config.appKey;
+    const token = app.$cookies.get(appKey + '_token');
     const result: any = await context.$shopify.api.fetchAddresses(token);
     let addresses = {};
     if (result) {

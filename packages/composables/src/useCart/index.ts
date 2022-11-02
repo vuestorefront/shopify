@@ -4,44 +4,53 @@ import {
   useCartFactory,
   UseCartFactoryParams
 } from '@vue-storefront/core';
-import { Cart, CartItem, Coupon, Product } from '../types';
-
+import { Cart, CartItem, Product } from '../types';
 const params: UseCartFactoryParams<Cart, CartItem, Product> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   load: async (context: Context) => {
     // check if cart is already initiated
-    const appKey = context.$shopify.config.app.$config.appKey;
-    let existingLocale = context.$shopify.config.app.$cookies.get('cur-vsf-locale');
+    const app = context.$shopify.config.app;
+    const appKey = app.$config.appKey;
+    let existingLocale = app.$cookies.get('cur-vsf-locale');
     let isLocaleSwitched = false;
-    if (existingLocale === undefined || existingLocale === '' || existingLocale !== context.$shopify.config.app.$cookies.get('vsf-locale')) {
-      context.$shopify.config.app.$cookies.set('cur-vsf-locale', context.$shopify.config.app.$cookies.get('vsf-locale'));
-      existingLocale = context.$shopify.config.app.$cookies.get('cur-vsf-locale');
+    if (existingLocale === undefined || existingLocale === '' || existingLocale !== app.i18n.locale) {
+      app.$cookies.set('cur-vsf-locale', app.i18n.locale);
+      existingLocale = app.$cookies.get('cur-vsf-locale');
       isLocaleSwitched = true;
     } 
-    let existngCartId = context.$shopify.config.app.$cookies.get(appKey + '_cart_id');
+    let existngCartId = app.$cookies.get(appKey + '_cart_id');
     if ((existngCartId === undefined || existngCartId === '' || isLocaleSwitched)) {
       // Initiate new cart
       existngCartId = await context.$shopify.api.createCart().then((checkout) => {
-        context.$shopify.config.app.$cookies.set(appKey + '_cart_id', checkout, {maxAge: 60 * 60 * 24 * 365, path: '/'});
-        return checkout;
+        app.$cookies.set(appKey + '_cart_id', checkout.id, {maxAge: 60 * 60 * 24 * 365, path: '/'});
+        return checkout.id;
       });
     }
     const checkoutId = existngCartId;
     // Keep existing cart
-    const plainResp = await context.$shopify.api.checkOut(checkoutId).then((checkout) => {
-      // Do something with the checkout
-      return checkout;
+    const plainResp = await context.$shopify.api.checkOut(checkoutId).then(async(checkout) => {
+       // Do something with the checkout
+      if(checkout.orderStatusUrl !== null){
+        const newCheckout = await context.$shopify.api.createCart().then((checkout) => {
+            return checkout;
+        });
+        app.$cookies.set(appKey + '_cart_id', newCheckout.id, {maxAge: 60 * 60 * 24 * 365, path: '/'});
+        return newCheckout;
+      }else {
+        return checkout;
+      }
     });
     return JSON.parse(JSON.stringify(plainResp));
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addItem: async (context: Context, { currentCart, product, quantity, customQuery }) => {
-    const appKey = context.$shopify.config.app.$config.appKey;
+    const app = context.$shopify.config.app;
+    const appKey = app.$config.appKey;
     return await context.$shopify.api.addToCart({ currentCart, product, quantity, customQuery }).then((checkout) => {
       // store cart id
-      if (!context.$shopify.config.app.$cookies.get(appKey + '_cart_id', currentCart.id)) {
-        context.$shopify.config.app.$cookies.set(appKey + '_cart_id', currentCart.id, { maxAge: 60 * 60 * 24 * 365, path: '/' });  
+      if (!app.$cookies.get(appKey + '_cart_id', currentCart.id)) {
+        app.$cookies.set(appKey + '_cart_id', currentCart.id, { maxAge: 60 * 60 * 24 * 365, path: '/' });  
       }
       return JSON.parse(JSON.stringify(checkout));
     });
@@ -72,19 +81,22 @@ const params: UseCartFactoryParams<Cart, CartItem, Product> = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applyCoupon: async (context: Context, { currentCart, couponCode, customQuery }) => {
-    console.log('Mocked: useCart.applyCoupon');
-    return {
-      updatedCart: {},
-      updatedCoupon: {}
-    };
+    return await context.$shopify.api.applyCoupon({ currentCart, couponCode, customQuery }).then((checkout) => {
+      // return updated checkout data
+      return {
+        updatedCart: JSON.parse(JSON.stringify(checkout.checkout))
+      };
+    });
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeCoupon: async (context: Context, { currentCart, couponCode, customQuery }) => {
-    console.log('Mocked: useCart.removeCoupon');
-    return {
-      updatedCart: {}
-    };
+    return await context.$shopify.api.removeCoupon({ currentCart, couponCode, customQuery }).then((checkout) => {
+      // return updated checkout data
+      return {
+        updatedCart: JSON.parse(JSON.stringify(checkout.checkout))
+      };
+    });
   },
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
