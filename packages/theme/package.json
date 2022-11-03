@@ -1,6 +1,6 @@
 {
   "name": "@vue-storefront/shopify-theme",
-  "version": "1.1.1",
+  "version": "1.1.4",
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build --modern=client",
@@ -18,7 +18,7 @@
     "@nuxtjs/sitemap": "^2.4.0",
     "@nuxtjs/style-resources": "^1.0.0",
     "@storefront-ui/vue": "^0.12.0",
-    "@vue-storefront/shopify": "^1.1.1",
+    "@vue-storefront/shopify": "^1.1.4",
     "@vue-storefront/middleware": "2.5.6",
     "@vue-storefront/nuxt": "2.5.6",
     "@vue-storefront/nuxt-theme": "2.5.6",
