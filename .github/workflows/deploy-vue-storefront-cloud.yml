@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 16.x
       - name: Build and publish docker image
-        uses: elgohr/Publish-Docker-Github-Action@master
+        uses: elgohr/Publish-Docker-Github-Action@v5
         with:
           name: demo-shopify-storefrontcloud-io/vue-storefront:${{ github.sha }}
           registry: registry.vuestorefront.cloud
