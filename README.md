@@ -48,7 +48,7 @@ Want to contribute? Ping us on `#shopify` channel on [our Discord](https://disco
 4. Run `yarn` to install dependencies
 5. Build dependencies `yarn build:api-client && yarn build:composables`
 6. Run `yarn dev:theme` to run theme. You can find other commands in `package.json`
-7. [Open PR](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) to develop branch
+7. [Open PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) to develop branch
 
 💡 If you need HMR on ```Api-Client```/ ```Composables``` run `yarn dev:api-client` or `yarn dev:composables` on a separate terminal window.
 
